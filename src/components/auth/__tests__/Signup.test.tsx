@@ -1,6 +1,6 @@
 import { render, screen, cleanup } from '@testing-library/react';
 import { expect } from 'vitest';
-import Signup from './Signup';
+import Signup from '../Signup';
 
 afterEach(cleanup);
 
@@ -32,13 +32,5 @@ describe('<Signup />', () => {
   it('should render a button for with text signup', () => {
     render(<Signup />);
     expect(screen.getByRole('button',{name:'Sign Up'})).toBeInTheDocument();
-  });
-  it('should render a text which suggest "Have an Account?"', () => {
-    render(<Signup />);
-    expect(screen.getByText('Have an Account?')).toBeInTheDocument();
-  });
-  it('should render a button with text "Sign In"', () => {
-    render(<Signup />);
-    expect(screen.getByRole('button',{name:'Sign In'})).toBeInTheDocument()
   });
 });

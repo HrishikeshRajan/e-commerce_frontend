@@ -1,13 +1,13 @@
 import React from 'react';
 import './App.css';
-import Signup from './components/auth/Signup';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Auth from './components/auth/Auth';
 
 const App: React.FC = () => {
   const allRoutes = createBrowserRouter([
     {
       path: '/auth',
-      element: <Signup />,
+      element: <Auth />,
     },
   ]);
   return (
