@@ -1,8 +1,8 @@
 import { FetchErrorResponse, SignupFields } from '../index';
 import { registerURL } from './constants';
 
-export const errorParser = (errors: any) => {
-  if (!errors) return null;
+export const errorParser = (response: any) => {
+  const errors = response.message.error;
   const errorObj: FetchErrorResponse = {
     error: false,
   };
@@ -10,7 +10,6 @@ export const errorParser = (errors: any) => {
     errorObj[err.path[0]] = err.message;
   });
   errorObj.error = true;
-
   return errorObj;
 };
 export const signup = async (fields: SignupFields) => {
@@ -24,12 +23,9 @@ export const signup = async (fields: SignupFields) => {
       },
       body: JSON.stringify(fields),
     });
-    const result = await response.json();
-
-    const parsedError = errorParser(result.message.error);
-
-    return [parsedError, result.message?.message || null];
+    return await response.json();
   } catch (error) {
-    console.log(error);
+    //should remove in production
+    alert('There was an error during signup. Please try again.');
   }
 };

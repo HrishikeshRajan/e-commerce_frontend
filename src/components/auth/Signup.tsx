@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { signup } from './apis/signup.api';
+import { errorParser, signup } from './apis/signup.api';
 
 const Signup: React.FC = () => {
   const [fields, setFields] = useState({
@@ -31,19 +31,25 @@ const Signup: React.FC = () => {
     };
 
     signup(user).then((response: any) => {
-      const [errors, result] = response;
-
-      const errorObj = {
-        fullname: errors?.fullname || '',
-        email: errors?.email || '',
-        password: errors?.password || '',
-        error: errors?.error || false,
-      };
-      if (errorObj) {
+      if (!response.success) {
+        const error = errorParser(response);
+        const errorObj = {
+          fullname: error?.fullname || '',
+          email: error?.email || '',
+          password: error?.password || '',
+          error: error?.error || false,
+        };
         setErrorStatus(errorObj);
       }
-      if (result) {
-        setSuccessMsg(result);
+      if (response.success) {
+        const errorObj = {
+          fullname: '',
+          email: '',
+          password: '',
+          error: false,
+        };
+        setErrorStatus(errorObj);
+        setSuccessMsg(response.message.message);
       }
     });
   };
