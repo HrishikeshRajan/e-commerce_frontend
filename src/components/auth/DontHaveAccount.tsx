@@ -6,9 +6,12 @@ type Status = {
 };
 const DontHaveAccount: React.FC<Status> = (props: Status) => {
   return (
-    <div >
-      Don't have an Account?
-      <button data-testid='DHA'  onClick={() => props.changeSignIn(!props.signIn)}>Sign up</button>
+    <div className='flex justify-center w-full  lg:w-4/12 my-2'>
+     <p className='font-medium select-none  pr-1'> Don't have an Account?</p>
+      <button data-testid='DHA'  
+      onClick={() => props.changeSignIn(!props.signIn)}
+      className='font-bold'
+      >Sign up</button>
     </div>
   );
 };

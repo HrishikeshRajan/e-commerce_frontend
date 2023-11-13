@@ -12,7 +12,7 @@ const Auth = () => {
       <div className='w-full h-screen flex justify-center items-center' >
         <div className='flex flex-col h-96 w-full justify-center items-center'>
           {signIn ? <Signin /> : <Signup />}
-          <div className="auth-toggler">
+          <div className="flex w-full justify-center items-center text-center">
             {signIn ? (
               <DontHaveAccount signIn={signIn} changeSignIn={setSignIn} />
             ) : (
