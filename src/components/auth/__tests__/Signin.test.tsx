@@ -9,21 +9,21 @@ describe('<Signin />', () => {
     render(<Signin />);
     expect(screen.getByRole('form')).toBeInTheDocument();
   });
-  it('should render with a heading Sign Up', () => {
+  it('should render with the heading "Sign Up"', () => {
     render(<Signin />);
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
   });
-  it('should render a textbox to enter email address', () => {
+  it('should render a textbox to enter an email address', () => {
     render(<Signin />);
     expect(screen.getByLabelText('Email', { exact: true })).toBeInTheDocument();
   });
-  it('should render a textbox to enter password', () => {
+  it('should render a textbox to enter a password', () => {
     render(<Signin />);
     expect(
       screen.getByLabelText('Password', { exact: true }),
     ).toBeInTheDocument();
   });
-  it('should render a button for with text "Signin"', () => {
+  it('should render a button with the text "Signin"', () => {
     render(<Signin />);
     expect(screen.getByRole('button', { name: 'Signin' })).toBeInTheDocument();
   });
