@@ -10,14 +10,15 @@ describe('<Auth />', () => {
     render(<Auth />);
     expect(screen.getByRole('form')).toBeInTheDocument();
     expect(
-      screen.getByRole('heading', { name: 'Sign in' }),
+      screen.getByRole('heading', { name: 'Sign In' }),
     ).toBeInTheDocument();
   });
   it('should render an Sign up form when clicked on Don\'t have an Account', () => {
     render(<Auth />);
-    const mockChange = vi.fn()
     expect(screen.getByRole('form')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('DHA'))
-    expect(mockChange).toHaveBeenCalled()
+    expect(
+      screen.getByRole('heading', { name: 'Sign Up' }),
+    ).toBeInTheDocument();
   });
 });
