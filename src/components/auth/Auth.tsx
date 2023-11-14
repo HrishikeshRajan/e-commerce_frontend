@@ -8,20 +8,20 @@ const Auth = () => {
   const [signIn, setSignIn] = useState<Boolean>(true);
 
   return (
-    <Fragment>
-      <div className='w-full h-screen flex justify-center items-center' >
-        <div className='flex flex-col h-96 w-full justify-center items-center'>
+    <>
+      <div className=" h-screen absolute left-0 right-0 top-0 grid place-items-cente">
+        <div className="  flex flex-col  w-full justify-center items-center mt-20">
           {signIn ? <Signin /> : <Signup />}
           <div className="flex w-full justify-center items-center text-center">
             {signIn ? (
               <DontHaveAccount signIn={signIn} changeSignIn={setSignIn} />
             ) : (
-              <HaveAnAccount  signIn={signIn} changeSignIn={setSignIn} />
+              <HaveAnAccount signIn={signIn} changeSignIn={setSignIn} />
             )}
           </div>
         </div>
       </div>
-    </Fragment>
+    </>
   );
 };
 
