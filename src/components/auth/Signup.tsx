@@ -1,7 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { errorParser, signup } from './apis/signup.api';
 
-const Signup: React.FC = () => {
+function Signup() {
   const [fields, setFields] = useState({
     fullname: '',
     email: '',
@@ -55,7 +56,6 @@ const Signup: React.FC = () => {
   };
   return (
     <form
-      role="form"
       className="w-10/12 lg:w-4/12 border-2 border-gray-300 rounded flex flex-col p-2 lg:p-5"
     >
       <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mt-2">
@@ -121,6 +121,6 @@ const Signup: React.FC = () => {
       </button>
     </form>
   );
-};
+}
 
 export default Signup;

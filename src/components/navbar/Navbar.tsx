@@ -1,17 +1,19 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
-import Logo from '../../assets/smartshop.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons/faCartPlus';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link } from 'react-router-dom';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
-const Navbar: React.FC = () => {
+import Logo from '../../assets/smartshop.png';
+
+function Navbar() {
   return (
     <nav className="border-2  sticky top-0 z-50">
       <div className="container border-gray-200 flex justify-between items-center sm:px-4 ">
         <div>
-          <Link to={'#'}>
+          <Link to="#">
             <img
               src={Logo}
               alt="Logo"
@@ -79,6 +81,7 @@ const Navbar: React.FC = () => {
           className="block w-full flex-1 border-2 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
         />
         <button
+          type="button"
           data-testid="search-btn"
           className="p-1 rounded-tr rounded-br border-none bg-gray-400 text-white"
         >
@@ -87,6 +90,6 @@ const Navbar: React.FC = () => {
       </div>
     </nav>
   );
-};
+}
 
 export default Navbar;

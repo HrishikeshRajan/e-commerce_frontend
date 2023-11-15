@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { signin } from './apis/signin.api';
-import { errorParser } from './apis/signin.api';
 import { Navigate } from 'react-router-dom';
+import { signin, errorParser } from './apis/signin.api';
 
-const Signin: React.FC = () => {
+function Signin() {
   const [fields, setFields] = useState({
     email: '',
     password: '',
@@ -22,7 +21,7 @@ const Signin: React.FC = () => {
   const [redirect, setRedirect] = useState(false);
 
   if (redirect) {
-    return <Navigate to={'/'} />;
+    return <Navigate to="/" />;
   }
   const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFields({ ...fields, [event.target.name]: event.target.value });
@@ -45,9 +44,9 @@ const Signin: React.FC = () => {
         return setErrorStatus(errorObj);
       }
       if (
-        !response.success &&
-        response.message.error &&
-        response.statusCode === 400
+        !response.success
+        && response.message.error
+        && response.statusCode === 400
       ) {
         const errorObj = {
           email: '',
@@ -66,14 +65,12 @@ const Signin: React.FC = () => {
         };
         setErrorStatus(errorObj);
         setRedirect(true);
-        return;
       }
     });
   };
 
   return (
     <form
-      role="form"
       className="w-10/12 lg:w-4/12 border-2 border-gray-300 rounded flex flex-col p-2 lg:p-5"
     >
       <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mt-2">
@@ -95,7 +92,7 @@ const Signin: React.FC = () => {
         aria-label="email"
         value={fields.email}
         onChange={handleFieldChange}
-        className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6`}
+        className="block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
       />
       <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1 select-none">
         {errorStatus.error && errorStatus.email}
@@ -108,7 +105,7 @@ const Signin: React.FC = () => {
         value={fields.password}
         aria-label="password"
         onChange={handleFieldChange}
-        className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6`}
+        className="block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
       />
       <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1 select-none">
         {errorStatus.error && errorStatus.password}
@@ -122,6 +119,6 @@ const Signin: React.FC = () => {
       </button>
     </form>
   );
-};
+}
 
 export default Signin;
