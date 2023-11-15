@@ -77,4 +77,5 @@ module.exports = {
     'consistent-return': 'off',
     'label-has-associated-control': 'off',
   },
+  ignorePatterns: ['postcss.config.js'],
 };
