@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,7 +11,7 @@ import Logo from '../../assets/smartshop.png';
 
 function Navbar() {
   return (
-    <nav className="border-2  sticky top-0 z-50">
+    <nav className="border-2  sticky top-0 z-50 bg-white">
       <div className="container border-gray-200 flex justify-between items-center sm:px-4 ">
         <div>
           <Link to="#">

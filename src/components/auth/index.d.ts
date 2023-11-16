@@ -3,7 +3,13 @@ export interface SignupFields {
   email: string | undefined;
   password: string | undefined;
 }
-export type  FetchErrorResponse = {
+export type FetchErrorResponse = {
   error: boolean;
   [x: string]: any;
+};
+
+export type ProtectedRouteProps = {
+  isAuthenticated: boolean;
+  authenticationPath: string;
+  outlet: JSX.Element;
 };
