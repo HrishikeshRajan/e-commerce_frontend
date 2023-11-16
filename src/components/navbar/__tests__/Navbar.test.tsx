@@ -1,7 +1,11 @@
-import { render, screen, cleanup, fireEvent } from '@testing-library/react';
+/* eslint-disable import/no-extraneous-dependencies */
+import {
+  render, screen, cleanup,
+} from '@testing-library/react';
 import { expect } from 'vitest';
-import Navbar from '../Navbar';
 import { BrowserRouter } from 'react-router-dom';
+import React from 'react';
+import Navbar from '../Navbar';
 
 describe('<Navbar />', () => {
   afterEach(cleanup);

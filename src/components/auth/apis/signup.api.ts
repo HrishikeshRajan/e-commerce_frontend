@@ -25,7 +25,7 @@ export const signup = async (fields: SignupFields) => {
     });
     return await response.json();
   } catch (error) {
-    //should remove in production
+    // should remove in production
     alert('There was an error during signup. Please try again.');
   }
 };

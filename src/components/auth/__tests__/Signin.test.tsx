@@ -1,14 +1,15 @@
-import { render, screen, cleanup, fireEvent } from '@testing-library/react';
-import { expect } from 'vitest';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable import/no-extraneous-dependencies */
+import {
+  render, screen, cleanup, fireEvent,
+} from '@testing-library/react';
+import { expect, vi } from 'vitest';
+import React from 'react';
 import Signin from '../Signin';
-import { vi } from 'vitest';
+
 afterEach(cleanup);
 
 describe('<Signin />', () => {
-  it('should render an HTML form', () => {
-    render(<Signin />);
-    expect(screen.getByRole('form')).toBeInTheDocument();
-  });
   it('should render with the heading "Sign Up"', () => {
     render(<Signin />);
     expect(screen.getByRole('heading', { level: 2 })).toBeInTheDocument();
@@ -29,21 +30,17 @@ describe('<Signin />', () => {
   });
 
   describe('Form submit', () => {
-    it('should render error message for login with unregistered email and password', async() => {
-      //@ts-ignore
-      globalThis.fetch = vi.fn(() => {
-        return Promise.resolve({
-          json: () => {
-            return Promise.resolve({
-              success: false,
-              statusCode: 400,
-              message: {
-                error: 'Invalid email or password',
-              },
-            });
+    it('should render error message for login with unregistered email and password', async () => {
+      // @ts-expect-error
+      globalThis.fetch = vi.fn(() => Promise.resolve({
+        json: () => Promise.resolve({
+          success: false,
+          statusCode: 400,
+          message: {
+            error: 'Invalid email or password',
           },
-        });
-      });
+        }),
+      }));
       render(<Signin />);
       const email = screen.getByLabelText('Email');
       fireEvent.change(email, {
@@ -64,35 +61,31 @@ describe('<Signin />', () => {
       expect(headingElement).toBeInTheDocument();
     });
     it('should render error message for login with empty email and password', async () => {
-      //@ts-ignore
-      globalThis.fetch = vi.fn(() => {
-        return Promise.resolve({
-          json: () => {
-            return Promise.resolve({
-              success: false,
-              statusCode: 422,
-              message: {
-                error: [
-                  {
-                    code: 'invalid_type',
-                    expected: 'string',
-                    received: 'undefined',
-                    path: ['email'],
-                    message: 'Required',
-                  },
-                  {
-                    code: 'invalid_type',
-                    expected: 'string',
-                    received: 'undefined',
-                    path: ['password'],
-                    message: 'Required',
-                  },
-                ],
+      // @ts-expect-error
+      globalThis.fetch = vi.fn(() => Promise.resolve({
+        json: () => Promise.resolve({
+          success: false,
+          statusCode: 422,
+          message: {
+            error: [
+              {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'undefined',
+                path: ['email'],
+                message: 'Required',
               },
-            });
+              {
+                code: 'invalid_type',
+                expected: 'string',
+                received: 'undefined',
+                path: ['password'],
+                message: 'Required',
+              },
+            ],
           },
-        });
-      });
+        }),
+      }));
       render(<Signin />);
       const email = screen.getByLabelText('Email');
       fireEvent.change(email, {

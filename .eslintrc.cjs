@@ -76,6 +76,8 @@ module.exports = {
     '@typescript-eslint/no-explicit-any': 'off',
     'consistent-return': 'off',
     'label-has-associated-control': 'off',
+    'no-extraneous-dependencies': 'off',
+    'jsx-props-no-spreading': 'off',
   },
   ignorePatterns: ['postcss.config.js'],
 };

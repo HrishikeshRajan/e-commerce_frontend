@@ -1,5 +1,6 @@
 import { FetchErrorResponse, SignupFields } from '..';
 import { signinURL } from './constants';
+
 export const errorParser = (response: any) => {
   const errors = response.message.error;
   const errorObj: FetchErrorResponse = {
@@ -27,7 +28,7 @@ export const signin = async (user: Omit<SignupFields, 'fullname'>) => {
     const result = await response.json();
     return result;
   } catch (error) {
-    //should remove in production
+    // should remove in production
     alert('There was an error during signin. Please try again.');
   }
 };

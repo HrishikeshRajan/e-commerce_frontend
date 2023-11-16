@@ -1,10 +1,13 @@
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable import/no-extraneous-dependencies */
 import { render, screen } from '@testing-library/react';
-import DontHaveAccount from '../DontHaveAccount';
 import { vi } from 'vitest';
+import React from 'react';
+import DontHaveAccount from '../DontHaveAccount';
 
 type Status = {
-  signIn: Boolean;
-  changeSignIn: React.Dispatch<React.SetStateAction<Boolean>>;
+  signIn: boolean;
+  changeSignIn: React.Dispatch<React.SetStateAction<boolean>>;
 };
 const mockChangeSignIn = vi.fn();
 const status: Status = {
