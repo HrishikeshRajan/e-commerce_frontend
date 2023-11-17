@@ -1,6 +1,8 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { signin, errorParser } from './apis/signin.api';
+import AuthHelper from './apis/helper';
 
 function Signin() {
   const [fields, setFields] = useState({
@@ -63,8 +65,10 @@ function Signin() {
           password: '',
           error: false,
         };
-        setErrorStatus(errorObj);
-        setRedirect(true);
+        AuthHelper.authenticate(response.message.user, () => {
+          setErrorStatus(errorObj);
+          setRedirect(true);
+        });
       }
     });
   };

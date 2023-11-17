@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { signout } from '../auth/apis/signout';
 import SignoutError from './SignoutError';
+import AuthHelper from '../auth/apis/helper';
 
 interface IDialougeBox {
   status: boolean;
@@ -15,7 +16,9 @@ function SignoutDialougeBox(props:IDialougeBox) {
   const handleSignout = async () => {
     await signout().then((response) => {
       if (response.statusCode === 200) {
-        navigate('/auth');
+        AuthHelper.clearSignedOnData(() => {
+          navigate('/auth');
+        });
       } else {
         setError(!error);
       }

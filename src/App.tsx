@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/function-component-definition */
 import React from 'react';
 import './App.css';
@@ -9,9 +10,10 @@ import Profile from './components/user/Profile';
 import Account from './components/user/Account';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
+import AuthHelper from './components/auth/apis/helper';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
-  isAuthenticated: false,
+  isAuthenticated: AuthHelper.isSignedOn(),
   authenticationPath: '/auth',
 };
 
