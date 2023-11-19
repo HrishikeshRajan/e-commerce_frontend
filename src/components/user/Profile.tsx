@@ -8,7 +8,7 @@ import { listMyProfile } from './apis/showProfile.api';
 import { IUser } from '.';
 import { updateProfile } from './apis/updateProfile.api';
 import SuccessBox from './SuccessBox';
-import EmailToolTip from './EmailToolTip';
+import AuthHelper from '../auth/apis/helper';
 
 function Profile() {
   const [user, setUser] = useState<IUser>({
@@ -35,7 +35,9 @@ function Profile() {
       if (result?.statusCode === 200 && result?.success === true) {
         setUser({ ...user, ...result.message.user });
       } else {
-        setErrorOnFetch(result?.message);
+        AuthHelper.clearSignedOnData(() => {
+          setErrorOnFetch(result?.message);
+        });
       }
     });
 
@@ -60,7 +62,7 @@ function Profile() {
   };
 
   return (
-    <div className="w-full py-10 flex justify-center">
+    <div className="w-full py-5 flex justify-center">
       {success && <SuccessBox />}
       <form method="post" className="w-full lg:w-6/12 p-5 h-fit bg-white shadow-md">
         <h2 className="text-2xl text-slate-800 font-bold ">User Profile</h2>
