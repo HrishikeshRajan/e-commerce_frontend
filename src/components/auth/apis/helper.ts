@@ -13,9 +13,14 @@ const AuthHelper = {
     }
     return false;
   },
+  clearCookie: () => {
+    document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+    document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  },
   clearSignedOnData(cb:()=>void) {
     if (typeof window !== undefined) {
       localStorage.removeItem('user');
+      this.clearCookie();
     }
     cb();
   },
