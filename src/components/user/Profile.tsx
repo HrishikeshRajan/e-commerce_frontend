@@ -38,7 +38,7 @@ function Profile() {
     message: '',
   });
   const [fetchError, setFetchError] = useState({
-    state: false,
+    errorState: false,
     message: '',
     redirect: false,
   });
@@ -56,13 +56,13 @@ function Profile() {
     const abort = new AbortController();
     const { signal } = abort;
     listMyProfile(signal).then((response:any) => {
-      if (response?.statusCode === 200 && response?.success === true) {
+      if (response?.statusCode <= 200 && response?.success === true) {
         setUser({ ...user, ...response.message.user });
       } else if (response?.statusCode === 401
         && response?.success === false) {
-        setFetchError({ state: true, message: response.message?.error, redirect: true });
-      } else {
-        setFetchError({ state: true, message: response?.message?.error, redirect: false });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: true });
+      } if (response?.statusCode > 401 && response?.statusCode <= 500) {
+        setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
       }
     });
 
@@ -82,9 +82,9 @@ function Profile() {
         setSuccess(response?.message.user);
       } else if (response?.statusCode === 401
         && response?.success === false) {
-        setFetchError({ state: true, message: response.message?.error, redirect: true });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: true });
       } else {
-        setFetchError({ state: true, message: response?.message?.error, redirect: false });
+        setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
       }
     });
   };
@@ -101,9 +101,9 @@ function Profile() {
         });
       } else if (response?.statusCode === 401
         && response?.success === false) {
-        setFetchError({ state: true, message: response.message?.error, redirect: true });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: true });
       } else {
-        setFetchError({ state: true, message: response.message?.error, redirect: false });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: false });
       }
     });
   }
@@ -118,9 +118,9 @@ function Profile() {
         });
       } else if (response?.statusCode === 401
         && response?.success === false) {
-        setFetchError({ state: true, message: response.message?.error, redirect: true });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: true });
       } else {
-        setFetchError({ state: true, message: response.message?.error, redirect: false });
+        setFetchError({ errorState: true, message: response.message?.error, redirect: false });
       }
     });
   };
@@ -141,7 +141,9 @@ function Profile() {
   return (
     <div className="w-full py-5 flex justify-center">
       {success.state && <SuccessBox {...success} set={setSuccess} />}
-      {fetchError.state && <ErrorBox {...fetchError} action={setFetchError} />}
+      {fetchError.errorState
+      && !fetchError.redirect
+      && <ErrorBox {...fetchError} action={setFetchError} />}
       {fetchError.redirect && <RedirectToSignIn />}
       <form method="post" className="w-full lg:w-6/12 p-5 h-fit bg-white shadow-md">
         <h2 className="text-2xl text-slate-800 font-bold ">User Profile</h2>

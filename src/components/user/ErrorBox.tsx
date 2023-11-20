@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 
 interface IDialougeBox {
-  state: boolean
+  errorState: boolean
   message:string
   action: React.Dispatch<React.SetStateAction<{
-    state: boolean;
+    errorState: boolean;
     message: string;
     redirect: boolean;
   }>>
@@ -22,7 +22,7 @@ function ErrorBox(props:IDialougeBox) {
 
         <p className="text-gray-600 my-3 font-semibold text-xs">{props.message}</p>
         <div className=" w-full  py-1 px-5 flex justify-evenly items-center">
-          <button type="button" onClick={() => props.action({ state: !props.state, message: '', redirect: false })} className="w-1/3 p-2 font-bold text-xs bg-slate-200 hover:scale-105">Close</button>
+          <button type="button" onClick={() => props.action({ errorState: !props.errorState, message: '', redirect: false })} className="w-1/3 p-2 font-bold text-xs bg-slate-200 hover:scale-105">Close</button>
         </div>
       </div>
     </div>
