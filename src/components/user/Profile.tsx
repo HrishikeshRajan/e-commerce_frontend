@@ -20,6 +20,7 @@ import { deleteImage, uploadImage } from './apis/image.api';
 import { profilePicture } from './helper/getProfilePicture';
 import ErrorBox from './ErrorBox';
 import RedirectToSignIn from './RedirectToSignIn';
+import Address from './Address';
 
 function Profile() {
   const [user, setUser] = useState<IUser>({
@@ -139,13 +140,13 @@ function Profile() {
   } = useDropzone({ onDrop });
 
   return (
-    <div className="w-full py-5 flex justify-center">
+    <div className="w-full py-5 flex flex-col lg:flex-row  items-center justify-center shadow-sm">
       {success.state && <SuccessBox {...success} set={setSuccess} />}
       {fetchError.errorState
       && !fetchError.redirect
       && <ErrorBox {...fetchError} action={setFetchError} />}
       {fetchError.redirect && <RedirectToSignIn />}
-      <form method="post" className="w-full lg:w-6/12 p-5 h-fit bg-white shadow-md">
+      <form method="post" className="w-full lg:w-6/12 p-5 h-fit bg-white ">
         <h2 className="text-2xl text-slate-800 font-bold ">User Profile</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
@@ -187,6 +188,8 @@ function Profile() {
 
         </div>
       </form>
+
+      <Address address={user?.address} />
     </div>
   );
 }

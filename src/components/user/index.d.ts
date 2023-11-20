@@ -1,3 +1,12 @@
+export interface IAddress {
+  fullname: string
+  city: string
+  homeAddress: string
+  state: string
+  postalCode: string
+  phoneNo: string
+  country: string
+}
 export interface IUser {
   fullname: string
   username: string
@@ -7,4 +16,5 @@ export interface IUser {
     secure_url: string
     url: string
   }
+  address?:IAddress
 }
