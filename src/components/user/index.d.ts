@@ -16,5 +16,5 @@ export interface IUser {
     secure_url: string
     url: string
   }
-  address?:IAddress
+  address?:IAddress[]
 }

@@ -1,9 +1,18 @@
+import { IUser } from '../../user';
+
 const AuthHelper = {
   authenticate: (user:any, cb:()=>void) => {
     if (typeof window !== undefined) {
       localStorage.setItem('user', JSON.stringify(user));
     }
     cb();
+  },
+  updateAuthenticatedUserData: (user:IUser) => {
+    if (typeof window !== undefined && localStorage.getItem('user')) {
+      const oldUser = JSON.parse(localStorage.getItem('user') as string);
+      const updated = { ...oldUser, ...user };
+      localStorage.setItem('user', JSON.stringify(updated));
+    }
   },
   isSignedOn() {
     if (typeof window === undefined) {

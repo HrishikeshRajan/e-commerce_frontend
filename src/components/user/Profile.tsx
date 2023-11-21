@@ -12,7 +12,7 @@ import { useDropzone } from 'react-dropzone';
 import { redirect, useNavigate } from 'react-router';
 import defaultUser from '../../assets/defaultUser.png';
 import { listMyProfile } from './apis/showProfile.api';
-import { IUser } from '.';
+import { IAddress, IUser } from '.';
 import { updateProfile } from './apis/updateProfile.api';
 import SuccessBox from './SuccessBox';
 import AuthHelper from '../auth/apis/helper';
@@ -20,6 +20,7 @@ import { deleteImage, uploadImage } from './apis/image.api';
 import { profilePicture } from './helper/getProfilePicture';
 import ErrorBox from './ErrorBox';
 import RedirectToSignIn from './RedirectToSignIn';
+// import EditAddress from './EditAddress';
 import Address from './Address';
 
 function Profile() {
@@ -146,8 +147,8 @@ function Profile() {
       && !fetchError.redirect
       && <ErrorBox {...fetchError} action={setFetchError} />}
       {fetchError.redirect && <RedirectToSignIn />}
-      <form method="post" className="w-full lg:w-6/12 p-5 h-fit bg-white ">
-        <h2 className="text-2xl text-slate-800 font-bold ">User Profile</h2>
+      <form method="post" className="w-full lg:w-6/12 p-5  bg-white ">
+        <h2 className="text-2xl text-slate-800 font-bold ">Manage Profile Picture</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
           <input {...getInputProps()} hidden onChange={hanldeImageSubmit} />
@@ -163,7 +164,7 @@ function Profile() {
         </div>
         <hr className="my-3" />
         <div className="">
-          <h2 className="text-lg font-medium text-slate-600 py-3">{edit ? 'Edit your profile' : 'Your Details'}</h2>
+          <h2 className="text-2xl text-slate-800 font-bold ">{edit ? 'Edit Your Profile' : 'Manage Profile'}</h2>
           <label htmlFor="fullname">Fullname</label>
           <input type="text" id="fullname" value={user.fullname} name="fullname" onChange={setForm} className="inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6" required disabled={!edit} />
           <label htmlFor="username">Username</label>
@@ -188,8 +189,12 @@ function Profile() {
 
         </div>
       </form>
-
-      <Address address={user?.address} />
+      <div className="flex flex-col w-full lg:w-5/12  p-5 ">
+        <h1 className="text-2xl text-slate-800 font-bold  ">Manage Address</h1>
+        <hr className="mb-10" />
+        {user.address
+      && user.address.map((item:any) => <Address key={item._id} address={item} />)}
+      </div>
     </div>
   );
 }
