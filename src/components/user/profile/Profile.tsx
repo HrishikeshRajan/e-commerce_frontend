@@ -10,7 +10,7 @@ import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDropzone } from 'react-dropzone';
 import defaultUser from '../../../assets/defaultUser.png';
-import { listMyProfile } from '../apis/showProfile.api';
+// import { listMyProfile } from '../apis/showProfile.api';
 import { IUser } from '..';
 import { updateProfile } from '../apis/updateProfile.api';
 import SuccessBox from '../dialougeBox/SuccessBox';
@@ -53,22 +53,28 @@ function Profile() {
   };
 
   useEffect(() => {
-    const abort = new AbortController();
-    const { signal } = abort;
-    listMyProfile(signal).then((response:any) => {
-      if (response?.statusCode <= 200 && response?.success === true) {
-        setUser({ ...user, ...response.message.user });
-      } else if (response?.statusCode === 401
-        && response?.success === false) {
-        setFetchError({ errorState: true, message: response.message?.error, redirect: true });
-      } if (response?.statusCode > 401 && response?.statusCode <= 500) {
-        setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
-      }
-    });
+    const data = AuthHelper.isSignedOn();
+    // const abort = new AbortController();
+    if (data) {
+      setUser(data);
+    }
+    // } else {
+    //   const { signal } = abort;
+    //   listMyProfile(signal).then((response:any) => {
+    //     if (response?.statusCode <= 200 && response?.success === true) {
+    //       setUser({ ...user, ...response.message.user });
+    //     } else if (response?.statusCode === 401
+    //       && response?.success === false) {
+    //       setFetchError({ errorState: true, message: response.message?.error, redirect: true });
+    //     } if (response?.statusCode > 401 && response?.statusCode <= 500) {
+    //       setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
+    //     }
+    //   });
+    // }
 
-    return () => {
-      abort.abort();
-    };
+    // return () => {
+    //   abort.abort();
+    // };
   }, []);
 
   const onSubmit = (event:React.FormEvent) => {
@@ -82,6 +88,7 @@ function Profile() {
         setSuccess({ state: true, message: 'Profile saved successfully' });
         setSuccess(response?.message.user);
         setSubmit(false);
+        AuthHelper.updateAuthenticatedUserData(response.message?.user);
       } else if (response?.statusCode === 401
         && response?.success === false) {
         setSubmit(false);
