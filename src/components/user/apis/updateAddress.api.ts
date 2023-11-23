@@ -1,9 +1,9 @@
-import { IAddress} from '..';
+import { IAddress } from '..';
 import { baseURL } from '../../auth/apis/constants';
 
-export const updateAddress = async (address:IAddress) => {
+export const updateAddress = async (address:Omit<IAddress, '_id'>, id:string) => {
   try {
-    const response = await fetch(`${baseURL()}/address`, {
+    const response = await fetch(`${baseURL()}/address/${id}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -14,7 +14,6 @@ export const updateAddress = async (address:IAddress) => {
     });
     return await response.json();
   } catch (error) {
-    // alert(error);
-    console.log(error)
+    console.log(error);
   }
 };

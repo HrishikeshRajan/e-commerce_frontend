@@ -13,3 +13,7 @@ export type ProtectedRouteProps = {
   authenticationPath: string;
   outlet: JSX.Element;
 };
+
+export interface Index {
+  index: number
+}

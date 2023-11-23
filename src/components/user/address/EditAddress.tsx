@@ -10,58 +10,41 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { updateAddress } from '../apis/updateAddress.api';
 import AuthHelper from '../../auth/apis/helper';
+import { AddressSchema, transformZodToFormikErrors } from './helpers/helper';
+import { IAddress } from '..';
 
-const AddressSchema = z.object({
-  fullname: z.string().min(2),
-  city: z.string().min(2),
-  homeAddress: z.string().min(5),
-  state: z.string().min(2),
-  postalCode: z.string().length(6),
-  phoneNo: z.string().min(7),
-  country: z.string().min(2),
-});
 interface IProps {
-  address:any
+  address:IAddress
 }
 function EditAddress() {
   const navigate = useNavigate();
-  const loadAddress = useLoaderData();
+  const loadAddress = useLoaderData() as IAddress;
+  if (!loadAddress) return;
   const props:IProps = {
     address: loadAddress,
-  };
-  const transformZodToFormikErrors = (zodError: ZodError<any>): { [key: string]: string } => {
-    const formikErrors: { [key: string]: string } = {};
-    zodError.errors.forEach((error: { path: any[]; message: string; }) => {
-      if (error.path) {
-        const path = error.path.join('.');
-        formikErrors[path] = error.message;
-      }
-    });
-
-    return formikErrors;
   };
 
   return (
     <Formik
       initialValues={{
-        fullname: '',
-        homeAddress: '',
-        city: '',
-        state: '',
-        postalCode: '',
-        phoneNo: '',
-        country: '',
+        fullname: props.address.fullname,
+        homeAddress: props.address.homeAddress,
+        city: props.address.city,
+        state: props.address.state,
+        postalCode: props.address.postalCode,
+        phoneNo: props.address.phoneNo,
+        country: props.address.country,
 
       }}
       validationSchema={toFormikValidationSchema(AddressSchema)}
       onSubmit={(values, actions) => {
         try {
-          updateAddress({ ...values }).then((response) => {
+          updateAddress({ ...values }, props.address._id).then((response) => {
             if (response.statusCode === 422) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
             }
             actions.setSubmitting(false);
-            AuthHelper.updateAuthenticatedUserData(response.message?.user);
+            AuthHelper.updateAuthenticatedUserAddress(response.message?.address, props.address._id);
           });
         } catch (error) {
           console.error(error);
@@ -72,14 +55,11 @@ function EditAddress() {
       { (formik) => (
         <Form className="w-full lg:w-full p-4 h-fit bg-white">
           <h2 className="text-2xl text-slate-600 font-bold py-10">Edit Address</h2>
-          <div className="">
-            {/* <h2 className="text-lg font-medium text-slate-600 py-3"> Your Details</h2> */}
-
+          <div>
             <label htmlFor="fullname">Fullname</label>
             <Field
               type="text"
               name="fullname"
-              value={props.address.fullname}
               className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.fullname
             && formik.errors.fullname) ? 'border-2 border-red-500' : ''}`}
             />
@@ -91,7 +71,6 @@ function EditAddress() {
             <Field
               type="text"
               name="homeAddress"
-              value={props.address.homeAddress}
               className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.homeAddress
             && formik.errors.homeAddress) ? 'border-2 border-red-500' : ''}`}
             />
@@ -105,7 +84,6 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="city"
-                  value={props.address.city}
                   className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.city
             && formik.errors.city) ? 'border-2 border-red-500' : ''}`}
                 />
@@ -118,7 +96,6 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="state"
-                  value={props.address.state}
                   className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.state
             && formik.errors.state) ? 'border-2 border-red-500' : ''}`}
                 />
@@ -133,7 +110,6 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="postalCode"
-                  value={props.address.postalCode}
                   className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.postalCode
             && formik.errors.postalCode) ? 'border-2 border-red-500' : ''}`}
                 />
@@ -147,7 +123,6 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="phoneNo"
-                  value={props.address.phoneNo}
                   className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.phoneNo
             && formik.errors.phoneNo) ? 'border-2 border-red-500' : ''}`}
                 />
@@ -160,7 +135,6 @@ function EditAddress() {
             <Field
               type="text"
               name="country"
-              value={props.address.country}
               className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.country
             && formik.errors.country) ? 'border-2 border-red-500' : ''}`}
 
