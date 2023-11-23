@@ -4,14 +4,12 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import EditAddress from './EditAddress';
+import { Link } from 'react-router-dom';
 
 interface IProps {
   address:any
 }
 function Address({ address }:IProps) {
-  const [edit, setEdit] = useState(false);
-
-  if (edit) return <EditAddress address={address} />;
   return (
     <div className=" shadow-md px-5 w-full lg:w-4/12 py-3  ">
       <div className="flex w-full justify-between">
@@ -20,7 +18,7 @@ function Address({ address }:IProps) {
 
         </div>
         <div className="w-20 flex my-2 items-center">
-          <button type="button" onClick={() => setEdit(!edit)} className="px-2 mr-3 py-1 text-slate-600 rounded"><FontAwesomeIcon icon={faPenToSquare} /></button>
+          <Link to={`edit/${address._id}`} className="px-2 mr-3 py-1 text-slate-600 rounded"><FontAwesomeIcon icon={faPenToSquare} /></Link>
           <button type="button" className="px-2 py-1 mr-3 text-slate-600 rounded"><FontAwesomeIcon icon={faTrash} /></button>
 
         </div>

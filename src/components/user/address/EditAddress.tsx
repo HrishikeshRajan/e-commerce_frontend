@@ -7,6 +7,7 @@ import {
 } from 'formik';
 import { ZodError, z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
+import { useLoaderData, useNavigate } from 'react-router-dom';
 import { updateAddress } from '../apis/updateAddress.api';
 import AuthHelper from '../../auth/apis/helper';
 
@@ -22,7 +23,12 @@ const AddressSchema = z.object({
 interface IProps {
   address:any
 }
-function EditAddress(props:IProps) {
+function EditAddress() {
+  const navigate = useNavigate();
+  const loadAddress = useLoaderData();
+  const props:IProps = {
+    address: loadAddress,
+  };
   const transformZodToFormikErrors = (zodError: ZodError<any>): { [key: string]: string } => {
     const formikErrors: { [key: string]: string } = {};
     zodError.errors.forEach((error: { path: any[]; message: string; }) => {
@@ -164,7 +170,7 @@ function EditAddress(props:IProps) {
             && <div className="text-red-500 pb-2">{formik.errors.country}</div>}
           </div>
           <div className="w-full flex justify-between my-2">
-            <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Cancel</button>
+            <button type="button" onClick={() => navigate(-1)} className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Back</button>
             {formik.isSubmitting
               ? <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>updating</button>
               : <button type="submit" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Save Address</button>}

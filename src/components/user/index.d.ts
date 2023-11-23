@@ -6,6 +6,7 @@ export interface IAddress {
   postalCode: string
   phoneNo: string
   country: string
+  _id:string
 }
 export interface IUser {
   fullname: string

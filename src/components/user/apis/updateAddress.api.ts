@@ -4,7 +4,7 @@ import { baseURL } from '../../auth/apis/constants';
 export const updateAddress = async (address:IAddress) => {
   try {
     const response = await fetch(`${baseURL()}/address`, {
-      method: 'POST',
+      method: 'PUT',
       credentials: 'include',
       headers: {
         Accept: 'application/json',
@@ -15,6 +15,6 @@ export const updateAddress = async (address:IAddress) => {
     return await response.json();
   } catch (error) {
     // alert(error);
-    cosnole.log(error)
+    console.log(error)
   }
 };
