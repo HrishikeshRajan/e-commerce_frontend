@@ -47,6 +47,7 @@ function Profile() {
   const [deletes, setDeletes] = useState(false);
   const [clientImage, setClientImage] = useState(profilePicture.getImage()?.secure_url);
   const [isSubmitting, setSubmit] = useState(false);
+  const [imageSubmit, setImageSubmit] = useState(false);
   const setForm = (event:React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
@@ -92,20 +93,24 @@ function Profile() {
     });
   };
 
-  function hanldeImageSubmit() {
+  function handleImageSubmit() {
     if (typeof file === 'undefined') return;
+    setImageSubmit(true);
     const form = new FormData();
     form.append('image', file);
     uploadImage(form).then((response) => {
       if (response.statusCode <= 201 && response.success) {
+        setImageSubmit(false);
         AuthHelper.authenticate(response.message?.user, () => {
           setSuccess({ state: true, message: 'Image Uploaded succesfully' });
           setDeletes(!deletes);
         });
       } else if (response?.statusCode === 401
         && response?.success === false) {
+        setImageSubmit(false);
         setFetchError({ errorState: true, message: response.message?.error, redirect: true });
       } else {
+        setImageSubmit(false);
         setFetchError({ errorState: true, message: response.message?.error, redirect: false });
       }
     });
@@ -153,7 +158,7 @@ function Profile() {
         <h2 className="text-2xl text-slate-800 font-bold ">Manage Profile Picture</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
-          <input {...getInputProps()} hidden onChange={hanldeImageSubmit} />
+          <input {...getInputProps()} hidden onChange={handleImageSubmit} />
           {
             isDragActive
               ? <p>Drop the files here ...</p>
@@ -161,8 +166,8 @@ function Profile() {
           }
         </div>
         <div className="my-2">
-          {file && <button type="button" onClick={hanldeImageSubmit} className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold">Upload</button>}
-          {(dataUrl || clientImage) && <button type="button" onClick={deleteProfilePicture} className="bg-red-300 mx-1 py-1 px-2 w-20 shadow-md rounded text-white fond-bold">Delete</button> }
+          {file && (imageSubmit ? <button type="button" className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold disabled:opacity-70" disabled>Updating</button> : <button type="button" onClick={handleImageSubmit} className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold">Upload</button>) }
+          {(dataUrl || clientImage) && !imageSubmit && <button type="button" onClick={deleteProfilePicture} className="bg-red-300 mx-1 py-1 px-2 w-20 shadow-md rounded text-white fond-bold">Delete</button> }
         </div>
         <hr className="my-3" />
         <div className="">
