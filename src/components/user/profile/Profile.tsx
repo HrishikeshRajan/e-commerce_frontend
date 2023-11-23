@@ -46,7 +46,7 @@ function Profile() {
   const [dataUrl, setDataUrl] = useState<string | ArrayBuffer | null>();
   const [deletes, setDeletes] = useState(false);
   const [clientImage, setClientImage] = useState(profilePicture.getImage()?.secure_url);
-
+  const [isSubmitting, setSubmit] = useState(false);
   const setForm = (event:React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [event.target.name]: event.target.value });
   };
@@ -72,6 +72,7 @@ function Profile() {
 
   const onSubmit = (event:React.FormEvent) => {
     event.preventDefault();
+    setSubmit(true);
     const userData = {
       ...user,
     };
@@ -79,10 +80,13 @@ function Profile() {
       if (response?.success && response?.statusCode <= 201) {
         setSuccess({ state: true, message: 'Profile saved successfully' });
         setSuccess(response?.message.user);
+        setSubmit(false);
       } else if (response?.statusCode === 401
         && response?.success === false) {
+        setSubmit(false);
         setFetchError({ errorState: true, message: response.message?.error, redirect: true });
       } else {
+        setSubmit(false);
         setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
       }
     });
@@ -183,7 +187,9 @@ function Profile() {
               Cancel
             </button>
           )}
-          <button onClick={onSubmit} type="button" className="text-white bg-blue-400 dark:bg-blue-500  font-medium rounded text-sm px-5 py-2.5 ">Save</button>
+          {isSubmitting
+            ? <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>updating</button>
+            : <button type="button" onClick={onSubmit} className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Save</button>}
 
         </div>
       </form>

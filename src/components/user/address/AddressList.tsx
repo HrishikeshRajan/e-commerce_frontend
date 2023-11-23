@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import Address from './Address';
-import CreateAddressBtn from './CreateAddress';
+import CreateAddressBtn from './CreateAddressBtn';
 import { IAddress } from '..';
 
-function AddressWrapper() {
+function AddressList() {
   const address = useLoaderData() as IAddress[];
   const [createAddress, setCreateAddress] = useState(false);
   if (!address.length) return <h1>Loading</h1>;
@@ -22,4 +22,4 @@ function AddressWrapper() {
   );
 }
 
-export default AddressWrapper;
+export default AddressList;
