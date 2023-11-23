@@ -7,8 +7,8 @@ import {
 } from 'formik';
 import { ZodError, z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { updateAddress } from './apis/updateAddress.api';
-import AuthHelper from '../auth/apis/helper';
+import { updateAddress } from '../apis/updateAddress.api';
+import AuthHelper from '../../auth/apis/helper';
 
 const AddressSchema = z.object({
   fullname: z.string().min(2),

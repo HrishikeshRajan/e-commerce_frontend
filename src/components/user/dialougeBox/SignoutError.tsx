@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signout } from '../auth/apis/signout';
+import { signout } from '../../auth/apis/signout';
 
 interface IDialougeBox {
   status: boolean;

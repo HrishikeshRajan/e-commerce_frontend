@@ -9,19 +9,16 @@ import React, {
 import { faPenToSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useDropzone } from 'react-dropzone';
-import { redirect, useNavigate } from 'react-router';
-import defaultUser from '../../assets/defaultUser.png';
-import { listMyProfile } from './apis/showProfile.api';
-import { IAddress, IUser } from '.';
-import { updateProfile } from './apis/updateProfile.api';
-import SuccessBox from './SuccessBox';
-import AuthHelper from '../auth/apis/helper';
-import { deleteImage, uploadImage } from './apis/image.api';
-import { profilePicture } from './helper/getProfilePicture';
-import ErrorBox from './ErrorBox';
-import RedirectToSignIn from './RedirectToSignIn';
-// import EditAddress from './EditAddress';
-import Address from './Address';
+import defaultUser from '../../../assets/defaultUser.png';
+import { listMyProfile } from '../apis/showProfile.api';
+import { IUser } from '..';
+import { updateProfile } from '../apis/updateProfile.api';
+import SuccessBox from '../dialougeBox/SuccessBox';
+import AuthHelper from '../../auth/apis/helper';
+import { deleteImage, uploadImage } from '../apis/image.api';
+import { profilePicture } from '../helper/getProfilePicture';
+import ErrorBox from '../dialougeBox/ErrorBox';
+import RedirectToSignIn from '../dialougeBox/RedirectToSignIn';
 
 function Profile() {
   const [user, setUser] = useState<IUser>({
@@ -116,6 +113,7 @@ function Profile() {
         profilePicture.removeImage(() => {
           setDataUrl('');
           setClientImage('');
+          setFile('');
           setSuccess({ state: true, message: 'Image deleted succesfully' });
         });
       } else if (response?.statusCode === 401
@@ -189,12 +187,6 @@ function Profile() {
 
         </div>
       </form>
-      { /** <div className="flex flex-col w-full lg:w-5/12  p-5 bg-white ">
-        <h1 className="text-2xl text-slate-800 font-bold  ">Manage Address</h1>
-        <hr className="mb-10" />
-        {user.address
-      && user.address.map((item:any) => <Address key={item._id} address={item} />)}
-        </div> */}
     </div>
   );
 }

@@ -8,13 +8,13 @@ import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { faBasketShopping } from '@fortawesome/free-solid-svg-icons/faBasketShopping';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import SignoutDialougeBox from './SignoutDialougeBox';
+import SignoutDialougeBox from './dialougeBox/SignoutDialougeBox';
 
 function Account() {
   const [signout, setSignOut] = useState(false);
   return (
-    <div className="flex flex-col lg:flex-row  min-h-full p-2 gap-2">
-      <div className=" w-full flex lg:flex-col  lg:w-4/12">
+    <div className="flex flex-col  mt-10 lg:flex-row  min-h-full p-2 gap-2">
+      <div className=" w-full flex lg:flex-col  lg:w-3/12">
         <NavLink to="orders" className="h-14 flex w-full items-center px-3  bg-white border-2 border-slate-100 text-slate-500 font-semibold">
           <>
             <FontAwesomeIcon icon={faBasketShopping} className="lg:hiden" />

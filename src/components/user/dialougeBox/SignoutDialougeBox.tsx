@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signout } from '../auth/apis/signout';
+import { signout } from '../../auth/apis/signout';
 import SignoutError from './SignoutError';
-import AuthHelper from '../auth/apis/helper';
+import AuthHelper from '../../auth/apis/helper';
 
 interface IDialougeBox {
   status: boolean;

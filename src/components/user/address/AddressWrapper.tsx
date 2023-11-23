@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useLoaderData } from 'react-router-dom';
 import Address from './Address';
-import { IAddress } from '.';
 import CreateAddressBtn from './CreateAddress';
+import { IAddress } from '..';
 
 function AddressWrapper() {
   const address = useLoaderData() as IAddress[];
