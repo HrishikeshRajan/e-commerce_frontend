@@ -12,6 +12,9 @@ import ProtectedRoute from './components/auth/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
 import AuthHelper from './components/auth/apis/helper';
 import Dashboard from './components/marketplace/Dashboard';
+import AddressWrapper from './components/user/AddressWrapper';
+import { fakeAddress } from './components/user/fakes/addressArray';
+import EditAddress from './components/user/EditAddress';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
   isAuthenticated: AuthHelper.isSignedOn(),
@@ -43,11 +46,24 @@ const App = () => {
         {
           path: '/account',
           element: <Account />,
+          children: [
+            {
+              path: 'profile',
+              element: <ProtectedRoute {...protectedRouteProps} outlet={<Profile />} />,
+            },
+            {
+              path: 'address',
+              element: <ProtectedRoute {...protectedRouteProps} outlet={<AddressWrapper />} />,
+              loader: () => fakeAddress,
+            },
+            {
+              path: 'address/add',
+              element: <ProtectedRoute {...protectedRouteProps} outlet={<EditAddress address={{}} />} />,
+              loader: () => fakeAddress,
+            },
+          ],
         },
-        {
-          path: 'account/profile',
-          element: <ProtectedRoute {...protectedRouteProps} outlet={<Profile />} />,
-        },
+
         {
           path: 'marketplace',
           element: <Dashboard />,

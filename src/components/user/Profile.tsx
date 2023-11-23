@@ -141,13 +141,13 @@ function Profile() {
   } = useDropzone({ onDrop });
 
   return (
-    <div className="w-full py-5 flex flex-col lg:flex-row  items-center justify-center shadow-sm">
+    <div className="w-full  flex flex-col lg:flex-row  shadow-sm">
       {success.state && <SuccessBox {...success} set={setSuccess} />}
       {fetchError.errorState
       && !fetchError.redirect
       && <ErrorBox {...fetchError} action={setFetchError} />}
       {fetchError.redirect && <RedirectToSignIn />}
-      <form method="post" className="w-full lg:w-6/12 p-5  bg-white ">
+      <form method="post" className="w-full lg:w-full p-5  bg-white ">
         <h2 className="text-2xl text-slate-800 font-bold ">Manage Profile Picture</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
@@ -155,11 +155,11 @@ function Profile() {
           {
             isDragActive
               ? <p>Drop the files here ...</p>
-              : <p>Drag &apos;n&apos; drop some files here, or click to select files</p>
+              : <p>Drag &apos;n&apos; drop your profile picture here, or click to select files</p>
           }
         </div>
         <div className="my-2">
-          <button type="button" onClick={hanldeImageSubmit} className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold">Upload</button>
+          {file && <button type="button" onClick={hanldeImageSubmit} className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold">Upload</button>}
           {(dataUrl || clientImage) && <button type="button" onClick={deleteProfilePicture} className="bg-red-300 mx-1 py-1 px-2 w-20 shadow-md rounded text-white fond-bold">Delete</button> }
         </div>
         <hr className="my-3" />
@@ -189,12 +189,12 @@ function Profile() {
 
         </div>
       </form>
-      <div className="flex flex-col w-full lg:w-5/12  p-5 ">
+      { /** <div className="flex flex-col w-full lg:w-5/12  p-5 bg-white ">
         <h1 className="text-2xl text-slate-800 font-bold  ">Manage Address</h1>
         <hr className="mb-10" />
         {user.address
       && user.address.map((item:any) => <Address key={item._id} address={item} />)}
-      </div>
+        </div> */}
     </div>
   );
 }

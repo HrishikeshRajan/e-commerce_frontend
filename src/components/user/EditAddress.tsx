@@ -7,7 +7,6 @@ import {
 } from 'formik';
 import { ZodError, z } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { IAddress } from '.';
 import { updateAddress } from './apis/updateAddress.api';
 import AuthHelper from '../auth/apis/helper';
 
@@ -66,9 +65,9 @@ function EditAddress(props:IProps) {
 
       { (formik) => (
         <Form className="w-full lg:w-full p-4 h-fit bg-white">
-          <h2 className="text-2xl text-slate-600 font-bold ">User Address</h2>
+          <h2 className="text-2xl text-slate-600 font-bold py-10">Edit Address</h2>
           <div className="">
-            <h2 className="text-lg font-medium text-slate-600 py-3"> Your Details</h2>
+            {/* <h2 className="text-lg font-medium text-slate-600 py-3"> Your Details</h2> */}
 
             <label htmlFor="fullname">Fullname</label>
             <Field
@@ -165,7 +164,7 @@ function EditAddress(props:IProps) {
             && <div className="text-red-500 pb-2">{formik.errors.country}</div>}
           </div>
           <div className="w-full flex justify-between my-2">
-
+            <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Cancel</button>
             {formik.isSubmitting
               ? <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>updating</button>
               : <button type="submit" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Save Address</button>}
