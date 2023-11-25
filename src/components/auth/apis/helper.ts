@@ -49,6 +49,16 @@ const AuthHelper = {
       return oldUser;
     }
   },
+  pushAuthenticatedUserAddress: (address:IAddress[], cb:VoidFunction) => {
+    if (typeof window !== undefined && address !== undefined && localStorage.getItem('user')) {
+      const oldUser = JSON.parse(localStorage.getItem('user') as string);
+      if (oldUser && oldUser?.address !== undefined) {
+        oldUser?.address.push(address);
+        localStorage.setItem('user', JSON.stringify(oldUser));
+      }
+    }
+    cb();
+  },
 
   isSignedOn() {
     try {

@@ -7,7 +7,7 @@ import { IAddress } from '..';
 function AddressList() {
   const address = useLoaderData() as IAddress[];
   const [createAddress, setCreateAddress] = useState(false);
-  if (!address.length) return <h1>Loading</h1>;
+
   return (
     <div className="flex flex-col h-screen w-full   p-5 bg-white ">
       <h1 className="text-2xl text-slate-800 font-bold  ">Manage Address</h1>

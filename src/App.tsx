@@ -15,6 +15,7 @@ import Dashboard from './components/marketplace/Dashboard';
 import AddressWrapper from './components/user/address/AddressList';
 import EditAddress from './components/user/address/EditAddress';
 import { parseAddressFromLocalStorage, parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
+import AddAddress from './components/user/address/AddAddress';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
   isAuthenticated: AuthHelper.isSignedOn(),
@@ -68,6 +69,10 @@ const App = () => {
                 outlet={<EditAddress />}
               />,
               loader: ({ params }) => parseSpecificAddressFromLocalStorage(params),
+            },
+            {
+              path: 'address/add',
+              element: <ProtectedRoute {...protectedRouteProps} outlet={<AddAddress />} />,
             },
 
           ],
