@@ -3,10 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { signout } from '../../auth/apis/signout';
 
 interface IDialougeBox {
-  status: boolean;
-  action: React.Dispatch<React.SetStateAction<boolean>>
+  clearError ():void
 }
-function SignoutError(props:IDialougeBox) {
+function SignoutError({ clearError }:IDialougeBox) {
   const navigate = useNavigate();
   const handleSignout = async () => {
     await signout().then((response) => {
@@ -22,7 +21,7 @@ function SignoutError(props:IDialougeBox) {
         <h2 className="text-lg font-bold mt-1">Error</h2>
         <p className="text-gray-600 my-6 font-semibold text-xs">Something went wrong, let&apos;s try again</p>
         <div className=" w-full  py-1 px-5 flex justify-evenly items-center">
-          <button type="button" onClick={() => props.action(!props.status)} className="w-1/3 p-2 font-bold text-xs bg-slate-200 hover:scale-105">Close</button>
+          <button type="button" onClick={clearError} className="w-1/3 p-2 font-bold text-xs bg-slate-200 hover:scale-105">Close</button>
           <button type="button" onClick={handleSignout} className="w-1/3 p-2 font-bold bg-green-200 hover:scale-105 text-xs">Retry</button>
         </div>
       </div>

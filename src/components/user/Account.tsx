@@ -12,6 +12,9 @@ import SignoutDialougeBox from './dialougeBox/SignoutDialougeBox';
 
 function Account() {
   const [signout, setSignOut] = useState(false);
+  const clickSignout = ():void => {
+    setSignOut(!signout);
+  };
   return (
     <div className="flex flex-col  mt-10 lg:flex-row  min-h-full p-2 gap-2">
       <div className=" w-full flex lg:flex-col  lg:w-3/12">
@@ -54,11 +57,12 @@ function Account() {
           <>
             <FontAwesomeIcon icon={faRightFromBracket} className="lg:hiden" />
             <p className="hidden lg:inline-block px-2">Signout</p>
+
           </>
         </NavLink>
+        {signout && <SignoutDialougeBox handleSignout={clickSignout} />}
 
       </div>
-      {signout && <SignoutDialougeBox status={signout} action={setSignOut} />}
 
       <Outlet />
 
