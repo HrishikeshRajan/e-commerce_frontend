@@ -15,6 +15,18 @@ const AuthHelper = {
       localStorage.setItem('user', JSON.stringify(updated));
     }
   },
+  removeAuthenticatedUserAddress: (id:string) => {
+    if (typeof window !== undefined && localStorage.getItem('user')) {
+      const oldUser = JSON.parse(localStorage.getItem('user') as string);
+
+      oldUser.address = oldUser
+        .address
+        .filter((item: IAddress) => (item._id.toString() !== id.toString()));
+
+      localStorage.setItem('user', JSON.stringify(oldUser));
+      return oldUser;
+    }
+  },
   updateAuthenticatedUserAddress: (address:IAddress[], id:string) => {
     if (typeof window !== undefined && address !== undefined && localStorage.getItem('user')) {
       const oldUser = JSON.parse(localStorage.getItem('user') as string);
@@ -37,6 +49,7 @@ const AuthHelper = {
       return oldUser;
     }
   },
+
   isSignedOn() {
     try {
       if (typeof window === undefined) {

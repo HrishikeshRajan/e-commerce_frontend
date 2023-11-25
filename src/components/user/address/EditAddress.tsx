@@ -42,6 +42,11 @@ function EditAddress() {
           updateAddress({ ...values }, props.address._id).then((response) => {
             if (response.statusCode === 422) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
+            } else if (response.statusCode === 401) {
+              AuthHelper.clearSignedOnData(() => {
+                actions.setSubmitting(false);
+                navigate('/auth');
+              });
             }
             actions.setSubmitting(false);
             AuthHelper.updateAuthenticatedUserAddress(response.message?.address, props.address._id);
