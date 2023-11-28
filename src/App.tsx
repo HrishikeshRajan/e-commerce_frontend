@@ -11,7 +11,6 @@ import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
 import ProtectedRoute, { RedirectIfUserExists } from './components/auth/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
-import AuthHelper from './components/auth/apis/helper';
 import Dashboard from './components/marketplace/Dashboard';
 import AddressWrapper from './components/user/address/AddressList';
 import EditAddress from './components/user/address/EditAddress';
