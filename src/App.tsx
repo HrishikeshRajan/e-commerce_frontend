@@ -3,6 +3,7 @@
 import React from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import { Provider } from 'react-redux';
 import Auth from './components/auth/Auth';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
@@ -16,6 +17,7 @@ import AddressWrapper from './components/user/address/AddressList';
 import EditAddress from './components/user/address/EditAddress';
 import { parseAddressFromLocalStorage, parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
 import AddAddress from './components/user/address/AddAddress';
+import store from './utils/store';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
   isAuthenticated: AuthHelper.isSignedOn(),
@@ -87,7 +89,9 @@ const App = () => {
     },
   ]);
   return (
-    <RouterProvider router={allRoutes} />
+    <Provider store={store}>
+      <RouterProvider router={allRoutes} />
+    </Provider>
   );
 };
 

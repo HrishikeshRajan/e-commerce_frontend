@@ -3,8 +3,11 @@ import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import { signin, errorParser } from './apis/signin.api';
 import AuthHelper from './apis/helper';
+import { useTypedDispatch } from '../../hooks/user/reduxHooks';
+import { addUser } from '../../utils/reduxSlice/appSlice';
 
 function Signin() {
+  const dispatch = useTypedDispatch();
   const [fields, setFields] = useState({
     email: '',
     password: '',
@@ -65,6 +68,8 @@ function Signin() {
           password: '',
           error: false,
         };
+
+        dispatch(addUser(response.message?.user));
         AuthHelper.authenticate(response.message.user, () => {
           setErrorStatus(errorObj);
           setRedirect(true);
