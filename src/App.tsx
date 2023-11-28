@@ -9,7 +9,7 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
-import ProtectedRoute from './components/auth/ProtectedRoute';
+import ProtectedRoute, { RedirectIfUserExists } from './components/auth/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
 import AuthHelper from './components/auth/apis/helper';
 import Dashboard from './components/marketplace/Dashboard';

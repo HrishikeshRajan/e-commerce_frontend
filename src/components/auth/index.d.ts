@@ -14,6 +14,10 @@ export type ProtectedRouteProps = {
   outlet: JSX.Element;
 };
 
+export type IsLoggedIn = {
+  outlet: JSX.Element;
+};
+
 export interface Index {
   index: number
 }

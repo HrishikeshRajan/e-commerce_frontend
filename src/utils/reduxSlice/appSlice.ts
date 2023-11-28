@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../components/user';
+import { accountMenu } from '../../components/user/constants';
 
 interface IAPP {
   user:IUser | null,
@@ -18,9 +19,13 @@ const appSlice = createSlice({
     addUser: (state, action:PayloadAction<IUser>) => {
       state.user = action.payload;
     },
+    confirmAuthentication: (state, action:PayloadAction<boolean>) => {
+      state.authenticated = action.payload;
+    },
+
   },
 });
 
-export const { addUser } = appSlice.actions;
+export const { addUser, confirmAuthentication } = appSlice.actions;
 
 export default appSlice.reducer;

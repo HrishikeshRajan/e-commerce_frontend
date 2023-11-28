@@ -4,9 +4,9 @@ import { Navigate } from 'react-router-dom';
 import { signin, errorParser } from './apis/signin.api';
 import AuthHelper from './apis/helper';
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
-import { addUser } from '../../utils/reduxSlice/appSlice';
+import { addUser, confirmAuthentication } from '../../utils/reduxSlice/appSlice';
 
-function Signin() {
+function Signin():React.JSX.Element {
   const dispatch = useTypedDispatch();
   const [fields, setFields] = useState({
     email: '',
@@ -23,9 +23,9 @@ function Signin() {
     accountError: false,
     message: '',
   });
-  const [redirect, setRedirect] = useState(false);
+  const [redirects, setRedirect] = useState(false);
 
-  if (redirect) {
+  if (redirects) {
     return <Navigate to="/" />;
   }
   const handleFieldChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +70,7 @@ function Signin() {
         };
 
         dispatch(addUser(response.message?.user));
+        dispatch(confirmAuthentication(true));
         AuthHelper.authenticate(response.message.user, () => {
           setErrorStatus(errorObj);
           setRedirect(true);
