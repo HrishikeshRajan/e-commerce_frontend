@@ -19,13 +19,24 @@ const appSlice = createSlice({
     addUser: (state, action:PayloadAction<IUser>) => {
       state.user = action.payload;
     },
+    removeUser: (state) => {
+      state.user = null;
+    },
     confirmAuthentication: (state, action:PayloadAction<boolean>) => {
       state.authenticated = action.payload;
+    },
+    removeAuthentication: (state) => {
+      state.authenticated = false;
     },
 
   },
 });
 
-export const { addUser, confirmAuthentication } = appSlice.actions;
+export const {
+  addUser,
+  removeUser,
+  confirmAuthentication,
+  removeAuthentication,
+} = appSlice.actions;
 
 export default appSlice.reducer;

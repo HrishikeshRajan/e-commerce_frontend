@@ -9,7 +9,6 @@ export type FetchErrorResponse = {
 };
 
 export type ProtectedRouteProps = {
-  isAuthenticated: boolean;
   authenticationPath: string;
   outlet: JSX.Element;
 };

@@ -5,11 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons/faCartPlus';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
-import { Link } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import Logo from '../../assets/smartshop.png';
+import { useUpdateReduxStore } from '../../hooks/user/useUpdateReduxStore';
 
 function Navbar() {
+  useUpdateReduxStore();
+
   return (
     <nav className=" bg-white">
       <div className="border-gray-200 flex justify-between items-center sm:px-4 ">
@@ -47,13 +50,13 @@ function Navbar() {
             />
             <span className="pl-1">eng</span>
           </li>
-          <li className="pr-2 sm:px-3 " aria-label="profile">
+          <NavLink to="/account" className="pr-2 sm:px-3 " aria-label="profile">
             <FontAwesomeIcon
               icon={faUser}
               className="text-slate-700 "
               size="lg"
             />
-          </li>
+          </NavLink>
           <li className="pr-2 sm:px-3" aria-label="cart">
             <FontAwesomeIcon
               icon={faCartPlus}

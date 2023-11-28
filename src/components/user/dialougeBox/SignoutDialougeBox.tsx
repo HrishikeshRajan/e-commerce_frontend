@@ -6,6 +6,8 @@ import { signout } from '../../auth/apis/signout';
 import SignoutError from './SignoutError';
 import AuthHelper from '../../auth/apis/helper';
 import { usePageFreeze } from '../../../hooks/user/usePageFreeze';
+import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
+import { removeAuthentication, removeUser } from '../../../utils/reduxSlice/appSlice';
 
 interface IDialougeBox {
   handleSignout():void
@@ -13,17 +15,23 @@ interface IDialougeBox {
 
 function SignoutDialougeBox({ handleSignout }:IDialougeBox) {
   const [error, setError] = useState(false);
+  const dispatch = useTypedDispatch();
   const removeError = () => {
     setError(!error);
   };
   const navigate = useNavigate();
 
+  /**
+   * This hook hides the veritical scroll
+   */
   usePageFreeze();
 
   const signOut = async () => {
     await signout().then((response) => {
       if (response.statusCode === 200) {
         AuthHelper.clearSignedOnData(() => {
+          dispatch(removeUser());
+          dispatch(removeAuthentication());
           navigate('/auth');
         });
       } else {

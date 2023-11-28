@@ -20,7 +20,6 @@ import AddAddress from './components/user/address/AddAddress';
 import store from './utils/store';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
-  isAuthenticated: AuthHelper.isSignedOn(),
   authenticationPath: '/auth',
 };
 
@@ -43,7 +42,7 @@ const App = () => {
         },
         {
           path: 'auth',
-          element: <Auth />,
+          element: <RedirectIfUserExists outlet={<Auth />} />,
         },
 
         {
