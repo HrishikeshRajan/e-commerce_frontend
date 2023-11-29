@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../components/user';
-import { accountMenu } from '../../components/user/constants';
 
 interface IAPP {
   user:IUser | null,
