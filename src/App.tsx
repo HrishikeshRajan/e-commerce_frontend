@@ -17,6 +17,9 @@ import EditAddress from './components/user/address/EditAddress';
 import { parseAddressFromLocalStorage, parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
 import AddAddress from './components/user/address/AddAddress';
 import store from './utils/store';
+import ForgotForm from './components/auth/ForgotForm';
+import NewPassword from './components/auth/NewPassword';
+import Expired from './components/error/Expired';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
   authenticationPath: '/auth',
@@ -42,6 +45,14 @@ const App = () => {
         {
           path: 'auth',
           element: <RedirectIfUserExists outlet={<Auth />} />,
+        },
+        {
+          path: 'forgotpassword',
+          element: <RedirectIfUserExists outlet={<ForgotForm />} />,
+        },
+        {
+          path: 'reset-password/:id',
+          element: <RedirectIfUserExists outlet={<NewPassword />} />,
         },
 
         {
@@ -84,6 +95,10 @@ const App = () => {
         },
       ],
 
+    },
+    {
+      path: '/expired',
+      element: <Expired />,
     },
   ]);
   return (
