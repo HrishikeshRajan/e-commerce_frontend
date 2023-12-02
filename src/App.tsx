@@ -57,7 +57,7 @@ const App = () => {
 
         {
           path: '/account',
-          element: <Account />,
+          element: <ProtectedRoute {...protectedRouteProps} outlet={<Account />} />,
           children: [
             {
               path: 'profile',

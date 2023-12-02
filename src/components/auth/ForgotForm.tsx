@@ -7,11 +7,17 @@ import React from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
+import { useNavigate } from 'react-router-dom';
 import { emailSchema } from './helpers/validationSchema.helper';
 import { forgot } from './apis/forgot.api';
 import { transformZodToFormikErrors } from '../user/address/helpers/helper';
+import useAuthPage from '../../hooks/user/useAuthPage';
 
 function ForgotForm() {
+  const navigate = useNavigate();
+
+  useAuthPage();
+
   return (
     <div className=" h-screen absolute left-0 right-0 top-0 grid place-items-center">
       <Formik
@@ -42,7 +48,7 @@ function ForgotForm() {
             </h2>
             {form.status && <h4 className="p-5 bg-green-100">{form.status}</h4>}
 
-            <label htmlFor="email" className="py-2 text-slate-700 text-center">Enter your registered email address</label>
+            <label htmlFor="email" className="py-2 text-slate-700 text-left ml-1">Enter your registered email address</label>
             <Field
               type="email"
               name="email"
@@ -81,6 +87,7 @@ function ForgotForm() {
                 </button>
               )
             }
+            <button type="button" className="my-4 " onClick={() => navigate('/auth')}>Back to Login?</button>
           </Form>
         )}
       </Formik>

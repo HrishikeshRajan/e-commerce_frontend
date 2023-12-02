@@ -5,11 +5,13 @@ import { IUser } from '../../components/user';
 interface IAPP {
   user:IUser | null,
   authenticated:boolean | false,
+  authPage:boolean | false
 }
 
 const initialState:IAPP = {
   user: null,
   authenticated: false,
+  authPage: false,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -27,6 +29,9 @@ const appSlice = createSlice({
     removeAuthentication: (state) => {
       state.authenticated = false;
     },
+    signInPage: (state, action:PayloadAction<boolean>) => {
+      state.authPage = action.payload;
+    },
 
   },
 });
@@ -36,6 +41,7 @@ export const {
   removeUser,
   confirmAuthentication,
   removeAuthentication,
+  signInPage
 } = appSlice.actions;
 
 export default appSlice.reducer;

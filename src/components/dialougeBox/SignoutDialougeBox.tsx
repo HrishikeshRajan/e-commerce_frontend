@@ -2,12 +2,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
-import { signout } from '../../auth/apis/signout';
+import { signout } from '../auth/apis/signout';
 import SignoutError from './SignoutError';
-import AuthHelper from '../../auth/apis/helper';
-import { usePageFreeze } from '../../../hooks/user/usePageFreeze';
-import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
-import { removeAuthentication, removeUser } from '../../../utils/reduxSlice/appSlice';
+import AuthHelper from '../auth/apis/helper';
+import { usePageFreeze } from '../../hooks/user/usePageFreeze';
+import { useTypedDispatch } from '../../hooks/user/reduxHooks';
+import { removeAuthentication, removeUser } from '../../utils/reduxSlice/appSlice';
 
 interface IDialougeBox {
   handleSignout():void

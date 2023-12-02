@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { signout } from '../../auth/apis/signout';
-import AuthHelper from '../../auth/apis/helper';
-import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
-import { removeAuthentication, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { signout } from '../auth/apis/signout';
+import AuthHelper from '../auth/apis/helper';
+import { useTypedDispatch } from '../../hooks/user/reduxHooks';
+import { removeAuthentication, removeUser } from '../../utils/reduxSlice/appSlice';
 
 interface IDialougeBox {
   clearError ():void

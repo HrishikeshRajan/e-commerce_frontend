@@ -8,7 +8,7 @@ import React, { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { faBasketShopping } from '@fortawesome/free-solid-svg-icons/faBasketShopping';
 import { faUser } from '@fortawesome/free-solid-svg-icons/faUser';
-import SignoutDialougeBox from './dialougeBox/SignoutDialougeBox';
+import SignoutDialougeBox from '../dialougeBox/SignoutDialougeBox';
 
 function Account() {
   const [signout, setSignOut] = useState(false);

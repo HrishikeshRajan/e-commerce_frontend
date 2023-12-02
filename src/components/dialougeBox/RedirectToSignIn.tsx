@@ -2,8 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { faCircleExclamation } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { signout } from '../../auth/apis/signout';
-import AuthHelper from '../../auth/apis/helper';
+import { signout } from '../auth/apis/signout';
+import AuthHelper from '../auth/apis/helper';
 
 function RedirectToSignIn() {
   const navigate = useNavigate();

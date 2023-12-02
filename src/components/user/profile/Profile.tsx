@@ -13,12 +13,12 @@ import defaultUser from '../../../assets/defaultUser.png';
 // import { listMyProfile } from '../apis/showProfile.api';
 import { IUser } from '..';
 import { updateProfile } from '../apis/updateProfile.api';
-import SuccessBox from '../dialougeBox/SuccessBox';
+import SuccessBox from '../../dialougeBox/SuccessBox';
 import AuthHelper from '../../auth/apis/helper';
 import { deleteImage, uploadImage } from '../apis/image.api';
 import { profilePicture } from '../helper/getProfilePicture';
-import ErrorBox from '../dialougeBox/ErrorBox';
-import RedirectToSignIn from '../dialougeBox/RedirectToSignIn';
+import ErrorBox from '../../dialougeBox/ErrorBox';
+import RedirectToSignIn from '../../dialougeBox/RedirectToSignIn';
 
 function Profile() {
   const [user, setUser] = useState<IUser>({
@@ -54,27 +54,9 @@ function Profile() {
 
   useEffect(() => {
     const data = AuthHelper.isSignedOn();
-    // const abort = new AbortController();
     if (data) {
       setUser(data);
     }
-    // } else {
-    //   const { signal } = abort;
-    //   listMyProfile(signal).then((response:any) => {
-    //     if (response?.statusCode <= 200 && response?.success === true) {
-    //       setUser({ ...user, ...response.message.user });
-    //     } else if (response?.statusCode === 401
-    //       && response?.success === false) {
-    //       setFetchError({ errorState: true, message: response.message?.error, redirect: true });
-    //     } if (response?.statusCode > 401 && response?.statusCode <= 500) {
-    //       setFetchError({ errorState: true, message: response?.message?.error, redirect: false });
-    //     }
-    //   });
-    // }
-
-    // return () => {
-    //   abort.abort();
-    // };
   }, []);
 
   const onSubmit = (event:React.FormEvent) => {

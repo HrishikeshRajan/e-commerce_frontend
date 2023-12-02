@@ -138,7 +138,9 @@ function Signin():React.JSX.Element {
           </Form>
         )}
       </Formik>
-      <ForgotPassword />
+      <div className="flex justify-end">
+        <ForgotPassword />
+      </div>
     </>
   );
 }
