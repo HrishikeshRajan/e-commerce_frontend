@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Navigate,
 } from 'react-router-dom';
-import { IsLoggedIn, ProtectedRouteProps } from '.';
+import { IsLoggedIn, ProtectedRouteProps } from '../auth';
 import { useTypedSelector } from '../../hooks/user/reduxHooks';
 
 function ProtectedRoute({ authenticationPath, outlet }:ProtectedRouteProps) {

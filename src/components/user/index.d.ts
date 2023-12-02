@@ -19,3 +19,7 @@ export interface IUser {
   }
   address?:IAddress[]
 }
+export type FetchResponse =
+{ successMsg:string;
+  isSuccess:boolean;
+};

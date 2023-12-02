@@ -41,7 +41,7 @@ export const {
   removeUser,
   confirmAuthentication,
   removeAuthentication,
-  signInPage
+  signInPage,
 } = appSlice.actions;
 
 export default appSlice.reducer;

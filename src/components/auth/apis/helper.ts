@@ -2,11 +2,13 @@ import { Index } from '..';
 import { IAddress, IUser } from '../../user';
 
 const AuthHelper = {
-  authenticate: (user:any, cb:()=>void) => {
+  authenticate: (user:any, cb?:()=>void) => {
     if (typeof window !== undefined) {
       localStorage.setItem('user', JSON.stringify(user));
     }
-    cb();
+    if (cb) {
+      cb();
+    }
   },
   updateAuthenticatedUserData: (user:IUser) => {
     if (typeof window !== undefined && localStorage.getItem('user')) {
@@ -75,12 +77,14 @@ const AuthHelper = {
     document.cookie = 'token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
     document.cookie = 'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
   },
-  clearSignedOnData(cb:()=>void) {
+  clearSignedOnData(cb?:()=>void) {
     if (typeof window !== undefined) {
       localStorage.removeItem('user');
       this.clearCookie();
     }
-    cb();
+    if (cb) {
+      cb();
+    }
   },
 };
 
