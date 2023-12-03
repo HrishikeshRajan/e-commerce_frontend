@@ -12,10 +12,10 @@ import Account from './components/user/Account';
 import ProtectedRoute, { RedirectIfUserExists } from './components/middleware/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
 import Dashboard from './components/marketplace/Dashboard';
-import AddressWrapper from './components/user/address/AddressList';
-import EditAddress from './components/user/address/EditAddress';
-import { parseAddressFromLocalStorage, parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
-import AddAddress from './components/user/address/AddAddress';
+import AddressWrapper from './components/user/address/Wrapper';
+import EditAddress from './components/user/address/EditForm';
+import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
+import AddAddress from './components/user/address/AddForm';
 import store from './utils/store';
 import ForgotForm from './components/auth/ForgotForm';
 import NewPassword from './components/auth/NewPassword';
@@ -66,12 +66,6 @@ const App = () => {
             {
               path: 'address',
               element: <ProtectedRoute {...protectedRouteProps} outlet={<AddressWrapper />} />,
-              loader: () => parseAddressFromLocalStorage(),
-            },
-            {
-              path: 'address/edit',
-              element: <ProtectedRoute {...protectedRouteProps} outlet={<EditAddress />} />,
-              loader: () => parseAddressFromLocalStorage(),
             },
             {
               path: 'address/edit/:addressId',

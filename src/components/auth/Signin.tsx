@@ -12,7 +12,7 @@ import { signin } from './apis/signin.api';
 import AuthHelper from './apis/helper';
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
 import { addUser, confirmAuthentication } from '../../utils/reduxSlice/appSlice';
-import { transformZodToFormikErrors } from '../user/address/helpers/helper';
+import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import { loginSchema } from './helpers/validationSchema.helper';
 import ForgotPassword from './ForgotPassword';
 import Loading from '../../utils/animations/Loading';

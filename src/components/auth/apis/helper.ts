@@ -29,26 +29,19 @@ const AuthHelper = {
       return oldUser;
     }
   },
-  updateAuthenticatedUserAddress: (address:IAddress[], id:string) => {
-    if (typeof window !== undefined && address !== undefined && localStorage.getItem('user')) {
+  updateUserAddressInLocalStorage: (address:IAddress, id:string) => {
+    if (typeof window !== undefined && address && localStorage.getItem('user')) {
       const oldUser = JSON.parse(localStorage.getItem('user') as string);
-      const addressIndex: Index = {
-        index: 0,
-      };
 
-      address?.find((item: IAddress, index) => {
+      const modifiedUser = oldUser.address.map((item:IAddress) => {
         if (item._id.toString() === id.toString()) {
-          addressIndex.index = index;
-          return item;
+          return { ...item, ...address };
         }
+        return item;
       });
-
-      const updatedAddress = Object
-        .assign(oldUser.address[addressIndex.index], address[addressIndex.index]);
-      oldUser.address[addressIndex.index] = updatedAddress;
-
+      oldUser.address = modifiedUser;
       localStorage.setItem('user', JSON.stringify(oldUser));
-      return oldUser;
+      return modifiedUser;
     }
   },
   pushAuthenticatedUserAddress: (address:IAddress[], cb:VoidFunction) => {
@@ -60,6 +53,17 @@ const AuthHelper = {
       }
     }
     cb();
+  },
+  getUserFromLocalStorage() {
+    try {
+      if (typeof window === undefined) {
+        return false;
+      } if (localStorage.getItem('user') && typeof localStorage.getItem('user') === 'string') {
+        return JSON.parse(localStorage.getItem('user') as string);
+      }
+    } catch (error) {
+      return false;
+    }
   },
 
   isSignedOn() {

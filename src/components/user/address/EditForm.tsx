@@ -5,19 +5,24 @@ import React, { useState } from 'react';
 import {
   Formik, Field, Form, ErrorMessage,
 } from 'formik';
-import { ZodError, z } from 'zod';
+import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useLoaderData, useNavigate } from 'react-router-dom';
+import { StatusCodes } from 'http-status-codes';
 import { updateAddress } from '../apis/updateAddress.api';
 import AuthHelper from '../../auth/apis/helper';
-import { AddressSchema, transformZodToFormikErrors } from './helpers/helper';
+import { AddressSchema, transformZodToFormikErrors } from './helpers/validationSchema';
 import { IAddress } from '..';
+import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
 
 interface IProps {
   address:IAddress
 }
 function EditAddress() {
   const navigate = useNavigate();
+  const dispatch = useTypedDispatch();
+
   const loadAddress = useLoaderData() as IAddress;
   if (!loadAddress) return;
   const props:IProps = {
@@ -40,16 +45,21 @@ function EditAddress() {
       onSubmit={(values, actions) => {
         try {
           updateAddress({ ...values }, props.address._id).then((response) => {
-            if (response.statusCode === 422) {
-              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-            } else if (response.statusCode === 401) {
-              AuthHelper.clearSignedOnData(() => {
-                actions.setSubmitting(false);
-                navigate('/auth');
-              });
-            }
             actions.setSubmitting(false);
-            AuthHelper.updateAuthenticatedUserAddress(response.message?.address, props.address._id);
+            if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
+            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
+              && response?.success === false) {
+              AuthHelper.clearSignedOnData();
+              dispatch(removeUser());
+              navigate('/auth');
+            }
+            if (response.success && response.statusCode === StatusCodes.OK) {
+              AuthHelper
+                .updateUserAddressInLocalStorage(response.message.address, props.address._id);
+              const user = AuthHelper.getUserFromLocalStorage();
+              dispatch(addUser(user));
+            }
           });
         } catch (error) {
           console.error(error);

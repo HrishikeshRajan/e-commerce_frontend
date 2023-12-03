@@ -10,7 +10,7 @@ import { ZodError } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import { emailSchema } from './helpers/validationSchema.helper';
 import { forgot } from './apis/forgot.api';
-import { transformZodToFormikErrors } from '../user/address/helpers/helper';
+import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import useAuthPage from '../../hooks/user/useAuthPage';
 
 function ForgotForm() {

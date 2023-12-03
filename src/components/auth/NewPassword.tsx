@@ -6,7 +6,7 @@ import React from 'react';
 import { Form, useNavigate, useParams } from 'react-router-dom';
 import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { transformZodToFormikErrors } from '../user/address/helpers/helper';
+import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import { updatePassword } from './apis/updatePassword.api';
 import { passwordSchema } from './helpers/validationSchema.helper';
 

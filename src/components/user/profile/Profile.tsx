@@ -13,6 +13,7 @@ import { StatusCodes } from 'http-status-codes';
 import { useNavigate } from 'react-router-dom';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { ToastContainer, toast } from 'react-toastify';
+import { ZodError } from 'zod';
 import { updateProfile } from '../apis/updateProfile.api';
 import AuthHelper from '../../auth/apis/helper';
 import Image from './Image';
@@ -21,6 +22,7 @@ import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
 import { editProfileSchema } from '../helper/validationSchema';
 import Loading from '../../../utils/animations/Loading';
 import 'react-toastify/dist/ReactToastify.css';
+import { transformZodToFormikErrors } from '../address/helpers/validationSchema';
 
 function Profile() {
   const dispatch = useTypedDispatch();
@@ -55,6 +57,8 @@ function Profile() {
               AuthHelper.clearSignedOnData();
               dispatch(removeUser());
               navigate('/auth');
+            } else if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
             }
           });
         }}
