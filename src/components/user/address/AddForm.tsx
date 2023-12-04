@@ -57,9 +57,9 @@ function AddAddress() {
       }}
     >
 
-      { (formik) => (
+      { (form) => (
         <>
-          <Form className="w-full lg:w-full p-4 h-fit bg-white" onSubmit={formik.handleSubmit}>
+          <Form className="w-full lg:w-full p-4 h-fit bg-white" onSubmit={form.handleSubmit}>
             <h2 className="text-2xl text-slate-600 font-bold py-10">Enter Your Address</h2>
             <div>
               <label htmlFor="fullname">Fullname</label>
@@ -67,8 +67,7 @@ function AddAddress() {
                 type="text"
                 id="fullname"
                 name="fullname"
-                className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.fullname
-                    && formik.errors.fullname) ? 'border-2 border-red-500' : ''}`}
+                className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.fullname && form.touched.fullname && 'border-2 border-red-500'}`}
               />
               <ErrorMessage
                 name="fullname"
@@ -82,8 +81,7 @@ function AddAddress() {
               <Field
                 type="text"
                 name="homeAddress"
-                className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.homeAddress
-                    && formik.errors.homeAddress) ? 'border-2 border-red-500' : ''}`}
+                className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.homeAddress && form.touched.homeAddress && 'border-2 border-red-500'}`}
               />
               <ErrorMessage
                 name="homeAddress"
@@ -99,8 +97,7 @@ function AddAddress() {
                   <Field
                     type="text"
                     name="city"
-                    className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.city
-                    && formik.errors.city) ? 'border-2 border-red-500' : ''}`}
+                    className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.city && form.touched.city && 'border-2 border-red-500'}`}
                   />
                   <ErrorMessage
                     name="city"
@@ -116,8 +113,7 @@ function AddAddress() {
                   <Field
                     type="text"
                     name="state"
-                    className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.state
-                    && formik.errors.state) ? 'border-2 border-red-500' : ''}`}
+                    className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.state && form.touched.state && 'border-2 border-red-500'}`}
                   />
                   <ErrorMessage
                     name="state"
@@ -135,8 +131,7 @@ function AddAddress() {
                   <Field
                     type="text"
                     name="postalCode"
-                    className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.postalCode
-                    && formik.errors.postalCode) ? 'border-2 border-red-500' : ''}`}
+                    className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.postalCode && form.touched.postalCode && 'border-2 border-red-500'}`}
                   />
                   <ErrorMessage
                     name="postalCode"
@@ -153,8 +148,8 @@ function AddAddress() {
                   <Field
                     type="text"
                     name="phoneNo"
-                    className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.phoneNo
-                    && formik.errors.phoneNo) ? 'border-2 border-red-500' : ''}`}
+                    className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.phoneNo && form.touched.phoneNo && 'border-2 border-red-500'}`}
+
                   />
                   <ErrorMessage
                     name="phoneNo"
@@ -170,8 +165,7 @@ function AddAddress() {
               <Field
                 type="text"
                 name="country"
-                className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.country
-                    && formik.errors.country) ? 'border-2 border-red-500' : ''}`}
+                className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.country && form.touched.country && 'border-2 border-red-500'}`}
 
               />
               <ErrorMessage
@@ -185,7 +179,7 @@ function AddAddress() {
             </div>
             <div className="w-full flex justify-between my-2">
               <button type="button" onClick={() => navigate(-1)} className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Back</button>
-              {formik.isSubmitting
+              {form.isSubmitting
                 ? (
                   <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>
                     <Loading />
