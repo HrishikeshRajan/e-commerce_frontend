@@ -5,7 +5,7 @@ import { IUser } from '../../components/user';
 interface IAPP {
   user:IUser | null,
   authenticated:boolean | false,
-  authPage:boolean | false
+  authPage:boolean | false,
 }
 
 const initialState:IAPP = {

@@ -1,9 +1,8 @@
 /* eslint-disable react/jsx-closing-tag-location */
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createPortal } from 'react-dom';
 import { signout } from '../auth/apis/signout';
-import SignoutError from './SignoutError';
 import AuthHelper from '../auth/apis/helper';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
@@ -14,11 +13,7 @@ interface IDialougeBox {
 }
 
 function SignoutDialougeBox({ handleSignout }:IDialougeBox) {
-  const [error, setError] = useState(false);
   const dispatch = useTypedDispatch();
-  const removeError = () => {
-    setError(!error);
-  };
   const navigate = useNavigate();
 
   /**
@@ -27,19 +22,14 @@ function SignoutDialougeBox({ handleSignout }:IDialougeBox) {
   usePageFreeze();
 
   const signOut = async () => {
-    await signout().then((response) => {
-      if (response.statusCode === 200) {
-        AuthHelper.clearSignedOnData(() => {
-          dispatch(removeUser());
-          dispatch(removeAuthentication());
-          navigate('/auth');
-        });
-      } else {
-        setError(!error);
-      }
+    await signout().then(() => {
+      AuthHelper.clearSignedOnData(() => {
+        dispatch(removeUser());
+        dispatch(removeAuthentication());
+        navigate('/auth');
+      });
     });
   };
-  if (error) return <SignoutError clearError={removeError} />;
   return createPortal(
     <>
       <div className="fixed inset-0 backdrop-blur-sm "> </div>
