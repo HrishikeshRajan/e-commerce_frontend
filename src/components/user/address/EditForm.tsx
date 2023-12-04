@@ -15,6 +15,7 @@ import { AddressSchema, transformZodToFormikErrors } from './helpers/validationS
 import { IAddress } from '..';
 import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
 import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
+import Loading from '../../../utils/animations/Loading';
 
 interface IProps {
   address:IAddress
@@ -67,56 +68,72 @@ function EditAddress() {
       }}
     >
 
-      { (formik) => (
+      { (form) => (
         <Form className="w-full lg:w-full p-4 h-fit bg-white">
           <h2 className="text-2xl text-slate-600 font-bold py-10">Edit Address</h2>
           <div>
+
             <label htmlFor="fullname">Fullname</label>
             <Field
               type="text"
+              id="fullname"
               name="fullname"
-              className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.fullname
-            && formik.errors.fullname) ? 'border-2 border-red-500' : ''}`}
+              className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.fullname && form.touched.fullname && 'border-2 border-red-500'}`}
             />
-            {formik.touched.fullname
-            && formik.errors.fullname
-            && <div className="text-red-500 pb-2">{formik.errors.fullname}</div>}
-
+            <ErrorMessage
+              name="fullname"
+              render={(msg) => (
+                <div className="text-red-500 pb-2">
+                  {msg}
+                </div>
+              )}
+            />
             <label htmlFor="homeAddress">Home/Flat Name</label>
             <Field
               type="text"
               name="homeAddress"
-              className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.homeAddress
-            && formik.errors.homeAddress) ? 'border-2 border-red-500' : ''}`}
+              className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.homeAddress && form.touched.homeAddress && 'border-2 border-red-500'}`}
             />
-            {formik.touched.homeAddress
-            && formik.errors.homeAddress
-            && <div className="text-red-500 pb-2">{formik.errors.homeAddress}</div>}
-
+            <ErrorMessage
+              name="homeAddress"
+              render={(msg) => (
+                <div className="text-red-500 pb-2">
+                  {msg}
+                </div>
+              )}
+            />
             <div className="flex  justify-between">
               <div>
                 <label htmlFor="city">City</label>
                 <Field
                   type="text"
                   name="city"
-                  className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.city
-            && formik.errors.city) ? 'border-2 border-red-500' : ''}`}
+                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.city && form.touched.city && 'border-2 border-red-500'}`}
                 />
-                {formik.touched.city
-            && formik.errors.city
-            && <div className="text-red-500 pb-2">{formik.errors.city}</div>}
+                <ErrorMessage
+                  name="city"
+                  render={(msg) => (
+                    <div className="text-red-500 pb-2">
+                      {msg}
+                    </div>
+                  )}
+                />
               </div>
               <div>
-                <label htmlFor="city">State</label>
+                <label htmlFor="state">State</label>
                 <Field
                   type="text"
                   name="state"
-                  className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.state
-            && formik.errors.state) ? 'border-2 border-red-500' : ''}`}
+                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.state && form.touched.state && 'border-2 border-red-500'}`}
                 />
-                {formik.touched.state
-            && formik.errors.state
-            && <div className="text-red-500 pb-2">{formik.errors.state}</div>}
+                <ErrorMessage
+                  name="state"
+                  render={(msg) => (
+                    <div className="text-red-500 pb-2">
+                      {msg}
+                    </div>
+                  )}
+                />
               </div>
             </div>
             <div className="flex justify-between">
@@ -125,12 +142,16 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="postalCode"
-                  className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.postalCode
-            && formik.errors.postalCode) ? 'border-2 border-red-500' : ''}`}
+                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.postalCode && form.touched.postalCode && 'border-2 border-red-500'}`}
                 />
-                {formik.touched.postalCode
-            && formik.errors.postalCode
-            && <div className="text-red-500 pb-2">{formik.errors.postalCode}</div>}
+                <ErrorMessage
+                  name="postalCode"
+                  render={(msg) => (
+                    <div className="text-red-500 pb-2">
+                      {msg}
+                    </div>
+                  )}
+                />
               </span>
 
               <span className="flex flex-col w-4/6">
@@ -138,31 +159,45 @@ function EditAddress() {
                 <Field
                   type="text"
                   name="phoneNo"
-                  className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.phoneNo
-            && formik.errors.phoneNo) ? 'border-2 border-red-500' : ''}`}
+                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.phoneNo && form.touched.phoneNo && 'border-2 border-red-500'}`}
+
                 />
-                {formik.touched.phoneNo
-            && formik.errors.phoneNo
-            && <div className="text-red-500 pb-2">{formik.errors.phoneNo}</div>}
+                <ErrorMessage
+                  name="phoneNo"
+                  render={(msg) => (
+                    <div className="text-red-500 pb-2">
+                      {msg}
+                    </div>
+                  )}
+                />
               </span>
             </div>
             <label htmlFor="country">Country</label>
             <Field
               type="text"
               name="country"
-              className={`inline-block my-1 w-full flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6 ${(formik.touched.country
-            && formik.errors.country) ? 'border-2 border-red-500' : ''}`}
+              className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.country && form.touched.country && 'border-2 border-red-500'}`}
 
             />
-            {formik.touched.country
-            && formik.errors.country
-            && <div className="text-red-500 pb-2">{formik.errors.country}</div>}
+            <ErrorMessage
+              name="country"
+              render={(msg) => (
+                <div className="text-red-500 pb-2">
+                  {msg}
+                </div>
+              )}
+            />
           </div>
           <div className="w-full flex justify-between my-2">
             <button type="button" onClick={() => navigate(-1)} className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Back</button>
-            {formik.isSubmitting
-              ? <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>updating</button>
-              : <button type="submit" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Save Address</button>}
+            {form.isSubmitting
+              ? (
+                <button type="button" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 " disabled>
+                  <Loading />
+                  Saving
+                </button>
+              )
+              : <button type="submit" className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Save</button>}
 
           </div>
         </Form>
