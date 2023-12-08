@@ -33,6 +33,16 @@ const appSlice = createSlice({
       state.authPage = action.payload;
     },
 
+    upgradeToSeller: (state, action:PayloadAction<boolean>) => {
+      const { user } = state;
+      if (user) {
+        user.seller = action.payload;
+        if (user.seller) { user.role = 'seller'; } else { user.role = 'user'; }
+      }
+
+      state.user = user;
+    },
+
   },
 });
 
@@ -42,6 +52,7 @@ export const {
   confirmAuthentication,
   removeAuthentication,
   signInPage,
+  upgradeToSeller,
 } = appSlice.actions;
 
 export default appSlice.reducer;

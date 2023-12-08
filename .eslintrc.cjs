@@ -9,6 +9,7 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:react/recommended',
     'airbnb-typescript',
+    'plugin:security/recommended',
   ],
   overrides: [
     {
@@ -78,6 +79,16 @@ module.exports = {
     'label-has-associated-control': 'off',
     'no-extraneous-dependencies': 'off',
     'jsx-props-no-spreading': 'off',
+    'jsx-a11y/label-has-associated-control': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
+    'jsx-a11y/label-has-for': ['error', {
+      required: {
+        some: ['nesting', 'id'],
+      },
+    }],
   },
   ignorePatterns: ['postcss.config.js'],
 };

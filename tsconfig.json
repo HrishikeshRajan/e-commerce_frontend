@@ -19,8 +19,10 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
     "types": ["vitest/globals"]
   },
   "include": ["src",".eslintrc.cjs"],
+  "exclude": ["node-modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

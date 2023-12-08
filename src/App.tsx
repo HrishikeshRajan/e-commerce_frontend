@@ -11,7 +11,7 @@ import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
 import ProtectedRoute, { RedirectIfUserExists } from './components/middleware/ProtectedRoute';
 import { ProtectedRouteProps } from './components/auth';
-import Dashboard from './components/marketplace/Dashboard';
+import Dashboard from './components/marketplace_dashboard/Dashboard';
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';
 import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
@@ -20,6 +20,8 @@ import store from './utils/store';
 import ForgotForm from './components/auth/ForgotForm';
 import NewPassword from './components/auth/NewPassword';
 import Expired from './components/error/Expired';
+import Marketplace from './components/marketplace/Marketplace';
+import ServiceUnavailable from './components/error/ServiceUnavailable';
 
 const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
   authenticationPath: '/auth',
@@ -79,12 +81,16 @@ const App = () => {
               path: 'address/add',
               element: <ProtectedRoute {...protectedRouteProps} outlet={<AddAddress />} />,
             },
+            {
+              path: 'marketplace',
+              element: <ProtectedRoute {...protectedRouteProps} outlet={<Marketplace />} />,
+            },
 
           ],
         },
 
         {
-          path: 'marketplace',
+          path: 'marketplace/dashboard',
           element: <Dashboard />,
         },
       ],
@@ -93,6 +99,10 @@ const App = () => {
     {
       path: '/expired',
       element: <Expired />,
+    },
+    {
+      path: '/server/error',
+      element: <ServiceUnavailable />,
     },
   ]);
   return (

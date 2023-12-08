@@ -9,6 +9,7 @@ export interface IAddress {
   _id:string
 }
 export interface IUser {
+  _id:string
   fullname: string
   username: string
   email: string
@@ -18,6 +19,8 @@ export interface IUser {
     url: string
   }
   address?:IAddress[]
+  seller:boolean
+  role:string
 }
 export type FetchResponse =
 { successMsg:string;
