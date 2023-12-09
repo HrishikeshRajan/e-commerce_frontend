@@ -9,8 +9,7 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
-import ProtectedRoute, { RedirectIfUserExists } from './components/middleware/ProtectedRoute';
-import { ProtectedRouteProps } from './components/auth';
+import { AuthenticationWrapper, RedirectIfAuthenticated } from './components/middleware/ProtectedRoute';
 import Dashboard from './components/marketplace_dashboard/Dashboard';
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';
@@ -22,10 +21,6 @@ import NewPassword from './components/auth/NewPassword';
 import Expired from './components/error/Expired';
 import Marketplace from './components/marketplace/Marketplace';
 import ServiceUnavailable from './components/error/ServiceUnavailable';
-
-const protectedRouteProps:Omit<ProtectedRouteProps, 'outlet'> = {
-  authenticationPath: '/auth',
-};
 
 const Element = () => (
   <div className="container min-h-screen">
@@ -42,48 +37,85 @@ const App = () => {
       children: [
         {
           path: '/',
-          element: <Home />,
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <Home />
+            </AuthenticationWrapper>
+          ),
         },
         {
           path: 'auth',
-          element: <RedirectIfUserExists outlet={<Auth />} />,
+          element: (
+            <RedirectIfAuthenticated authentication={false}>
+              <Auth />
+            </RedirectIfAuthenticated>
+          ),
         },
         {
           path: 'forgotpassword',
-          element: <RedirectIfUserExists outlet={<ForgotForm />} />,
+          element: (
+            <RedirectIfAuthenticated authentication={false}>
+              <ForgotForm />
+            </RedirectIfAuthenticated>
+          ),
         },
         {
           path: 'reset-password/:id',
-          element: <RedirectIfUserExists outlet={<NewPassword />} />,
+          element: (
+            <RedirectIfAuthenticated authentication={false}>
+              <NewPassword />
+            </RedirectIfAuthenticated>
+          ),
         },
 
         {
           path: '/account',
-          element: <ProtectedRoute {...protectedRouteProps} outlet={<Account />} />,
+          element: (
+            <AuthenticationWrapper authentication>
+              <Account />
+            </AuthenticationWrapper>
+          ),
           children: [
             {
               path: 'profile',
-              element: <ProtectedRoute {...protectedRouteProps} outlet={<Profile />} />,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <Profile />
+                </AuthenticationWrapper>
+              ),
             },
             {
               path: 'address',
-              element: <ProtectedRoute {...protectedRouteProps} outlet={<AddressWrapper />} />,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <AddressWrapper />
+                </AuthenticationWrapper>
+              ),
             },
             {
               path: 'address/edit/:addressId',
-              element: <ProtectedRoute
-                {...protectedRouteProps}
-                outlet={<EditAddress />}
-              />,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <EditAddress />
+                </AuthenticationWrapper>
+              ),
               loader: ({ params }) => parseSpecificAddressFromLocalStorage(params),
             },
             {
               path: 'address/add',
-              element: <ProtectedRoute {...protectedRouteProps} outlet={<AddAddress />} />,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <AddAddress />
+                </AuthenticationWrapper>
+              ),
             },
             {
               path: 'marketplace',
-              element: <ProtectedRoute {...protectedRouteProps} outlet={<Marketplace />} />,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <Marketplace />
+                </AuthenticationWrapper>
+              ),
             },
 
           ],
@@ -91,18 +123,30 @@ const App = () => {
 
         {
           path: 'marketplace/dashboard',
-          element: <Dashboard />,
+          element: (
+            <AuthenticationWrapper authentication>
+              <Dashboard />
+            </AuthenticationWrapper>
+          ),
         },
       ],
 
     },
     {
       path: '/expired',
-      element: <Expired />,
+      element: (
+        <AuthenticationWrapper authentication={false}>
+          <Expired />
+        </AuthenticationWrapper>
+      ),
     },
     {
       path: '/server/error',
-      element: <ServiceUnavailable />,
+      element: (
+        <AuthenticationWrapper authentication={false}>
+          <ServiceUnavailable />
+        </AuthenticationWrapper>
+      ),
     },
   ]);
   return (
