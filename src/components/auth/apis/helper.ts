@@ -1,4 +1,3 @@
-import { Index } from '..';
 import { IAddress, IUser } from '../../user';
 
 const AuthHelper = {

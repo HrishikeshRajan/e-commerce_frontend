@@ -1,9 +1,11 @@
 import { configureStore } from '@reduxjs/toolkit';
 import appSlice from './reduxSlice/appSlice';
+import markeplaceSlice from './reduxSlice/markeplaceSlice';
 
 const store = configureStore({
   reducer: {
     app: appSlice,
+    marketplace: markeplaceSlice,
   },
 });
 

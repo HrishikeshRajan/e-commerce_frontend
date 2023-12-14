@@ -12,7 +12,7 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx",
+    "jsx": "react",
 
     /* Linting */
     "strict": true,
@@ -20,9 +20,19 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals"],
+    
+    /* Path alias */
+    "baseUrl": ".",
+
+    "paths": {
+      "@/*": ["./src/*", "./dist/*", ""],
+      "hooks/*": ["./src/hooks/*"],
+      "utils/*": ["./src/utils/*"],
+
+    }
   },
   "include": ["src",".eslintrc.cjs"],
   "exclude": ["node-modules"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  // "references": [{ "path": "./tsconfig.node.json" }]
 }

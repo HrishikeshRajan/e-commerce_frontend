@@ -16,7 +16,7 @@ function Account() {
     setSignOut(!signout);
   };
   return (
-    <div className="flex flex-col  mt-10 lg:flex-row  min-h-full p-2 gap-2">
+    <div className="top-0 left-0  flex flex-col  mt-10 lg:flex-row  min-h-full p-2 gap-2">
       <div className=" w-full flex lg:flex-col  lg:w-3/12">
         <NavLink to="orders" className="h-14 flex w-full items-center px-3  bg-white border-2 border-slate-100 text-slate-500 font-semibold">
           <>

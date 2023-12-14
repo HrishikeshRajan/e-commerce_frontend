@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { signInPage } from '../../utils/reduxSlice/appSlice';
 import { useTypedDispatch } from './reduxHooks';
 

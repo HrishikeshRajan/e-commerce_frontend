@@ -10,22 +10,24 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyin
 import Logo from '../../assets/smartshop.png';
 import { useUpdateReduxStore } from '../../hooks/user/useUpdateReduxStore';
 import { useTypedSelector } from '../../hooks/user/reduxHooks';
+import TogglerBtn from '../marketplace/dashboard/ui/sidebar/TogglerBtn';
 
 function Navbar() {
   const signedIn = useTypedSelector((store) => store.app);
+
   useUpdateReduxStore();
 
   return (
-    <nav className=" bg-white">
+    <nav className=" bg-white  fixed top-0 w-full ">
       <div className="border-gray-200 flex justify-between items-center sm:px-4 ">
-        <Link to="/">
+        <Link to="/" className="hidden sm:block">
           <img
             src={Logo}
             alt="Logo"
-            className="w-16 object-cover cursor-pointer rounded-full"
+            className="w-16 object-cover cursor-pointer rounded-full "
           />
         </Link>
-
+        <TogglerBtn />
         {!signedIn.authPage && (
           <>
             <div className=" w-2/4 hidden lg:flex items-center justify-center flex-1">

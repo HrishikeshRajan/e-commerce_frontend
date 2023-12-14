@@ -10,7 +10,7 @@ import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
 import { AuthenticationWrapper, RedirectIfAuthenticated } from './components/middleware/ProtectedRoute';
-import Dashboard from './components/marketplace_dashboard/Dashboard';
+import Dashboard from './components/marketplace/dashboard/pages/Dashboard';
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';
 import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
@@ -19,11 +19,19 @@ import store from './utils/store';
 import ForgotForm from './components/auth/ForgotForm';
 import NewPassword from './components/auth/NewPassword';
 import Expired from './components/error/Expired';
-import Marketplace from './components/marketplace/Marketplace';
+import Marketplace from './components/marketplace/Seller';
 import ServiceUnavailable from './components/error/ServiceUnavailable';
+import Main from './components/marketplace/dashboard/pages/Main';
+import ShopsWrapper from './components/marketplace/dashboard/pages/shop/ShopsWrapper';
+import ProductWrapper from './components/marketplace/dashboard/pages/products/ProductWrapper';
+import SalesWrapper from './components/marketplace/dashboard/pages/sales/SalesWapper';
+import SettingSWapper from './components/marketplace/dashboard/pages/settings/SettingSWapper';
+import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop';
+import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
+import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
 
 const Element = () => (
-  <div className="container min-h-screen">
+  <div className=" min-h-screen">
     <Navbar />
     <Outlet />
   </div>
@@ -128,6 +136,75 @@ const App = () => {
               <Dashboard />
             </AuthenticationWrapper>
           ),
+          children: [
+            {
+              index: true,
+              element: (
+                <AuthenticationWrapper authentication>
+                  <Main />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'shop',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <ShopsWrapper />
+                </AuthenticationWrapper>
+              ),
+              children: [
+                {
+                  index: true,
+
+                  element: (
+                    <AuthenticationWrapper authentication>
+                      <CreateShop />
+                    </AuthenticationWrapper>
+                  ),
+                },
+                {
+                  path: 'myshops',
+                  element: (
+                    <AuthenticationWrapper authentication>
+                      <ListShops />
+                    </AuthenticationWrapper>
+                  ),
+                },
+                {
+                  path: 'edit/:id',
+                  element: (
+                    <AuthenticationWrapper authentication>
+                      <EditForm />
+                    </AuthenticationWrapper>
+                  ),
+                },
+              ],
+            },
+            {
+              path: 'products',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <ProductWrapper />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'sales',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <SalesWrapper />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'settings',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <SettingSWapper />
+                </AuthenticationWrapper>
+              ),
+            },
+          ],
         },
       ],
 

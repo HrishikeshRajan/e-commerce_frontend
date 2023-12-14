@@ -1,7 +1,7 @@
 import { IUser } from '..';
 import { baseURL } from '../../auth/apis/constants';
 
-export const updateProfile = async (user:IUser) => {
+export const updateProfile = async (user:Pick<IUser, 'fullname' | 'email' | 'username' >) => {
   try {
     const response = await fetch(`${baseURL()}/profile`, {
       method: 'PUT',

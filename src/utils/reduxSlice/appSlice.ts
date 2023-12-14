@@ -4,14 +4,16 @@ import { IUser } from '../../components/user';
 
 interface IAPP {
   user:IUser | null,
-  authenticated:boolean | false,
-  authPage:boolean | false,
+  authenticated:boolean,
+  authPage:boolean,
+  sidebarIsOpen:boolean
 }
 
 const initialState:IAPP = {
   user: null,
   authenticated: false,
   authPage: false,
+  sidebarIsOpen: false,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -42,6 +44,9 @@ const appSlice = createSlice({
 
       state.user = user;
     },
+    toggleSidebar: (state) => {
+      state.sidebarIsOpen = !state.sidebarIsOpen;
+    },
 
   },
 });
@@ -53,6 +58,7 @@ export const {
   removeAuthentication,
   signInPage,
   upgradeToSeller,
+  toggleSidebar
 } = appSlice.actions;
 
 export default appSlice.reducer;
