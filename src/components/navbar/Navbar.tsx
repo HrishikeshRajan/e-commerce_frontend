@@ -8,14 +8,15 @@ import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link, NavLink } from 'react-router-dom';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import Logo from '../../assets/smartshop.png';
-import { useUpdateReduxStore } from '../../hooks/user/useUpdateReduxStore';
+import { useUpdateLocalStore } from '../../hooks/user/useUpdateLocalStore';
 import { useTypedSelector } from '../../hooks/user/reduxHooks';
 import TogglerBtn from '../marketplace/dashboard/ui/sidebar/TogglerBtn';
 
 function Navbar() {
   const signedIn = useTypedSelector((store) => store.app);
 
-  useUpdateReduxStore();
+  // Keeps local storage sync with redux store change
+  useUpdateLocalStore();
 
   return (
     <nav className=" bg-white  fixed top-0 w-full ">
