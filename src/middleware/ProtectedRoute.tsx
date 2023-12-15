@@ -2,8 +2,11 @@ import React, { useEffect } from 'react';
 import {
   Navigate, useNavigate,
 } from 'react-router-dom';
+import AuthHelper from '@/components/auth/apis/helper';
+import { isEmpty } from 'lodash';
+import { addUser } from '@/utils/reduxSlice/appSlice';
 import { IsLoggedIn, ProtectedRouteProps } from '../components/auth';
-import { useTypedSelector } from '../hooks/user/reduxHooks';
+import { useTypedDispatch, useTypedSelector } from '../hooks/user/reduxHooks';
 
 /** *
  * This middleware is deprecated use AuthWrapper instead
@@ -41,17 +44,23 @@ export const AuthenticationWrapper = ({
   children,
   authentication = true,
 }:AuthWrapper):React.JSX.Element | string => {
-  const isSignedIn = useTypedSelector((store) => store.app.authenticated);
+  // const isSignedIn = useTypedSelector((store) => store.app.authenticated);
+  const dispatch = useTypedDispatch();
+  const user = AuthHelper.getUserFromLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
   // compares the condition and current user status
-    if (authentication && !isSignedIn) {
+    if (authentication && isEmpty(user)) {
       navigate('/auth');
     }
+    if (!isEmpty(user)) {
+      dispatch(addUser(user));
+    }
+
     setLoading(false);
-  }, [isSignedIn, navigate, authentication]);
+  }, [user, navigate, authentication, dispatch]);
 
   return loading ? 'Loading' : children;
 };
@@ -61,17 +70,18 @@ export const RedirectIfAuthenticated = ({
   children,
   authentication = true,
 }:AuthWrapper):React.JSX.Element | string => {
-  const isSignedIn = useTypedSelector((store) => store.app.authenticated);
+  // const isSignedIn = useTypedSelector((store) => store.app.authenticated);
+  const user = AuthHelper.getUserFromLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
   // compares the condition and current user status
-    if (!authentication && isSignedIn) {
+    if (!authentication && !isEmpty(user)) {
       navigate('/');
     }
     setLoading(false);
-  }, [isSignedIn, navigate, authentication]);
+  }, [user, navigate, authentication]);
 
   return loading ? 'Loading' : children;
 };
