@@ -19,7 +19,6 @@ type FormProps = {
   }>
 };
 function AddLogo({ form }:FormProps) {
-  console.log(form);
   const [dataUrl, setDataUrl] = useState<string | ArrayBuffer | null>();
 
   const dispatch = useTypedDispatch();

@@ -61,7 +61,7 @@ function EditForm() {
           <Form className=" shadow-md  sm:w-5/6 p-5" onSubmit={form.handleSubmit}>
             <h1 className="text-4xl text-slate-500 py-2 mb-1">Edit Shop</h1>
 
-            <AddLogo />
+            <AddLogo form={form} />
 
             <div className="my-5">
               <label htmlFor="fullname" className="block mb-2 text-sm font-medium text-gray-900 ">Your shop name</label>
