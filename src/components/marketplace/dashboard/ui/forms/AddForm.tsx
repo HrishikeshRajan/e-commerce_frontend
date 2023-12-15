@@ -12,6 +12,7 @@ import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { useNavigate } from 'react-router-dom';
 import { removeUser } from 'utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
+import { merge } from 'lodash';
 import AuthHelper from '../../../../auth/apis/helper';
 import { createNewShop } from '../../pages/shop/apis/createShop';
 import AddLogo from './AddLogo';
@@ -21,7 +22,7 @@ export const ShopCoreSchema = z.object({
   description: z.string(),
   address: z.string(),
   email: z.string().email(),
-  logo: z.string(),
+  logo: z.string().optional(),
 });
 
 export type Shop = z.infer<typeof ShopCoreSchema>;
@@ -29,7 +30,12 @@ export type Shop = z.infer<typeof ShopCoreSchema>;
 function AddForm() {
   const dispatch = useTypedDispatch();
   const logo = useTypedSelector((store) => store.marketplace.shop.logo);
+
+  // useEffect(() => {
+
+  // }, [logo]);
   const navigate = useNavigate();
+
   return (
     <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5 m-2">
 
@@ -39,10 +45,11 @@ function AddForm() {
           description: '',
           address: '',
           email: '',
-          logo,
+          logo: '',
         }}
         validationSchema={toFormikValidationSchema(ShopCoreSchema)}
         onSubmit={(values, actions) => {
+          merge(values, { logo });
           createNewShop({ ...values }).then((response) => {
             actions.setSubmitting(false);
             if (response.statusCode === StatusCodes.OK) {
@@ -53,14 +60,16 @@ function AddForm() {
               dispatch(removeUser());
               navigate('/auth');
             }
-          }).catch((e) => console.log(e));
+          });
         }}
       >
         {(form) => (
-          <Form className=" shadow-md  sm:w-5/6 p-5" onSubmit={form.handleSubmit}>
-            <h1 className="text-4xl text-slate-500 py-2 mb-1">Create Shop</h1>
+          <Form className=" shadow-md  sm:w-5/6 p-5">
+            <h1 className="text-4xl text-slate-500 py-2 mb-1">
+              Create Shop
+            </h1>
 
-            <AddLogo />
+            <AddLogo form={form} />
 
             <div className="my-5">
               <label htmlFor="fullname" className="block mb-2 text-sm font-medium text-gray-900 ">Your shop name</label>
@@ -115,12 +124,13 @@ function AddForm() {
             {
               form.isSubmitting
                 ? (
-                  <button type="button" className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-cente disabled:bg-opacity-60" disabled>
+                  <button type="button" className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center disabled:bg-opacity-60" disabled>
                     <Loading />
                     Please wait
                   </button>
                 )
-                : <button type="submit" className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-cente">Create</button>
+
+                : <button type="submit" className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Create</button>
 
             }
           </Form>

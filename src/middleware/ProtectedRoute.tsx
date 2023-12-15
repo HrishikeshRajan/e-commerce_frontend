@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import {
   Navigate, useNavigate,
 } from 'react-router-dom';
-import { IsLoggedIn, ProtectedRouteProps } from '../auth';
-import { useTypedSelector } from '../../hooks/user/reduxHooks';
+import { IsLoggedIn, ProtectedRouteProps } from '../components/auth';
+import { useTypedSelector } from '../hooks/user/reduxHooks';
 
 /** *
  * This middleware is deprecated use AuthWrapper instead

@@ -9,7 +9,7 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
-import { AuthenticationWrapper, RedirectIfAuthenticated } from './components/middleware/ProtectedRoute';
+import { AuthenticationWrapper, RedirectIfAuthenticated } from './middleware/ProtectedRoute';
 import Dashboard from './components/marketplace/dashboard/pages/Dashboard';
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';

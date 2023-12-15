@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { addShops } from '@/utils/reduxSlice/markeplaceSlice';
 import { StatusCodes } from 'http-status-codes';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faShopSlash } from '@fortawesome/free-solid-svg-icons';
 import ShopCard from '../../ui/cards/ShopCard';
 import { getShops } from './apis/listShops';
 
@@ -25,7 +27,15 @@ function ListShops() {
   }, []);
 
   const shops = useTypedSelector((store) => store.marketplace.shop.shops);
-  if (shops.length < 1) return;
+  if (shops.length < 1) {
+    return (
+      <div className="w-full text-slate-600 flex gap-3 flex-col justify-center items-center">
+
+        <FontAwesomeIcon icon={faShopSlash} size="2xl" />
+        <h1>It looks like you don&apos;t own any shops yet.</h1>
+      </div>
+    );
+  }
   return (
     <div className="flex flex-wrap justify-center p-2 md:justify-start mt-32 gap-3 lg:mt-20 md:w-8/12">
       {shops.map((item) => <ShopCard key={item._id} item={item} />)}
