@@ -20,7 +20,7 @@ function Sidebar() {
 
   return (
     <>
-      <aside id="default-sidebar" className={`absolute sm:relative top-0 left-0 w-96 sm:w-3/12 -z-0 h-screen shadow-md   dark:bg-gray-800 transition-transform ${isOpen ? '-translate-x-0' : '-translate-x-full'} sm:translate-x-0`} aria-label="Sidebar">
+      <aside id="default-sidebar" className={`absolute sm:relative top-0 left-0 w-96 sm:w-3/12 z-40 h-screen shadow-md   dark:bg-gray-800 transition-transform ${isOpen ? '-translate-x-0' : '-translate-x-full'} sm:translate-x-0`} aria-label="Sidebar">
         <div className="w-full flex flex-col justify-center items-center py-5">
           <img src={user?.photo?.secure_url ? user?.photo?.secure_url : defaultUser} className="w-20 h-20 rounded-full" alt="profileImage" />
           <span className="font-medium p-2 text-slate-100">{user?.fullname}</span>

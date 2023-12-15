@@ -57,7 +57,7 @@ function ShopCard({ item }:ShopCardPropTypes) {
   return (
 
     <>
-      <div className="w-full md:w-64 h-56 bg-slate-700 border border-gray-200 rounded-lg shadow  relative">
+      <div className="w-full md:w-64 z-0 h-56 bg-slate-500 border border-gray-200 rounded-lg shadow  relative">
         <Link to="/">
           <img className="rounded-full m-1 w-10 h-10" src={item.logo.secure_url ?? defaultImage} alt="logo" />
         </Link>
@@ -71,8 +71,8 @@ function ShopCard({ item }:ShopCardPropTypes) {
           <Link to="/">
             <h5 className="mb-1 text-lg font-bold tracking-tight text-gray-900 dark:text-white">{item.name}</h5>
           </Link>
-          <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{item.description}</p>
-          <Link to="/" className="inline-flex items-center px-2 py-1 text-sm font-bold text-center   rounded-lg bg-white text-slate-700 hover:scale-105">
+          <p className="mb-3 font-normal text-gray-100 ">{item.description}</p>
+          <Link to="/" className="inline-flex items-center px-2 py-2 text-sm font-bold text-center   rounded-lg bg-white text-slate-700 hover:scale-105">
             Visit
             <svg className="rtl:rotate-180 w-3.5 h-3.5 ms-2" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
               <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
