@@ -7,6 +7,7 @@ interface IAPP {
   authenticated:boolean,
   authPage:boolean,
   sidebarIsOpen:boolean
+  doSignout:boolean
 }
 
 const initialState:IAPP = {
@@ -14,6 +15,7 @@ const initialState:IAPP = {
   authenticated: false,
   authPage: false,
   sidebarIsOpen: false,
+  doSignout: false,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -47,6 +49,9 @@ const appSlice = createSlice({
     toggleSidebar: (state) => {
       state.sidebarIsOpen = !state.sidebarIsOpen;
     },
+    toggleSignout: (state) => {
+      state.doSignout = !state.doSignout;
+    },
 
   },
 });
@@ -58,7 +63,8 @@ export const {
   removeAuthentication,
   signInPage,
   upgradeToSeller,
-  toggleSidebar
+  toggleSidebar,
+  toggleSignout
 } = appSlice.actions;
 
 export default appSlice.reducer;

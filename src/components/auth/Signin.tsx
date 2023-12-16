@@ -9,7 +9,7 @@ import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { signin } from './apis/signin.api';
-import AuthHelper from './apis/helper';
+
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
 import { addUser, confirmAuthentication } from '../../utils/reduxSlice/appSlice';
 import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
@@ -56,12 +56,10 @@ function Signin():React.JSX.Element {
               setMainError({ accountError: true, message: response.message?.error });
               return;
             }
-            if (response.success) {
+            if (response.success && response.statusCode === StatusCodes.OK) {
               dispatch(addUser(response.message?.user));
               dispatch(confirmAuthentication(true));
-              AuthHelper.authenticate(response.message.user, () => {
-                setRedirect(true);
-              });
+              setRedirect(true);
             }
           });
         }}

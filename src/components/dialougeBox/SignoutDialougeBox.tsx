@@ -6,7 +6,7 @@ import { signout } from '../auth/apis/signout';
 import AuthHelper from '../auth/apis/helper';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
-import { removeAuthentication, removeUser } from '../../utils/reduxSlice/appSlice';
+import { removeAuthentication, removeUser, toggleSignout } from '../../utils/reduxSlice/appSlice';
 
 interface IDialougeBox {
   handleSignout():void
@@ -26,6 +26,7 @@ function SignoutDialougeBox({ handleSignout }:IDialougeBox) {
       AuthHelper.clearSignedOnData(() => {
         dispatch(removeUser());
         dispatch(removeAuthentication());
+        dispatch(toggleSignout());
         navigate('/auth');
       });
     });

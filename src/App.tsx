@@ -29,10 +29,12 @@ import SettingSWapper from './components/marketplace/dashboard/pages/settings/Se
 import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop';
 import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
 import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
+import Sidebar from './components/user/ui/sidebar/Sidebar';
 
 const Element = () => (
   <div className=" min-h-screen">
     <Navbar />
+    <Sidebar />
     <Outlet />
   </div>
 );

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { isEmpty } from 'lodash';
 import AuthHelper from '../../components/auth/apis/helper';
 
 import { useTypedSelector } from './reduxHooks';
@@ -8,10 +9,8 @@ export const useUpdateLocalStore = () => {
   const user = useTypedSelector((store) => store.app.user);
 
   useEffect(() => {
-    if (user) {
-      if (Object.values(user).length > 1) {
-        AuthHelper.updateAuthenticatedUserData(user);
-      }
+    if (!(isEmpty(user))) {
+      AuthHelper.updateAuthenticatedUserData(user);
     }
   }, [user]);
 };

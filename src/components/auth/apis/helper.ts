@@ -1,3 +1,6 @@
+import {
+  isEmpty, isNull, isUndefined, merge,
+} from 'lodash';
 import { IAddress, IUser } from '../../user';
 
 const AuthHelper = {
@@ -10,10 +13,16 @@ const AuthHelper = {
     }
   },
   updateAuthenticatedUserData: (user:IUser) => {
-    if (typeof window !== undefined && localStorage.getItem('user')) {
+    if (typeof window !== undefined) {
       const oldUser = JSON.parse(localStorage.getItem('user') as string);
-      const updated = { ...oldUser, ...user };
-      localStorage.setItem('user', JSON.stringify(updated));
+
+      if (isEmpty(oldUser) || isUndefined(oldUser) || isNull(oldUser)) {
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        merge(oldUser, { ...user });
+
+        localStorage.setItem('user', JSON.stringify(oldUser));
+      }
     }
   },
   removeAuthenticatedUserAddress: (id:string) => {

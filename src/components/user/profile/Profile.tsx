@@ -51,7 +51,6 @@ function Profile() {
             toast.success('Successfully saved');
             if (response?.success && response?.statusCode <= StatusCodes.OK) {
               dispatch(addUser(response.message?.user));
-              // AuthHelper.updateAuthenticatedUserData(response.message?.user);
             } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
               && response?.success === false) {
               AuthHelper.clearSignedOnData();
