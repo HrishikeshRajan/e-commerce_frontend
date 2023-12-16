@@ -7,6 +7,8 @@ import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link, useNavigate } from 'react-router-dom';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';
+import { isEmpty } from 'lodash';
+import { faStore } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../assets/smartshop.png';
 import DefaultUser from '../../assets/defaultUser.png';
 import { useUpdateLocalStore } from '../../hooks/user/useUpdateLocalStore';
@@ -27,11 +29,16 @@ function Navbar() {
   const signOut = async () => {
     await signout().then(() => {
       AuthHelper.clearSignedOnData(() => {
+        setAccountTab(false);
         dispatch(removeUser());
         dispatch(removeAuthentication());
         navigate('/auth');
       });
     });
+  };
+
+  const redirectToSignIn = () => {
+    navigate('/auth');
   };
 
   // Keeps local storage sync with redux store change
@@ -67,8 +74,19 @@ function Navbar() {
                 <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
               </button>
             </div>
-            <ul className="flex p-3 w-full md:w-3/6  justify-end gap-5 ">
-              <li className="pr-2 sm:px-3" aria-label="language">
+            <ul className="flex p-3 w-full md:w-3/6   justify-end gap-5 ">
+              <li className="hidden md:flex p-2 items-center justify-center cursor-pointer  border-2 rounded-full" aria-label="marketplace">
+
+                <Link to="account/marketplace">
+                  <FontAwesomeIcon
+                    icon={faStore}
+                    className="text-slate-700"
+                    size="sm"
+                  />
+                  <span className="text-sm font-bold text-slate-800 pl-1">Become a Seller  </span>
+                </Link>
+              </li>
+              <li className="pr-2 sm:px-3 flex items-center" aria-label="language">
                 <FontAwesomeIcon
                   icon={faLanguage}
                   className="text-slate-700"
@@ -76,30 +94,43 @@ function Navbar() {
                 />
                 <span className="pl-1">eng</span>
               </li>
-              <li className="pr-2 sm:px-3  relative" aria-label="profile">
+              <li className="block md:hidden">
+                <img className="w-7 h-7 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src={DefaultUser} alt="Bordered avatar" />
+              </li>
+              <li className="pr-2 sm:px-3   relative hidden md:block" aria-label="profile">
                 {/* Profile Dropdown comes here */}
                 <button onClick={() => setAccountTab(!accountTab)} id="dropdownLeftButton" data-dropdown-toggle="dropdownLeft" data-dropdown-placement="left" className="flex text-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
                   <span className="sr-only">Open user menu</span>
                   <img className="w-8 h-8 rounded-full" src={DefaultUser} alt="user" />
                 </button>
-                <div id="dropdownLeft" className={`z-10 ${accountTab ? 'block absolute' : 'hidden'} bg-white divide-y divide-gray-100  rounded-lg shadow w-44 right-0`}>
+                <div id="dropdownLeft" className={` ${accountTab ? 'block absolute' : 'hidden'} bg-white divide-y divide-gray-100  mt-2 rounded-lg shadow w-44 right-0`}>
                   <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
                     <div className="truncate text-slate-800">{user?.email}</div>
                   </div>
                   <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 right-0" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
                     <li>
 
-                      {DropdownProfile.map((item) => <Link key={item.id} to={item.path} className="block px-4 py-2 hover:bg-gray-100 text-slate-800">{item.title}</Link>)}
+                      {DropdownProfile.map((item) => <Link key={item.id} to={item.path} className="block px-4 py-2  hover:bg-gray-100 text-slate-800">{item.title}</Link>)}
                     </li>
-
+                    {accountTab && <button type="button" tabIndex={-1} className="fixed inset-0 -z-10 cursor-default " onClick={() => setAccountTab(!accountTab)}> </button>}
                   </ul>
-                  <button className="py-2 w-full" type="button" onClick={signOut}>
-                    <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign out</a>
-                  </button>
+                  {
+                    isEmpty(user) ? (
+                      <button className="py-2 w-full" type="button" onClick={redirectToSignIn}>
+                        <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign in</a>
+                      </button>
+                    )
+                      : (
+                        <button className="py-2 w-full" type="button" onClick={signOut}>
+                          <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign out</a>
+                        </button>
+                      )
+                  }
+
                 </div>
 
               </li>
-              <li className="pr-2 sm:px-3" aria-label="cart">
+              <li className="pr-2 sm:px-3 flex items-center" aria-label="cart">
                 <FontAwesomeIcon
                   icon={faCartPlus}
                   className="text-slate-700"
