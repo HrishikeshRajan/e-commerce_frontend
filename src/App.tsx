@@ -4,6 +4,7 @@ import React from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import MarketPlaceSidebar from '@/components/marketplace/dashboard/ui/sidebar/Sidebar';
 import Auth from './components/auth/Auth';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
@@ -19,7 +20,7 @@ import store from './utils/store';
 import ForgotForm from './components/auth/ForgotForm';
 import NewPassword from './components/auth/NewPassword';
 import Expired from './components/error/Expired';
-import Marketplace from './components/marketplace/Seller';
+import Marketplace from './components/user/Seller';
 import ServiceUnavailable from './components/error/ServiceUnavailable';
 import Main from './components/marketplace/dashboard/pages/Main';
 import ShopsWrapper from './components/marketplace/dashboard/pages/shop/ShopsWrapper';
@@ -30,12 +31,22 @@ import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop
 import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
 import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
 import Sidebar from './components/user/ui/sidebar/Sidebar';
+import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 
+// All user components handled here
 const Element = () => (
-  <div className=" min-h-screen">
+  <div className=" min-h-screen relative ">
     <Navbar />
     <Sidebar />
     <Outlet />
+  </div>
+);
+
+// All markplace components handled here
+const MarketPlace = () => (
+  <div className=" min-h-screen relative ">
+    <SellerNavbar />
+    <Dashboard />
   </div>
 );
 
@@ -120,7 +131,7 @@ const App = () => {
               ),
             },
             {
-              path: 'marketplace',
+              path: 'seller',
               element: (
                 <AuthenticationWrapper authentication>
                   <Marketplace />
@@ -131,85 +142,85 @@ const App = () => {
           ],
         },
 
+      ],
+
+    },
+    {
+      path: 'marketplace/dashboard',
+      element: (
+        <AuthenticationWrapper authentication>
+          <MarketPlace />
+        </AuthenticationWrapper>
+      ),
+      children: [
         {
-          path: 'marketplace/dashboard',
+          index: true,
           element: (
             <AuthenticationWrapper authentication>
-              <Dashboard />
+              <Main />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'shop',
+          element: (
+            <AuthenticationWrapper authentication>
+              <ShopsWrapper />
             </AuthenticationWrapper>
           ),
           children: [
             {
               index: true,
-              element: (
-                <AuthenticationWrapper authentication>
-                  <Main />
-                </AuthenticationWrapper>
-              ),
-            },
-            {
-              path: 'shop',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <ShopsWrapper />
-                </AuthenticationWrapper>
-              ),
-              children: [
-                {
-                  index: true,
 
-                  element: (
-                    <AuthenticationWrapper authentication>
-                      <CreateShop />
-                    </AuthenticationWrapper>
-                  ),
-                },
-                {
-                  path: 'myshops',
-                  element: (
-                    <AuthenticationWrapper authentication>
-                      <ListShops />
-                    </AuthenticationWrapper>
-                  ),
-                },
-                {
-                  path: 'edit/:id',
-                  element: (
-                    <AuthenticationWrapper authentication>
-                      <EditForm />
-                    </AuthenticationWrapper>
-                  ),
-                },
-              ],
-            },
-            {
-              path: 'products',
               element: (
                 <AuthenticationWrapper authentication>
-                  <ProductWrapper />
+                  <CreateShop />
                 </AuthenticationWrapper>
               ),
             },
             {
-              path: 'sales',
+              path: 'myshops',
               element: (
                 <AuthenticationWrapper authentication>
-                  <SalesWrapper />
+                  <ListShops />
                 </AuthenticationWrapper>
               ),
             },
             {
-              path: 'settings',
+              path: 'edit/:id',
               element: (
                 <AuthenticationWrapper authentication>
-                  <SettingSWapper />
+                  <EditForm />
                 </AuthenticationWrapper>
               ),
             },
           ],
         },
+        {
+          path: 'products',
+          element: (
+            <AuthenticationWrapper authentication>
+              <ProductWrapper />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'sales',
+          element: (
+            <AuthenticationWrapper authentication>
+              <SalesWrapper />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'settings',
+          element: (
+            <AuthenticationWrapper authentication>
+              <SettingSWapper />
+            </AuthenticationWrapper>
+          ),
+        },
       ],
-
     },
     {
       path: '/expired',

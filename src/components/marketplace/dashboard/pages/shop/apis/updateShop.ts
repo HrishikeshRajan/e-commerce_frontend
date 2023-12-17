@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../constants';
+import { ShopBaseUrl } from '../../../../urlConstants';
 import { Shop } from '../../../ui/forms/AddForm';
 
 export const updateShop = async (shop:Shop, shopId:string) => {

@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../constants';
+import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const getShops = async (signal:any, userId:string) => {
   try {

@@ -25,8 +25,8 @@ export const menu:SidebarItemTypes[] = [
     icon: RiShoppingBag3Fill,
   },
   {
-    title: 'Marketplace',
-    path: 'account/marketplace',
+    title: 'Become a Seller',
+    path: 'account/seller',
     id: 2,
     icon: SiHomeassistantcommunitystore,
 

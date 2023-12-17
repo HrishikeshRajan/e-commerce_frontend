@@ -2,12 +2,18 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { IUser } from '../../components/user';
 
+enum Screen {
+  USER = 'USER',
+  SELLER = 'SELLER',
+}
 interface IAPP {
   user:IUser | null,
   authenticated:boolean,
   authPage:boolean,
-  sidebarIsOpen:boolean
-  doSignout:boolean
+  sidebarIsOpen:boolean,
+  doSignout:boolean,
+  sidebar:boolean,
+  screen:Screen
 }
 
 const initialState:IAPP = {
@@ -16,6 +22,8 @@ const initialState:IAPP = {
   authPage: false,
   sidebarIsOpen: false,
   doSignout: false,
+  sidebar: false,
+  screen: Screen.USER,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -52,6 +60,12 @@ const appSlice = createSlice({
     toggleSignout: (state) => {
       state.doSignout = !state.doSignout;
     },
+    toggleUserSidebar: (state) => {
+      state.sidebar = !state.sidebar;
+    },
+    setScreen: (state, action:PayloadAction<Screen>) => {
+      state.screen = action.payload;
+    },
 
   },
 });
@@ -64,7 +78,9 @@ export const {
   signInPage,
   upgradeToSeller,
   toggleSidebar,
-  toggleSignout
+  toggleSignout,
+  toggleUserSidebar,
+  setScreen,
 } = appSlice.actions;
 
 export default appSlice.reducer;

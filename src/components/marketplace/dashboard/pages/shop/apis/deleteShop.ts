@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../constants';
+import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const deleteShop = async (shopId:string) => {
   try {

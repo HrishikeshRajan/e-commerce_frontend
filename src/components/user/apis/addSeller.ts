@@ -1,4 +1,4 @@
-import { sellerBaseUrl } from '../constants';
+import { sellerBaseUrl } from '../../marketplace/urlConstants';
 
 export const activateSeller = async (status:boolean, userId:string) => {
   try {

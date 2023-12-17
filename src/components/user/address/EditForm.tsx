@@ -69,7 +69,7 @@ function EditAddress() {
     >
 
       { (form) => (
-        <Form className="w-full lg:w-full p-4 h-fit bg-white">
+        <Form className="w-full md:8/12 p-4 h-fit bg-white">
           <h2 className="text-2xl text-slate-600 font-bold py-10">Edit Address</h2>
           <div>
 

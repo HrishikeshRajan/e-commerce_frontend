@@ -85,7 +85,7 @@ function Image() {
   }
   return (
     <>
-      <div className="p-5">
+      <div className="p-5 w-full">
         <h2 className="text-2xl text-slate-800 font-bold ">Manage Profile Picture</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">

@@ -1,4 +1,4 @@
-import { ShopBaseUrl } from '../../../../constants';
+import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const uploadImage = async function uploadImage(form: FormData) {
   try {

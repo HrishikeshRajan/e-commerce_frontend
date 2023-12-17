@@ -33,8 +33,11 @@ function Profile() {
   const userDetails = useTypedSelector((store) => store.app.user);
 
   return (
-    <div className="w-full  flex flex-col   shadow-sm">
+    <div className=" w-full md:w-8/12  flex flex-col   shadow-sm">
+
+      {/* Image upload section */}
       <Image />
+
       <Formik
         initialValues={
           {
@@ -63,7 +66,7 @@ function Profile() {
         }}
       >
         {(form) => (
-          <Form method="post" className="w-full lg:w-full p-5  bg-white ">
+          <Form method="post" className="w-full   p-5 ">
             <hr className="my-3" />
             <div className="">
               <h2 className="text-2xl text-slate-800 font-bold ">{edit ? 'Edit Your Profile' : 'Manage Profile'}</h2>

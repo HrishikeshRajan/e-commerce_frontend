@@ -1,21 +1,34 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-nested-ternary */
-import React, { useState } from 'react';
-import { useTypedSelector } from 'hooks/user/reduxHooks';
+import React from 'react';
+import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
+import AuthHelper from '@/components/auth/apis/helper';
+import { signout } from '@/components/auth/apis/signout';
+import { removeUser, removeAuthentication } from '@/utils/reduxSlice/appSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { isEmpty } from 'lodash';
 import { menu } from './constants';
-import SignoutDialougeBox from '../../../../dialougeBox/SignoutDialougeBox';
 import ToggleButton from './ToggleButton';
 import Item from './Item';
 import defaultUser from '../../../../../assets/defaultUser.png';
 
 function Sidebar() {
-  const [signout, setSignOut] = useState(false);
-
   const user = useTypedSelector((store) => store.app.user);
   const isOpen = useTypedSelector((store) => store.app.sidebarIsOpen);
+  const dispatch = useTypedDispatch();
+  const navigate = useNavigate();
 
-  const clickSignout = ():void => {
-    setSignOut(!signout);
+  // Only triggers when user clicks on confirm singout button (YES)
+  const signOut = async () => {
+    await signout().then(() => {
+      AuthHelper.clearSignedOnData(() => {
+        dispatch(removeUser());
+        dispatch(removeAuthentication());
+        navigate('/auth');
+      });
+    });
   };
 
   return (
@@ -30,14 +43,52 @@ function Sidebar() {
           {/** Sidebar options */}
           <ul className="space-y-2 font-medium">
             {
-              menu.map((item) => <Item key={item.id} item={item} />)
+              menu.map((item) => {
+                if (item.title.match(/sign out/gi) && !isEmpty(user)) {
+                  return (
+                    <li key={item.id} onClick={signOut} role="button">
+                      <Link
+                        to={item.path}
+                        className="flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white transition ease-in delay-100  hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      >
+                        <div className="flex item-center">
+                          <span className="flex items-center">
+                            {item.icon && <item.icon />}
+                          </span>
+                          <span className="ms-3">{item.title}</span>
+                        </div>
+
+                      </Link>
+
+                    </li>
+                  );
+                } if (item.title.match(/sign out/gi) && isEmpty(user)) {
+                  return (
+                    <li key={item.id} onClick={signOut} role="button">
+                      <Link
+                        to="/auth"
+                        className="flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white transition ease-in delay-100  hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                      >
+                        <div className="flex item-center">
+                          <span className="flex items-center">
+                            {item.icon && <item.icon />}
+                          </span>
+                          <span className="ms-3">SignIn</span>
+                        </div>
+
+                      </Link>
+
+                    </li>
+                  );
+                }
+                return <Item key={item.id} item={item} />;
+              })
             }
 
           </ul>
         </div>
       </aside>
       <ToggleButton />
-      {signout && <SignoutDialougeBox handleSignout={clickSignout} />}
     </>
   );
 }
