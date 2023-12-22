@@ -3,7 +3,6 @@ import { IUser } from '@/components/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface CloudinaryImage { id: string, secure_url: string, url: string }
-
 export interface ShopCore {
   _id:string
   name: string
@@ -24,6 +23,7 @@ interface IAPP {
     shops:ShopCore[]
     currentShop:ShopCore
   }
+  productImages:string[]
 }
 
 const initialState:IAPP = {
@@ -52,6 +52,7 @@ const initialState:IAPP = {
       created: '',
     },
   },
+  productImages: [],
 };
 
 const marketplaceSlice = createSlice({
@@ -105,6 +106,13 @@ const marketplaceSlice = createSlice({
         },
       };
     },
+    addProductImages: (state, action:PayloadAction<string>) => {
+      state.productImages.push(action.payload);
+    },
+    clearProductImages: (state) => {
+      state.productImage = '';
+      state.productImages = [];
+    },
   },
 });
 
@@ -118,6 +126,8 @@ export const {
   addShops,
   addShop,
   clearShop,
+  addProductImages,
+  clearProductImages,
 } = marketplaceSlice.actions;
 
 export default marketplaceSlice.reducer;

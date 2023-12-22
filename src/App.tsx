@@ -32,6 +32,7 @@ import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
 import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
 import Sidebar from './components/user/ui/sidebar/Sidebar';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
+import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 
 // All user components handled here
 const Element = () => (
@@ -197,12 +198,23 @@ const App = () => {
           ],
         },
         {
-          path: 'products',
+          path: 'product',
           element: (
             <AuthenticationWrapper authentication>
               <ProductWrapper />
             </AuthenticationWrapper>
           ),
+          children: [
+            {
+              index: true,
+
+              element: (
+                <AuthenticationWrapper authentication>
+                  <AddProductForm />
+                </AuthenticationWrapper>
+              ),
+            },
+          ],
         },
         {
           path: 'sales',

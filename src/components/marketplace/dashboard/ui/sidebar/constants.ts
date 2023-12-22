@@ -7,6 +7,7 @@ import {
   IoMdAnalytics, IoIosSettings, IoIosArrowForward, IoIosArrowDown,
 } from 'react-icons/io';
 import { FaHome, FaSignOutAlt } from 'react-icons/fa';
+import { CiBoxList } from "react-icons/ci";
 import { IconType } from 'react-icons';
 
 export type SidebarItemTypes = {
@@ -41,7 +42,23 @@ export const menu:SidebarItemTypes[] = [
     ],
   },
   {
-    title: 'Products', id: 3, path: 'products', icon: MdInventory2,
+    title: 'Manage Products',
+    id: 3,
+    path: 'product',
+    icon: MdInventory2,
+    childrenIcons: {
+      arrowRight: IoIosArrowForward,
+      arrowDown: IoIosArrowDown,
+    },
+    children: [
+      {
+        title: 'Add Product', id: 3, path: 'product', icon: FaPlus,
+      },
+      {
+        title: 'Your Products', id: 3.2, path: 'products/shop', icon: CiBoxList,
+      },
+
+    ],
   },
   {
     title: 'Sales Analytics', id: 4, path: 'sales', icon: IoMdAnalytics,
