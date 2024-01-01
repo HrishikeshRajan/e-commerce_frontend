@@ -9,15 +9,11 @@ import {
   decPreviousProductPageNumber,
   incNextProductPageNumber,
 } from '@/utils/reduxSlice/productSlice';
-import { MdDeleteForever } from 'react-icons/md';
 
 import {
-  CaretSortIcon,
   ChevronDownIcon,
-  DotsHorizontalIcon,
 } from '@radix-ui/react-icons';
 import {
-  ColumnDef,
   ColumnFiltersState,
   SortingState,
   VisibilityState,
@@ -35,9 +31,6 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import {
@@ -48,7 +41,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
 import 'react-toastify/dist/ReactToastify.css';
@@ -62,6 +54,8 @@ import AuthHelper from '@/components/auth/apis/helper';
 import { getProductsBySellerId } from './apis/getProduct';
 import { deleteProductById } from './apis/deleteProduct';
 import { deleteProductsByIds } from './apis/deleteProductsByIds';
+import { SellerProduct } from '.';
+import { columns } from './column';
 
 const queryObj:{ page?:number } = {};
 
@@ -71,153 +65,6 @@ declare module '@tanstack/table-core' {
     handleDeleteProduct:(product:SellerProduct) => void
   }
 }
-
-interface SellerProduct {
-  _id: string;
-  name: string;
-  price: number;
-  stock: number;
-  ownerId: {
-    _id: string;
-    fullname: string;
-  };
-  shopId: {
-    _id: string;
-    name: string;
-  };
-  createdAt: string;
-}
-
-export const columns: ColumnDef<SellerProduct>[] = [
-  {
-    id: 'select',
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected()
-          || (table.getIsSomePageRowsSelected() && 'indeterminate')
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: 'name',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Product Name
-        <CaretSortIcon className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => (
-      <div className="capitalize pl-4">{row.getValue('name')}</div>
-    ),
-  },
-  {
-    accessorKey: 'shopId',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Shop Name
-        <CaretSortIcon className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => <div className="lowercase pl-4">{row.original.shopId.name}</div>,
-  },
-  {
-    accessorKey: 'stock',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Stock
-        <CaretSortIcon className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => (
-      row.getValue('stock') as number < 5 ? <div className="capitalize pl-5 font-bold  text-red-600">{row.getValue('stock')}</div>
-        : <div className="capitalize pl-5">{row.getValue('stock')}</div>
-    ),
-  },
-  {
-    accessorKey: 'price',
-    header: ({ column }) => (
-      <Button
-        variant="ghost"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Price
-        <CaretSortIcon className="ml-2 h-4 w-4" />
-      </Button>
-    ),
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue('price'));
-      const formatted = new Intl.NumberFormat('en-IN', {
-        style: 'currency',
-        currency: 'INR',
-      }).format(amount);
-
-      return <div className=" font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: 'actions',
-    header: 'Actions',
-    enableHiding: false,
-    cell: (options) => {
-      const product = options.row.original;
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <DotsHorizontalIcon className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(product._id)}
-            >
-              Copy product ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View shop details</DropdownMenuItem>
-            <DropdownMenuItem>View product details</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onClick={() => options
-                .table
-                .options
-                .meta?.handleDeleteProduct(options.row.original)}
-            >
-              {' '}
-              <MdDeleteForever />
-              {' '}
-              <span className="p-1 text-red-500">Delete product</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
 
 function ListProductsWrapper() {
   const dispatch = useTypedDispatch();
@@ -236,7 +83,7 @@ function ListProductsWrapper() {
         navigate('/auth');
       }
     });
-  }, [dispatch, productStore.confirmDelete]);
+  }, [dispatch, navigate, productStore.confirmDelete]);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [next, setNext] = React.useState<boolean>(false);
