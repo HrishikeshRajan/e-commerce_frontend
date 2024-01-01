@@ -1,10 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/function-component-definition */
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import MarketPlaceSidebar from '@/components/marketplace/dashboard/ui/sidebar/Sidebar';
+
 import Auth from './components/auth/Auth';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
@@ -34,6 +34,7 @@ import Sidebar from './components/user/ui/sidebar/Sidebar';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 
+const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 // All user components handled here
 const Element = () => (
   <div className=" min-h-screen relative ">
@@ -211,6 +212,16 @@ const App = () => {
               element: (
                 <AuthenticationWrapper authentication>
                   <AddProductForm />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'list',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <Suspense fallback={<h1>Loding</h1>}>
+                    <ListProductsWrapper />
+                  </Suspense>
                 </AuthenticationWrapper>
               ),
             },

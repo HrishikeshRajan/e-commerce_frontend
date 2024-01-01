@@ -52,7 +52,7 @@ function AddProductForm() {
     },
   };
   return (
-    <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5 m-2">
+    <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5">
 
       <Formik
         initialValues={{

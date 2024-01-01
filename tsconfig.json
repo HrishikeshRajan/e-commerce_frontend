@@ -29,6 +29,7 @@
       "@/*": ["./src/*", "./dist/*", ""],
       "hooks/*": ["./src/hooks/*"],
       "utils/*": ["./src/utils/*"],
+      "components/*": ["./src/components/*"],
 
     }
   },

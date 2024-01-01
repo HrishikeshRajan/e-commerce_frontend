@@ -3,11 +3,9 @@ import { RxDashboard } from 'react-icons/rx';
 import { FaShop, FaPlus } from 'react-icons/fa6';
 import { MdInventory2 } from 'react-icons/md';
 import { BsShopWindow } from 'react-icons/bs';
-import {
-  IoMdAnalytics, IoIosSettings, IoIosArrowForward, IoIosArrowDown,
-} from 'react-icons/io';
+import { IoIosArrowForward, IoIosArrowDown } from 'react-icons/io';
 import { FaHome, FaSignOutAlt } from 'react-icons/fa';
-import { CiBoxList } from "react-icons/ci";
+import { CiBoxList } from 'react-icons/ci';
 import { IconType } from 'react-icons';
 
 export type SidebarItemTypes = {
@@ -55,17 +53,10 @@ export const menu:SidebarItemTypes[] = [
         title: 'Add Product', id: 3, path: 'product', icon: FaPlus,
       },
       {
-        title: 'Your Products', id: 3.2, path: 'products/shop', icon: CiBoxList,
+        title: 'Your Products', id: 3.2, path: 'product/list', icon: CiBoxList,
       },
 
     ],
-  },
-  {
-    title: 'Sales Analytics', id: 4, path: 'sales', icon: IoMdAnalytics,
-  },
-  {
-    title: 'Settings', id: 5, path: 'settings', icon: IoIosSettings,
-
   },
   {
     title: 'Back to home', id: 6, path: '/', icon: FaHome,

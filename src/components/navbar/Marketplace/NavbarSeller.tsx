@@ -67,76 +67,57 @@ function SellerNavbar() {
 
           {/** This section will not be visible in signin or signup pages */}
           {!app.authPage && (
-            <>
-              <div className=" w-2/4 hidden lg:flex items-center justify-end">
-                <input
-                  type="search"
-                  name="search"
-                  placeholder="Search products here"
-                  id="search"
-                  data-testid="searchbox-lg"
-                  className="inline-block  outline-none border-2 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
+            <ul className="flex p-3 w-full md:w-3/6   justify-end gap-5 ">
+
+              <li className="pr-2 sm:px-3 flex items-center" aria-label="language">
+                <FontAwesomeIcon
+                  icon={faLanguage}
+                  className="text-slate-700"
+                  size="lg"
                 />
-                <button
-                  type="button"
-                  aria-label="search"
-                  className="p-2 rounded-tr rounded-br border-none bg-gray-400 text-white"
-                >
-                  <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
+                <span className="pl-1">eng</span>
+              </li>
+              <li className="block md:hidden">
+                <img className="w-7 h-7 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src={DefaultUser} alt="Bordered avatar" />
+              </li>
+              <li className="pr-2 sm:px-3  group relative hidden md:block pb-1  items-center" aria-label="profile">
+
+                {/* Profile Dropdown comes here */}
+
+                <button onClick={() => setAccountTab(!accountTab)} className="flextext-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
+                  <span className="sr-only">Open user menu</span>
+                  <img className="w-8 h-8 rounded-full" src={DefaultUser} alt="user" />
                 </button>
-              </div>
-              <ul className="flex p-3 w-full md:w-3/6   justify-end gap-5 ">
+                <div id="dropdownLeft" className=" hidden group-hover:absolute group-hover:block bg-white divide-y divide-gray-100  mt-1 rounded-lg shadow w-44 right-0">
+                  <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
+                    <div className="truncate text-slate-800">{user?.email}</div>
+                  </div>
+                  <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 right-0" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
 
-                <li className="pr-2 sm:px-3 flex items-center" aria-label="language">
-                  <FontAwesomeIcon
-                    icon={faLanguage}
-                    className="text-slate-700"
-                    size="lg"
-                  />
-                  <span className="pl-1">eng</span>
-                </li>
-                <li className="block md:hidden">
-                  <img className="w-7 h-7 p-1 rounded-full ring-2 ring-gray-300 dark:ring-gray-500" src={DefaultUser} alt="Bordered avatar" />
-                </li>
-                <li className="pr-2 sm:px-3  group relative hidden md:block pb-1  items-center" aria-label="profile">
+                    {/* Any options to profile dropdown should come here */}
 
-                  {/* Profile Dropdown comes here */}
+                    {accountTab && <button type="button" tabIndex={-1} className="fixed inset-0 -z-10 cursor-default " onClick={() => setAccountTab(!accountTab)}> </button>}
+                  </ul>
 
-                  <button onClick={() => setAccountTab(!accountTab)} className="flextext-sm bg-gray-800 rounded-full md:me-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600" type="button">
-                    <span className="sr-only">Open user menu</span>
-                    <img className="w-8 h-8 rounded-full" src={DefaultUser} alt="user" />
-                  </button>
-                  <div id="dropdownLeft" className=" hidden group-hover:absolute group-hover:block bg-white divide-y divide-gray-100  mt-1 rounded-lg shadow w-44 right-0">
-                    <div className="px-4 py-3 text-sm text-gray-900 dark:text-white">
-                      <div className="truncate text-slate-800">{user?.email}</div>
-                    </div>
-                    <ul className="py-2 text-sm text-gray-700 dark:text-gray-200 right-0" aria-labelledby="dropdownInformdropdownAvatarNameButtonationButton">
-
-                      {/* Any options to profile dropdown should come here */}
-
-                      {accountTab && <button type="button" tabIndex={-1} className="fixed inset-0 -z-10 cursor-default " onClick={() => setAccountTab(!accountTab)}> </button>}
-                    </ul>
-
-                    {/* Shows signout if user exists else signin */}
-                    {
-                      isEmpty(user) ? (
-                        <button className="py-2 w-full" type="button" onClick={redirectToSignIn}>
-                          <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign in</a>
+                  {/* Shows signout if user exists else signin */}
+                  {
+                    isEmpty(user) ? (
+                      <button className="py-2 w-full" type="button" onClick={redirectToSignIn}>
+                        <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign in</a>
+                      </button>
+                    )
+                      : (
+                        <button className="py-2 w-full" type="button" onClick={signOut}>
+                          <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign out</a>
                         </button>
                       )
-                        : (
-                          <button className="py-2 w-full" type="button" onClick={signOut}>
-                            <a href="#" className="block px-4 py-2 text-sm hover:bg-gray-100   text-slate-800">Sign out</a>
-                          </button>
-                        )
-                    }
+                  }
 
-                  </div>
+                </div>
 
-                </li>
+              </li>
 
-              </ul>
-            </>
+            </ul>
           )}
         </div>
         {/* Only renders for small screens */}

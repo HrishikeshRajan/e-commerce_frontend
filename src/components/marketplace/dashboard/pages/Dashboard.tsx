@@ -6,7 +6,10 @@ function Dashboard() {
   return (
     <div className="flex w-full">
       <Sidebar />
-      <Outlet />
+      <div className="w-full h-screen overflow-y-scroll">
+        <Outlet />
+      </div>
+
     </div>
   );
 }

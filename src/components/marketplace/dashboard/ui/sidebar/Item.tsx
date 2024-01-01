@@ -38,7 +38,7 @@ function Item({ item }:ItemPropTypes) {
       <li onClick={handleItemClick} role="button">
         <Link
           to={item.path}
-          className={`flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white transition ease-in delay-100  ${(marketStore.currentTab === item.id) ? 'bg-gray-700' : ''} hover:bg-gray-100 dark:hover:bg-gray-700 group`}
+          className={`flex items-center justify-between p-2 text-gray-900 rounded-lg  transition ease-in delay-100  ${(marketStore.currentTab === item.id) ? 'bg-gray-200' : ''} hover:bg-gray-400  group`}
         >
           <div className="flex item-center">
             <span className="flex items-center">

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-nested-ternary */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import AuthHelper from '@/components/auth/apis/helper';
 import { signout } from '@/components/auth/apis/signout';
@@ -20,6 +20,7 @@ function Sidebar() {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
 
+  // useEffect(() => {},[isOpen])
   // Only triggers when user clicks on confirm singout button (YES)
   const signOut = async () => {
     await signout().then(() => {
@@ -33,12 +34,13 @@ function Sidebar() {
 
   return (
     <>
-      <aside id="default-sidebar" className={`absolute sm:relative top-0 left-0 w-96 sm:w-3/12 z-40 h-screen shadow-md   dark:bg-gray-800 transition-transform ${isOpen ? '-translate-x-0' : '-translate-x-full'} sm:translate-x-0`} aria-label="Sidebar">
+      <aside id="default-sidebar" className={`fixed bg-white sm:relative top-0 left-0 bottom-0 w-96 lg:w-3/12 z-40 h-screen overflow-y-hidden shadow-md   dark:bg-gray-800 transition-transform ${isOpen ? '-translate-x-0' : '-translate-x-full'} sm:translate-x-0`} aria-label="Sidebar">
         <div className="w-full flex flex-col justify-center items-center py-5">
-          <img src={user?.photo?.secure_url ? user?.photo?.secure_url : defaultUser} className="w-20 h-20 rounded-full" alt="profileImage" />
-          <span className="font-medium p-2 text-slate-100">{user?.fullname}</span>
+          <img src={user?.photo?.secure_url ? user?.photo?.secure_url : defaultUser} className="w-10 h-10 rounded-full" alt="profileImage" />
+          <span className="font-medium p-2 text-slate-700">{user?.fullname}</span>
+          <small className="font-medium  text-slate-700 border-2 p-1 rounded shadow-sm">{user?.role}</small>
         </div>
-        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="h-full px-3 py-4 overflow-y-auto bg-gray-50">
 
           {/** Sidebar options */}
           <ul className="space-y-2 font-medium">
@@ -49,7 +51,7 @@ function Sidebar() {
                     <li key={item.id} onClick={signOut} role="button">
                       <Link
                         to={item.path}
-                        className="flex items-center justify-between p-2 text-gray-900 rounded-lg dark:text-white transition ease-in delay-100  hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                        className="flex items-center justify-between p-2 text-gray-900 rounded-lg  transition ease-in delay-100  hover:bg-gray-100 group"
                       >
                         <div className="flex item-center">
                           <span className="flex items-center">

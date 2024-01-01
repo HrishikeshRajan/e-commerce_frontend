@@ -10,7 +10,7 @@ type ItemPropTypes = {
 function SubMenu({ item }:ItemPropTypes) {
   if (!item) return null;
   return (
-    <ul className="ml-3 p-1 text-gray-200  bg-gray-900 rounded m-2    transition delay-150">
+    <ul className="ml-3 text-gray-200   rounded m-2 bg-slate-100 p-2">
       {
         item.map((subitem) => <Item key={subitem.id} item={subitem} />)
       }
