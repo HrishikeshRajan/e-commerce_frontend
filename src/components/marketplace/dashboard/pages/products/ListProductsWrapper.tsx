@@ -51,17 +51,20 @@ import { StatusCodes } from 'http-status-codes';
 import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { useNavigate } from 'react-router-dom';
 import AuthHelper from '@/components/auth/apis/helper';
+import { confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
 import { getProductsBySellerId } from './apis/getProduct';
 import { deleteProductById } from './apis/deleteProduct';
 import { deleteProductsByIds } from './apis/deleteProductsByIds';
 import { SellerProduct } from '.';
 import { useColumn } from './column';
+import { IShop } from '../shop/types';
 
 const queryObj:{ page?:number } = {};
 
 declare module '@tanstack/table-core' {
   interface TableMeta<TData extends RowData> {
     handleDeleteProduct:(product:SellerProduct) => void
+    handleDeleteShop:(shop:IShop) => void
   }
 }
 
@@ -144,6 +147,16 @@ function ListProductsWrapper() {
       }
     });
   };
+  const handleDeleteShop = (shop:IShop) => {
+    dispatch(confirmShopDelete({
+      confirm: true,
+      name: shop.name,
+      id: shop._id,
+      title: 'Are you sure to delete  shop?',
+      info: shop.name,
+      bulk: false,
+    }));
+  };
 
   const table = useReactTable({
     data: productStore && productStore.productListResponse.products,
@@ -162,7 +175,10 @@ function ListProductsWrapper() {
       columnVisibility,
       rowSelection,
     },
-    meta: { handleDeleteProduct },
+    meta: {
+      handleDeleteProduct,
+      handleDeleteShop,
+    },
     getRowId: ((row) => row._id),
   });
 

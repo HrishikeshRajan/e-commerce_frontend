@@ -1,4 +1,5 @@
 /* eslint-disable no-param-reassign */
+import { ShopList } from '@/components/marketplace/dashboard/pages/shop/types';
 import { IUser } from '@/components/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
@@ -24,7 +25,18 @@ interface IAPP {
     currentShop:ShopCore
   }
   productImages:string[]
+  shopsList:ShopList
+  confirmShopDelete:DeleteShopDialouge
 }
+
+export type DeleteShopDialouge = {
+  confirm:boolean
+  name:string
+  id:string
+  title:string
+  info:string
+  bulk:boolean
+};
 
 const initialState:IAPP = {
   currentTab: 1,
@@ -53,6 +65,19 @@ const initialState:IAPP = {
     },
   },
   productImages: [],
+  shopsList: {
+    shops: [],
+    itemsShowing: 0,
+    totalItems: 0,
+  },
+  confirmShopDelete: {
+    confirm: false,
+    name: '',
+    id: '',
+    title: '',
+    info: '',
+    bulk: false,
+  },
 };
 
 const marketplaceSlice = createSlice({
@@ -112,6 +137,13 @@ const marketplaceSlice = createSlice({
     clearProductImages: (state) => {
       state.productImages = [];
     },
+    addShopList: (state, action:PayloadAction<ShopList>) => {
+      state.shopsList = action.payload;
+    },
+
+    confirmShopDelete: (state, action:PayloadAction<DeleteShopDialouge>) => {
+      state.confirmShopDelete = action.payload;
+    },
   },
 });
 
@@ -127,6 +159,8 @@ export const {
   clearShop,
   addProductImages,
   clearProductImages,
+  addShopList,
+  confirmShopDelete,
 } = marketplaceSlice.actions;
 
 export default marketplaceSlice.reducer;

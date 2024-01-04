@@ -50,10 +50,7 @@ export const menu:SidebarItemTypes[] = [
     },
     children: [
       {
-        title: 'Add Product', id: 3, path: 'product', icon: FaPlus,
-      },
-      {
-        title: 'Your Products', id: 3.2, path: 'product/list', icon: CiBoxList,
+        title: 'Your Products', id: 3, path: 'product/list', icon: CiBoxList,
       },
 
     ],

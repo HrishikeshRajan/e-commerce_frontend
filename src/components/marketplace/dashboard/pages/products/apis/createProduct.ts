@@ -19,6 +19,7 @@ export const createNewProduct = async (product:Omit<Product, 'id'>) => {
     formData.append('color', product.color);
     formData.append('gender', product.gender);
     formData.append('shopId', product.shopId);
+    formData.append('stock', JSON.stringify(product.stock));
     formData.append('isDiscontinued', JSON.stringify(product.isDiscontinued));
 
     for (let i = 0; i < product.files.images.length; i += 1) {

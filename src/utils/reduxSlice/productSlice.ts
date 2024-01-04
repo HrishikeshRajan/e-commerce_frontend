@@ -71,6 +71,7 @@ const initialState:InitialState = {
     keywords: '',
     id: '',
     shopId: '',
+    stock: 0,
   },
 };
 

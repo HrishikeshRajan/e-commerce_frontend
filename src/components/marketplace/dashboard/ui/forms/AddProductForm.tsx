@@ -19,22 +19,6 @@ import { createNewProduct } from '../../pages/products/apis/createProduct';
 import AddProductPhoto from './AddProductPhoto';
 import { ProductCoreSchema } from '../../pages/products/types';
 
-// export const ProductCoreSchema = z.object({
-//   name: z.string(),
-//   price: z.string(),
-//   currencyCode: z.string(),
-//   description: z.string(),
-//   category: z.string(),
-//   brand: z.string(),
-//   sizes: z.string(),
-//   color: z.string(),
-//   gender: z.string(),
-//   isDiscontinued: z.boolean(),
-//   keywords: z.string(),
-// });
-
-// export type Product = z.infer<typeof ProductCoreSchema>;
-
 function AddProductForm() {
   const dispatch = useTypedDispatch();
   const [discontinued, setDiscontinued] = useState(false);
@@ -53,6 +37,7 @@ function AddProductForm() {
       images: files,
     },
   };
+
   return (
     <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5">
 
@@ -70,6 +55,7 @@ function AddProductForm() {
           isDiscontinued: false,
           keywords: '',
           shopId: params.id!,
+          stock: 0,
         }}
         validationSchema={toFormikValidationSchema(ProductCoreSchema.omit({ id: true }))}
         onSubmit={(values, actions) => {
@@ -91,7 +77,6 @@ function AddProductForm() {
           <Form className=" shadow-md  sm:w-5/6 p-5">
             <h1 className=" text-slate-500 py-2 mb-1 text-4xl font-semibold">
               Add New Product
-              {JSON.stringify(form.errors)}
             </h1>
 
             <div className="my-5">
@@ -248,6 +233,25 @@ function AddProductForm() {
               />
               <ErrorMessage
                 name="price"
+                render={(msg) => (
+                  <div className="text-red-500 pb-2">
+                    {msg}
+                  </div>
+                )}
+              />
+            </div>
+
+            <div className="mb-5">
+              <label htmlFor="stock" className="block mb-2 text-sm font-medium text-gray-900 ">Total stock available</label>
+              <Field
+                type="number"
+                id="stock"
+                name="stock"
+                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.price && form.touched.price && 'border-2 border-red-500'} `}
+                placeholder="Your product stock"
+              />
+              <ErrorMessage
+                name="stock"
                 render={(msg) => (
                   <div className="text-red-500 pb-2">
                     {msg}

@@ -216,7 +216,7 @@ const App = () => {
               ),
             },
             {
-              path: 'list',
+              index: true,
               element: (
                 <AuthenticationWrapper authentication>
                   <Suspense fallback={<h1>Loding</h1>}>
@@ -226,7 +226,7 @@ const App = () => {
               ),
             },
             {
-              path: 'list/edit/:id',
+              path: 'edit/:id',
               element: (
                 <AuthenticationWrapper authentication>
                   <EditProductForm />

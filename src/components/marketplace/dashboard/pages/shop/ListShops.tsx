@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { addShops } from '@/utils/reduxSlice/markeplaceSlice';
+import { addShopList, confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
 import { StatusCodes } from 'http-status-codes';
 
 import { Button } from '@/components/ui/button';
 import {
   Table, TableHeader, TableRow, TableHead, TableBody, TableCell,
 } from '@/components/ui/table';
-import { decPreviousProductPageNumber, addProductsList, incNextProductPageNumber } from '@/utils/reduxSlice/productSlice';
+import {
+  decPreviousProductPageNumber, addProductsList, incNextProductPageNumber, confirmDelete,
+} from '@/utils/reduxSlice/productSlice';
 import {
   DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem,
 } from '@radix-ui/react-dropdown-menu';
@@ -22,21 +24,34 @@ import {
   getSortedRowModel,
   getFilteredRowModel,
   flexRender,
+  RowData,
 } from '@tanstack/react-table';
 import { isEmpty } from 'lodash';
 import { Input } from '@/components/ui/input';
 import queryString from 'query-string';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
 import { getShops } from './apis/listShops';
-import { getProductsBySellerId } from '../products/apis/getProduct';
 import { useShopColumn } from './columns';
 
-function ListShops() {
-  const queryObj:{ page?:number } = {};
+import { SellerProduct } from '../products';
+import { deleteShop } from './apis/deleteShop';
+import { IShop } from './types';
+import { deleteShops } from './apis/deleteShopsbyIds';
 
+declare module '@tanstack/table-core' {
+  interface TableMeta<TData extends RowData> {
+    handleDeleteProduct:(product:SellerProduct) => void
+    handleDeleteShop:(shop:IShop) => void
+  }
+}
+
+function ListShops() {
+  const queryObj:{ [x:string]:any } = {};
+  queryObj.page = 1;
   const dispatch = useTypedDispatch();
   const userId = useTypedSelector((store) => store.app.user?._id);
-
+  queryObj.owner = userId;
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [next, setNext] = React.useState<boolean>(false);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -45,26 +60,92 @@ function ListShops() {
   const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
+  const shops = useTypedSelector((store) => store.marketplace.shopsList);
+  const isDeleteShop = useTypedSelector((store) => store.marketplace.confirmShopDelete);
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
+
     if (userId) {
-      getShops(signal, userId).then((response) => {
+      getShops(signal, queryString.stringify(queryObj)).then((response) => {
         if (response && response.statusCode === StatusCodes.OK && response.success) {
-          dispatch(addShops(response.message?.message));
+          dispatch(addShopList(response.message));
         }
       });
     }
     return function cleanup() {
       abortController.abort();
     };
-  }, []);
-
-  const shops = useTypedSelector((store) => store.marketplace.shop.shops);
+  }, [dispatch, userId, isDeleteShop.confirm]);
 
   const columns = useShopColumn();
+
+  const handleDeleteShop = (shop: IShop) => {
+    dispatch(confirmShopDelete({
+      confirm: true,
+      name: shop.name,
+      id: shop._id,
+      title: 'Are you sure to delete  shop?',
+      info: shop.name,
+      bulk: false,
+    }));
+  };
+
+  const handleDeleteShops = () => {
+    dispatch(confirmShopDelete({
+      confirm: true,
+      name: '',
+      id: '',
+      title: 'Are you sure to delete all selected shops?',
+      info: '',
+      bulk: true,
+    }));
+  };
+
+  const confirmDeleteShops = (shopsIds:string[]) => {
+    deleteShops(shopsIds).then((response) => {
+      if (response.statusCode === 200) {
+        toast.success('Products successfully deleted');
+        dispatch(confirmShopDelete({
+          confirm: false,
+          name: '',
+          id: '',
+          title: '',
+          info: '',
+          bulk: false,
+        }));
+      }
+    });
+  };
+  const handleDeleteProduct = (product:SellerProduct) => {
+    dispatch(confirmDelete({
+      confirm: true,
+      name: product.name,
+      productId: product._id,
+      title: 'Are you sure to delete product?',
+      info: product.name,
+      bulk: false,
+    }));
+  };
+
+  const confirmDeleteShop = (productId:string) => {
+    deleteShop(productId).then((response) => {
+      if (response.statusCode === 200) {
+        toast.success(`${response.message.deleted.name} successfully deleted`);
+        dispatch(confirmShopDelete({
+          confirm: false,
+          name: '',
+          id: '',
+          title: '',
+          info: '',
+          bulk: false,
+        }));
+      }
+    });
+  };
+
   const table = useReactTable({
-    data: shops,
+    data: shops.shops,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -81,7 +162,52 @@ function ListShops() {
       rowSelection,
     },
     getRowId: ((row) => row._id),
+    meta: {
+      handleDeleteShop,
+      handleDeleteProduct,
+    },
   });
+
+  const handleNext = () => {
+    if (!table.getCanNextPage()) {
+      dispatch(incNextProductPageNumber());
+
+      if (!queryObj.page) return;
+      queryObj.page += 1;
+      const abortController = new AbortController();
+      const { signal } = abortController;
+      getShops(signal, queryString.stringify(queryObj)).then((response) => {
+        if (response.success) {
+          dispatch(addProductsList(response.message));
+        } else {
+          setNext(true);
+        }
+        abortController.abort();
+      });
+    }
+
+    table.nextPage();
+  };
+
+  const handlePrevious = () => {
+    if (!table.getCanPreviousPage()) {
+      dispatch(decPreviousProductPageNumber());
+
+      if (!queryObj.page) return;
+      queryObj.page -= 1;
+      const abortController = new AbortController();
+      const { signal } = abortController;
+      getShops(signal, queryString.stringify(queryObj)).then((response) => {
+        if (response.success) {
+          dispatch(addProductsList(response.message));
+        } else {
+          setNext(true);
+        }
+        abortController.abort();
+      });
+    }
+    table.previousPage();
+  };
 
   return (
     <>
@@ -98,6 +224,7 @@ function ListShops() {
               variant="outline"
               size="sm"
               className="ml-5"
+              onClick={handleDeleteShops}
               disabled={isEmpty(rowSelection)}
             >
               Bulk Delete
@@ -187,7 +314,7 @@ function ListShops() {
             <div className="flex-1 text-sm text-muted-foreground">
               page:
               {' '}
-              add current page value
+              {queryObj.page}
             </div>
             <div className="flex-1 text-sm text-muted-foreground">
               showing
@@ -197,25 +324,13 @@ function ListShops() {
               {' '}
               of
               {' '}
-              Display total items in number
+              {shops.totalItems}
             </div>
             <div className="space-x-2">
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  if (table.getCanPreviousPage()) {
-                    dispatch(decPreviousProductPageNumber());
-                    if (!queryObj.page) return;
-                    queryObj.page -= 1;
-                    getProductsBySellerId(queryString.stringify(queryObj)).then((response) => {
-                      if (response.success) {
-                        dispatch(addProductsList(response.message));
-                      }
-                    });
-                  }
-                  table.previousPage();
-                }}
+                onClick={handlePrevious}
                 disabled={!table.getCanPreviousPage()}
               >
                 Previous
@@ -223,23 +338,7 @@ function ListShops() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => {
-                  if (!table.getCanNextPage()) {
-                    dispatch(incNextProductPageNumber());
-
-                    if (!queryObj.page) return;
-                    queryObj.page += 1;
-
-                    getProductsBySellerId(queryString.stringify(queryObj)).then((response) => {
-                      if (response.success) {
-                        dispatch(addProductsList(response.message));
-                      } else {
-                        setNext(true);
-                      }
-                    });
-                  }
-                  table.nextPage();
-                }}
+                onClick={handleNext}
                 disabled={next}
               >
                 Next
@@ -249,6 +348,13 @@ function ListShops() {
         </div>
       </div>
 
+      {isDeleteShop.confirm && (
+        <ConfirmBox title={isDeleteShop.title} info={isDeleteShop.name}>
+          {isDeleteShop.bulk
+            ? <button type="button" onClick={() => confirmDeleteShops(Object.keys(rowSelection))} className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Yes, delete</button>
+            : <button type="button" onClick={() => confirmDeleteShop(isDeleteShop.id)} className="text-white bg-slate-800 hover:bg-slate-700 outline-none font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">Yes, delete</button>}
+        </ConfirmBox>
+      )}
       <ToastContainer
         position="top-right"
         autoClose={1000}

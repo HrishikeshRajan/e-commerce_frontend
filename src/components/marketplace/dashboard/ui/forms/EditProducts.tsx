@@ -69,6 +69,7 @@ function EditProductForm() {
           keywords: product.keywords.toString(),
           id: product.id,
           shopId: product.shopId,
+          stock: product.stock,
         }}
         validationSchema={toFormikValidationSchema(ProductCoreSchema)}
         onSubmit={(values, actions) => {
@@ -252,6 +253,24 @@ function EditProductForm() {
                 />
                 <ErrorMessage
                   name="price"
+                  render={(msg) => (
+                    <div className="text-red-500 pb-2">
+                      {msg}
+                    </div>
+                  )}
+                />
+              </div>
+              <div className="mb-5">
+                <label htmlFor="stock" className="block mb-2 text-sm font-medium text-gray-900 ">Total stock available</label>
+                <Field
+                  type="number"
+                  id="stock"
+                  name="stock"
+                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.price && form.touched.price && 'border-2 border-red-500'} `}
+                  placeholder="Your product stock"
+                />
+                <ErrorMessage
+                  name="stock"
                   render={(msg) => (
                     <div className="text-red-500 pb-2">
                       {msg}

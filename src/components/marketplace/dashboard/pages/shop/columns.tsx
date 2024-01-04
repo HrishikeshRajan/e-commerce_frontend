@@ -21,10 +21,10 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShopCore } from '@/utils/reduxSlice/markeplaceSlice';
+import { IShop } from './types';
 
 export const useShopColumn = () => {
-  const columns: ColumnDef<ShopCore>[] = [
+  const columns: ColumnDef<IShop>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -89,6 +89,19 @@ export const useShopColumn = () => {
       cell: ({ row }) => <div className="lowercase pl-4">{row.original.email}</div>,
     },
     {
+      accessorKey: 'totalProducts',
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Total Products
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => <div className="lowercase pl-4">{row.original.totalProducts}</div>,
+    },
+    {
       id: 'actions',
       header: 'Actions',
       enableHiding: false,
@@ -113,7 +126,12 @@ export const useShopColumn = () => {
               <DropdownMenuItem><Link to={`/marketplace/dashboard/product/${shop._id}`}>Add Product</Link></DropdownMenuItem>
               <DropdownMenuItem><Link to={`/marketplace/dashboard/shop/edit/${shop._id}`}>Edit Shop details</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => options
+                  .table
+                  .options
+                  .meta?.handleDeleteShop(shop)}
+              >
                 {' '}
                 <MdDeleteForever />
                 {' '}
