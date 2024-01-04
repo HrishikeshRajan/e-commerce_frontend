@@ -22,6 +22,9 @@ function ConfirmBox({ title, children, info }:IDialougeBox) {
     confirm: false,
     name: '',
     productId: '',
+    title: '',
+    info: '',
+    bulk: false,
   }));
 
   return createPortal(

@@ -1,8 +1,13 @@
 /* eslint-disable import/no-cycle */
 import { ShopBaseUrl } from '../../../../urlConstants';
-import { Shop } from '../../../ui/forms/AddForm';
 
-export const updateShop = async (shop:Shop, shopId:string) => {
+type IShop = {
+  name: string;
+  description: string;
+  address: string;
+  email: string;
+};
+export const updateShop = async (shop:IShop, shopId:string) => {
   try {
     const response = await fetch(`${ShopBaseUrl('shop')}/${shopId}`, {
       method: 'PUT',
@@ -18,3 +23,21 @@ export const updateShop = async (shop:Shop, shopId:string) => {
     console.log(error);
   }
 };
+
+// Function to convert Cloudinary image URL to Data URL
+export async function convertCloudinaryToDataUrl(cloudinaryImageUrl:string) {
+  try {
+    const response = await fetch(cloudinaryImageUrl);
+    const blob = await response.blob();
+
+    return await new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
+  } catch (error) {
+    console.error('Error converting Cloudinary image to Data URL:', error);
+    return null;
+  }
+}

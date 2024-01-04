@@ -4,40 +4,42 @@ import React, { useState } from 'react';
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik';
-import { z } from 'zod';
+
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTypedDispatch } from 'hooks/user/reduxHooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { removeUser } from 'utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
 import { merge } from 'lodash';
 import AuthHelper from '../../../../auth/apis/helper';
 import { createNewProduct } from '../../pages/products/apis/createProduct';
 import AddProductPhoto from './AddProductPhoto';
+import { ProductCoreSchema } from '../../pages/products/types';
 
-export const ProductCoreSchema = z.object({
-  name: z.string(),
-  price: z.string(),
-  currencyCode: z.string(),
-  description: z.string(),
-  category: z.string(),
-  brand: z.string(),
-  sizes: z.string(),
-  color: z.string(),
-  gender: z.string(),
-  isDiscontinued: z.string(),
-  keywords: z.string(),
-});
+// export const ProductCoreSchema = z.object({
+//   name: z.string(),
+//   price: z.string(),
+//   currencyCode: z.string(),
+//   description: z.string(),
+//   category: z.string(),
+//   brand: z.string(),
+//   sizes: z.string(),
+//   color: z.string(),
+//   gender: z.string(),
+//   isDiscontinued: z.boolean(),
+//   keywords: z.string(),
+// });
 
-export type Product = z.infer<typeof ProductCoreSchema>;
+// export type Product = z.infer<typeof ProductCoreSchema>;
 
 function AddProductForm() {
   const dispatch = useTypedDispatch();
   const [discontinued, setDiscontinued] = useState(false);
   const [files, setFiles] = useState<File[]>();
+  const params = useParams();
 
   const setFilesData = (buffers:File[]) => setFiles(buffers);
 
@@ -57,7 +59,7 @@ function AddProductForm() {
       <Formik
         initialValues={{
           name: '',
-          price: '',
+          price: 0,
           currencyCode: 'INR',
           description: '',
           category: '',
@@ -65,10 +67,11 @@ function AddProductForm() {
           sizes: '',
           color: '',
           gender: '',
-          isDiscontinued: 'false',
+          isDiscontinued: false,
           keywords: '',
+          shopId: params.id!,
         }}
-        validationSchema={toFormikValidationSchema(ProductCoreSchema)}
+        validationSchema={toFormikValidationSchema(ProductCoreSchema.omit({ id: true }))}
         onSubmit={(values, actions) => {
           merge(values, fileObj);
           createNewProduct({ ...values }).then((response) => {
@@ -81,13 +84,14 @@ function AddProductForm() {
               dispatch(removeUser());
               navigate('/auth');
             }
-          });
+          }).catch((e) => console.log(e));
         }}
       >
         {(form) => (
           <Form className=" shadow-md  sm:w-5/6 p-5">
             <h1 className=" text-slate-500 py-2 mb-1 text-4xl font-semibold">
               Add New Product
+              {JSON.stringify(form.errors)}
             </h1>
 
             <div className="my-5">
@@ -236,7 +240,7 @@ function AddProductForm() {
             <div className="mb-5">
               <label htmlFor="price" className="block mb-2 text-sm font-medium text-gray-900 ">Selling Price of Product</label>
               <Field
-                type="text"
+                type="number"
                 id="price"
                 name="price"
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.price && form.touched.price && 'border-2 border-red-500'} `}
@@ -260,12 +264,12 @@ function AddProductForm() {
                     id="isDiscontinued"
                     onChange={() => {
                       toggleDiscontinued();
-                      form.setFieldValue('isDiscontinued', discontinued ? 'true' : 'false', true);
+                      form.setFieldValue('isDiscontinued', !discontinued, true);
                     }}
                     type="checkbox"
                     name="isDiscontinued"
                     className="sr-only peer"
-                    checked={!!discontinued}
+                    checked={discontinued}
                   />
                   <div className="w-11 h-6 bg-gray-200  dark:peer-focus:ring-slate-600 rounded-full peer dark:bg-gray-300 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-0 after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-0  after:rounded-full after:h-5 after:w-5 after:transition-all  peer-checked:bg-green-300">{discontinued && <small>Yes</small>}</div>
                   {!discontinued && <small>No</small>}
@@ -305,7 +309,6 @@ function AddProductForm() {
 
             </h3>
             <AddProductPhoto
-              form={form}
               preview
               multiple
               setDatas={setFilesData}

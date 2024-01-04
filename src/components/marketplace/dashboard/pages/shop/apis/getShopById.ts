@@ -1,9 +1,9 @@
 /* eslint-disable import/no-cycle */
 import { ShopBaseUrl } from '../../../../urlConstants';
 
-export const getShops = async (signal:any, userId:string) => {
+export const getShopById = async (signal:any, shopId:string) => {
   try {
-    const response = await fetch(`${ShopBaseUrl('shops')}/${userId}`, {
+    const response = await fetch(`${ShopBaseUrl('shop')}/${shopId}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',

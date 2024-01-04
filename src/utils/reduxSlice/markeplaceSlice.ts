@@ -2,7 +2,7 @@
 import { IUser } from '@/components/user';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface CloudinaryImage { id: string, secure_url: string, url: string }
+export interface CloudinaryImage { id: string, secure_url: string, url: string }
 export interface ShopCore {
   _id:string
   name: string
@@ -110,7 +110,6 @@ const marketplaceSlice = createSlice({
       state.productImages.push(action.payload);
     },
     clearProductImages: (state) => {
-      state.productImage = '';
       state.productImages = [];
     },
   },

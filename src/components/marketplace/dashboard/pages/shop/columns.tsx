@@ -21,10 +21,10 @@ import {
 import { Checkbox } from '@/components/ui/checkbox';
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { SellerProduct } from '.';
+import { ShopCore } from '@/utils/reduxSlice/markeplaceSlice';
 
-export const useColumn = () => {
-  const columns: ColumnDef<SellerProduct>[] = [
+export const useShopColumn = () => {
+  const columns: ColumnDef<ShopCore>[] = [
     {
       id: 'select',
       header: ({ table }) => (
@@ -54,70 +54,46 @@ export const useColumn = () => {
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Product Name
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => (
-        <div className="capitalize pl-4">{row.getValue('name')}</div>
-      ),
-    },
-    {
-      accessorKey: 'shopId',
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
           Shop Name
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => <div className="lowercase pl-4">{row.original.shopId.name}</div>,
-    },
-    {
-      accessorKey: 'stock',
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Stock
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      ),
       cell: ({ row }) => (
-        row.getValue('stock') as number < 5 ? <div className="capitalize pl-5 font-bold  text-red-600">{row.getValue('stock')}</div>
-          : <div className="capitalize pl-5">{row.getValue('stock')}</div>
+        <div className="capitalize pl-4">{row.original.name}</div>
       ),
     },
     {
-      accessorKey: 'price',
+      accessorKey: 'owner',
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Price
+          Seller Name
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => {
-        const amount = parseFloat(row.getValue('price'));
-        const formatted = new Intl.NumberFormat('en-IN', {
-          style: 'currency',
-          currency: 'INR',
-        }).format(amount);
-
-        return <div className=" font-medium">{formatted}</div>;
-      },
+      cell: ({ row }) => <div className="lowercase pl-4">{row.original.owner.fullname}</div>,
+    },
+    {
+      accessorKey: 'email',
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Email
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => <div className="lowercase pl-4">{row.original.email}</div>,
     },
     {
       id: 'actions',
       header: 'Actions',
       enableHiding: false,
       cell: (options) => {
-        const product = options.row.original;
+        const shop = options.row.original;
         return (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -129,24 +105,19 @@ export const useColumn = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Actions</DropdownMenuLabel>
               <DropdownMenuItem
-                onClick={() => navigator.clipboard.writeText(product._id)}
+                onClick={() => navigator.clipboard.writeText(shop._id)}
               >
-                Copy product ID
+                Copy Shop ID
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>View shop details</DropdownMenuItem>
-              <DropdownMenuItem><Link to={`edit/${product._id}`}>Edit product details</Link></DropdownMenuItem>
+              <DropdownMenuItem><Link to={`/marketplace/dashboard/product/${shop._id}`}>Add Product</Link></DropdownMenuItem>
+              <DropdownMenuItem><Link to={`/marketplace/dashboard/shop/edit/${shop._id}`}>Edit Shop details</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem
-                onClick={() => options
-                  .table
-                  .options
-                  .meta?.handleDeleteProduct(options.row.original)}
-              >
+              <DropdownMenuItem>
                 {' '}
                 <MdDeleteForever />
                 {' '}
-                <span className="p-1 text-red-500">Delete product</span>
+                <span className="p-1 text-red-500">Delete shop  </span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

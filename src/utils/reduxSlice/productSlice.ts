@@ -1,4 +1,6 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
+import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { remove } from 'lodash';
 
@@ -27,6 +29,7 @@ interface InitialState {
   productListResponse:ProductListResponse
   confirmDelete:DeleteProductMeta
   productListCurrentPage:number
+  productToEdit:IProduct
 }
 
 type DeleteProductMeta = {
@@ -54,6 +57,21 @@ const initialState:InitialState = {
     bulk: false,
   },
   productListCurrentPage: 1,
+  productToEdit: {
+    name: '',
+    price: 0,
+    currencyCode: '',
+    description: '',
+    category: '',
+    brand: '',
+    sizes: '',
+    color: '',
+    gender: '',
+    isDiscontinued: false,
+    keywords: '',
+    id: '',
+    shopId: '',
+  },
 };
 
 const productSlice = createSlice({
@@ -81,6 +99,9 @@ const productSlice = createSlice({
     decPreviousProductPageNumber: (state) => {
       state.productListCurrentPage -= 1;
     },
+    addProductToEdit: (state, action:PayloadAction<IProduct>) => {
+      state.productToEdit = action.payload;
+    },
   },
 });
 
@@ -90,5 +111,6 @@ export const {
   removeProductFromListById,
   incNextProductPageNumber,
   decPreviousProductPageNumber,
+  addProductToEdit,
 } = productSlice.actions;
 export default productSlice.reducer;

@@ -33,6 +33,7 @@ import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
 import Sidebar from './components/user/ui/sidebar/Sidebar';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
+import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 // All user components handled here
@@ -207,8 +208,7 @@ const App = () => {
           ),
           children: [
             {
-              index: true,
-
+              path: ':id',
               element: (
                 <AuthenticationWrapper authentication>
                   <AddProductForm />
@@ -222,6 +222,14 @@ const App = () => {
                   <Suspense fallback={<h1>Loding</h1>}>
                     <ListProductsWrapper />
                   </Suspense>
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'list/edit/:id',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <EditProductForm />
                 </AuthenticationWrapper>
               ),
             },

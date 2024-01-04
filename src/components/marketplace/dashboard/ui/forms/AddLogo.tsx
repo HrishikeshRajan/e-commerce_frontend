@@ -7,7 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { setShopLogo } from 'utils/reduxSlice/markeplaceSlice';
 import { FormikProps } from 'formik';
-import defaultLogo from '../../../../../assets/defaultUser.png';
+import defaultLogo from '@/assets/defaultCamera.jpg';
 
 type FormProps = {
   form:FormikProps<{

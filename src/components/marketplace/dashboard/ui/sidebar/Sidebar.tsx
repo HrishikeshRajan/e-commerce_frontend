@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-nested-ternary */
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import AuthHelper from '@/components/auth/apis/helper';
 import { signout } from '@/components/auth/apis/signout';

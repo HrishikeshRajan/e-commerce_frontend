@@ -7,7 +7,7 @@ export interface FileTypes {
   files?:any
 }
 export type Product = IProduct & FileTypes;
-export const createNewProduct = async (product:Omit<Product, 'id'>) => {
+export const UpdateProduct = async (product:Product) => {
   try {
     const formData = new FormData();
     formData.append('name', product.name);
@@ -18,7 +18,6 @@ export const createNewProduct = async (product:Omit<Product, 'id'>) => {
     formData.append('brand', product.brand);
     formData.append('color', product.color);
     formData.append('gender', product.gender);
-    formData.append('shopId', product.shopId);
     formData.append('isDiscontinued', JSON.stringify(product.isDiscontinued));
 
     for (let i = 0; i < product.files.images.length; i += 1) {
@@ -37,14 +36,13 @@ export const createNewProduct = async (product:Omit<Product, 'id'>) => {
       formData.append('sizes', sizes[i]);
     }
 
-    const response = await fetch(`${ProductBaseUrl('/')}`, {
-      method: 'POST',
+    const response = await fetch(`${ProductBaseUrl(product.id!)}`, {
+      method: 'PUT',
       credentials: 'include',
       body: formData,
     });
     return await response.json();
   } catch (error) {
     console.log(error);
-    return { response: { message: { error: 'Product creation failed' } } };
   }
 };

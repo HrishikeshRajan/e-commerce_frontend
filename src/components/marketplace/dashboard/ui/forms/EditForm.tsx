@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik';
@@ -9,12 +9,15 @@ import { StatusCodes } from 'http-status-codes';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { removeUser } from 'utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
+import { addShop, setShopLogo } from '@/utils/reduxSlice/markeplaceSlice';
+import { merge } from 'lodash';
 import AuthHelper from '../../../../auth/apis/helper';
 import AddLogo from './AddLogo';
-import { updateShop } from '../../pages/shop/apis/updateShop';
+import { convertCloudinaryToDataUrl, updateShop } from '../../pages/shop/apis/updateShop';
+import { getShopById } from '../../pages/shop/apis/getShopById';
 
 export const ShopCoreSchema = z.object({
   name: z.string(),
@@ -31,8 +34,27 @@ function EditForm() {
   const shop = useTypedSelector((store) => store.marketplace.shop.currentShop);
   const logo = useTypedSelector((store) => store.marketplace.shop.logo);
   const navigate = useNavigate();
+  const params = useParams();
+
+  useEffect(() => {
+    const abortController = new AbortController();
+    getShopById(abortController.signal, params.id!).then((response) => {
+      if (response.statusCode === 200) {
+        convertCloudinaryToDataUrl(response.message.shop.logo.secure_url).then((res:any) => {
+          dispatch(setShopLogo(res as string));
+        });
+        dispatch(addShop(response.message.shop));
+      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
+        && response?.success === false) {
+        AuthHelper.clearSignedOnData();
+        dispatch(removeUser());
+        navigate('/auth');
+      }
+    });
+    return () => abortController.abort();
+  }, [dispatch, navigate, params.id]);
   return (
-    <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5 m-2">
+    <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5 ">
 
       <Formik
         initialValues={{
@@ -40,10 +62,11 @@ function EditForm() {
           description: shop.description || '',
           address: shop.address || '',
           email: shop.email || '',
-          logo: logo || '',
+          logo,
         }}
         validationSchema={toFormikValidationSchema(ShopCoreSchema)}
         onSubmit={(values, actions) => {
+          merge(values, { logo: shop.logo });
           updateShop({ ...values }, shop._id).then((response) => {
             actions.setSubmitting(false);
             if (response.statusCode === StatusCodes.OK) {
@@ -56,10 +79,13 @@ function EditForm() {
             }
           }).catch((e) => console.log(e));
         }}
+        enableReinitialize
       >
         {(form) => (
           <Form className=" shadow-md  sm:w-5/6 p-5" onSubmit={form.handleSubmit}>
-            <h1 className="text-4xl text-slate-500 py-2 mb-1">Edit Shop</h1>
+            <h1 className="text-4xl text-slate-500 py-2 mb-1">
+              Edit Shop
+            </h1>
 
             <AddLogo form={form} />
 

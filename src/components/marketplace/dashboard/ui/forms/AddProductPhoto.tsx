@@ -7,13 +7,10 @@
 import React, { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import { FormikProps } from 'formik';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { addProductImages } from '@/utils/reduxSlice/markeplaceSlice';
-import { Product } from './AddProductForm';
 
 type FormProps = {
-  form:FormikProps<Product>
   preview:boolean
   multiple:boolean
   setDatas:(buffer:File[]) => void

@@ -55,13 +55,12 @@ import { getProductsBySellerId } from './apis/getProduct';
 import { deleteProductById } from './apis/deleteProduct';
 import { deleteProductsByIds } from './apis/deleteProductsByIds';
 import { SellerProduct } from '.';
-import { columns } from './column';
+import { useColumn } from './column';
 
 const queryObj:{ page?:number } = {};
 
 declare module '@tanstack/table-core' {
   interface TableMeta<TData extends RowData> {
-    test:TData
     handleDeleteProduct:(product:SellerProduct) => void
   }
 }
@@ -70,6 +69,7 @@ function ListProductsWrapper() {
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
   const productStore = useTypedSelector((store) => store.products);
+  const columns = useColumn();
 
   useEffect(() => {
     queryObj.page = 1;
