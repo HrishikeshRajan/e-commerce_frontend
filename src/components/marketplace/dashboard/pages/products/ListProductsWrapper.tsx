@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/style-prop-object */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import {
   addProductsList,
@@ -52,6 +52,7 @@ import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { useNavigate } from 'react-router-dom';
 import AuthHelper from '@/components/auth/apis/helper';
 import { confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
+import { ProductBaseUrl } from '@/components/marketplace/urlConstants';
 import { getProductsBySellerId } from './apis/getProduct';
 import { deleteProductById } from './apis/deleteProduct';
 import { deleteProductsByIds } from './apis/deleteProductsByIds';
@@ -73,20 +74,43 @@ function ListProductsWrapper() {
   const navigate = useNavigate();
   const productStore = useTypedSelector((store) => store.products);
   const columns = useColumn();
+  const [searchQuery, setQuery] = useState<string>('');
+  const getKeywords = async () => {
+    const response = await fetch(`${ProductBaseUrl(`seller/list?name=${searchQuery}`)}`, {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const json = await response.json();
+    return json;
+  };
 
   useEffect(() => {
     queryObj.page = 1;
-    getProductsBySellerId(queryString.stringify(queryObj)).then((response) => {
-      if (response.statusCode === 200) {
-        dispatch(addProductsList(response.message));
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
+    let timer :any;
+    if (searchQuery) {
+      timer = setTimeout(() => {
+        getKeywords().then((response) => {
+          if (!response.message.error) {
+            dispatch(addProductsList(response.message));
+          }
+        });
+      }, 200);
+    } else {
+      getProductsBySellerId(queryString.stringify(queryObj)).then((response) => {
+        if (response.statusCode === 200) {
+          dispatch(addProductsList(response.message));
+        } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
         && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
-      }
-    });
-  }, [dispatch, navigate, productStore.confirmDelete]);
+          AuthHelper.clearSignedOnData();
+          dispatch(removeUser());
+          navigate('/auth');
+        }
+      });
+    }
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [dispatch, navigate, productStore.confirmDelete, searchQuery]);
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [next, setNext] = React.useState<boolean>(false);
@@ -189,8 +213,8 @@ function ListProductsWrapper() {
           <div className=" flex items-center py-4">
             <Input
               placeholder="Filter by product name..."
-              value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-              onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+              value={searchQuery}
+              onChange={(e) => setQuery(e.target.value)}
               className="max-w-sm"
             />
             <Button

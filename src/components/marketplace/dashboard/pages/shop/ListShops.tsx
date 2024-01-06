@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { addShopList, confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
 import { StatusCodes } from 'http-status-codes';
@@ -31,6 +31,7 @@ import { Input } from '@/components/ui/input';
 import queryString from 'query-string';
 import { ToastContainer, toast } from 'react-toastify';
 import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
+import { ShopBaseUrl } from '@/components/marketplace/urlConstants';
 import { getShops } from './apis/listShops';
 import { useShopColumn } from './columns';
 
@@ -62,11 +63,34 @@ function ListShops() {
 
   const shops = useTypedSelector((store) => store.marketplace.shopsList);
   const isDeleteShop = useTypedSelector((store) => store.marketplace.confirmShopDelete);
+
+  const [searchQuery, setQuery] = useState<string>('');
+  const getKeywords = async () => {
+    const response = await fetch(`${ShopBaseUrl('shops?name')}${searchQuery}`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    const json = await response.json();
+    return json;
+  };
+
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-
-    if (userId) {
+    let timer :any;
+    if (searchQuery) {
+      timer = setTimeout(() => {
+        getKeywords().then((response) => {
+          if (!response.message.error) {
+            dispatch(addProductsList(response.message));
+          }
+        });
+      }, 200);
+    } else if (userId) {
       getShops(signal, queryString.stringify(queryObj)).then((response) => {
         if (response && response.statusCode === StatusCodes.OK && response.success) {
           dispatch(addShopList(response.message));
@@ -74,9 +98,10 @@ function ListShops() {
       });
     }
     return function cleanup() {
+      clearTimeout(timer);
       abortController.abort();
     };
-  }, [dispatch, userId, isDeleteShop.confirm]);
+  }, [dispatch, userId, isDeleteShop.confirm, searchQuery]);
 
   const columns = useShopColumn();
 
@@ -215,9 +240,9 @@ function ListShops() {
         <div className="md:mt-24  p-2 w-full">
           <div className=" flex items-center py-4">
             <Input
-              placeholder="Filter by product name..."
-              value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
-              onChange={(event) => table.getColumn('name')?.setFilterValue(event.target.value)}
+              placeholder="Filter by shop name..."
+              value={searchQuery}
+              onChange={(e) => setQuery(e.target.value)}
               className="max-w-sm"
             />
             <Button
@@ -236,7 +261,7 @@ function ListShops() {
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className="bg-slate-50 active:opacity-100 opacity-100">
                 {table
                   .getAllColumns()
                   .filter((column) => column.getCanHide())
