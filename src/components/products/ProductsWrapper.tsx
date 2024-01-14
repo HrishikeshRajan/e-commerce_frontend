@@ -5,13 +5,12 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 
-import queryString from 'query-string';
 import ProductNotFoundError from './ProductNotFoundError';
 import Card from './Card';
 import { ProductUser } from './types';
-import { ProductBaseUrl } from '../marketplace/urlConstants';
 import ScrollToTopButton from './ScrollToTopButton';
 import Loading from './Loading';
+import { getInitialProducts, getProductsByQuery } from './apis/getProducts';
 
 function ProductCardsWrapper() {
   const params = useParams();
@@ -22,36 +21,12 @@ function ProductCardsWrapper() {
   const [loading, setLoading] = useState(false);
   const [products, setProducts] = useState<ProductUser[]>();
 
-  async function getProd(signal:any, query:any) {
-    try {
-      const response = await fetch(`${ProductBaseUrl(`list?${queryString.stringify(query)}`)}`, {
-        method: 'GET',
-        credentials: 'include',
-        signal,
-      });
-      return await response.json();
-    } catch (errors) {
-      console.log(errors);
-    }
-  }
-
   // Initial Load
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    async function getInitial() {
-      try {
-        const response = await fetch(`${ProductBaseUrl(`list?page=1&category=${params.category}`)}`, {
-          method: 'GET',
-          credentials: 'include',
-          signal,
-        });
-        return await response.json();
-      } catch (errors) {
-        console.log(errors);
-      }
-    }
-    getInitial().then((response) => {
+
+    getInitialProducts(params.category, signal).then((response) => {
       if (response && response.statusCode === 200
            && response.message.products
            && response.message.products.length > 1) {
@@ -69,7 +44,7 @@ function ProductCardsWrapper() {
     const abortController = new AbortController();
     const { signal } = abortController;
     if (queryObj.page > 1 && hasMore) {
-      getProd(signal, queryObj).then((response) => {
+      getProductsByQuery(signal, queryObj).then((response) => {
         setLoading(false);
         if (response && response.statusCode === 200
            && response.message.products
@@ -117,7 +92,7 @@ function ProductCardsWrapper() {
   }, []);
 
   if (!products || (products && products.length < 1)) {
-    return <ProductNotFoundError category={params.category} />;
+    return <ProductNotFoundError category={params.category!} />;
   }
 
   return (
