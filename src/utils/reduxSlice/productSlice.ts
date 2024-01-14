@@ -58,6 +58,7 @@ export interface CategoryCore {
   description: string
   updated: Date
   created: Date
+  offer:string
 }
 const initialState:InitialState = {
   productListResponse: {
