@@ -34,8 +34,10 @@ import Sidebar from './components/user/ui/sidebar/Sidebar';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
+import ProductCardsWrapper from './components/products/ProductsWrapper';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
+
 // All user components handled here
 const Element = () => (
   <div className=" min-h-screen relative ">
@@ -64,6 +66,14 @@ const App = () => {
           element: (
             <AuthenticationWrapper authentication={false}>
               <Home />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: '/:category',
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <ProductCardsWrapper />
             </AuthenticationWrapper>
           ),
         },

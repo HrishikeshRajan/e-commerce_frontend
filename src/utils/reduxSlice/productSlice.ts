@@ -1,6 +1,7 @@
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
+import { ProductUser } from '@/components/products/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { remove } from 'lodash';
 
@@ -30,6 +31,13 @@ interface InitialState {
   confirmDelete:DeleteProductMeta
   productListCurrentPage:number
   productToEdit:IProduct
+  categories:CategoryCore[]
+  userProducts:ProductUser[]
+  userProductsMeta:{
+    itemsShowing:number,
+    totalItems:number
+  }
+  currentPage:number
 }
 
 type DeleteProductMeta = {
@@ -41,12 +49,21 @@ type DeleteProductMeta = {
   bulk:boolean
 };
 
+export interface CategoryCore {
+  _id: string
+  name: string
+  image: {
+    secure_url: string
+  },
+  description: string
+  updated: Date
+  created: Date
+}
 const initialState:InitialState = {
   productListResponse: {
     itemsShowing: 0,
     totalItems: 0,
     products: [],
-
   },
   confirmDelete: {
     confirm: false,
@@ -73,6 +90,13 @@ const initialState:InitialState = {
     shopId: '',
     stock: 0,
   },
+  categories: [],
+  userProducts: [],
+  userProductsMeta: {
+    itemsShowing: 0,
+    totalItems: 0,
+  },
+  currentPage: 1,
 };
 
 const productSlice = createSlice({
@@ -103,6 +127,19 @@ const productSlice = createSlice({
     addProductToEdit: (state, action:PayloadAction<IProduct>) => {
       state.productToEdit = action.payload;
     },
+    addCategories: (state, action:PayloadAction<CategoryCore[]>) => {
+      state.categories = action.payload;
+    },
+    addProducts: (state, action:PayloadAction<ProductUser[]>) => {
+      state.userProducts = action.payload;
+      // state.userProducts = [...state.userProducts, ...action.payload];
+    },
+    addProductsMeta: (state, action:PayloadAction<any>) => {
+      state.userProductsMeta = action.payload;
+    },
+    addCurrentPage: (state, action:PayloadAction<number>) => {
+      state.currentPage = action.payload;
+    },
   },
 });
 
@@ -113,5 +150,9 @@ export const {
   incNextProductPageNumber,
   decPreviousProductPageNumber,
   addProductToEdit,
+  addCategories,
+  addProducts,
+  addProductsMeta,
+  addCurrentPage,
 } = productSlice.actions;
 export default productSlice.reducer;

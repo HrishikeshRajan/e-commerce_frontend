@@ -1,3 +1,4 @@
 *.css
 *.svg
 ./src/utils/**/*.ts
+./src/components/products/products_test.json
