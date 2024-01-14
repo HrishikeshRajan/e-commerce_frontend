@@ -11,6 +11,7 @@ import { ProductUser } from './types';
 import ScrollToTopButton from './ScrollToTopButton';
 import Loading from './Loading';
 import { getInitialProducts, getProductsByQuery } from './apis/getProducts';
+import UserSidebar from '../home/sidebar/UserSidebar';
 
 function ProductCardsWrapper() {
   const params = useParams();
@@ -96,40 +97,43 @@ function ProductCardsWrapper() {
   }
 
   return (
-    <div className="w-full h-screen  mt-28">
-      <p className="text-slate-600 pl-5 lg:pl-20 mt-48 lg:mt-20 text-sm ">
-        <Link to="/">home</Link>
+    <div className="w-full flex absolute  bg-red-20 h-screen  mt-28">
+      <UserSidebar />
+      <div className="w-full">
+        <p className="text-slate-600 pl-5 lg:pl-20 mt-48 lg:mt-20 text-sm ">
+          <Link to="/">home</Link>
 
-        {' '}
-        /
-        { ' '}
-        {params.category}
-      </p>
-      <h2 className="text-lg text-slate-700  my-10 p-5 lg:ms-20 font-normal ">
-        {' '}
-        <span className="text-slate-900 font-semibold">
+          {' '}
+          /
+          { ' '}
           {params.category}
-        </span>
-        {' '}
-        -
-        {' '}
-        <span>
-          (
-          {productMeta.totalItems || 0}
-          ) items
-        </span>
-      </h2>
-      {products && (
-        <div className="w-full flex flex-wrap md:gap-2 lg:p-2 justify-center">
-          {products.map((item) => <Card key={item._id} {...item} />)}
-        </div>
-      )}
-      {loading && hasMore
+        </p>
+        <h2 className="text-lg text-slate-700  my-10 p-5 lg:ms-20 font-normal ">
+          {' '}
+          <span className="text-slate-900 font-semibold">
+            {params.category}
+          </span>
+          {' '}
+          -
+          {' '}
+          <span>
+            (
+            {productMeta.totalItems || 0}
+            ) items
+          </span>
+        </h2>
+        {products && (
+          <div className="w-full flex flex-wrap md:gap-2 lg:p-2 justify-center">
+            {products.map((item) => <Card key={item._id} {...item} />)}
+          </div>
+        )}
+        {loading && hasMore
 
                 && (
                   <Loading />
                 )}
-      {!hasMore && <ScrollToTopButton />}
+        {!hasMore && <ScrollToTopButton />}
+      </div>
     </div>
   );
 }

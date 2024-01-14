@@ -1,11 +1,63 @@
+/* eslint-disable jsx-a11y/control-has-associated-label */
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
+import convert from 'color-convert';
 
-function Sidebar() {
-  const [filter, setFilter] = useState<boolean>(false);
+function Sidebar({ filter }:{ filter:any }) {
+  const [isFilter, setIsFilter] = useState<boolean>(true);
+  const [brandCount, setBrandCount] = useState(10);
+  const [colorCount, setColorCount] = useState(10);
+  if (!filter) return;
   return (
     <>
-      <div className={`absolute transition   ${filter ? '-translate-x-96' : 'translate-x-0'} lg:translate-x-0 z-10 lg:fixed shadow-lg h-screen w-9/12 lg:w-2/12 bg-red-400  left-0 `}>Sidebar</div>
-      <button type="button" className="lg:hidden text-black mt-20 absolute z-10" onClick={() => setFilter(!filter)}>Click</button>
+      <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-12/12 left-0 `}>
+        <h1 className="font-bold text-slate-800 py-5 ms-5">Filter</h1>
+        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+        <div>
+          <h2 className="font-semibold text-slate-700 text-sm mb-2 ms-5">BRAND</h2>
+
+          <div className="ms-5 flex gap-2 flex-col">
+            {filter.brands
+            && filter.brands.slice(0, brandCount).map((brand:string, index:number) => (
+              <div className="flex  items-center" key={index}>
+                <input type="checkbox" id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                <label
+                  htmlFor="basic"
+                  className="pl-2 text-slate-400"
+                >
+                  {brand}
+                </label>
+              </div>
+            ))}
+            {filter.brands && filter.brands.length > 10 && filter.brands.length !== brandCount && <button type="button" onClick={() => setBrandCount((num) => num + brandCount)} className="text-slate-600">+ Show more</button>}
+            {filter.brands && filter.brands.length === brandCount && <button type="button" onClick={() => setBrandCount((num) => num - 10)} className="text-slate-600"> - Show less</button>}
+
+          </div>
+          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+          <h2 className="font-semibold text-slate-700 text-sm mb-2 ms-5">COLOR</h2>
+          <div className="ms-5 flex gap-2 flex-col">
+            {filter.colors
+             && filter.colors.slice(0, colorCount).map((color:string, index:number) => (
+               <div className="flex  items-center" key={index}>
+                 <input type="checkbox" id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                 <label
+                   htmlFor="basic"
+                   className="pl-2 text-slate-400 flex gap-2"
+                 >
+                   <button type="button" className="w-5 h-5 rounded-full" style={{ backgroundColor: `#${convert.rgb.hex(convert.keyword.rgb(color.toLocaleLowerCase() as unknown as any))}` }} />
+                   {color}
+                 </label>
+               </div>
+             ))}
+            {filter.colors && filter.colors.length > 10 && filter.colors.length !== colorCount && <button type="button" onClick={() => setColorCount((num) => num + colorCount)} className="text-slate-600">+ Show more</button>}
+            {filter.colors && filter.colors.length === colorCount && <button type="button" onClick={() => setColorCount((num) => num - 10)} className="text-slate-600"> - Show less</button>}
+
+          </div>
+        </div>
+      </div>
+      <button type="button" className="lg:hidden text-black mt-20 absolute z-10" onClick={() => setIsFilter(!filter)}>Click</button>
+
     </>
   );
 }
