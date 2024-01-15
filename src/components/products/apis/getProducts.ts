@@ -1,7 +1,7 @@
 import queryString from 'query-string';
 import { ProductBaseUrl } from '../../../utils/uri/productUri';
 
-export async function getProductsByQuery(signal:any, query:any) {
+export async function getProductsByQuery(query:any, signal:any) {
   try {
     const response = await fetch(`${ProductBaseUrl(`list?${queryString.stringify(query)}`)}`, {
       method: 'GET',
@@ -9,12 +9,15 @@ export async function getProductsByQuery(signal:any, query:any) {
       signal,
     });
     return await response.json();
-  } catch (errors) {
-    console.log(errors);
+  } catch (error:any) {
+    if (error.name === 'AbortError') {
+      return;
+    }
+    console.log(error);
   }
 }
 
-export async function getInitialProducts(category:any, signal:any) {
+export async function getInitialProducts(category:string, signal:any) {
   try {
     const response = await fetch(`${ProductBaseUrl(`list?page=1&category=${category}`)}`, {
       method: 'GET',
@@ -22,7 +25,10 @@ export async function getInitialProducts(category:any, signal:any) {
       signal,
     });
     return await response.json();
-  } catch (errors) {
-    console.log(errors);
+  } catch (error:any) {
+    if (error.name === 'AbortError') {
+      return;
+    }
+    console.log(error);
   }
 }

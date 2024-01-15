@@ -26,6 +26,10 @@ interface ProductListResponse {
   totalItems:number
   products:ProductListType[]
 }
+
+interface ProductQuery {
+  [x:string]:any
+}
 interface InitialState {
   productListResponse:ProductListResponse
   confirmDelete:DeleteProductMeta
@@ -38,6 +42,7 @@ interface InitialState {
     totalItems:number
   }
   currentPage:number
+  productQuery:ProductQuery
 }
 
 type DeleteProductMeta = {
@@ -98,6 +103,7 @@ const initialState:InitialState = {
     totalItems: 0,
   },
   currentPage: 1,
+  productQuery: {},
 };
 
 const productSlice = createSlice({
@@ -143,6 +149,9 @@ const productSlice = createSlice({
     addCurrentPage: (state, action:PayloadAction<number>) => {
       state.currentPage = action.payload;
     },
+    addProductQuery: (state, action:PayloadAction<ProductQuery>) => {
+      state.productQuery = { ...state.productQuery, ...action.payload };
+    },
   },
 });
 
@@ -158,5 +167,6 @@ export const {
   updateProducts,
   addProductsMeta,
   addCurrentPage,
+  addProductQuery,
 } = productSlice.actions;
 export default productSlice.reducer;

@@ -1,16 +1,22 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 
-import { addProducts, addProductsMeta, updateProducts } from '@/utils/reduxSlice/productSlice';
+import { addProductsMeta, updateProducts } from '@/utils/reduxSlice/productSlice';
+import useInitialProductsLoad from '@/hooks/user/useInitalProductsLoad';
+import useScroll from '@/hooks/useScroll';
+import useIncrementPageOnScroll from '@/hooks/user/useIncrementPageOnScroll';
+
+import useQuerySync from '@/hooks/useQuerySync';
 import ProductNotFoundError from './ProductNotFoundError';
 import Card from './Card';
 
 import ScrollToTopButton from './ScrollToTopButton';
 import Loading from './Loading';
-import { getInitialProducts, getProductsByQuery } from './apis/getProducts';
+import { getProductsByQuery } from './apis/getProducts';
 import UserSidebar from '../home/sidebar/UserSidebar';
 
 function ProductCardsWrapper() {
@@ -23,36 +29,17 @@ function ProductCardsWrapper() {
 
   const dispatch = useTypedDispatch();
   const products = useTypedSelector((store) => store.products.userProducts);
+  const query = useTypedSelector((store) => store.products.productQuery);
 
-  // Initial Load
-  useEffect(() => {
-    const abortController = new AbortController();
-    const { signal } = abortController;
-    if (products.length < 1 || (products.length > 1 && products[0].category !== params.category)) {
-      getInitialProducts(params.category, signal).then((response) => {
-        if (response && response.statusCode === 200
-           && response.message.products
-           && response.message.products.length > 1) {
-          dispatch(addProducts(response.message.products));
-          dispatch(addProductsMeta({
-            itemsShowing: response.message.itemsShowing,
-            totalItems: response.message.totalItems,
-          }));
-        } else if (response && response.statusCode === 404) {
-          console.log('product not found');
-        }
-      });
-    }
-    return () => {
-      abortController.abort();
-    };
-  }, [dispatch, params.category, products]);
+  useQuerySync(queryObj);
+
+  useInitialProductsLoad(params.category!);
 
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    if (queryObj.page > 1 && hasMore) {
-      getProductsByQuery(signal, queryObj).then((response) => {
+    if (query.page > 1 && hasMore) {
+      getProductsByQuery(query, signal).then((response) => {
         setLoading(false);
         if (response && response.statusCode === 200
            && response.message.products
@@ -62,18 +49,18 @@ function ProductCardsWrapper() {
             itemsShowing: response.message.itemsShowing,
             totalItems: response.message.totalItems,
           }));
-        } else if (response && response.statusCode === 404) {
-          console.log('product not found');
-        } else if (response.message.error) {
+        } else if (response && response.message.error) {
           setHasMore(false);
           setLoading(false);
+        } else {
+          console.log(response);
         }
       });
     }
     return () => {
       abortController.abort();
     };
-  }, [dispatch, hasMore, queryObj]);
+  }, [dispatch, hasMore, query]);
 
   const handleScroll = useCallback(async () => {
     try {
@@ -92,16 +79,9 @@ function ProductCardsWrapper() {
     }
   }, [hasMore]);
 
-  useEffect(() => {
-    setQueryObj((prevQueryObj) => ({ ...prevQueryObj, page }));
-  }, [page]);
+  useIncrementPageOnScroll(setQueryObj, page);
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
+  useScroll(handleScroll);
 
   if (!products || (products && products.length < 1)) {
     return <ProductNotFoundError category={params.category!} />;
