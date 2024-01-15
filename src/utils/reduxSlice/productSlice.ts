@@ -133,7 +133,9 @@ const productSlice = createSlice({
     },
     addProducts: (state, action:PayloadAction<ProductUser[]>) => {
       state.userProducts = action.payload;
-      // state.userProducts = [...state.userProducts, ...action.payload];
+    },
+    updateProducts: (state, action:PayloadAction<ProductUser[]>) => {
+      state.userProducts = [...state.userProducts, ...action.payload];
     },
     addProductsMeta: (state, action:PayloadAction<any>) => {
       state.userProductsMeta = action.payload;
@@ -153,6 +155,7 @@ export const {
   addProductToEdit,
   addCategories,
   addProducts,
+  updateProducts,
   addProductsMeta,
   addCurrentPage,
 } = productSlice.actions;

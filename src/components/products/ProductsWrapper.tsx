@@ -1,13 +1,13 @@
-/* eslint-disable no-console */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
-import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 
+import { addProducts, addProductsMeta, updateProducts } from '@/utils/reduxSlice/productSlice';
 import ProductNotFoundError from './ProductNotFoundError';
 import Card from './Card';
-import { ProductUser } from './types';
+
 import ScrollToTopButton from './ScrollToTopButton';
 import Loading from './Loading';
 import { getInitialProducts, getProductsByQuery } from './apis/getProducts';
@@ -20,26 +20,33 @@ function ProductCardsWrapper() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState<ProductUser[]>();
+
+  const dispatch = useTypedDispatch();
+  const products = useTypedSelector((store) => store.products.userProducts);
 
   // Initial Load
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-
-    getInitialProducts(params.category, signal).then((response) => {
-      if (response && response.statusCode === 200
+    if (products.length < 1 || (products.length > 1 && products[0].category !== params.category)) {
+      getInitialProducts(params.category, signal).then((response) => {
+        if (response && response.statusCode === 200
            && response.message.products
            && response.message.products.length > 1) {
-        setProducts(response.message.products);
-      } else if (response && response.statusCode === 404) {
-        console.log('product not found');
-      }
-    });
+          dispatch(addProducts(response.message.products));
+          dispatch(addProductsMeta({
+            itemsShowing: response.message.itemsShowing,
+            totalItems: response.message.totalItems,
+          }));
+        } else if (response && response.statusCode === 404) {
+          console.log('product not found');
+        }
+      });
+    }
     return () => {
       abortController.abort();
     };
-  }, [params.category]);
+  }, [dispatch, params.category, products]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -50,7 +57,11 @@ function ProductCardsWrapper() {
         if (response && response.statusCode === 200
            && response.message.products
            && response.message.products.length > 1) {
-          setProducts((prev) => [...prev!, ...response.message.products]);
+          dispatch(updateProducts(response.message.products));
+          dispatch(addProductsMeta({
+            itemsShowing: response.message.itemsShowing,
+            totalItems: response.message.totalItems,
+          }));
         } else if (response && response.statusCode === 404) {
           console.log('product not found');
         } else if (response.message.error) {
@@ -62,9 +73,9 @@ function ProductCardsWrapper() {
     return () => {
       abortController.abort();
     };
-  }, [hasMore, queryObj]);
+  }, [dispatch, hasMore, queryObj]);
 
-  const handleScroll = async () => {
+  const handleScroll = useCallback(async () => {
     try {
       const { scrollHeight } = document.documentElement;
       const { innerHeight } = window;
@@ -79,7 +90,7 @@ function ProductCardsWrapper() {
     } catch (errors) {
       console.log(errors);
     }
-  };
+  }, [hasMore]);
 
   useEffect(() => {
     setQueryObj((prevQueryObj) => ({ ...prevQueryObj, page }));
@@ -90,7 +101,7 @@ function ProductCardsWrapper() {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
   if (!products || (products && products.length < 1)) {
     return <ProductNotFoundError category={params.category!} />;

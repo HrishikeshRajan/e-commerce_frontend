@@ -39,9 +39,9 @@ function Sidebar({ filter }:{ filter:any }) {
             {filter.brands
             && filter.brands.slice(0, brandCount).map((brand:string, index:number) => (
               <div className="flex  items-center" key={index}>
-                <input type="checkbox" id="basic" name="brand" value={brand} onChange={(e) => handleCheckBox(e)} className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                <input type="checkbox" id={brand} name="brand" value={brand} onChange={(e) => handleCheckBox(e)} className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
                 <label
-                  htmlFor="basic"
+                  htmlFor={brand}
                   className="pl-2 text-slate-400"
                 >
                   {brand}
@@ -58,9 +58,9 @@ function Sidebar({ filter }:{ filter:any }) {
             {filter.colors
              && filter.colors.slice(0, colorCount).map((color:string, index:number) => (
                <div className="flex  items-center" key={index}>
-                 <input type="checkbox" name="color" onChange={(e) => handleCheckBox(e)} value={color} id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                 <input type="checkbox" name="color" onChange={(e) => handleCheckBox(e)} value={color} id={color} className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
                  <label
-                   htmlFor="basic"
+                   htmlFor={color}
                    className="pl-2 text-slate-400 flex gap-2"
                  >
                    <button type="button" className="w-5 h-5 rounded-full" style={{ backgroundColor: `#${convert.rgb.hex(convert.keyword.rgb(color.toLocaleLowerCase() as unknown as any))}` }} />

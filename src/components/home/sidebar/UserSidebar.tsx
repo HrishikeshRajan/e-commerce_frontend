@@ -4,7 +4,7 @@ import Sidebar from './Sidebar';
 
 function UserSidebar() {
   const [filter, setFilter] = useState<{ filter:any }>({ filter: {} });
-  async function logMovies() {
+  async function getFilterOptions() {
     const response = await fetch(ProductBaseUrl('filter_menu'));
     const movies = await response.json();
     return movies;
@@ -12,8 +12,7 @@ function UserSidebar() {
 
   useEffect(() => {
     try {
-      logMovies().then((response) => {
-        console.log(response);
+      getFilterOptions().then((response) => {
         setFilter(response.message);
       });
     } catch (error) {
