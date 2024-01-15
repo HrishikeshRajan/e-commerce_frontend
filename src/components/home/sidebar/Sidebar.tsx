@@ -1,15 +1,20 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/no-array-index-key */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import convert from 'color-convert';
 import { useParams } from 'react-router-dom';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
+import { addProductQuery } from '@/utils/reduxSlice/productSlice';
 
 function Sidebar({ filter }:{ filter:any }) {
   const [isFilter, setIsFilter] = useState<boolean>(true);
   const [brandCount, setBrandCount] = useState(10);
   const [colorCount, setColorCount] = useState(10);
   const params = useParams();
+
+  const dispatch = useTypedDispatch();
+  // const query = useTypedSelector((store) => store.products.productQuery);
 
   const [queryObj, setQueryObj] = useState<{ page:number,
     category:string,
@@ -18,11 +23,26 @@ function Sidebar({ filter }:{ filter:any }) {
     page: 1, category: params.category!, brand: [], color: [],
   });
 
+  useEffect(() => {
+    dispatch(addProductQuery({ ...queryObj }));
+  }, [dispatch, queryObj]);
+
   const handleCheckBox = (e :React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'brand') {
-      setQueryObj((prev) => ({ ...prev, brand: [...queryObj.brand, e.target.value] }));
-    } else if (e.target.name === 'color') {
-      setQueryObj((prev) => ({ ...prev, color: [...queryObj.color, e.target.value] }));
+    if (e.target.checked) {
+      if (e.target.name === 'brand') {
+        setQueryObj((prev) => ({ ...prev, brand: [...queryObj.brand, e.target.value] }));
+      } else if (e.target.name === 'color') {
+        setQueryObj((prev) => ({ ...prev, color: [...queryObj.color, e.target.value] }));
+      }
+    }
+    if (!e.target.checked) {
+      if (e.target.name === 'brand') {
+        const rest = queryObj.brand.filter((item) => item != e.target.value);
+        setQueryObj((prev) => ({ ...prev, brand: rest }));
+      } else if (e.target.name === 'color') {
+        const rest = queryObj.color.filter((item) => item != e.target.value);
+        setQueryObj((prev) => ({ ...prev, color: [...rest] }));
+      }
     }
   };
   if (!filter) return;
