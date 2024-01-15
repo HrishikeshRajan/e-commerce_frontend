@@ -3,12 +3,30 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useState } from 'react';
 import convert from 'color-convert';
+import { useParams } from 'react-router-dom';
 
 function Sidebar({ filter }:{ filter:any }) {
   const [isFilter, setIsFilter] = useState<boolean>(true);
   const [brandCount, setBrandCount] = useState(10);
   const [colorCount, setColorCount] = useState(10);
+  const params = useParams();
+
+  const [queryObj, setQueryObj] = useState<{ page:number,
+    category:string,
+    brand:string[],
+    color:string[] }>({
+    page: 1, category: params.category!, brand: [], color: [],
+  });
+
+  const handleCheckBox = (e :React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.name === 'brand') {
+      setQueryObj((prev) => ({ ...prev, brand: [...queryObj.brand, e.target.value] }));
+    } else if (e.target.name === 'color') {
+      setQueryObj((prev) => ({ ...prev, color: [...queryObj.color, e.target.value] }));
+    }
+  };
   if (!filter) return;
+
   return (
     <>
       <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-12/12 left-0 `}>
@@ -21,7 +39,7 @@ function Sidebar({ filter }:{ filter:any }) {
             {filter.brands
             && filter.brands.slice(0, brandCount).map((brand:string, index:number) => (
               <div className="flex  items-center" key={index}>
-                <input type="checkbox" id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                <input type="checkbox" id="basic" name="brand" value={brand} onChange={(e) => handleCheckBox(e)} className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
                 <label
                   htmlFor="basic"
                   className="pl-2 text-slate-400"
@@ -40,7 +58,7 @@ function Sidebar({ filter }:{ filter:any }) {
             {filter.colors
              && filter.colors.slice(0, colorCount).map((color:string, index:number) => (
                <div className="flex  items-center" key={index}>
-                 <input type="checkbox" id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
+                 <input type="checkbox" name="color" onChange={(e) => handleCheckBox(e)} value={color} id="basic" className="w-6 h-6 accent-black border-white bg-white rounded-lg" />
                  <label
                    htmlFor="basic"
                    className="pl-2 text-slate-400 flex gap-2"
