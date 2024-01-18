@@ -1,7 +1,8 @@
 import { getProductsByQuery } from '@/components/products/apis/getProducts';
-import { ProductUser } from '@/components/products/types';
 import { merge } from 'lodash';
 import { useEffect, useState } from 'react';
+import { updateProducts } from '@/utils/reduxSlice/productSlice';
+import { useTypedDispatch, useTypedSelector } from './reduxHooks';
 
 const useProductsQuery = (
   query: Record<string, string | number>,
@@ -9,8 +10,8 @@ const useProductsQuery = (
 ) => {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<ProductUser[]>([]);
   const [error, setError] = useState(false);
+  const dispatch = useTypedDispatch();
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -21,10 +22,7 @@ const useProductsQuery = (
     getProductsByQuery(query, signal)
       .then((response) => {
         if (response) {
-          setProducts((preProducts) => [
-            ...preProducts,
-            ...(response.message?.products || []),
-          ]);
+          dispatch(updateProducts(response.message?.products || []));
 
           setHasMore(response.message.products.length > 0);
           setLoading(false);
@@ -36,7 +34,8 @@ const useProductsQuery = (
       });
 
     return () => abortController.abort();
-  }, [query, page]);
+  }, [query, page, dispatch]);
+  const products = useTypedSelector((store) => store.products.userProducts);
 
   return {
     loading,
