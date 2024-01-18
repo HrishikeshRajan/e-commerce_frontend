@@ -3,44 +3,51 @@
 /* eslint-disable react/no-array-index-key */
 import React, { useEffect, useState } from 'react';
 import convert from 'color-convert';
-import { useParams } from 'react-router-dom';
-import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { addProductQuery } from '@/utils/reduxSlice/productSlice';
+// import { useTypedDispatch } from '@/hooks/user/reduxHooks';
+// import { addProductQuery } from '@/utils/reduxSlice/productSlice';
 
 function Sidebar({ filter }:{ filter:any }) {
   const [isFilter, setIsFilter] = useState<boolean>(true);
   const [brandCount, setBrandCount] = useState(10);
   const [colorCount, setColorCount] = useState(10);
-  const params = useParams();
 
-  const dispatch = useTypedDispatch();
+  // const dispatch = useTypedDispatch();
   // const query = useTypedSelector((store) => store.products.productQuery);
 
-  const [queryObj, setQueryObj] = useState<{ page:number,
-    category:string,
+  const [queryObj, setQueryObj] = useState<{
+    created:boolean,
+    page:1,
     brand:string[],
     color:string[] }>({
-    page: 1, category: params.category!, brand: [], color: [],
+    brand: [], color: [], page: 1, created: false,
   });
 
-  useEffect(() => {
-    dispatch(addProductQuery({ ...queryObj }));
-  }, [dispatch, queryObj]);
+  // useEffect(() => {
+  //   dispatch(addProductQuery({ ...queryObj }));
+  // }, [dispatch, queryObj]);
 
   const handleCheckBox = (e :React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
       if (e.target.name === 'brand') {
-        setQueryObj((prev) => ({ ...prev, brand: [...queryObj.brand, e.target.value] }));
+        setQueryObj((prev) => ({
+          ...prev,
+          created: true,
+          brand: [...queryObj.brand, e.target.value],
+        }));
       } else if (e.target.name === 'color') {
-        setQueryObj((prev) => ({ ...prev, color: [...queryObj.color, e.target.value] }));
+        setQueryObj((prev) => ({
+          ...prev,
+          created: true,
+          color: [...queryObj.color, e.target.value],
+        }));
       }
     }
     if (!e.target.checked) {
       if (e.target.name === 'brand') {
-        const rest = queryObj.brand.filter((item) => item != e.target.value);
+        const rest = queryObj.brand.filter((item) => item !== e.target.value);
         setQueryObj((prev) => ({ ...prev, brand: rest }));
       } else if (e.target.name === 'color') {
-        const rest = queryObj.color.filter((item) => item != e.target.value);
+        const rest = queryObj.color.filter((item) => item !== e.target.value);
         setQueryObj((prev) => ({ ...prev, color: [...rest] }));
       }
     }
@@ -49,7 +56,7 @@ function Sidebar({ filter }:{ filter:any }) {
 
   return (
     <>
-      <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-12/12 left-0 `}>
+      <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-96 left-0 `}>
         <h1 className="font-bold text-slate-800 py-5 ms-5">Filter</h1>
         <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
         <div>
