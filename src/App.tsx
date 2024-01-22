@@ -70,7 +70,7 @@ const App = () => {
           ),
         },
         {
-          path: '/:category',
+          path: 'products',
           element: (
             <AuthenticationWrapper authentication={false}>
               <ProductCardsWrapper />

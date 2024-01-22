@@ -1,9 +1,10 @@
+/* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { ProductUser } from '@/components/products/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { remove } from 'lodash';
+import { remove, merge } from 'lodash';
 
 export interface ProductListType {
   _id: string;
@@ -27,9 +28,14 @@ interface ProductListResponse {
   products:ProductListType[]
 }
 
-interface ProductQuery {
-  [x:string]:any
+export interface ProductQuery {
+  brand?:string[],
+  color?:string[],
+  category?:string,
+  page?:number
 }
+
+type Query = ProductQuery;
 interface InitialState {
   productListResponse:ProductListResponse
   confirmDelete:DeleteProductMeta
@@ -42,7 +48,7 @@ interface InitialState {
     totalItems:number
   }
   currentPage:number
-  productQuery:ProductQuery
+  productQuery:Query
 }
 
 type DeleteProductMeta = {
@@ -103,7 +109,12 @@ const initialState:InitialState = {
     totalItems: 0,
   },
   currentPage: 1,
-  productQuery: {},
+  productQuery: {
+    brand: [],
+    color: [],
+    category: '',
+    page: 0,
+  },
 };
 
 const productSlice = createSlice({
@@ -137,11 +148,22 @@ const productSlice = createSlice({
     addCategories: (state, action:PayloadAction<CategoryCore[]>) => {
       state.categories = action.payload;
     },
-    updateProducts: (state, action:PayloadAction<ProductUser[]>) => {
-      state.userProducts = [...state.userProducts, ...action.payload];
-    },
-    addFilteredProduct: (state, action:PayloadAction<ProductUser[]>) => {
+    addProducts: (state, action:PayloadAction<ProductUser[]>) => {
       state.userProducts = [...action.payload];
+    },
+    updateProducts: (state, action:PayloadAction<ProductUser[]>) => {
+      const products = [...state.userProducts];
+      const set = new Set();
+
+      products.map((pro) => set.add(pro._id));
+
+      for (let index = 0; index < action.payload.length; index++) {
+        if (!set.has(action.payload[index]._id)) {
+          products.push(action.payload[index]);
+        }
+      }
+
+      state.userProducts = [...products];
     },
     addProductsMeta: (state, action:PayloadAction<any>) => {
       state.userProductsMeta = action.payload;
@@ -150,7 +172,8 @@ const productSlice = createSlice({
       state.currentPage = action.payload;
     },
     addProductQuery: (state, action:PayloadAction<ProductQuery>) => {
-      state.productQuery = { ...state.productQuery, ...action.payload };
+      merge(state.productQuery, action.payload);
+      state.productQuery = { ...state.productQuery };
     },
   },
 });
@@ -163,10 +186,10 @@ export const {
   decPreviousProductPageNumber,
   addProductToEdit,
   addCategories,
+  addProducts,
   updateProducts,
   addProductsMeta,
   addCurrentPage,
   addProductQuery,
-  addFilteredProduct,
 } = productSlice.actions;
 export default productSlice.reducer;

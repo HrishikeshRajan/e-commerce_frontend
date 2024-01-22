@@ -6,7 +6,11 @@ function MenuCard({ name, secure_url, offer = '' }:{ name:string, secure_url:str
   return (
 
     <div className="relative w-44 h-fit transition delay-50 ease-linear hover:scale-105 active:scale-105   border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
-      <Link to={name}>
+      <Link to={{
+        pathname: '/products',
+        search: `?category=${name}`,
+      }}
+      >
         <img className="" src={secure_url} alt="" />
 
         <div className="bg-black text-center w-full absolute bottom-0 bg-opacity-80 ">

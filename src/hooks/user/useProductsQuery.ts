@@ -1,12 +1,15 @@
 import { getProductsByQuery } from '@/components/products/apis/getProducts';
-import { merge } from 'lodash';
 import { useEffect, useState } from 'react';
-import { updateProducts } from '@/utils/reduxSlice/productSlice';
+import {
+  addProducts, addProductsMeta,
+} from '@/utils/reduxSlice/productSlice';
+import { URLSearchParams } from 'url';
+import { StatusCodes } from 'http-status-codes';
 import { useTypedDispatch, useTypedSelector } from './reduxHooks';
 
 const useProductsQuery = (
-  query: Record<string, string | number>,
   page: number,
+  searchParams:URLSearchParams,
 ) => {
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -14,17 +17,33 @@ const useProductsQuery = (
   const dispatch = useTypedDispatch();
 
   useEffect(() => {
+    if (page === 0) return;
     const abortController = new AbortController();
     const { signal } = abortController;
     setLoading(true);
     setError(false);
-    merge(query, { page });
-    getProductsByQuery(query, signal)
-      .then((response) => {
-        if (response) {
-          dispatch(updateProducts(response.message?.products || []));
 
+    const copyQuery = {
+      page,
+      category: searchParams.get('category')!,
+      brand: [...searchParams.getAll('brand')!],
+      color: [...searchParams.getAll('color')!],
+    };
+
+    getProductsByQuery(copyQuery, signal)
+      .then((response) => {
+        if (response && response.success) {
+          dispatch(addProductsMeta({
+            itemsShowing: response.message.itemsShowing,
+            totalItems: response.message.totalItems,
+          }));
+
+          dispatch(addProducts(response.message?.products));
           setHasMore(response.message.products.length > 0);
+          setLoading(false);
+        } else if (!response.success && response.statusCode === StatusCodes.NOT_FOUND) {
+          dispatch(addProducts([]));
+          setHasMore(false);
           setLoading(false);
         }
       })
@@ -34,7 +53,7 @@ const useProductsQuery = (
       });
 
     return () => abortController.abort();
-  }, [query, page, dispatch]);
+  }, [page, dispatch, searchParams]);
   const products = useTypedSelector((store) => store.products.userProducts);
 
   return {
