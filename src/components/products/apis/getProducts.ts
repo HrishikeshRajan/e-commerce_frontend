@@ -1,9 +1,8 @@
 import queryString from 'query-string';
-import { ProductQuery } from '@/utils/reduxSlice/productSlice';
 import { ProductBaseUrl } from '../../../utils/uri/productUri';
 
 export async function getProductsByQuery(
-  query:ProductQuery,
+  query:Record<any, any>,
   signal: AbortSignal,
 ) {
   try {

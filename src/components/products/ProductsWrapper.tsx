@@ -13,7 +13,6 @@ function ProductCardsWrapper() {
   const [page] = useState(1);
 
   const [searchParams] = useSearchParams();
-
   const {
     products, loading, hasMore,
   } = useProductsQuery(page, searchParams);

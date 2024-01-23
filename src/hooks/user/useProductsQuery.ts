@@ -23,12 +23,19 @@ const useProductsQuery = (
     setLoading(true);
     setError(false);
 
-    const copyQuery = {
+    const copyQuery:Record<any, any> = {
       page,
       category: searchParams.get('category')!,
       brand: [...searchParams.getAll('brand')!],
       color: [...searchParams.getAll('color')!],
     };
+
+    if (searchParams.get('price[gte]') !== null) {
+      copyQuery['price[gte]'] = searchParams.get('price[gte]');
+    }
+    if (searchParams.get('price[lte]') !== null) {
+      copyQuery['price[lte]'] = searchParams.get('price[lte]');
+    }
 
     getProductsByQuery(copyQuery, signal)
       .then((response) => {
@@ -41,7 +48,7 @@ const useProductsQuery = (
           dispatch(addProducts(response.message?.products));
           setHasMore(response.message.products.length > 0);
           setLoading(false);
-        } else if (!response.success && response.statusCode === StatusCodes.NOT_FOUND) {
+        } else if (response && !response.success && response.statusCode === StatusCodes.NOT_FOUND) {
           dispatch(addProducts([]));
           setHasMore(false);
           setLoading(false);

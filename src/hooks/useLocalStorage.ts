@@ -23,7 +23,18 @@ const useLocalStorage = <S, D>(key:S) => {
       console.log(error);
     }
   };
-  return [storedVal, setValue] as const;
+
+  const clearField = (fieldName:string):void => {
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(fieldName);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return [storedVal, setValue, clearField] as const;
 };
 
 export default useLocalStorage;

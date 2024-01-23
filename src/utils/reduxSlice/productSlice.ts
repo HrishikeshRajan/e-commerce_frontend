@@ -32,7 +32,10 @@ export interface ProductQuery {
   brand?:string[],
   color?:string[],
   category?:string,
-  page?:number
+  page?:number,
+  'price[gte]'?:string,
+  'price[lte]'?:string
+
 }
 
 type Query = ProductQuery;
@@ -114,6 +117,9 @@ const initialState:InitialState = {
     color: [],
     category: '',
     page: 0,
+    'price[gte]': '0',
+    'price[lte]': '0',
+
   },
 };
 

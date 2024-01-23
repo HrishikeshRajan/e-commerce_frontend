@@ -15,26 +15,19 @@ function Sidebar() {
   const [colorCount, setColorCount] = useState(10);
   const dispatch = useTypedDispatch();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [storedVal, setData] = useLocalStorage<string, ProductQuery>('filter');
-  const [queryObject, setqueryObject] = useState<ProductQuery>(() => {
-    if (storedVal) {
-      return {
-        brand: storedVal.brand && storedVal.brand?.length > 0 ? storedVal?.brand : [],
-        color: storedVal.color && storedVal?.color.length > 0 ? storedVal?.color : [],
-        category: searchParams.get('category')!,
-      };
-    }
-    return {
-      brand: [],
-      color: [],
-      category: searchParams.get('category')!,
-    };
+  const [storedVal, setData, clearField] = useLocalStorage<string, ProductQuery>('filter');
+  const [queryObject, setqueryObject] = useState<ProductQuery>({
+    brand: [],
+    color: [],
+    category: searchParams.get('category')!,
+
   });
 
+  const [priceRange, setPriceRange] = useState({ min: '', max: '' });
   const { filter } = useFilter();
 
   useEffect(() => {
-    setSearchParams(queryObject as Record<string, string>);
+    setSearchParams(queryObject as unknown as Record<string, string>);
     setData(queryObject);
   }, [queryObject, dispatch, setSearchParams]);
 
@@ -66,11 +59,69 @@ function Sidebar() {
   };
   if (!filter) return;
 
+  const handlePriceFilter = () => {
+    if (priceRange.min === '') {
+      searchParams.delete('price[gte]');
+      setSearchParams(searchParams, { replace: true });
+      const copyQuery = { ...queryObject };
+      delete copyQuery['price[gte]'];
+      setqueryObject(() => ({ ...copyQuery }));
+    }
+    if (priceRange.max === '') {
+      searchParams.delete('price[lte]');
+
+      setSearchParams(searchParams);
+      const copyQuery = { ...queryObject };
+      delete copyQuery['price[lte]'];
+      setqueryObject(() => ({ ...copyQuery }));
+    }
+    if (parseInt(priceRange.min, 10) < 100) {
+      return;
+    }
+    if (parseInt(priceRange.max, 10) > 5000) {
+      return;
+    }
+    if (parseInt(priceRange.max, 10) < 100) {
+      return;
+    }
+    if (parseInt(priceRange.min, 10) === parseInt(priceRange.max, 10)) {
+      return;
+    }
+    if (parseInt(priceRange.min, 10) > parseInt(priceRange.max, 10)) {
+      return;
+    }
+    const priceRanges:Record<any, any> = {};
+
+    if (parseInt(priceRange.min, 10)) {
+      priceRanges['price[gte]'] = priceRange.min;
+    }
+    if (parseInt(priceRange.max, 10)) {
+      priceRanges['price[lte]'] = priceRange.max;
+    }
+    setqueryObject((val) => ({ ...val, ...priceRanges }));
+  };
+
   return (
     <>
       <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-60 left-0 `}>
-        <h1 className="font-bold text-slate-800 py-5 ms-5">Filter</h1>
-        <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+        <div className="flex justify-between">
+          <h1 className="font-bold text-slate-800 py-1 ms-5">Filter</h1>
+          <button
+            onClick={() => {
+              setqueryObject((val) => ({
+                ...val, brand: [], color: [], 'price[gte]': '', 'price[lte]': '',
+              }));
+              setPriceRange({ max: '', min: '' });
+              clearField('filter');
+            }}
+            type="button"
+            className="py-1 px-2 font-bold text-xs rounded text-cyan-600 hover:scale-105 active:scale-105"
+          >
+            CLEAR ALL
+
+          </button>
+        </div>
+        <hr className="h-px my-8 bg-gray-200 border-0 d" />
         <div>
           <h2 className="font-semibold text-slate-700 text-sm mb-2 ms-5">BRAND</h2>
 
@@ -92,7 +143,7 @@ function Sidebar() {
             {filter.brands && filter.brands.length === brandCount && <button type="button" onClick={() => setBrandCount((num) => num - 10)} className="text-slate-600"> - Show less</button>}
 
           </div>
-          <hr className="h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+          <hr className="h-px my-8 bg-gray-200 border-0 " />
           <h2 className="font-semibold text-slate-700 text-sm mb-2 ms-5">COLOR</h2>
           <div className="ms-5 flex gap-2 flex-col">
             {filter.colors
@@ -110,6 +161,28 @@ function Sidebar() {
              ))}
             {filter.colors && filter.colors.length > 10 && filter.colors.length !== colorCount && <button type="button" onClick={() => setColorCount((num) => num + colorCount)} className="text-slate-600">+ Show more</button>}
             {filter.colors && filter.colors.length === colorCount && <button type="button" onClick={() => setColorCount((num) => num - 10)} className="text-slate-600"> - Show less</button>}
+
+          </div>
+          <hr className="h-px my-8 bg-gray-200 border-0 " />
+          <h2 className="font-semibold text-slate-700 text-sm mb-2 ms-5">PRICE</h2>
+          <div className="ms-2 flex  flex-col">
+            <div className="flex justify-between">
+              <button
+                onClick={() => handlePriceFilter()}
+                type="button"
+                className="py-1 px-2 shadow-sm my-2 border-2 rounded text-purple-400 hover:scale-105 active:scale-105"
+              >
+                Apply
+
+              </button>
+
+            </div>
+            <div>
+              <label htmlFor="min">Min</label>
+              <input type="number" onChange={(e) => setPriceRange((val) => ({ ...val, min: e.target.value }))} value={priceRange.min} className="bg-white border border-slate-300 w-full" min={100} id="min" />
+              <label htmlFor="min">MAx</label>
+              <input onChange={(e) => setPriceRange((val) => ({ ...val, max: e.target.value }))} value={priceRange.max} className="bg-white border w-full border-slate-300" max={1000} id="min" />
+            </div>
 
           </div>
         </div>
