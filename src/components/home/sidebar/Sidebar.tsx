@@ -108,11 +108,13 @@ function Sidebar() {
           <h1 className="font-bold text-slate-800 py-1 ms-5">Filter</h1>
           <button
             onClick={() => {
-              setqueryObject((val) => ({
-                ...val, brand: [], color: [], 'price[gte]': '', 'price[lte]': '',
-              }));
+              const copyQuery = { ...queryObject };
+              delete copyQuery['price[gte]'];
+              delete copyQuery['price[lte]'];
+              copyQuery.brand = [];
+              copyQuery.color = [];
+              setqueryObject({ ...copyQuery });
               setPriceRange({ max: '', min: '' });
-              clearField('filter');
             }}
             type="button"
             className="py-1 px-2 font-bold text-xs rounded text-cyan-600 hover:scale-105 active:scale-105"
