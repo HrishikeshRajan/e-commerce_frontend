@@ -30,6 +30,10 @@ const useProductsQuery = (
       color: [...searchParams.getAll('color')!],
     };
 
+    if (searchParams.get('sort') !== null) {
+      copyQuery.sort = searchParams.get('sort');
+    }
+
     if (searchParams.get('price[gte]') !== null) {
       copyQuery['price[gte]'] = searchParams.get('price[gte]');
     }
