@@ -48,7 +48,7 @@ function Sidebar() {
 
   return (
     <>
-      <div className={`absolute transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-60 left-0 `}>
+      <div className={`static transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-60 left-0 `}>
         <div className="flex justify-between">
           <h1 className="font-bold text-slate-800 py-1 ms-5">Filter</h1>
           <button

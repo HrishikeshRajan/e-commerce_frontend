@@ -1,43 +1,16 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
-
-import { useSearchParams } from 'react-router-dom';
-import useProductsQuery from '@/hooks/user/useProductsQuery';
-import Loading from '@/utils/animations/Loading';
-
-import Card from './Card';
+import React from 'react';
+import Products from './Products';
 import Sidebar from '../home/sidebar/Sidebar';
-import ProductNotFoundError from './ProductNotFoundError';
-import SortWrapper from '../home/filter/SortWrapper';
 
 function ProductCardsWrapper() {
-  const [page] = useState(1);
-
-  const [searchParams] = useSearchParams();
-  const {
-    products, loading, hasMore,
-  } = useProductsQuery(page, searchParams);
-
   return (
 
-    <>
+    <div className="flex lg:mt-36">
       <Sidebar />
-      <div className="w-full flex  bg-red-20 h-screen  mt-28">
-        <div className="w-full">
-          <SortWrapper />
-          {products && (
-            <div className="w-full flex flex-wrap md:gap-2 lg:p-2 justify-center">
-              {products.map((item) => <Card key={item._id} {...item} />)}
-            </div>
-          )}
-          <div className="w-full flex justify-center">
-            {loading && <Loading />}
-            {!hasMore && <ProductNotFoundError category={searchParams.get('category')!} />}
-          </div>
-        </div>
-      </div>
+      <Products />
 
-    </>
+    </div>
   );
 }
 
