@@ -23,30 +23,31 @@ const useProductsQuery = (
     setLoading(true);
     setError(false);
 
-    const copyQuery:Record<any, any> = {
-      page,
-      category: searchParams.get('category')!,
-      brand: [...searchParams.getAll('brand')!],
-      color: [...searchParams.getAll('color')!],
-    };
+    // const copyQuery:Record<any, any> = {
+    //   // page,
+    //   category: searchParams.get('category')!,
+    //   brand: [...searchParams.getAll('brand')!],
+    //   color: [...searchParams.getAll('color')!],
+    // };
 
-    if (searchParams.get('sort') !== null) {
-      copyQuery.sort = searchParams.get('sort');
-    }
+    // if (searchParams.get('sort') !== null) {
+    //   copyQuery.sort = searchParams.get('sort');
+    // }
 
-    if (searchParams.get('price[gte]') !== null) {
-      copyQuery['price[gte]'] = searchParams.get('price[gte]');
-    }
-    if (searchParams.get('price[lte]') !== null) {
-      copyQuery['price[lte]'] = searchParams.get('price[lte]');
-    }
+    // if (searchParams.get('price[gte]') !== null) {
+    //   copyQuery['price[gte]'] = searchParams.get('price[gte]');
+    // }
+    // if (searchParams.get('price[lte]') !== null) {
+    //   copyQuery['price[lte]'] = searchParams.get('price[lte]');
+    // }
 
-    getProductsByQuery(copyQuery, signal)
+    getProductsByQuery(searchParams.toString(), signal)
       .then((response) => {
         if (response && response.success) {
           dispatch(addProductsMeta({
             itemsShowing: response.message.itemsShowing,
             totalItems: response.message.totalItems,
+            totalPages: response.message.totalPages,
           }));
 
           dispatch(addProducts(response.message?.products));

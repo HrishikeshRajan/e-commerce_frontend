@@ -56,6 +56,7 @@ function Sidebar() {
               searchParams.delete('brand');
               searchParams.delete('color');
               searchParams.delete('sort');
+              searchParams.delete('page');
               setSearchParams(searchParams, { replace: true });
             }}
             type="button"

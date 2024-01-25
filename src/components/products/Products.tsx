@@ -20,7 +20,7 @@ function Products() {
   if (loading) return <ProductsShimmer />;
   return (
 
-    <div className="w-full flex  bg-red-20 h-screen ">
+    <div className="w-full flex  bg-red-20 ">
       <div className="w-full">
         <SortWrapper />
         {products && (

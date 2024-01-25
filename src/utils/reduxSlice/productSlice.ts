@@ -48,7 +48,8 @@ interface InitialState {
   userProducts:ProductUser[]
   userProductsMeta:{
     itemsShowing:number,
-    totalItems:number
+    totalItems:number,
+    totalPages:number,
   }
   currentPage:number
   productQuery:Query
@@ -110,6 +111,7 @@ const initialState:InitialState = {
   userProductsMeta: {
     itemsShowing: 0,
     totalItems: 0,
+    totalPages: 0,
   },
   currentPage: 1,
   productQuery: {
