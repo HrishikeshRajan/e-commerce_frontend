@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/no-array-index-key */
@@ -5,6 +6,8 @@ import React, { useState } from 'react';
 import convert from 'color-convert';
 import useFilter from '@/hooks/useFilter';
 import { useSearchParams } from 'react-router-dom';
+import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import PriceSlider from '../ui/PriceSlider';
 
 function Sidebar() {
   const [isFilter, setIsFilter] = useState<boolean>(true);
@@ -13,6 +16,8 @@ function Sidebar() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { filter } = useFilter();
+  const colors = useTypedSelector((store) => store.products.colorCount);
+  const brands = useTypedSelector((store) => store.products.brandCount);
 
   const handleCheckBox = (e :React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.checked) {
@@ -48,7 +53,7 @@ function Sidebar() {
 
   return (
     <>
-      <div className={`static transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'} overflow-y-auto lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-60 left-0 `}>
+      <div className={`static transition p-3   ${isFilter ? '-translate-x-96' : 'translate-x-0'}  lg:translate-x-0 z-10 h-fit bg-white shadow-lg w-9/12 lg:w-3/12 left-0 `}>
         <div className="flex justify-between">
           <h1 className="font-bold text-slate-800 py-1 ms-5">Filter</h1>
           <button
@@ -57,6 +62,8 @@ function Sidebar() {
               searchParams.delete('color');
               searchParams.delete('sort');
               searchParams.delete('page');
+              searchParams.delete('price[gte]');
+              searchParams.delete('price[lte]');
               setSearchParams(searchParams, { replace: true });
             }}
             type="button"
@@ -82,6 +89,7 @@ function Sidebar() {
                 >
                   {brand}
                 </label>
+                {brands && brands.length > 0 && <span className="text-slate-500 ms-3 text-xs">{brands && brands[index]._id.brand === brand ? `(${brands[index].count})` : ''}</span> }
               </div>
             ))}
             {filter.brands && filter.brands.length > 10 && filter.brands.length !== brandCount && <button type="button" onClick={() => setBrandCount((num) => num + brandCount)} className="text-slate-600">+ Show more</button>}
@@ -102,6 +110,7 @@ function Sidebar() {
                    <button type="button" className="w-5 h-5 rounded-full" style={{ backgroundColor: `#${convert.rgb.hex(convert.keyword.rgb(color.toLocaleLowerCase() as unknown as any))}` }} />
                    {color}
                  </label>
+                 {colors && colors.length > 0 && <span className="text-slate-500 ms-3 text-xs">{colors && colors[index]._id.color === color ? `(${colors[index].count})` : ''}</span> }
                </div>
              ))}
             {filter.colors && filter.colors.length > 10 && filter.colors.length !== colorCount && <button type="button" onClick={() => setColorCount((num) => num + colorCount)} className="text-slate-600">+ Show more</button>}
@@ -109,7 +118,7 @@ function Sidebar() {
 
           </div>
           <hr className="h-px my-8 bg-gray-200 border-0 " />
-
+          <PriceSlider />
         </div>
       </div>
       <button type="button" className="lg:hidden text-black mt-20 absolute z-10" onClick={() => setIsFilter(!filter)}>Click</button>

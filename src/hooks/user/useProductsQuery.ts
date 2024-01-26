@@ -1,6 +1,8 @@
 import { getProductsByQuery } from '@/components/products/apis/getProducts';
 import { useEffect, useState } from 'react';
 import {
+  addBrandCount,
+  addColorCount,
   addProducts, addProductsMeta,
 } from '@/utils/reduxSlice/productSlice';
 import { URLSearchParams } from 'url';
@@ -51,6 +53,8 @@ const useProductsQuery = (
           }));
 
           dispatch(addProducts(response.message?.products));
+          dispatch(addBrandCount(response.message?.brandsCount));
+          dispatch(addColorCount(response.message?.colorsCount));
           setHasMore(response.message.products.length > 0);
           setLoading(false);
         } else if (response && !response.success && response.statusCode === StatusCodes.NOT_FOUND) {

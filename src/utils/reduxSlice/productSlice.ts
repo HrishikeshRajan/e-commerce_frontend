@@ -39,21 +39,6 @@ export interface ProductQuery {
 }
 
 type Query = ProductQuery;
-interface InitialState {
-  productListResponse:ProductListResponse
-  confirmDelete:DeleteProductMeta
-  productListCurrentPage:number
-  productToEdit:IProduct
-  categories:CategoryCore[]
-  userProducts:ProductUser[]
-  userProductsMeta:{
-    itemsShowing:number,
-    totalItems:number,
-    totalPages:number,
-  }
-  currentPage:number
-  productQuery:Query
-}
 
 type DeleteProductMeta = {
   confirm:boolean
@@ -75,6 +60,37 @@ export interface CategoryCore {
   created: Date
   offer:string
 }
+
+interface ColorCount {
+  _id: {
+    color: string;
+  };
+  count: number;
+}
+interface BrandCount {
+  _id: {
+    brand: string;
+  };
+  count: number;
+}
+interface InitialState {
+  productListResponse:ProductListResponse
+  confirmDelete:DeleteProductMeta
+  productListCurrentPage:number
+  productToEdit:IProduct
+  categories:CategoryCore[]
+  userProducts:ProductUser[]
+  userProductsMeta:{
+    itemsShowing:number,
+    totalItems:number,
+    totalPages:number,
+  }
+  currentPage:number
+  productQuery:Query
+  colorCount:Array<ColorCount>
+  brandCount:Array<BrandCount>
+}
+
 const initialState:InitialState = {
   productListResponse: {
     itemsShowing: 0,
@@ -121,8 +137,9 @@ const initialState:InitialState = {
     page: 0,
     'price[gte]': '0',
     'price[lte]': '0',
-
   },
+  colorCount: [],
+  brandCount: [],
 };
 
 const productSlice = createSlice({
@@ -183,6 +200,12 @@ const productSlice = createSlice({
       merge(state.productQuery, action.payload);
       state.productQuery = { ...state.productQuery };
     },
+    addColorCount: (state, action:PayloadAction<ColorCount[]>) => {
+      state.colorCount = [...action.payload];
+    },
+    addBrandCount: (state, action:PayloadAction<BrandCount[]>) => {
+      state.brandCount = [...action.payload];
+    },
   },
 });
 
@@ -199,5 +222,7 @@ export const {
   addProductsMeta,
   addCurrentPage,
   addProductQuery,
+  addColorCount,
+  addBrandCount,
 } = productSlice.actions;
 export default productSlice.reducer;
