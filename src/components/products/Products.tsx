@@ -30,7 +30,7 @@ function Products() {
         )}
         <div className="w-full flex justify-center">
           {loading && <Loading />}
-          {!hasMore && <ProductNotFoundError category={searchParams.get('category')!} />}
+          {!hasMore && <ProductNotFoundError />}
         </div>
       </div>
     </div>
