@@ -2,7 +2,6 @@ import { getProductsByQuery } from '@/components/products/apis/getProducts';
 import { useEffect, useState } from 'react';
 import {
   addBrandCount,
-  addColorCount,
   addProducts, addProductsMeta,
 } from '@/utils/reduxSlice/productSlice';
 import { URLSearchParams } from 'url';
@@ -25,24 +24,6 @@ const useProductsQuery = (
     setLoading(true);
     setError(false);
 
-    // const copyQuery:Record<any, any> = {
-    //   // page,
-    //   category: searchParams.get('category')!,
-    //   brand: [...searchParams.getAll('brand')!],
-    //   color: [...searchParams.getAll('color')!],
-    // };
-
-    // if (searchParams.get('sort') !== null) {
-    //   copyQuery.sort = searchParams.get('sort');
-    // }
-
-    // if (searchParams.get('price[gte]') !== null) {
-    //   copyQuery['price[gte]'] = searchParams.get('price[gte]');
-    // }
-    // if (searchParams.get('price[lte]') !== null) {
-    //   copyQuery['price[lte]'] = searchParams.get('price[lte]');
-    // }
-
     getProductsByQuery(searchParams.toString(), signal)
       .then((response) => {
         if (response && response.success) {
@@ -54,7 +35,6 @@ const useProductsQuery = (
 
           dispatch(addProducts(response.message?.products));
           dispatch(addBrandCount(response.message?.brandsCount));
-          dispatch(addColorCount(response.message?.colorsCount));
           setHasMore(response.message.products.length > 0);
           setLoading(false);
         } else if (response && !response.success && response.statusCode === StatusCodes.NOT_FOUND) {

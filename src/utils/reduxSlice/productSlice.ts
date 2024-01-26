@@ -4,7 +4,7 @@
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { ProductUser } from '@/components/products/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { remove, merge } from 'lodash';
+import { remove } from 'lodash';
 
 export interface ProductListType {
   _id: string;
@@ -38,8 +38,6 @@ export interface ProductQuery {
 
 }
 
-type Query = ProductQuery;
-
 type DeleteProductMeta = {
   confirm:boolean
   name:string
@@ -60,13 +58,6 @@ export interface CategoryCore {
   created: Date
   offer:string
 }
-
-interface ColorCount {
-  _id: {
-    color: string;
-  };
-  count: number;
-}
 interface BrandCount {
   _id: {
     brand: string;
@@ -86,8 +77,6 @@ interface InitialState {
     totalPages:number,
   }
   currentPage:number
-  productQuery:Query
-  colorCount:Array<ColorCount>
   brandCount:Array<BrandCount>
 }
 
@@ -130,15 +119,6 @@ const initialState:InitialState = {
     totalPages: 0,
   },
   currentPage: 1,
-  productQuery: {
-    brand: [],
-    color: [],
-    category: '',
-    page: 0,
-    'price[gte]': '0',
-    'price[lte]': '0',
-  },
-  colorCount: [],
   brandCount: [],
 };
 
@@ -176,32 +156,11 @@ const productSlice = createSlice({
     addProducts: (state, action:PayloadAction<ProductUser[]>) => {
       state.userProducts = [...action.payload];
     },
-    updateProducts: (state, action:PayloadAction<ProductUser[]>) => {
-      const products = [...state.userProducts];
-      const set = new Set();
-
-      products.map((pro) => set.add(pro._id));
-
-      for (let index = 0; index < action.payload.length; index++) {
-        if (!set.has(action.payload[index]._id)) {
-          products.push(action.payload[index]);
-        }
-      }
-
-      state.userProducts = [...products];
-    },
     addProductsMeta: (state, action:PayloadAction<any>) => {
       state.userProductsMeta = action.payload;
     },
     addCurrentPage: (state, action:PayloadAction<number>) => {
       state.currentPage = action.payload;
-    },
-    addProductQuery: (state, action:PayloadAction<ProductQuery>) => {
-      merge(state.productQuery, action.payload);
-      state.productQuery = { ...state.productQuery };
-    },
-    addColorCount: (state, action:PayloadAction<ColorCount[]>) => {
-      state.colorCount = [...action.payload];
     },
     addBrandCount: (state, action:PayloadAction<BrandCount[]>) => {
       state.brandCount = [...action.payload];
@@ -218,11 +177,8 @@ export const {
   addProductToEdit,
   addCategories,
   addProducts,
-  updateProducts,
   addProductsMeta,
   addCurrentPage,
-  addProductQuery,
-  addColorCount,
   addBrandCount,
 } = productSlice.actions;
 export default productSlice.reducer;

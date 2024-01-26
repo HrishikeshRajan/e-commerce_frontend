@@ -16,7 +16,6 @@ function Sidebar() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { filter } = useFilter();
-  const colors = useTypedSelector((store) => store.products.colorCount);
   const brands = useTypedSelector((store) => store.products.brandCount);
 
   const handleCheckBox = (e :React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +109,7 @@ function Sidebar() {
                    <button type="button" className="w-5 h-5 rounded-full" style={{ backgroundColor: `#${convert.rgb.hex(convert.keyword.rgb(color.toLocaleLowerCase() as unknown as any))}` }} />
                    {color}
                  </label>
-                 {colors && colors.length > 0 && <span className="text-slate-500 ms-3 text-xs">{colors && colors[index]._id.color === color ? `(${colors[index].count})` : ''}</span> }
+
                </div>
              ))}
             {filter.colors && filter.colors.length > 10 && filter.colors.length !== colorCount && <button type="button" onClick={() => setColorCount((num) => num + colorCount)} className="text-slate-600">+ Show more</button>}
