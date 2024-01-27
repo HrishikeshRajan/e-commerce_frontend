@@ -63,6 +63,7 @@ function Sidebar() {
               searchParams.delete('page');
               searchParams.delete('price[gte]');
               searchParams.delete('price[lte]');
+              searchParams.delete('name');
               setSearchParams(searchParams, { replace: true });
             }}
             type="button"

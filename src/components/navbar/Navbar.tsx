@@ -5,7 +5,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCartPlus } from '@fortawesome/free-solid-svg-icons/faCartPlus';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link, useNavigate } from 'react-router-dom';
-import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import {
   removeAuthentication, removeUser, toggleUserSidebar,
 } from '@/utils/reduxSlice/appSlice';
@@ -19,6 +18,7 @@ import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks'
 import { DropdownProfile } from './constants';
 import AuthHelper from '../auth/apis/helper';
 import { signout } from '../auth/apis/signout';
+import Search from './Search';
 
 function Navbar() {
   const app = useTypedSelector((store) => store.app);
@@ -50,7 +50,7 @@ function Navbar() {
 
   return (
     <nav className="  fixed top-0 z-40 w-full shadow-md bg-white  p-2 ">
-      <div className="border-gray-200 flex justify-between items-center sm:px-4 ">
+      <div className="border-gray-200 flex justify-evenly items-center sm:px-4 ">
 
         {!app.authPage && (
           <Link to="/" className="hidden sm:block">
@@ -87,25 +87,9 @@ function Navbar() {
 
         {!app.authPage && (
           <>
-            <div className=" w-2/4 hidden lg:flex items-center justify-end">
-              <input
-                type="search"
-                name="search"
-                placeholder="Search products here"
-                id="search"
-                data-testid="searchbox-lg"
-                className="inline-block  outline-none border-2 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-              />
-              <button
-                type="button"
-                aria-label="search"
-                className="p-2 rounded-tr rounded-br border-none bg-gray-400 text-white"
-              >
-                <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
-              </button>
-            </div>
+            <Search />
             <ul className="flex p-3 w-full md:w-3/6   justify-end gap-5 ">
-              <li className="hidden lg:flex p-2 items-center justify-center cursor-pointer  border-2 rounded-full" aria-label="marketplace">
+              <li className="hidden lg:flex p-2 items-center justify-center cursor-pointer  border-2 rounded shadow-sm" aria-label="marketplace">
 
                 <Link to="account/seller">
                   <FontAwesomeIcon
@@ -182,27 +166,6 @@ function Navbar() {
           </>
         )}
       </div>
-      {!app.authPage && (
-        <div className=" w-full flex justify-center flex-1 lg:hidden mt-5 p-3">
-          <input
-            type="search"
-            name="search"
-            placeholder="Search products here"
-            id="search"
-            aria-label="search box"
-            data-testid="searchbox-sm"
-            className="block w-full flex-1 border-2 bg-transparent py-1.5 pl-3 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-          />
-          <button
-            type="button"
-            data-testid="search-btn"
-            aria-label="search"
-            className="p-1 rounded-tr rounded-br border-none bg-gray-400 text-white"
-          >
-            <FontAwesomeIcon icon={faMagnifyingGlass} size="lg" />
-          </button>
-        </div>
-      )}
     </nav>
 
   );
