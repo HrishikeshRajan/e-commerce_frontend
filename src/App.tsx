@@ -35,6 +35,7 @@ import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
 import ProductCardsWrapper from './components/products/ProductsWrapper';
+import ProductView from './components/home/SingleProduct/ProductView';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -74,6 +75,14 @@ const App = () => {
           element: (
             <AuthenticationWrapper authentication={false}>
               <ProductCardsWrapper />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'product/:prodId',
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <ProductView />
             </AuthenticationWrapper>
           ),
         },

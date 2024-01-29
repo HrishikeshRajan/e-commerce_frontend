@@ -3,6 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { ProductUser } from '@/components/products/types';
+import { CurrencyCode, ProductCore } from '@/types/Product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { remove } from 'lodash';
 
@@ -78,6 +79,7 @@ interface InitialState {
   }
   currentPage:number
   brandCount:Array<BrandCount>
+  singleProduct:ProductCore
 }
 
 const initialState:InitialState = {
@@ -120,6 +122,33 @@ const initialState:InitialState = {
   },
   currentPage: 1,
   brandCount: [],
+  singleProduct: {
+    _id: '',
+    name: '',
+    price: 0,
+    currencyCode: CurrencyCode.currencyCode,
+    description: '',
+    image: {
+      url: '',
+      secure_url: '',
+    },
+    images: [],
+    category: '',
+    brand: '',
+    ratings: 0,
+    numberOfReviews: 0,
+    sellerId: '',
+    shopId: '',
+    reviews: [],
+    sizes: [],
+    color: '',
+    gender: '',
+    isDiscontinued: false,
+    keywords: [],
+    updatedAt: '',
+    createdAt: '',
+    stock: 0,
+  },
 };
 
 const productSlice = createSlice({
@@ -132,6 +161,9 @@ const productSlice = createSlice({
       state
         .productListResponse
         .products = action.payload.products;
+    },
+    addSingleProduct: (state, action:PayloadAction<ProductCore>) => {
+      state.product = action.payload;
     },
     removeProductFromListById: (state) => {
       const id = state.confirmDelete.productId;
@@ -180,5 +212,6 @@ export const {
   addProductsMeta,
   addCurrentPage,
   addBrandCount,
+  addSingleProduct,
 } = productSlice.actions;
 export default productSlice.reducer;
