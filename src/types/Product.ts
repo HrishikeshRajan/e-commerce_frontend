@@ -53,3 +53,62 @@ export interface ShopCore {
   owner: string
   email:string
 }
+
+export interface ProductListType {
+  _id: string;
+  name: string;
+  price: number;
+  stock: number;
+  ownerId: {
+    _id: string;
+    fullname: string;
+  };
+  shopId: {
+    _id: string;
+    name: string;
+  };
+  createdAt: string;
+}
+
+export interface ProductListResponse {
+  itemsShowing:number
+  totalItems:number
+  products:ProductListType[]
+}
+
+export interface ProductQuery {
+  brand?:string[],
+  color?:string[],
+  category?:string,
+  page?:number,
+  'price[gte]'?:string,
+  'price[lte]'?:string
+
+}
+
+export type DeleteProductMeta = {
+  confirm:boolean
+  name:string
+  productId:string
+  title:string
+  info:string
+  bulk:boolean
+};
+
+export interface CategoryCore {
+  _id: string
+  name: string
+  image: {
+    secure_url: string
+  },
+  description: string
+  updated: Date
+  created: Date
+  offer:string
+}
+export interface BrandCount {
+  _id: {
+    brand: string;
+  };
+  count: number;
+}

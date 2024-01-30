@@ -3,68 +3,18 @@
 /* eslint-disable no-param-reassign */
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { ProductUser } from '@/components/products/types';
-import { CurrencyCode, ProductCore } from '@/types/Product';
+import {
+  BrandCount,
+  CategoryCore,
+  CurrencyCode,
+  DeleteProductMeta,
+  ProductCore,
+  ProductListResponse,
+  ProductListType,
+} from '@/types/Product';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { remove } from 'lodash';
 
-export interface ProductListType {
-  _id: string;
-  name: string;
-  price: number;
-  stock: number;
-  ownerId: {
-    _id: string;
-    fullname: string;
-  };
-  shopId: {
-    _id: string;
-    name: string;
-  };
-  createdAt: string;
-}
-
-interface ProductListResponse {
-  itemsShowing:number
-  totalItems:number
-  products:ProductListType[]
-}
-
-export interface ProductQuery {
-  brand?:string[],
-  color?:string[],
-  category?:string,
-  page?:number,
-  'price[gte]'?:string,
-  'price[lte]'?:string
-
-}
-
-type DeleteProductMeta = {
-  confirm:boolean
-  name:string
-  productId:string
-  title:string
-  info:string
-  bulk:boolean
-};
-
-export interface CategoryCore {
-  _id: string
-  name: string
-  image: {
-    secure_url: string
-  },
-  description: string
-  updated: Date
-  created: Date
-  offer:string
-}
-interface BrandCount {
-  _id: {
-    brand: string;
-  };
-  count: number;
-}
 interface InitialState {
   productListResponse:ProductListResponse
   confirmDelete:DeleteProductMeta
@@ -80,6 +30,10 @@ interface InitialState {
   currentPage:number
   brandCount:Array<BrandCount>
   singleProduct:ProductCore
+  selectedSize:string
+  selectedColor:string
+  sizeNotSelected: boolean
+  colorNotSelected:boolean
 }
 
 const initialState:InitialState = {
@@ -138,7 +92,18 @@ const initialState:InitialState = {
     ratings: 0,
     numberOfReviews: 0,
     sellerId: '',
-    shopId: '',
+    shopId: {
+      _id: '',
+      name: '',
+      logo: {
+        url: '',
+        secure_url: '',
+      },
+      description: '',
+      address: '',
+      owner: '',
+      email: '',
+    },
     reviews: [],
     sizes: [],
     color: '',
@@ -149,6 +114,10 @@ const initialState:InitialState = {
     createdAt: '',
     stock: 0,
   },
+  selectedSize: '',
+  selectedColor: '',
+  sizeNotSelected: false,
+  colorNotSelected: false,
 };
 
 const productSlice = createSlice({
@@ -163,7 +132,7 @@ const productSlice = createSlice({
         .products = action.payload.products;
     },
     addSingleProduct: (state, action:PayloadAction<ProductCore>) => {
-      state.product = action.payload;
+      state.singleProduct = action.payload;
     },
     removeProductFromListById: (state) => {
       const id = state.confirmDelete.productId;
@@ -197,6 +166,18 @@ const productSlice = createSlice({
     addBrandCount: (state, action:PayloadAction<BrandCount[]>) => {
       state.brandCount = [...action.payload];
     },
+    addProductSize: (state, action:PayloadAction<string>) => {
+      state.selectedSize = action.payload;
+    },
+    addProductColor: (state, action:PayloadAction<string>) => {
+      state.selectedColor = action.payload;
+    },
+    addSizeNotSelectedError: (state, action:PayloadAction<boolean>) => {
+      state.sizeNotSelected = action.payload;
+    },
+    addColorNotSelectedError: (state, action:PayloadAction<boolean>) => {
+      state.colorNotSelected = action.payload;
+    },
   },
 });
 
@@ -213,5 +194,10 @@ export const {
   addCurrentPage,
   addBrandCount,
   addSingleProduct,
+  addProductColor,
+  addProductSize,
+  addColorNotSelectedError,
+  addSizeNotSelectedError,
+
 } = productSlice.actions;
 export default productSlice.reducer;

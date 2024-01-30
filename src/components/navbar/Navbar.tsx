@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartPlus } from '@fortawesome/free-solid-svg-icons/faCartPlus';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link, useNavigate } from 'react-router-dom';
 import {
@@ -19,6 +18,7 @@ import { DropdownProfile } from './constants';
 import AuthHelper from '../auth/apis/helper';
 import { signout } from '../auth/apis/signout';
 import Search from './Search';
+import CartNavIcon from './CartNavIcon';
 
 function Navbar() {
   const app = useTypedSelector((store) => store.app);
@@ -150,17 +150,7 @@ function Navbar() {
 
               </li>
               <li className="pr-2 sm:px-3 flex items-center" aria-label="cart">
-                <FontAwesomeIcon
-                  icon={faCartPlus}
-                  className="text-slate-700"
-                  size="lg"
-                />
-                <span
-                  className="bg-red-800 mx-1 px-1 text-white rounded"
-                  aria-label="quantity"
-                >
-                  0
-                </span>
+                <CartNavIcon />
               </li>
             </ul>
           </>

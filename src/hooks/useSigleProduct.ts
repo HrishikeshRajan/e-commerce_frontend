@@ -1,11 +1,14 @@
 import { PRODUCT } from '@/components/API';
 import { useEffect, useState } from 'react';
 import { ProductCore } from '@/types/Product';
+import { addSingleProduct } from '@/utils/reduxSlice/productSlice';
+import { useTypedDispatch } from './user/reduxHooks';
 
 export const useSingleProduct = (productId:string) => {
   const [product, setProduct] = useState<ProductCore>();
   const [loading, setLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<{ error:boolean, message:string }>({ error: false, message: '' });
+  const dispatch = useTypedDispatch();
   useEffect(() => {
     const controller = new AbortController();
     try {
@@ -13,6 +16,7 @@ export const useSingleProduct = (productId:string) => {
         setLoading(false);
         if (result.status === 200) {
           setProduct(result.data.message.product);
+          dispatch(addSingleProduct(result.data.message.product));
         }
       }).catch((error:any) => {
         if (error.name !== 'CanceledError') {
