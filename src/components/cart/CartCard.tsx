@@ -6,6 +6,7 @@ import { MdKeyboardArrowDown } from 'react-icons/md';
 import LineSmall from '../home/ui/LineSmall';
 import QtyBox from '../dialougeBox/QtyBox';
 import SizeBox from '../dialougeBox/SizeBox';
+import DeleteItemBtn from './DeleteItemBtn';
 
 function CartCard({ cartItem }:{ cartItem:Item }) {
   const [selectSize, setSelectSize] = useState(false);
@@ -15,7 +16,7 @@ function CartCard({ cartItem }:{ cartItem:Item }) {
 
   return (
     <div className="flex  border   my-2 shadow-sm justify-start relative">
-      <button type="button" className="absolute top-0 right-0 p-2">X</button>
+      <DeleteItemBtn productId={product._id} />
       <div className=" w-28 flex items-center  ">
         <img src={product.images[0].secure_url} className="" alt="product" />
       </div>

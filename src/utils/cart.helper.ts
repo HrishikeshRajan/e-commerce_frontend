@@ -113,6 +113,23 @@ const cart = {
       console.log(error);
     }
   },
+  deleteProductById: (productId:string) => {
+    try {
+      if (typeof window === 'undefined') return;
+      const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
+      if (!isEmpty(userCart) && userCart.products[productId]) {
+        delete userCart.products[productId];
+      }
+      const grandTotalQty = sumQty(userCart.products);
+      userCart.grandTotalQty = grandTotalQty;
+      const grandTotalPrice = sumPrice(userCart.products);
+      userCart.grandTotalPrice = grandTotalPrice;
+      localStorage.setItem('cart', JSON.stringify(userCart));
+      return userCart;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default cart;
