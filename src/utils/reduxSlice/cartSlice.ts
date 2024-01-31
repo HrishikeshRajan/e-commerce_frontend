@@ -4,6 +4,7 @@ import { Cart } from '../../types/Cart';
 
 interface InitialState {
   cart:Cart
+  isQtyDialogueOpen:boolean
 }
 const initialState:InitialState = {
   cart: {
@@ -11,6 +12,7 @@ const initialState:InitialState = {
     grandTotalPrice: 0,
     grandTotalQty: 0,
   },
+  isQtyDialogueOpen: false,
 };
 const cartSlice = createSlice({
   name: 'cart',
@@ -19,8 +21,11 @@ const cartSlice = createSlice({
     addToCart: (state, action:PayloadAction<Cart>) => {
       state.cart = action.payload;
     },
+    toggleQtyDialogueBox: (state) => {
+      state.isQtyDialogueOpen = !state.isQtyDialogueOpen;
+    },
   },
 });
 
 export default cartSlice.reducer;
-export const { addToCart } = cartSlice.actions;
+export const { addToCart, toggleQtyDialogueBox } = cartSlice.actions;

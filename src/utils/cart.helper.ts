@@ -28,9 +28,9 @@ const cart = {
         const item = userCart.products[productId];
         item.qty += 1;
         item.totalPrice = Math.floor(item.product.price * item.qty);
-        userCart.products[productId] = item;
         item.options.color = options.color;
         item.options.size = options.size;
+        userCart.products[productId] = item;
       } else {
         const item:Item = {
           product,
@@ -57,6 +57,49 @@ const cart = {
 
       const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
       return userCart.grandTotalQty;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  get: () => {
+    try {
+      if (typeof window === 'undefined') return;
+
+      const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
+      return userCart;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  updateSize: (size:string, productId:string) => {
+    try {
+      if (typeof window === 'undefined') return;
+      const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
+      if (!isEmpty(userCart) && userCart.products[productId]) {
+        const item = userCart.products[productId];
+        item.options.size = size;
+        userCart.products[productId] = item;
+      }
+
+      localStorage.setItem('cart', JSON.stringify(userCart));
+      return userCart;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  updateQty: (qty:number, productId:string) => {
+    try {
+      if (typeof window === 'undefined') return;
+      const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
+      if (!isEmpty(userCart) && userCart.products[productId]) {
+        const item = userCart.products[productId];
+        item.qty = qty;
+        userCart.products[productId] = item;
+      }
+      const grandTotalQty = sumQty(userCart.products);
+      userCart.grandTotalQty = grandTotalQty;
+      localStorage.setItem('cart', JSON.stringify(userCart));
+      return userCart;
     } catch (error) {
       console.log(error);
     }
