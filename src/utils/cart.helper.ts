@@ -104,6 +104,15 @@ const cart = {
       console.log(error);
     }
   },
+  clearCart: () => {
+    try {
+      if (typeof window === 'undefined') return;
+
+      localStorage.removeItem('cart');
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default cart;

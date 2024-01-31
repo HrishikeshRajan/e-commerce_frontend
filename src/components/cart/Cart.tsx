@@ -1,12 +1,10 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
-import cart from '@/utils/cart.helper';
 import CartItem from './CartItem';
 import Summary from './Summary';
 
 function Cart() {
-  const cartstore = useTypedSelector((store) => store.cart.cart);
-  const userCart = useMemo(() => cart.get(), [cartstore]);
+  const userCart = useTypedSelector((store) => store.cart.cart);
   return (
     <div className="container flex justify-center ">
       <CartItem myCart={userCart!} />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Cart } from '@/types/Cart';
 import { formattedAmount } from '@/utils/convertToRupees';
+import { isEmpty } from 'lodash';
 import LineSmall from '../home/ui/LineSmall';
 
 function Summary({ summary }:{ summary:Cart }) {
@@ -14,7 +15,7 @@ function Summary({ summary }:{ summary:Cart }) {
         {' '}
         {formattedAmount(summary.grandTotalPrice)}
       </h3>
-      <button type="button" className="bg-gray-950 mt-5 text-white  w-full p-2 active:scale-95 ease-in-out duration-300">PLACE ORDER</button>
+      <button type="button" className={` mt-5 text-white  w-full p-2  ${isEmpty(summary.products) ? 'disabled:bg-slate-600 cursor-auto' : 'bg-gray-950 active:scale-95 ease-in-out duration-300'}`} disabled={!!isEmpty(summary.products)}>PLACE ORDER</button>
     </div>
   );
 }

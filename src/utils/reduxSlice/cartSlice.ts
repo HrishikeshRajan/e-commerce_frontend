@@ -21,6 +21,13 @@ const cartSlice = createSlice({
     addToCart: (state, action:PayloadAction<Cart>) => {
       state.cart = action.payload;
     },
+    clearCart: (state) => {
+      state.cart = {
+        products: {},
+        grandTotalPrice: 0,
+        grandTotalQty: 0,
+      };
+    },
     toggleQtyDialogueBox: (state) => {
       state.isQtyDialogueOpen = !state.isQtyDialogueOpen;
     },
@@ -28,4 +35,4 @@ const cartSlice = createSlice({
 });
 
 export default cartSlice.reducer;
-export const { addToCart, toggleQtyDialogueBox } = cartSlice.actions;
+export const { addToCart, toggleQtyDialogueBox, clearCart } = cartSlice.actions;
