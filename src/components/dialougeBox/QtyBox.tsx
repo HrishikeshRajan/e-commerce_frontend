@@ -6,6 +6,7 @@ import cart from '@/utils/cart.helper';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
+import { updateCartQty } from '../cart/apis/quantityUpdate';
 
 interface IDialougeBox {
   productId:string
@@ -23,10 +24,14 @@ function QtyBox({
    */
   usePageFreeze();
 
-  const dispacth = useTypedDispatch();
+  const dispatch = useTypedDispatch();
   const handleQty = (selectedQty:number) => {
     const updatedCart = cart.updateQty(selectedQty, productId);
-    dispacth(addToCart(updatedCart!));
+    dispatch(addToCart(updatedCart!));
+    updateCartQty(selectedQty, productId, updatedCart?.cartId as string).then((result) => {
+      dispatch(addToCart(result.message.cart));
+      cart.updateCart(result.message.cart);
+    });
   };
 
   return createPortal(

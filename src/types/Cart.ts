@@ -19,4 +19,17 @@ export type Cart = {
   products:{ [x:string]:Item }
   grandTotalPrice:number
   grandTotalQty:number
+  userId?:string
+  cartId?:string
+};
+export type ModifiedItem = {
+  productId:string,
+  qty:number
+  totalPrice:number
+  options:Options
+};
+export type ModifiedCart = {
+  products:{ [x:string]:ModifiedItem }
+  grandTotalPrice:number
+  grandTotalQty:number
 };

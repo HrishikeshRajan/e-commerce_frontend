@@ -1,4 +1,4 @@
-import { PRODUCT } from '@/components/API';
+import { PRODUCT } from '@/utils/API';
 import { useEffect, useState } from 'react';
 import { ProductCore } from '@/types/Product';
 import { addSingleProduct } from '@/utils/reduxSlice/productSlice';

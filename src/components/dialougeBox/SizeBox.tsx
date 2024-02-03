@@ -7,6 +7,7 @@ import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
 import { ProductCore } from '@/types/Product';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
+import { updateProductSize } from '../cart/apis/sizeUpdate';
 
 interface IDialougeBox {
   product:ProductCore
@@ -28,6 +29,10 @@ function SizeBox({
   const handleSelectSize = (selectedSize:string) => {
     const updatedCart = cart.updateSize(selectedSize, product._id);
     dispatch(addToCart(updatedCart!));
+    updateProductSize(selectedSize, product._id, updatedCart?.cartId as string).then((result) => {
+      dispatch(addToCart(result.message.cart));
+      cart.updateCart(result.message.cart);
+    });
   };
   return createPortal(
     <>

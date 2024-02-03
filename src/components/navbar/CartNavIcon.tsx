@@ -5,9 +5,11 @@ import { IconContext } from 'react-icons';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { useNavigate } from 'react-router-dom';
 import useQuantityObserver from '@/hooks/useQuantityObserver';
+import cart from '@/utils/cart.helper';
 
 function CartNavIcon() {
   const qty = useTypedSelector((store) => store.cart.cart.grandTotalQty);
+  const localCount = cart.getCount();
   const navigate = useNavigate();
 
   const shouldAnimate = useQuantityObserver(qty);
@@ -22,7 +24,7 @@ function CartNavIcon() {
         </span>
       </IconContext.Provider>
       <span className="sr-only">Notifications</span>
-      {(qty) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qty}</small></div>}
+      {(qty || localCount) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qty || localCount}</small></div>}
     </button>
   );
 }

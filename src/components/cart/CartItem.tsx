@@ -13,15 +13,15 @@ function CartItem({ myCart }:{ myCart:Cart }) {
           {' '}
           <span className="text-slate-600 font-light">
             (
-            {myCart.grandTotalQty}
+            {myCart && myCart.grandTotalQty}
             )
           </span>
         </h1>
-        <ClearCartBtn />
+        {myCart && !isEmpty(myCart.products) && <ClearCartBtn cartId={myCart.cartId!} />}
       </div>
-      { !isEmpty(myCart.products) && Object.entries(myCart.products)
-        .map(([id, product]) => <CartCard key={id} cartItem={product} />)}
-      {isEmpty(myCart.products) && <p className="py-3 text-center text-lg font-semibold text-slate-400">Cart is empty</p>}
+      { myCart && !isEmpty(myCart.products) && Object.entries(myCart.products)
+        .map(([id, product]) => <CartCard key={id} cartItem={product} cartId={myCart.cartId!} />)}
+      {!myCart && <p className="py-3 text-center text-lg font-semibold text-slate-400">Cart is empty</p>}
     </div>
   );
 }

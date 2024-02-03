@@ -8,7 +8,7 @@ import QtyBox from '../dialougeBox/QtyBox';
 import SizeBox from '../dialougeBox/SizeBox';
 import DeleteItemBtn from './DeleteItemBtn';
 
-function CartCard({ cartItem }:{ cartItem:Item }) {
+function CartCard({ cartItem, cartId }:{ cartItem:Item, cartId:string }) {
   const [selectSize, setSelectSize] = useState(false);
   const [selectQty, setSelectQty] = useState(false);
 
@@ -16,7 +16,7 @@ function CartCard({ cartItem }:{ cartItem:Item }) {
 
   return (
     <div className="flex  border   my-2 shadow-sm justify-start relative">
-      <DeleteItemBtn productId={product._id} />
+      <DeleteItemBtn productId={product._id} cartId={cartId} />
       <div className=" w-28 flex items-center  ">
         <img src={product.images[0].secure_url} className="" alt="product" />
       </div>

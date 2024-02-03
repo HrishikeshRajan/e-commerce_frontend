@@ -1,5 +1,5 @@
 import { ProductBaseUrl } from '../../../utils/uri/productUri';
-  
+
 export async function getProductsByQuery(
   query:string,
   signal: AbortSignal,

@@ -1,9 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable security/detect-object-injection */
 import {
   Cart, Item, Options,
 } from '@/types/Cart';
 import { ProductCore } from '@/types/Product';
 import { isEmpty } from 'lodash';
+import currency from 'currency.js';
 
 function sumQty(products:{ [x:string]:Item }) {
   return Object.values(products).reduce((totalQty, item) => totalQty + item.qty, 0);
@@ -12,6 +15,15 @@ function sumPrice(products:{ [x:string]:Item }) {
   return Object.values(products)
     .reduce((totalPrice, item) => totalPrice + item.product.price * item.qty, 0);
 }
+
+const findGrandTotal = (products: { [x: string]: Item }) => {
+  const productsArray = Object.values(products);
+  let total = 0;
+  for (const item of productsArray) {
+    total = currency(total).add(item.totalPrice).value;
+  }
+  return total;
+};
 
 const cart = {
   addToCart: (product:ProductCore, options:Options) => {
@@ -51,12 +63,21 @@ const cart = {
       console.log(error);
     }
   },
+  updateCart: (userCart:Cart) => {
+    try {
+      if (typeof window === 'undefined') return;
+      localStorage.setItem('cart', JSON.stringify(userCart));
+    } catch (error) {
+      console.log(error);
+    }
+  },
   getCount: () => {
     try {
       if (typeof window === 'undefined') return;
 
       const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
-      return userCart.grandTotalQty;
+      if (!userCart) return 0;
+      return userCart.grandTotalQty ? userCart.grandTotalQty : 0;
     } catch (error) {
       console.log(error);
     }
@@ -95,9 +116,10 @@ const cart = {
         const item = userCart.products[productId];
         item.qty = qty;
         userCart.products[productId] = item;
+        item.totalPrice = item.qty * item.product.price;
       }
-      const grandTotalQty = sumQty(userCart.products);
-      userCart.grandTotalQty = grandTotalQty;
+      userCart.grandTotalPrice = findGrandTotal(userCart.products);
+      userCart.grandTotalQty = sumQty(userCart.products);
       localStorage.setItem('cart', JSON.stringify(userCart));
       return userCart;
     } catch (error) {

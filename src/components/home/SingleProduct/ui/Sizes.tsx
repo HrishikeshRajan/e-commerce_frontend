@@ -6,7 +6,6 @@ import React from 'react';
 function Sizes({ sizes }:{ sizes:string[] }) {
   const dispatch = useTypedDispatch();
   const handleSize = (size:string) => {
-    console.log(size);
     dispatch(addProductSize(size));
   };
   return (
