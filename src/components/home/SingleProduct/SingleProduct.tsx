@@ -26,9 +26,9 @@ function SingleProduct() {
   if (!product) return;
   if (loading) return <h1>Loading</h1>;
   return (
-    <div className="w-full flex flex-col lg:flex-row lg:justify-center items-center lg:mt-44 lg:container">
-      <div className="w-full lg:w-5/12"><Images src={product.images} /></div>
-      <div className="w-full lg:w-7/12 pt-10 lg:pt-72">
+    <div className="w-full flex flex-col lg:flex-row lg:justify-center items-center lg:mt-10 lg:container">
+      <div className="w-full lg:w-5/12 mt-40"><Images src={product.images} /></div>
+      <div className="w-full lg:w-7/12 pt-10  lg:pt-10">
         <ProductName name={product.name} />
         <Brand brand={product.brand} />
 

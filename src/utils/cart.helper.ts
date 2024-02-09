@@ -66,6 +66,7 @@ const cart = {
   updateCart: (userCart:Cart) => {
     try {
       if (typeof window === 'undefined') return;
+      if (!userCart || typeof userCart === 'undefined') return;
       localStorage.setItem('cart', JSON.stringify(userCart));
     } catch (error) {
       console.log(error);
@@ -74,8 +75,9 @@ const cart = {
   getCount: () => {
     try {
       if (typeof window === 'undefined') return;
-
-      const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
+      const cartString = localStorage.getItem('cart');
+      if (!cartString || typeof cartString === 'undefined') return 0;
+      const userCart:Cart = JSON.parse(cartString);
       if (!userCart) return 0;
       return userCart.grandTotalQty ? userCart.grandTotalQty : 0;
     } catch (error) {

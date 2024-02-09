@@ -3,6 +3,7 @@ import appSlice from './reduxSlice/appSlice';
 import markeplaceSlice from './reduxSlice/markeplaceSlice';
 import productSlice from './reduxSlice/productSlice';
 import cartSlice from './reduxSlice/cartSlice';
+import orderSlice from './reduxSlice/orderSlice';
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     marketplace: markeplaceSlice,
     products: productSlice,
     cart: cartSlice,
+    order: orderSlice,
   },
 });
 

@@ -8,7 +8,7 @@ import useQuantityObserver from '@/hooks/useQuantityObserver';
 import cart from '@/utils/cart.helper';
 
 function CartNavIcon() {
-  const qty = useTypedSelector((store) => store.cart.cart.grandTotalQty);
+  const qty = useTypedSelector((store) => store.cart?.cart?.grandTotalQty) || 0;
   const localCount = cart.getCount();
   const navigate = useNavigate();
 
@@ -24,7 +24,7 @@ function CartNavIcon() {
         </span>
       </IconContext.Provider>
       <span className="sr-only">Notifications</span>
-      {(qty || localCount) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qty || localCount}</small></div>}
+      {(qty || localCount) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qty || localCount || 0}</small></div>}
     </button>
   );
 }

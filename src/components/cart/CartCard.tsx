@@ -15,7 +15,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:Item, cartId:string }) {
   const { product } = cartItem;
 
   return (
-    <div className="flex  border   my-2 shadow-sm justify-start relative">
+    <div className="flex  border  rounded p-2  my-2 shadow-sm justify-start relative">
       <DeleteItemBtn productId={product._id} cartId={cartId} />
       <div className=" w-28 flex items-center  ">
         <img src={product.images[0].secure_url} className="" alt="product" />
