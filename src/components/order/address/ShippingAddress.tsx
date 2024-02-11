@@ -2,14 +2,13 @@
 import React, { useEffect, useState } from 'react';
 import LineSmall from '@/components/home/ui/LineSmall';
 import { USER } from '@/utils/API';
-import { useNavigate } from 'react-router-dom';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import AddressCard, { Address } from './AddressCard';
 import PrimaryAddressFactory from '../factory/PrimaryAddressFactory';
+import ContinueBtn from './ContinueBtn';
 
 function ShippingAddress() {
   const [addresses, setAddresses] = useState<Address[]>();
-  const navigate = useNavigate();
   const addressId = useTypedSelector((store) => store.order.addressId);
   useEffect(() => {
     USER.get('/address', { withCredentials: true }).then((result) => {
@@ -44,8 +43,8 @@ function ShippingAddress() {
           }
         </div>
       </div>
-      <div className="w-full fixed bottom-0 lg:static lg:bottom-auto flex my-10 justify-center px-2">
-        {addressId && <button type="button" onClick={() => navigate('/payment')} className="bg-yellow-400 w-full lg:w-6/12 font-bold rounded text-slate-900 p-3">CONTINUE TO PAYMENT</button>}
+      <div className="w-full fixed bottom-0 lg:static lg:bottom-auto flex lg:my-10 justify-center lg:px-2">
+        {addressId && <ContinueBtn />}
       </div>
     </div>
   );

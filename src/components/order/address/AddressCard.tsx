@@ -24,8 +24,7 @@ function AddressCard({ address }:{ address:Address }) {
   const dispatch = useTypedDispatch();
   const addAddress = () => {
     dispatch(addAddressId(address._id));
-    ORDER.put(`/${orderId}/addresses/${address._id}`).then((result) => {
-      console.log(result);
+    ORDER.put(`/${orderId}/addresses/${address._id}`).then(() => {
     }).catch((error) => {
       console.log(error);
     });

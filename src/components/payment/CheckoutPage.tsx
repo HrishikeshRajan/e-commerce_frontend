@@ -1,23 +1,57 @@
+/* eslint-disable react/self-closing-comp */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { FormEvent, useState } from 'react';
-import { CardElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import orderHelper from '@/utils/order.helper';
-import { useNavigate } from 'react-router-dom';
-import cart from '@/utils/cart.helper';
-import { clearCart } from '@/utils/reduxSlice/cartSlice';
-import Loading from '@/utils/animations/Loading';
-import { IoArrowForwardOutline } from 'react-icons/io5';
+import React, { FormEvent, useEffect, useState } from 'react';
+import {
+  PaymentElement, useElements, useStripe,
+} from '@stripe/react-stripe-js';
+
+
+import { StripePaymentElementOptions } from '@stripe/stripe-js';
+import PayNowBtn from './PayNowBtn';
 
 function CheckoutForm() {
   const [paid, setPaid] = useState(false);
   const [loading, setLoading] = useState(false);
-  const dispatch = useTypedDispatch();
-  const navigate = useNavigate();
+  const [inputError, setInputError] = useState('');
+
   const stripe = useStripe();
   const elements = useElements();
-  const cartId = useTypedSelector((store) => store.cart.cart.cartId);
-  const orderId = orderHelper.getOrderId();
+
+  useEffect(() => {
+    if (!stripe) {
+      return;
+    }
+
+    const clientSecret = new URLSearchParams(window.location.search).get(
+      'payment_intent_client_secret',
+    );
+
+    if (!clientSecret) {
+      return;
+    }
+
+    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+      switch (paymentIntent?.status) {
+        case 'succeeded':
+          setInputError('Payment succeeded!');
+
+          break;
+        case 'processing':
+          setInputError('Your payment is processing.');
+          break;
+        case 'requires_payment_method':
+          setInputError('Your payment was not successful, please try again.');
+          break;
+        default:
+          setInputError('Something went wrong.');
+          break;
+      }
+    });
+  }, [stripe]);
+
+  if (!stripe || !elements) {
+    return;
+  }
   const handleSubmit = async (e:FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!stripe || !elements) {
@@ -25,56 +59,34 @@ function CheckoutForm() {
     }
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:4000/api/v1/orders/create', {
-        method: 'POST',
-        body: JSON.stringify({
-          paymentMethodTypes: 'card', currency: 'inr', cartId, orderId,
-        }),
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-      }).then((result) => result.json());
+      const { error } = await stripe.confirmPayment({
+        elements, confirmParams: { return_url: 'http://localhost:5173/payment/success' }, redirect: 'always',
+      });
 
-      const { clientSecret } = response.message;
-      await stripe.confirmCardPayment(
-        clientSecret,
-        {
-          payment_method: {
-            card: elements.getElement(CardElement)!,
-          },
-        },
-      );
+      if ((error && error.type === 'card_error') || (error && error.type === 'validation_error')) {
+        setInputError(error.message!);
+      }
     } catch (error) {
       console.log(error);
     }
     setPaid(!paid);
     setLoading(false);
-    cart.clearCart();
-    orderHelper.clearOrderId();
-    dispatch(clearCart());
+  };
+  const paymentElementOptions:StripePaymentElementOptions = {
+    layout: 'tabs',
+    wallets: {
+      googlePay: 'never',
+      applePay: 'never',
+    },
   };
 
   return (
     <form onSubmit={handleSubmit} className="w-full lg:w-6/12 shadow-md  lg:p-5 rounded ">
+
+      {inputError && <h1 className="font-bold text-red-500 py-5">{inputError}</h1>}
       {loading ? <p className="text-slate-400 py-10 font-bold">Please don&apos;t close the tab during the payment</p> : ''}
-      {!paid && <CardElement className="bg-white p-5" />}
-      {paid ? (
-        <button onClick={() => navigate('/')} type="button" className="w-full outline-none bg-cyan-400 text-slate-50 shadow-sm px-2 py-2 mt-5 font-bold flex justify-center items-center gap-2">
-          <span> Continue Shopping</span>
-          <IoArrowForwardOutline />
-        </button>
-      )
-        : (
-          <button type="submit" className="w-full m-0 fixed bottom-0 lg:static lg:bottom-auto disabled:bg-slate-400 outline-none bg-cyan-600 text-slate-50 shadow-sm   px-2 py-3 mt-5 font-bold" disabled={!!loading}>
-            {loading ? (
-              <>
-                Paying
-                {' '}
-                {' '}
-                <Loading />
-              </>
-            ) : 'PAY NOW'}
-          </button>
-        )}
+      {!paid && <PaymentElement id="payment-element" options={paymentElementOptions} />}
+      <PayNowBtn loading={loading} />
     </form>
   );
 }

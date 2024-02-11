@@ -40,6 +40,7 @@ import ProductView from './components/home/SingleProduct/ProductView';
 import Cart from './components/cart/Cart';
 import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
+import PaymentSuccess from './components/payment/PaymentSuccess';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -112,6 +113,14 @@ const App = () => {
           element: (
             <AuthenticationWrapper authentication={false}>
               <Payment />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'payment/success',
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <PaymentSuccess />
             </AuthenticationWrapper>
           ),
         },

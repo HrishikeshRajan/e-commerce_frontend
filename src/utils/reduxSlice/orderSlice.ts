@@ -7,7 +7,7 @@ interface InitialState {
 }
 const initialState:InitialState = {
   orderId: '',
-  addressId:''
+  addressId: '',
 };
 const orderSlice = createSlice({
   initialState,
@@ -19,8 +19,16 @@ const orderSlice = createSlice({
     addAddressId: (state, action:PayloadAction<string>) => {
       state.addressId = action.payload;
     },
+    clearOrderId: (state) => {
+      state.orderId = '';
+    },
+    clearAddressId: (state) => {
+      state.addressId = '';
+    },
   },
 });
 
 export default orderSlice.reducer;
-export const { addOrderId, addAddressId } = orderSlice.actions;
+export const {
+  addOrderId, addAddressId, clearAddressId, clearOrderId,
+} = orderSlice.actions;
