@@ -1,10 +1,10 @@
-import { Cart } from '@/types/Cart';
+import { CartDocument } from '@/types/Cart';
 import React from 'react';
 import { isEmpty } from 'lodash';
 import CartCard from './CartCard';
 import ClearCartBtn from './ClearCartBtn';
 
-function CartItem({ myCart }:{ myCart:Cart }) {
+function CartItem({ myCart }:{ myCart:CartDocument }) {
   return (
     <div className="lg:w-5/12 w-full mt-32 md:mt-40 lg:mt-32 shadow-sm  rounded ">
       <div className="flex w-full justify-between">
@@ -17,10 +17,10 @@ function CartItem({ myCart }:{ myCart:Cart }) {
             )
           </span>
         </h1>
-        {myCart && !isEmpty(myCart.products) && <ClearCartBtn cartId={myCart.cartId!} />}
+        {myCart && !isEmpty(myCart.products) && <ClearCartBtn cartId={myCart._id} />}
       </div>
-      { myCart && !isEmpty(myCart.products) && Object.entries(myCart.products)
-        .map(([id, product]) => <CartCard key={id} cartItem={product} cartId={myCart.cartId!} />)}
+      { myCart && myCart.products && !isEmpty(myCart.products) && Object.entries(myCart.products)
+        .map(([id, product]) => <CartCard key={id} cartItem={product} cartId={myCart._id} />)}
 
     </div>
   );

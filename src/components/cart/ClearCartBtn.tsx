@@ -1,6 +1,6 @@
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
-import { clearCart } from '@/utils/reduxSlice/cartSlice';
+import { clearCart, clearCartResponse } from '@/utils/reduxSlice/cartSlice';
 import React from 'react';
 import axios, { AxiosError } from 'axios';
 import { StatusCodes } from 'http-status-codes';
@@ -17,6 +17,7 @@ function ClearCartBtn({ cartId }:{ cartId:string }) {
       if (result.status === 200) {
         cart.clearCart();
         dispatch(clearCart());
+        dispatch(clearCartResponse());
       }
     }).catch((error:any) => {
       if (axios.isAxiosError(error)) {

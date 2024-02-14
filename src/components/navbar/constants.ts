@@ -6,7 +6,7 @@ export const DropdownProfile = [
   },
   {
     title: 'Orders',
-    path: 'orders',
+    path: 'myOrders',
     id: '2',
   },
   {

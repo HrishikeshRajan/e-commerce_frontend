@@ -2,7 +2,7 @@ import { submitCart } from '@/components/cart/apis/addToCart';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { Options } from '@/types/Cart';
 import cart from '@/utils/cart.helper';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { addToCart, addToCartResponse } from '@/utils/reduxSlice/cartSlice';
 import { replaceCartProductsWithIds } from '@/utils/replaceCartProductsWithIds';
 import { isEmpty } from 'lodash';
 import React from 'react';
@@ -28,8 +28,8 @@ function AddToCartButton() {
     const modifiedCart = replaceCartProductsWithIds(cartData!);
     submitCart(modifiedCart).then((result) => {
       if (result) {
-        cart.updateCart(result.message?.cart);
-        dispatch(addToCart(result.message.cart !));
+        cart.setCartResponse(result.message.cart);
+        dispatch(addToCartResponse(result.message.cart));
       }
     });
   };

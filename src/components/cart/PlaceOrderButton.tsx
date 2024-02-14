@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { Cart } from '@/types/Cart';
+import { CartDocument } from '@/types/Cart';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { useNavigate } from 'react-router';
@@ -8,11 +8,11 @@ import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { addOrderId } from '@/utils/reduxSlice/orderSlice';
 import { placeOrder } from './apis/placeOrder';
 
-function PlaceOrderButton({ summary }:{ summary:Cart }) {
+function PlaceOrderButton({ summary }:{ summary:CartDocument }) {
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
   const handlePlaceOrder = () => {
-    placeOrder(summary.cartId!).then((result) => {
+    placeOrder(summary._id!).then((result) => {
       orderHelper.addOrderId(result?.data.message.order.orderId);
       dispatch(addOrderId(result?.data.message.order.orderI));
       navigate('/address');

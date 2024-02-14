@@ -7,9 +7,9 @@ import Summary from './Summary';
 import EmptyCart from './EmptyCart';
 
 function Cart() {
-  const userCart = useTypedSelector((store) => store.cart.cart);
-  const localCart = cart.get();
-  if ((!localCart || (localCart && isEmpty(localCart.products)))) return <EmptyCart />
+  const userCart = useTypedSelector((store) => store.cart.cartResponse);
+  const localCart = cart.getResponse();
+  if ((!localCart || (localCart && isEmpty(localCart.products)))) return <EmptyCart />;
   return (
     <div className="lg:container flex justify-evenly lg:flex-row flex-col px-1">
       <CartItem myCart={userCart && !isEmpty(userCart.products) ? userCart : localCart!} />

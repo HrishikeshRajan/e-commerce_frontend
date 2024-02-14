@@ -29,7 +29,7 @@ function PaymentSuccess() {
         <FontAwesomeIcon icon={faCircleCheck} size="5x" className="text-green-500 animate-pulse" />
         <h2 className="text-bold text-slate-700 p-3">Payment Successfull</h2>
         <h3 className="font-bold text-slate-800 text-xl mb-10 p-3">Your order has been placed!</h3>
-        <Link to="/orders" className="font-semibold p-3 border-2 rounded outline-none">
+        <Link to="/myOrders" className="font-semibold p-3 border-2 rounded outline-none">
           View Orders
         </Link>
         <span className="font-semibold text-slate-600 p-3">or</span>

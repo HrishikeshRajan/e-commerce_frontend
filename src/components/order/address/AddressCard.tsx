@@ -1,6 +1,6 @@
 import LineSmall from '@/components/home/ui/LineSmall';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
-import { ORDER, USER } from '@/utils/API';
+import { ORDER } from '@/utils/API';
 import orderHelper from '@/utils/order.helper';
 import { addAddressId } from '@/utils/reduxSlice/orderSlice';
 import React from 'react';

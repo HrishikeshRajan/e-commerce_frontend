@@ -4,13 +4,14 @@ import React from 'react';
 import { createPortal } from 'react-dom';
 import cart from '@/utils/cart.helper';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { addToCart, addToCartResponse } from '@/utils/reduxSlice/cartSlice';
 import { ProductCore } from '@/types/Product';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
 import { updateProductSize } from '../cart/apis/sizeUpdate';
 
 interface IDialougeBox {
   product:ProductCore
+  cartId:string
   title:string
   info?:string
   currentSize:string
@@ -18,7 +19,7 @@ interface IDialougeBox {
 }
 
 function SizeBox({
-  title, info, close, product, currentSize,
+  title, info, close, product, currentSize, cartId,
 }:IDialougeBox) {
   /**
    * This hook hides the veritical scroll
@@ -29,9 +30,9 @@ function SizeBox({
   const handleSelectSize = (selectedSize:string) => {
     const updatedCart = cart.updateSize(selectedSize, product._id);
     dispatch(addToCart(updatedCart!));
-    updateProductSize(selectedSize, product._id, updatedCart?.cartId as string).then((result) => {
-      dispatch(addToCart(result.message.cart));
-      cart.updateCart(result.message.cart);
+    updateProductSize(selectedSize, product._id, cartId).then((result) => {
+      dispatch(addToCartResponse(result.message.cart));
+      cart.setCartResponse(result.message.cart);
     });
   };
   return createPortal(

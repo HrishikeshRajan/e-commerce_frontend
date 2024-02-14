@@ -5,7 +5,6 @@ import './App.css';
 import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import ngrok from 'ngrok';
 import Auth from './components/auth/Auth';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
@@ -41,6 +40,7 @@ import Cart from './components/cart/Cart';
 import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
 import PaymentSuccess from './components/payment/PaymentSuccess';
+import Orders from './components/order/Orders';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -121,6 +121,14 @@ const App = () => {
           element: (
             <AuthenticationWrapper authentication={false}>
               <PaymentSuccess />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'myOrders',
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <Orders />
             </AuthenticationWrapper>
           ),
         },

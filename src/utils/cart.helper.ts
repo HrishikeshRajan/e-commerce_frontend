@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable security/detect-object-injection */
 import {
-  Cart, Item, Options,
+  Cart, CartDocument, Item, Options,
 } from '@/types/Cart';
 import { ProductCore } from '@/types/Product';
 import { isEmpty } from 'lodash';
@@ -36,6 +36,7 @@ const cart = {
         grandTotalQty: 0,
       };
       const userCart:Cart = JSON.parse(localStorage.getItem('cart')!) || emptyCart;
+
       if (!isEmpty(userCart) && userCart.products[productId]) {
         const item = userCart.products[productId];
         item.qty += 1;
@@ -59,6 +60,15 @@ const cart = {
       userCart.grandTotalPrice = grandTotalPrice;
       localStorage.setItem('cart', JSON.stringify(userCart));
       return userCart;
+    } catch (error) {
+      console.log(error);
+    }
+  },
+  setCartResponse: (userCart:Cart) => {
+    try {
+      if (typeof window === 'undefined') return;
+      if (!userCart || typeof userCart === 'undefined') return;
+      localStorage.setItem('cartResponse', JSON.stringify(userCart));
     } catch (error) {
       console.log(error);
     }
@@ -94,6 +104,15 @@ const cart = {
       console.log(error);
     }
   },
+  getResponse: () => {
+    try {
+      if (typeof window === 'undefined') return;
+      const userCart:CartDocument = JSON.parse(localStorage.getItem('cartResponse')!);
+      return userCart;
+    } catch (error) {
+      console.log(error);
+    }
+  },
   updateSize: (size:string, productId:string) => {
     try {
       if (typeof window === 'undefined') return;
@@ -116,6 +135,8 @@ const cart = {
       const userCart:Cart = JSON.parse(localStorage.getItem('cart')!);
       if (!isEmpty(userCart) && userCart.products[productId]) {
         const item = userCart.products[productId];
+
+        console.log(item)
         item.qty = qty;
         userCart.products[productId] = item;
         item.totalPrice = item.qty * item.product.price;
@@ -133,6 +154,7 @@ const cart = {
       if (typeof window === 'undefined') return;
 
       localStorage.removeItem('cart');
+      localStorage.removeItem('cartResponse');
     } catch (error) {
       console.log(error);
     }

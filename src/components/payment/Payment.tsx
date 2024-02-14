@@ -13,7 +13,7 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 function Payment() {
   const [clientSecret, setClientSecret] = useState('');
 
-  const cartId = useTypedSelector((store) => store.cart.cart.cartId);
+  const cartId = useTypedSelector((store) => store.cart.cartResponse.cartId);
   const orderId = orderHelper.getOrderId();
 
   useEffect(() => {
