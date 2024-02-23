@@ -14,7 +14,7 @@ export const ProductCoreSchema = z.object({
   keywords: z.string(),
   id: z.string().optional(),
   shopId: z.string(),
-  stock:z.number()
+  stock: z.number(),
 });
 
 export type IProduct = z.infer<typeof ProductCoreSchema>;

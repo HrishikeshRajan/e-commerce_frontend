@@ -7,6 +7,7 @@ import { IoIosArrowForward, IoIosArrowDown } from 'react-icons/io';
 import { FaHome, FaSignOutAlt } from 'react-icons/fa';
 import { CiBoxList } from 'react-icons/ci';
 import { IconType } from 'react-icons';
+import { BiSolidShoppingBags } from 'react-icons/bi';
 
 export type SidebarItemTypes = {
   title:string
@@ -56,10 +57,13 @@ export const menu:SidebarItemTypes[] = [
     ],
   },
   {
-    title: 'Back to home', id: 6, path: '/', icon: FaHome,
+    title: 'My Orders', id: 7, path: 'orders', icon: BiSolidShoppingBags,
   },
   {
-    title: 'Sign out', id: 8, path: '#', icon: FaSignOutAlt,
+    title: 'Back to home', id: 8, path: '/', icon: FaHome,
+  },
+  {
+    title: 'Sign out', id: 9, path: '#', icon: FaSignOutAlt,
   },
 
 ];

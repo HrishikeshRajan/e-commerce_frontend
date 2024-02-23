@@ -7,6 +7,7 @@ import { v4 as uuidv4 } from 'uuid';
 import Order from './Order';
 
 function OrderCard({ order, cartId }:{ order:CartDocument, cartId:string }) {
+  if (!order) return;
   return (
     <div className="flex  flex-col gap-3">
       { order && order.products && !isEmpty(order.products) && Object.entries(order.products)

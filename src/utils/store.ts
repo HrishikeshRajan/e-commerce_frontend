@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { configureStore } from '@reduxjs/toolkit';
 import appSlice from './reduxSlice/appSlice';
 import markeplaceSlice from './reduxSlice/markeplaceSlice';

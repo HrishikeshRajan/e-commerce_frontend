@@ -12,7 +12,7 @@ function PlaceOrderButton({ summary }:{ summary:CartDocument }) {
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
   const handlePlaceOrder = () => {
-    placeOrder(summary._id!).then((result) => {
+    placeOrder(summary.cartId!).then((result) => {
       orderHelper.addOrderId(result?.data.message.order.orderId);
       dispatch(addOrderId(result?.data.message.order.orderI));
       navigate('/address');

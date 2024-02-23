@@ -18,7 +18,7 @@ export interface Order {
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 
-const useOrders = () => {
+const useOrdersByShop = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useTypedDispatch();
@@ -56,4 +56,4 @@ const useOrders = () => {
   return { loading, error };
 };
 
-export default useOrders;
+export default useOrdersByShop;

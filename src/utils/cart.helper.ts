@@ -136,7 +136,6 @@ const cart = {
       if (!isEmpty(userCart) && userCart.products[productId]) {
         const item = userCart.products[productId];
 
-        console.log(item)
         item.qty = qty;
         userCart.products[productId] = item;
         item.totalPrice = item.qty * item.product.price;

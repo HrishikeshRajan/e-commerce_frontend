@@ -69,7 +69,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:CartItemDocument, cartId:strin
         </div>
         <p className="font-normal my-2">{formattedAmount(cartItem.productId.price)}</p>
         <LineSmall />
-        <p className="font-bold my-2">
+        <div className="font-bold my-2">
           <h3 className="text-xs text-slate-900 font-base">
             <span className="font-light">tax: </span>
             {' '}
@@ -93,7 +93,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:CartItemDocument, cartId:strin
             {' '}
             {cartItem.totalPriceAfterTaxString}
           </span>
-        </p>
+        </div>
 
       </div>
     </div>

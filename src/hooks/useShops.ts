@@ -1,24 +1,11 @@
-/* eslint-disable import/no-cycle */
-import { CartDocument } from '@/types/Cart';
 import { useEffect, useState } from 'react';
-import { addMyOrders } from '@/utils/reduxSlice/orderSlice';
+import { addShopList } from '@/utils/reduxSlice/markeplaceSlice';
 import { useTypedDispatch } from './user/reduxHooks';
-
-export interface Order {
-  userId: string
-  cartId: CartDocument
-  shippingAddress: any
-  paymentDetails: any
-  orderDetails: any
-  orderedAt:string
-  orderId:string
-  _id:string
-}
 
 const headers = new Headers();
 headers.append('Content-Type', 'application/json');
 
-const useOrders = () => {
+const useShops = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useTypedDispatch();
@@ -35,11 +22,12 @@ const useOrders = () => {
       signal,
     };
 
-    fetch('http://localhost:4000/api/v1/orders/list', requestOptions)
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/shops`, requestOptions)
       .then((result) => result.json())
       .then((result) => {
         setLoading(false);
-        dispatch(addMyOrders(result.message.orders));
+        console.log(result.message);
+        dispatch(addShopList(result.message));
       })
       .catch((err:any) => {
         setLoading(false);
@@ -56,4 +44,4 @@ const useOrders = () => {
   return { loading, error };
 };
 
-export default useOrders;
+export default useShops;

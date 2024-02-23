@@ -41,6 +41,8 @@ import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
 import PaymentSuccess from './components/payment/PaymentSuccess';
 import Orders from './components/order/Orders';
+import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderWrapper';
+import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -300,6 +302,22 @@ const App = () => {
               ),
             },
           ],
+        },
+        {
+          path: 'orders',
+          element: (
+            <AuthenticationWrapper authentication>
+              <OrderWrapper />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          path: 'orders/:id/order',
+          element: (
+            <AuthenticationWrapper authentication>
+              <OrderTableWrapper />
+            </AuthenticationWrapper>
+          ),
         },
         {
           path: 'sales',

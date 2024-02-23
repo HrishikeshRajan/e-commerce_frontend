@@ -44,6 +44,28 @@ export interface ProductCore {
   stock:number
 }
 
+export interface ShopProductOrder {
+  productId:string
+  name: string
+  price: number
+  currencyCode: CurrencyCode
+  description: string
+  image: Photo
+  images: Array<Image>
+  category: string
+  brand: string
+  ratings: number
+  numberOfReviews: number
+  sellerId: string
+  shopId: string
+  reviews: Array<Review>
+  sizes: Array<string>
+  color: string
+  gender: string
+  isDiscontinued: boolean
+  keywords: Array<string>
+  stock:number
+}
 export interface ShopCore {
   _id:string
   name: string
