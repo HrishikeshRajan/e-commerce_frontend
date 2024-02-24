@@ -96,6 +96,7 @@ const columnHelper = createColumnHelper<TOrder>();
 export const useColumn = () => [
 
   columnHelper.accessor('orderId', {
+    id: 'orderId',
     header: () => (
       <span className="flex items-center">
         Order Id
@@ -134,7 +135,14 @@ export const useColumn = () => [
   }),
   columnHelper.accessor('product.name', {
     id: 'productName',
-    header: () => 'Product Name',
+    header: () => (
+      <>
+        <span className="flex items-center" data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Product Name
+        </span>
+        <Tooltip id="sort" />
+      </>
+    ),
     cell: (info) => info.getValue(),
   }),
   columnHelper.accessor('product.productId', {
@@ -146,18 +154,24 @@ export const useColumn = () => [
   columnHelper.accessor('qty', {
     id: 'qty',
     header: () => (
-      <span className="flex items-center">
-        Qty
-      </span>
+      <>
+        <span className="flex items-center" data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Qty
+        </span>
+        <Tooltip id="sort" />
+      </>
     ),
     cell: (info) => (info.row.original.product.stock < info.getValue() ? <span className="text-red-500">{info.getValue()}</span> : <span className="text-black">{info.getValue()}</span>),
   }),
   columnHelper.accessor('product.stock', {
     id: 'stock',
     header: () => (
-      <span className="flex items-center">
-        Stock
-      </span>
+      <>
+        <span className="flex items-center" data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Stock
+        </span>
+        <Tooltip id="sort" />
+      </>
     ),
     cell: (info) => (info.getValue() < 5 ? <span className="text-red-500">{info.getValue()}</span> : <span className="text-black">{info.getValue()}</span>),
   }),
@@ -175,7 +189,14 @@ export const useColumn = () => [
   }),
   columnHelper.accessor('product.price', {
     id: 'productPrice',
-    header: () => 'Unit Price',
+    header: () => (
+      <>
+        <span className="flex items-center" data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Product Price
+        </span>
+        <Tooltip id="sort" />
+      </>
+    ),
     cell: (info) => formattedAmount(info.getValue()),
   }),
   columnHelper.accessor('gstInPercentage', {
@@ -186,21 +207,32 @@ export const useColumn = () => [
   }),
   columnHelper.accessor('taxAmount', {
     id: 'taxAmount',
-    header: () => 'Tax Amount',
+    header: () => (
+      <>
+        <span className="flex items-center" data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Tax Amount
+        </span>
+        <Tooltip id="sort" />
+      </>
+    ),
     cell: (info) => formattedAmount(info.getValue()),
   }),
   columnHelper.accessor('totalPriceAfterTax', {
     id: 'totalPriceAfterTax',
     header: () => (
-      <span className="flex items-center">
-        Total Price
-      </span>
+      <>
+        <span className="flex items-center gap-2 " data-tooltip-id="sort" data-tooltip-content="Click to sort">
+          Total Price + Tax
+        </span>
+        <Tooltip id="sort" />
+      </>
     ),
     cell: (info) => formattedAmount(info.getValue()),
   }),
   columnHelper.accessor('paymentDetails.status', {
+    id: 'Payment Status',
     header: () => 'Payment Status',
-    cell: (info) => <span className=" rounded p-1 bg-green-500 text-white">{info.getValue()}</span>,
+    cell: (info) => <span className=" rounded p-2 bg-green-500 font-bold text-white">{info.getValue()}</span>,
     enableSorting: false,
   }),
   columnHelper.accessor('paymentDetails.paymentId', {
