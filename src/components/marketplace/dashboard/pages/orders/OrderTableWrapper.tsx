@@ -5,16 +5,15 @@
 import React from 'react';
 
 import { useParams } from 'react-router-dom';
-import Table from './Table';
+import TableTemplate from './Table';
 import ShopOrderTab from '../../ui/tabs/ShopOrderTab';
 
 function OrderTableWrapper() {
   const params = useParams();
   return (
     <div className="w-full mt-28 p-2">
-            <h1 className="text-xl font-bold text-slate-500 p-3">Your Orders</h1>
             <ShopOrderTab />
-            <Table paramsId={params.id!} />
+            <TableTemplate paramsId={params.id!} />
     </div>
   );
 }

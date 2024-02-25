@@ -8,12 +8,13 @@ import {
   flexRender, getCoreRowModel, useReactTable, SortingState,
   getSortedRowModel,
   PaginationState,
+  ColumnFiltersState,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
 import { useSearchParams } from 'react-router-dom';
 import { useColumn } from './TableHeaders';
 
-function Table({ paramsId }:{ paramsId:string }) {
-    // console.log(params)
+function TableTemplate({ paramsId }:{ paramsId:string }) {
   const [data, setData] = useState<TOrder[]>([]);
   const [pages, setPages] = useState<number>(-1);
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -24,6 +25,23 @@ function Table({ paramsId }:{ paramsId:string }) {
       pageSize: 5,
     });
 
+  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+    [],
+  );
+
+  // Debounced
+  useEffect(() => {
+    const timer = setTimeout(() => {
+        if (columnFilters.length > 0) {
+            search.set('search', `${columnFilters[0].id as string}:${columnFilters[0].value as string}`);
+            setSearchParams(search);
+        } else {
+            search.delete('search');
+            setSearchParams(search);
+        }
+    }, 200);
+    return () => clearTimeout(timer);
+  }, [columnFilters, search, setSearchParams]);
   const idTocode = (id:string, desc:boolean) => (desc ? `-${id}` : id);
 
   useEffect(() => {
@@ -70,22 +88,27 @@ function Table({ paramsId }:{ paramsId:string }) {
     state: {
       sorting,
       pagination,
+      columnFilters,
     },
     manualSorting: true,
     enableMultiSort: true,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
     pageCount: pages ?? -1,
     onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+    manualFiltering: true,
   });
 
   useEffect(() => {
      search.set('page', `${table.getState().pagination.pageIndex + 1}`);
      setSearchParams(search, { replace: true });
  }, [pageIndex, search, setSearchParams, table]);
-  return (
+
+ return (
     <div className="w-full  flex flex-col justify-center    ">
 
       <div className=" shadow-md w-full p-2 rounded-lg bg-white overflow-x-auto">
@@ -96,7 +119,8 @@ function Table({ paramsId }:{ paramsId:string }) {
                 {headerGroup.headers.map((header) => (
                   <th key={header.id} colSpan={header.colSpan} className="p-2 ">
                     {header.isPlaceholder ? null : (
-                      <button
+                      <>
+                        <button
                         type="button"
                         {...{
                           className: header.column.getCanSort()
@@ -113,7 +137,20 @@ function Table({ paramsId }:{ paramsId:string }) {
                           asc: ' 🔼',
                           desc: ' 🔽',
                         }[header.column.getIsSorted() as string] ?? null}
-                      </button>
+                        </button>
+                      {
+                       header.column.getCanFilter() ? (
+                        <div>
+                           <input
+                                type="text"
+                                value={header.column.getFilterValue() as string || ''}
+                                className="border-2 outline-none border-slate-200 my-1 p-1 rounded-lg "
+                                onChange={(e) => header.column.setFilterValue(e.target.value)}
+                                placeholder={`Search ${header.column.columnDef?.id}`} />
+                        </div>
+                      ) : null
+                      }
+                      </>
                     )}
                   </th>
                 ))}
@@ -229,4 +266,4 @@ function Table({ paramsId }:{ paramsId:string }) {
   );
 }
 
-export default Table;
+export default TableTemplate;

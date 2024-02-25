@@ -120,6 +120,7 @@ export const useColumn = () => [
       </>
     ),
     cell: (info) => new Date(info.getValue()).toLocaleString(),
+    enableColumnFilter: false,
   }),
   columnHelper.accessor('customerId.fullname', {
     id: 'fullname',
@@ -204,6 +205,7 @@ export const useColumn = () => [
     header: () => 'GST',
     cell: (info) => `%${info.getValue()}`,
     enableSorting: false,
+    enableColumnFilter: false,
   }),
   columnHelper.accessor('taxAmount', {
     id: 'taxAmount',
@@ -234,21 +236,25 @@ export const useColumn = () => [
     header: () => 'Payment Status',
     cell: (info) => <span className=" rounded p-2 bg-green-500 font-bold text-white">{info.getValue()}</span>,
     enableSorting: false,
+    enableColumnFilter: false,
   }),
   columnHelper.accessor('paymentDetails.paymentId', {
+    id: 'paymentId',
     header: () => 'Payment Id',
     cell: (info) => info.getValue(),
-    enableSorting: false,
   }),
   columnHelper.accessor('shippingAddress', {
     header: () => 'Shipping Address',
     cell: (info) => `${info.getValue().fullname}\n ${info.getValue().city}\n${info.getValue().homeAddress}\n${info.getValue().phoneNo}\n${info.getValue().postalCode}\n${info.getValue().state}`,
     enableSorting: false,
+    enableColumnFilter: false,
   }),
   columnHelper.accessor('orderStatus', {
+    id: 'orderStatus',
     header: () => 'Order Status',
     cell: (info) => flexRender(OrderStatus, { table: info.row }),
     enableSorting: false,
+    enableColumnFilter: false,
 
   }),
 ];
