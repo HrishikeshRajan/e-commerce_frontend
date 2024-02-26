@@ -1,31 +1,31 @@
-import { FetchErrorResponse, SignupFields } from '../index';
-import { registerURL } from './constants';
+import { SignupProps } from '../index';
 
-export const errorParser = (response: any) => {
-  const errors = response.message.error;
-  const errorObj: FetchErrorResponse = {
-    error: false,
+/**
+ * @author Hrishikesh Rajan
+ * Makes a signup request to the server.
+ *
+ * @param {SignupFields} fields - The signup fields to be sent to the server.
+ * @returns {Promise<any>} A promise that resolves to the response data from the server.
+ * @throws {Error} Throws an error if the signup request fails.
+ */
+
+export const signup = async (fields: SignupProps):Promise<any> => {
+  //  Request headers
+  const headers = new Headers();
+  headers.set('Accept', 'application/json');
+  headers.set('Content-Type', 'application/json');
+
+  // Fetch API options
+  const requestOptions:RequestInit = {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(fields),
   };
-  errors.map((err: any) => {
-    errorObj[err.path[0]] = err.message;
-  });
-  errorObj.error = true;
-  return errorObj;
-};
-export const signup = async (fields: SignupFields) => {
   try {
-    const url = registerURL();
-    const response = await fetch(url, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(fields),
-    });
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/register`;
+    const response = await fetch(url, requestOptions);
     return await response.json();
   } catch (error) {
-    // should remove in production
-    alert('There was an error during signup. Please try again.');
+    throw new Error('We\'re unable to process your register request. Please try again later.');
   }
 };

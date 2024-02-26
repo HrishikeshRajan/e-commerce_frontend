@@ -1,15 +1,28 @@
-/* eslint-disable jsx-a11y/label-has-associated-control */
-import React from 'react';
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-nested-ternary */
+import React, { useState } from 'react';
 import {
-  ErrorMessage, Field, Form, Formik,
+  Field, Form, Formik,
 } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { merge } from 'lodash';
 import { signup } from './apis/signup.api';
 import { registerSchema } from './helpers/validationSchema.helper';
-import Loading from '../../utils/animations/Loading';
+import Label from './Label';
+import Button from './ui/Button';
+import FormFieldError from './ui/FormFieldError';
+import { Status } from '.';
+/**
+ * @description
+ * Signup component allows users to register new account.
+ */
 
-function Signup() {
+function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.Element {
+  const [success, setSuccess] = useState(false);
+  const recaptchaRef = React.createRef<ReCAPTCHA>();
   return (
     <Formik
       initialValues={
@@ -20,96 +33,125 @@ function Signup() {
         }
       }
       validationSchema={toFormikValidationSchema(registerSchema)}
-      onSubmit={(values, actions) => {
+      onSubmit={async (values, actions) => {
+        actions.setSubmitting(true);
+        if (import.meta.env.VITE_PROCESS_ENV === 'production') {
+          const recaptchaToken = await recaptchaRef.current?.executeAsync();
+          recaptchaRef.current?.reset();
+
+          if (!recaptchaToken) {
+            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+            actions.setStatus(errorObj);
+            actions.setSubmitting(false);
+            return;
+          }
+          merge(values, { recaptchaToken });
+        }
+        actions.setStatus(null);
+
         signup({ ...values }).then((response: any) => {
           actions.setSubmitting(false);
-          if (response.success && response.statusCode === StatusCodes.OK) {
-            actions.setStatus(response.message?.message);
+
+          if (response.success && response.statusCode === StatusCodes.CREATED) {
+            const resObj:Status = { success: true, message: response.message?.message };
+            actions.setStatus(resObj);
+            setSuccess(true);
           } else {
-            actions.setStatus(response.message?.error);
+            const errorObj:Status = { success: false, message: response.message?.error };
+            actions.setStatus(errorObj);
           }
+        }).catch((error) => {
+          actions.setSubmitting(false);
+          const errorObj:Status = { success: false, message: (error as Error).message };
+          actions.setStatus(errorObj);
         });
       }}
     >
       {(form) => (
         <Form
-          className="w-10/12 lg:w-4/12 border-2 border-gray-300 rounded flex flex-col p-2 lg:p-5"
+          className="w-full bg-white shadow-md  rounded-xl  xl:w-4/12  flex flex-col px-2 lg:p-5"
         >
-          <h2 className="text-xl font-semibold leading-7 text-gray-900 text-center mt-2">
-            Sign Up
+
+          <h2 className="text-3xl font-semibold leading-7 text-cyan-500 text-center mt-5 mb-2">
+            Sign up
           </h2>
           {form.status && (
-            <h4 className="text-green-500 p-3 font-bold bg-green-50 my-2 rounded">
-              {form.status}
+            <h4 data-testid="h4" className={`${form.status.success ? 'text-green-500  bg-green-50' : 'text-red-500 bg-red-50'} p-3 font-bold  mt-2 rounded`}>
+              {form.status.message}
             </h4>
           )}
-          <label htmlFor="fullname">Fullname</label>
+          <Label id="fullname" value="Fullname" />
           <Field
             type="text"
             name="fullname"
             id="fullname"
             aria-label="fullname"
-            className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.fullname && form.touched.fullname && 'border-2 border-red-500'}`}
+            className={`block flex-1 rounded-lg border-2  bg-transparent p-4 xl:p-3  text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.fullname && form.touched.fullname && 'border-2 border-red-500'}`}
           />
-          <ErrorMessage
-            name="fullname"
-            render={(msg) => (
-              <div className="text-red-500 pb-2">
-                {msg}
-              </div>
-            )}
-          />
-          <label htmlFor="email">Email</label>
+          <FormFieldError name="fullname" />
+          <Label id="email" value="Email" />
           <Field
             type="email"
             name="email"
             id="email"
             aria-label="email"
-            className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.email && form.touched.email && 'border-2 border-red-500'}`}
+            className={`block flex-1 rounded-lg border-2 bg-transparent p-4 xl:p-3  text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.email && form.touched.email && 'border-2 border-red-500'}`}
 
           />
-          <ErrorMessage
-            name="email"
-            render={(msg) => (
-              <div className="text-red-500 pb-2">
-                {msg}
-              </div>
-            )}
-          />
-
-          <label htmlFor="password">Password</label>
+          <FormFieldError name="email" />
+          <Label id="password" value="Password" />
           <Field
             type="password"
             name="password"
             id="password"
             aria-label="password"
-            className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.password && form.touched.password && 'border-2 border-red-500'}`}
+            className={`block rounded-lg flex-1 border-2 bg-transparent p-4 xl:p-3  text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.password && form.touched.password && 'border-2 border-red-500'}`}
 
           />
-          <ErrorMessage
-            name="password"
-            render={(msg) => (
-              <div className="text-red-500 pb-2">
-                {msg}
-              </div>
-            )}
-          />
-          {form.isSubmitting ? (
-            <button
-              type="button"
-              className="mt-4 mb-5 rounded bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              <Loading />
-              Please wait
-            </button>
-          ) : (
-            <button
-              type="submit"
-              className="mt-4 mb-5 rounded bg-slate-600 px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Sign Up
-            </button>
+          <FormFieldError name="password" />
+
+          {import.meta.env.VITE_PROCESS_ENV === 'production'
+          && (
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              ref={recaptchaRef}
+              size="invisible"
+            />
           )}
+
+          {form.isSubmitting ? (
+
+            <Button
+              type="button"
+              className="mt-10 mb-5 cursor-wait rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              mode="loading"
+              disabled
+              loadingAnimation
+            >
+              Signing
+            </Button>
+          ) : (
+
+            !success ? (
+              <Button
+                type="submit"
+                className="mt-5 mb-5 rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                mode="idle"
+              >
+                Continue
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                className="mt-10 mb-5 rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                mode="idle"
+                onClick={toggleAuthState}
+              >
+                Back to login
+              </Button>
+            )
+          )}
+
         </Form>
       )}
     </Formik>

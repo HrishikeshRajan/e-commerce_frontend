@@ -1,4 +1,4 @@
-import { FetchErrorResponse, SignupFields } from '..';
+import { FetchErrorResponse, SignupProps } from '..';
 import { signinURL } from './constants';
 
 export const errorParser = (response: any) => {
@@ -13,7 +13,7 @@ export const errorParser = (response: any) => {
   return errorObj;
 };
 
-export const signin = async (user: Omit<SignupFields, 'fullname'>) => {
+export const signin = async (user: Omit<SignupProps, 'fullname'>) => {
   try {
     const url = signinURL();
     const response = await fetch(url, {

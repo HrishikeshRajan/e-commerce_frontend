@@ -6,7 +6,7 @@ type Status = {
 };
 function DontHaveAccount(props: Status) {
   return (
-    <div className="flex justify-center w-full  lg:w-4/12 my-2">
+    <div className="flex justify-center w-full my-2">
       <p className="font-medium select-none  pr-1">Don&apos;t have an Account?</p>
       <button
         type="button"

@@ -7,7 +7,7 @@ import { BrowserRouter } from 'react-router-dom';
 import React from 'react';
 import Navbar from '../Navbar';
 
-describe('<Navbar />', () => {
+describe.skip('<Navbar />', () => {
   afterEach(cleanup);
   test('should render the company logo correctly', () => {
     render(

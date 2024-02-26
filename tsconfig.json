@@ -33,7 +33,7 @@
 
     }
   },
-  "include": ["src",".eslintrc.cjs"],
+  "include": ["src",".eslintrc.cjs", "vite.config.ts","src/test/setup.ts"],
   "exclude": ["node-modules"],
   // "references": [{ "path": "./tsconfig.node.json" }]
 }

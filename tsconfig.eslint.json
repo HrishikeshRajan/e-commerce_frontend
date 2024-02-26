@@ -4,7 +4,7 @@
   
       "src",
       "tests",
-      ".eslintrc.cjs"
+      ".eslintrc.cjs",
     ]
   }
   

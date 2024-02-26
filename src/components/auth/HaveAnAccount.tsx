@@ -7,7 +7,7 @@ type Status = {
 
 function HaveAnAccount(props: Status) {
   return (
-    <div className="flex justify-center w-full  lg:w-4/12 my-2">
+    <div className="flex justify-center w-full  my-2">
       <p className="font-medium select-none pr-1">Have an Account? </p>
 
       <button
