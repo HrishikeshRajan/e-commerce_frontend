@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import {
   render, screen, cleanup, fireEvent,
-  waitFor,
   act,
 } from '@testing-library/react';
 

@@ -69,7 +69,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
     >
       {(form) => (
         <Form
-          className="w-full bg-white shadow-md  rounded-xl  xl:w-4/12  flex flex-col px-2 lg:p-5"
+          className="w-full bg-white xl:shadow-md  rounded-xl  xl:w-4/12  flex flex-col px-2 lg:p-5"
         >
 
           <h2 className="text-3xl font-semibold leading-7 text-cyan-500 text-center mt-5 mb-2">
