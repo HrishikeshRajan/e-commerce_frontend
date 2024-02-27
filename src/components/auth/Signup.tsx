@@ -137,6 +137,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
                 type="submit"
                 className="mt-5 mb-5 rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 mode="idle"
+                disabled={false}
               >
                 Continue
               </Button>
@@ -146,6 +147,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
                 className="mt-10 mb-5 rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 mode="idle"
                 onClick={toggleAuthState}
+                disabled={false}
               >
                 Back to login
               </Button>

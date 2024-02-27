@@ -21,6 +21,7 @@ function Button(props:ButtonProps) {
       <button
         type={props.type}
         className={props.className}
+        disabled={props.disabled ?? false}
         onClick={props.onClick || undefined}
       >
         { props.children }
@@ -29,11 +30,13 @@ function Button(props:ButtonProps) {
   }
   return (
     <button
+      aria-label="loading"
+      data-testid="loading"
       type={props.type}
       className={props.className}
-      disabled={props.mode === 'loading' && props.disabled}
+      disabled
     >
-      {props.mode === 'loading' && 'loading' && ((props.loadingAnimation ? <Loading /> : ''))}
+      { props.children && ((props.loadingAnimation ? <Loading /> : ''))}
     </button>
   );
 }

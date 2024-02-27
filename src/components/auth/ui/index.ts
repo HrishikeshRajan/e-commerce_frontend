@@ -8,6 +8,7 @@ type ButtonBaseProps = {
   children: React.ReactNode;
   className: string;
   type: 'submit' | 'reset' | 'button';
+  disabled:boolean
 };
 
 type ButtonPropsIdel = ButtonBaseProps & {
@@ -16,7 +17,6 @@ type ButtonPropsIdel = ButtonBaseProps & {
 };
 
 type ButtonPropsLoading = ButtonBaseProps & {
-  disabled: true;
   mode: 'loading';
   loadingAnimation: boolean;
 };
