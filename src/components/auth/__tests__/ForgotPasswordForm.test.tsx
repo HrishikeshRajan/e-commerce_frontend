@@ -6,6 +6,11 @@ import userEvent from '@testing-library/user-event';
 import ForgotForm from '../ForgotForm';
 
 describe('Forgot Password form', () => {
+  it('should render a company name', () => {
+    renderWithProviders(<ForgotForm />);
+    const heading = screen.queryByRole('heading', { name: /wondercart/i });
+    expect(heading).toBeInTheDocument();
+  });
   it('should render a heading', () => {
     renderWithProviders(<ForgotForm />);
     const heading = screen.queryByRole('heading', { name: /Forgot Password/i });
