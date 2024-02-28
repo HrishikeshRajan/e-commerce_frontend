@@ -11,6 +11,14 @@ export const handlers = [
     success: true,
     statusCode: 201,
   }, { status: 201 })),
+  http.get(`${import.meta.env.VITE_BASE_URL}/api/v1/users/verify`, async () => HttpResponse.json({
+    message: {
+      message: 'Greate! Your account has been verified!',
+      meta: 'Now it\'s shopping time',
+    },
+    success: true,
+    statusCode: 202,
+  }, { status: 202 })),
   http.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, async () => HttpResponse.json({
     message: {
       refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implbm5pZS5uaWNob2xzQGV4YW1wbGUuY29tIiwiaWQiOiI2NWRkN2FkY2E4MjUwOTM0MWQ5MTk4YWEiLCJsb2dnZWRJbiI6dHJ1ZSwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDkwMTM5MDMsImV4cCI6MTcwOTE4NjcwM30.ZzPuKoIieN5__xawZ2durONxx_OvMEyHCPuepb4CNbY',

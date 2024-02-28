@@ -43,6 +43,7 @@ import PaymentSuccess from './components/payment/PaymentSuccess';
 import Orders from './components/order/Orders';
 import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderWrapper';
 import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
+import ConfirmEmail from './components/auth/ConfirmEmail';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -204,6 +205,14 @@ const App = () => {
       element: (
         <RedirectIfAuthenticated authentication={false}>
           <Auth />
+        </RedirectIfAuthenticated>
+      ),
+    },
+    {
+      path: 'confirm',
+      element: (
+        <RedirectIfAuthenticated authentication={false}>
+          <ConfirmEmail />
         </RedirectIfAuthenticated>
       ),
     },

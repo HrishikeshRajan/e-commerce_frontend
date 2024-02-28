@@ -25,6 +25,6 @@ export const forgot = async (email: string):Promise<any> => {
     const response = await fetch(url, requestOptions);
     return await response.json();
   } catch (error) {
-    throw new Error('We\'re unable to process your register request. Please try again later.');
+    throw new Error('We\'re unable to process your password reset request. Please try again later.');
   }
 };

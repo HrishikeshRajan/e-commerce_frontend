@@ -27,9 +27,9 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
     <Formik
       initialValues={
         {
-          fullname: '',
-          email: '',
-          password: '',
+          fullname: 'Neo Leo',
+          email: 'hrishikeraj@gmail.com',
+          password: 'Neo@#$1234@#',
         }
       }
       validationSchema={toFormikValidationSchema(registerSchema)}

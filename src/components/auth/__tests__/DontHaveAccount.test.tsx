@@ -23,7 +23,7 @@ afterEach(() => {
 
 it('should render a text which suggest "Don\'t have an Account?"', () => {
   renderWithProviders(<DontHaveAccount {...status} />);
-  expect(screen.getByText("Don't have an Account?")).toBeInTheDocument();
+  expect(screen.getByText("Don't have an Account ?")).toBeInTheDocument();
 });
 it('should render a button to toggle form', () => {
   renderWithProviders(<DontHaveAccount {...status} />);
