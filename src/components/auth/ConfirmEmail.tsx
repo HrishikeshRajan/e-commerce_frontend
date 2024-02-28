@@ -56,6 +56,7 @@ function ConfirmEmail() {
         {!loading && !error.error && response.message
           && (
             <>
+              <h1 className="text-2xl text-slate-50 pb-1">{response.message}</h1>
               <h2 className="text-xl text-slate-50 pb-1">{response.meta}</h2>
               <Button
                 className="mt-5 mb-5 rounded-lg bg-white p-3 text-xl font-bold text-slate-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -64,7 +65,7 @@ function ConfirmEmail() {
                 type="button"
                 onClick={() => navigate('/auth')}
               >
-                Login
+                SHOP NOW
               </Button>
             </>
           )}

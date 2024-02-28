@@ -1,4 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
+import { StatusCodes } from 'http-status-codes';
 import {
   getResponse, http, HttpResponse,
 } from 'msw';
@@ -17,8 +18,8 @@ export const handlers = [
       meta: 'Now it\'s shopping time',
     },
     success: true,
-    statusCode: 202,
-  }, { status: 202 })),
+    statusCode: StatusCodes.ACCEPTED,
+  }, { status: StatusCodes.ACCEPTED })),
   http.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/login`, async () => HttpResponse.json({
     message: {
       refreshToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Implbm5pZS5uaWNob2xzQGV4YW1wbGUuY29tIiwiaWQiOiI2NWRkN2FkY2E4MjUwOTM0MWQ5MTk4YWEiLCJsb2dnZWRJbiI6dHJ1ZSwicm9sZSI6InVzZXIiLCJpYXQiOjE3MDkwMTM5MDMsImV4cCI6MTcwOTE4NjcwM30.ZzPuKoIieN5__xawZ2durONxx_OvMEyHCPuepb4CNbY',
