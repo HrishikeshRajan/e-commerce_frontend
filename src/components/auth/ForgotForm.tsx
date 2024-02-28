@@ -1,7 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import {
-  Formik, Form, ErrorMessage, Field,
+  Formik, Form, Field,
 } from 'formik';
 import React from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
@@ -30,7 +30,7 @@ function ForgotForm() {
         validationSchema={toFormikValidationSchema(emailSchema)}
         onSubmit={(values, actions) => {
           actions.setStatus('');
-          forgot({ ...values }).then((response) => {
+          forgot(values.email).then((response) => {
             actions.setSubmitting(false);
             if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
@@ -43,9 +43,12 @@ function ForgotForm() {
       >
         {(form) => (
           <Form
-            className="w-11/12 lg:w-4/12 xl:border-2  justify-center border-gray-300 rounded-xl bg-white mt-20  flex flex-col p-2 lg:p-5"
+            className="w-11/12 lg:w-4/12   justify-center border-gray-300 rounded-xl bg-white mt-20  flex flex-col p-2 lg:p-5"
           >
-            <h2 className="text-xl my-2 font-semibold leading-7 text-gray-900 text-center mt-2">
+            <h1 className="text-xl my-2 font-semibold leading-7 text-cyan-400 text-center mt-2">
+              WonderCart
+            </h1>
+            <h2 className="text-xl my-2 font-semibold leading-7 text-gray-500 text-left mt-2">
               Forgot Password
             </h2>
             {form.status && <h4 className="p-5 bg-green-100">{form.status}</h4>}
@@ -86,7 +89,7 @@ function ForgotForm() {
             }
             <Button
               type="button"
-              className="mt-1 mb-5 text-right rounded-lg  p-3 text-base xl:text-xl font-bold text-slate-800 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              className="mt-1 mb-5 text-right rounded-lg  p-3 text-base xl:text-xs font-bold text-slate-800 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               mode="idle"
               disabled={false}
               onClick={() => navigate('/auth')}
