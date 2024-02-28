@@ -29,6 +29,14 @@ export const handlers = [
     success: true,
     statusCode: 200,
   }, { status: 200 })),
+  http.post(`${import.meta.env.VITE_BASE_URL}/api/v1/users/forgot`, async () => HttpResponse.json({
+    message: {
+      message: 'An email verification link has been send to your email accounts',
+
+    },
+    success: true,
+    statusCode: 200,
+  }, { status: 200 })),
 ];
 
 export const myResponse = async (path:string) => {

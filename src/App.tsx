@@ -48,7 +48,7 @@ const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboar
 
 // All user components handled here
 const Element = () => (
-  <div className="bg-black relative ">
+  <div className="h-screen relative ">
     <Navbar />
     <Sidebar />
     <Outlet />
@@ -134,14 +134,7 @@ const App = () => {
             </AuthenticationWrapper>
           ),
         },
-        {
-          path: 'forgotpassword',
-          element: (
-            <RedirectIfAuthenticated authentication={false}>
-              <ForgotForm />
-            </RedirectIfAuthenticated>
-          ),
-        },
+
         {
           path: 'reset-password/:id',
           element: (
@@ -211,6 +204,14 @@ const App = () => {
       element: (
         <RedirectIfAuthenticated authentication={false}>
           <Auth />
+        </RedirectIfAuthenticated>
+      ),
+    },
+    {
+      path: 'forgotpassword',
+      element: (
+        <RedirectIfAuthenticated authentication={false}>
+          <ForgotForm />
         </RedirectIfAuthenticated>
       ),
     },

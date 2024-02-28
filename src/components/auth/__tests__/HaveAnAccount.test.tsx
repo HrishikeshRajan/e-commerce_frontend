@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-extraneous-dependencies */
 
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { vi } from 'vitest';
 import React from 'react';
+import { renderWithProviders } from '@/mocks/redux/test-utils';
 import HaveAnAccount from '../HaveAnAccount';
 
 type Status = {
@@ -20,11 +21,11 @@ afterEach(() => {
   vi.clearAllMocks();
 });
 
-it.skip('should render a text which suggest "Have an Account?"', () => {
-  render(<HaveAnAccount {...status} />);
-  expect(screen.getByText('Have an Account?')).toBeInTheDocument();
+it('should render a text which suggest "Have an Account?"', () => {
+  renderWithProviders(<HaveAnAccount {...status} />);
+  expect(screen.queryByText('Have an Account?')).toBeInTheDocument();
 });
-it.skip('should render a button with text "Sign in"', () => {
-  render(<HaveAnAccount {...status} />);
-  expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument();
+it('should render a button with text "Sign in"', () => {
+  renderWithProviders(<HaveAnAccount {...status} />);
+  expect(screen.getByRole('button', { name: 'Sign in here' })).toBeInTheDocument();
 });
