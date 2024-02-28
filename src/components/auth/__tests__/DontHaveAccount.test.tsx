@@ -27,5 +27,5 @@ it('should render a text which suggest "Don\'t have an Account?"', () => {
 });
 it('should render a button to toggle form', () => {
   renderWithProviders(<DontHaveAccount {...status} />);
-  expect(screen.getByRole('button', { name: 'Sign up here' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Sign up' })).toBeInTheDocument();
 });

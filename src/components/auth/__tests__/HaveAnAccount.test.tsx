@@ -23,9 +23,9 @@ afterEach(() => {
 
 it('should render a text which suggest "Have an Account?"', () => {
   renderWithProviders(<HaveAnAccount {...status} />);
-  expect(screen.queryByText('Have an Account?')).toBeInTheDocument();
+  expect(screen.queryByText('Have an Account ?')).toBeInTheDocument();
 });
 it('should render a button with text "Sign in"', () => {
   renderWithProviders(<HaveAnAccount {...status} />);
-  expect(screen.getByRole('button', { name: 'Sign in here' })).toBeInTheDocument();
+  expect(screen.getByRole('button', { name: 'Sign in' })).toBeInTheDocument();
 });

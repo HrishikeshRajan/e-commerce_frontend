@@ -5,8 +5,6 @@ import Signup from './Signup';
 import DontHaveAccount from './DontHaveAccount';
 import HaveAnAccount from './HaveAnAccount';
 import useAuthPage from '../../hooks/user/useAuthPage';
-import backgroundImage from '../../assets/mintmade fashion.png';
-import backgroundImageLg from '../../assets/auth.lg.png';
 import Button from './ui/Button';
 /**
  * @author Hrishikesh Rajan
@@ -30,8 +28,8 @@ function Auth():React.JSX.Element {
     <div className="relative   w-full bg-white">
       <div className="relative ">
         <picture className="xl:hidden">
-          <source media="(min-width: 1280px)" className="lg:block  w-full   absolute bg-no-repeat object-scale-down max-h-full drop-shadow-md rounded-md m-auto" srcSet={backgroundImageLg} />
-          <img src={backgroundImage} className="lg:block  w-full object-cover " alt="wallpaper" />
+          <source media="(min-width: 1280px)" className="lg:block  w-full   absolute bg-no-repeat object-scale-down max-h-full drop-shadow-md rounded-md m-auto" srcSet="https://res.cloudinary.com/dxv2tmvfw/image/upload/v1709130674/mintmade_fashion_1_2_qf6poe.png" />
+          <img src="https://res.cloudinary.com/dxv2tmvfw/image/upload/v1709130674/mintmade_fashion_1_2_qf6poe.png" className="lg:block  w-full object-cover " alt="wallpaper" />
         </picture>
       </div>
       <div className=" w-full xl:h-screen p-3 flex xl:flex-row flex-col justify-center xl:items-center gap-2 ">

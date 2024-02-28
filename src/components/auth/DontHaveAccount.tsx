@@ -14,7 +14,7 @@ function DontHaveAccount(props: Status) {
         onClick={() => props.changeSignIn(!props.signIn)}
         className="font-semibold text-blue-500"
       >
-        &nbsp; Sign up here
+        Sign up
       </button>
     </div>
   );
