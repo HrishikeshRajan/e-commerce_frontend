@@ -65,6 +65,8 @@ const MarketPlace = () => (
 );
 
 const App = () => {
+  // useClearCookie('user');
+
   const allRoutes = createBrowserRouter([
     {
       path: '/',

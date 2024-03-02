@@ -23,7 +23,7 @@ function Auth():React.JSX.Element {
   const [signIn, setSignIn] = useState<boolean>(true);
   const toggleAuthState = () => setSignIn(!signIn);
 
-  useAuthPage();
+  // useAuthPage();
   return (
     <div className="relative   w-full bg-white">
       <div className="relative ">

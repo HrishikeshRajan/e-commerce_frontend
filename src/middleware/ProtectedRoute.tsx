@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import {
   Navigate, useNavigate,
 } from 'react-router-dom';
-import AuthHelper from '@/components/auth/apis/helper';
+
 import { isEmpty } from 'lodash';
-import { addUser } from '@/utils/reduxSlice/appSlice';
+
 import { IsLoggedIn, ProtectedRouteProps } from '../components/auth';
-import { useTypedDispatch, useTypedSelector } from '../hooks/user/reduxHooks';
+import { useTypedSelector } from '../hooks/user/reduxHooks';
 
 /** *
  * This middleware is deprecated use AuthWrapper instead
@@ -44,9 +44,7 @@ export const AuthenticationWrapper = ({
   children,
   authentication = true,
 }:AuthWrapper):React.JSX.Element | string => {
-  // const isSignedIn = useTypedSelector((store) => store.app.authenticated);
-  const dispatch = useTypedDispatch();
-  const user = AuthHelper.getUserFromLocalStorage();
+  const user = useTypedSelector((store) => store.app.user);
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
 
@@ -55,23 +53,20 @@ export const AuthenticationWrapper = ({
     if (authentication && isEmpty(user)) {
       navigate('/auth');
     }
-    if (!isEmpty(user)) {
-      dispatch(addUser(user));
-    }
 
     setLoading(false);
-  }, [user, navigate, authentication, dispatch]);
+  }, [user, navigate, authentication]);
 
   return loading ? 'Loading' : children;
 };
+// Page loader animation here
 
 // Prevents signedin users from accessing auth pages
 export const RedirectIfAuthenticated = ({
   children,
   authentication = true,
 }:AuthWrapper):React.JSX.Element | string => {
-  // const isSignedIn = useTypedSelector((store) => store.app.authenticated);
-  const user = AuthHelper.getUserFromLocalStorage();
+  const user = useTypedSelector((store) => store.app.user);
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
 

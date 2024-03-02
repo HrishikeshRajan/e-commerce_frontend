@@ -35,8 +35,8 @@ function Signin():React.JSX.Element {
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
+        email: 'hrishikeshrajan3@gmail.com',
+        password: 'Best@#1234@#',
       }}
       validationSchema={toFormikValidationSchema(loginSchema)}
       onSubmit={(values, actions) => {
@@ -57,7 +57,7 @@ function Signin():React.JSX.Element {
             return;
           }
           if (response.success && response.statusCode === StatusCodes.OK) {
-            dispatch(addUser(response.message?.user));
+            dispatch(addUser(response.message?.userDetails));
             dispatch(confirmAuthentication(true));
             setRedirect(true);
           }

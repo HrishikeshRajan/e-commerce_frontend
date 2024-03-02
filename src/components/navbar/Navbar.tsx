@@ -9,6 +9,8 @@ import {
 } from '@/utils/reduxSlice/appSlice';
 import { isEmpty } from 'lodash';
 import { faBars, faStore } from '@fortawesome/free-solid-svg-icons';
+import { StatusCodes } from 'http-status-codes';
+import useFetchUser from '@/hooks/user/useFetchUser';
 import Logo from '../../assets/smartshop.png';
 import DefaultUser from '../../assets/defaultUser.png';
 import { useUpdateLocalStore } from '../../hooks/user/useUpdateLocalStore';
@@ -31,22 +33,24 @@ function Navbar() {
 
   // Clears all user data from redux and local storage
   const signOut = async () => {
-    await signout().then(() => {
-      AuthHelper.clearSignedOnData(() => {
-        setAccountTab(false);
-        dispatch(removeUser());
-        dispatch(removeAuthentication());
-        navigate('/auth');
-      });
+    await signout().then((result:any) => {
+      if (result.statusCode === StatusCodes.OK) {
+        AuthHelper.clearSignedOnData(() => {
+          setAccountTab(false);
+          dispatch(removeUser());
+          dispatch(removeAuthentication());
+          navigate('/auth');
+        });
+      }
     });
   };
 
   const redirectToSignIn = () => {
     navigate('/auth');
   };
-
+  useFetchUser();
   // Keeps local storage sync with redux store change
-  useUpdateLocalStore();
+  // useUpdateLocalStore();
 
   return (
     <nav className="  fixed top-0 z-40 w-full shadow-md bg-white  p-2 ">
