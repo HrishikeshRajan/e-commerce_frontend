@@ -39,6 +39,7 @@ function Navbar() {
           setAccountTab(false);
           dispatch(removeUser());
           dispatch(removeAuthentication());
+          AuthHelper.authenticate(false);
           navigate('/auth');
         });
       }

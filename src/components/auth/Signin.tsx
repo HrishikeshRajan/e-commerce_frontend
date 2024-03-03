@@ -18,6 +18,7 @@ import ForgotPassword from './ForgotPassword';
 import Label from './Label';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
+import AuthHelper from './apis/helper';
 
 function Signin():React.JSX.Element {
   const dispatch = useTypedDispatch();
@@ -59,6 +60,7 @@ function Signin():React.JSX.Element {
           if (response.success && response.statusCode === StatusCodes.OK) {
             dispatch(addUser(response.message?.userDetails));
             dispatch(confirmAuthentication(true));
+            AuthHelper.authenticate(true);
             setRedirect(true);
           }
         });

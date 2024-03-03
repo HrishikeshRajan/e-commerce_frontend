@@ -4,6 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import { getUser } from '@/components/auth/apis/getUser';
 import { addUser, confirmAuthentication } from '@/utils/reduxSlice/appSlice';
 import { isEmpty } from 'lodash';
+import AuthHelper from '@/components/auth/apis/helper';
 import { useTypedDispatch, useTypedSelector } from './reduxHooks';
 
 const useFetchUser = () => {
@@ -11,11 +12,12 @@ const useFetchUser = () => {
   const [error, setError] = useState(false);
   const dispatch = useTypedDispatch();
   const user = useTypedSelector((store) => store.app.user);
+
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-
-    if (!user || isEmpty(user)) {
+    // console.log(checkCookie('token'),AuthHelper.isLoggedIn());
+    if (((!user || isEmpty(user)) && AuthHelper.isLoggedIn())) {
       getUser(signal)
         .then((response: any) => {
           if (

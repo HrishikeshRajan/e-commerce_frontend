@@ -1,38 +1,33 @@
-import { ShopBaseUrl } from '@/components/marketplace/urlConstants';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { addCategories } from '@/utils/reduxSlice/productSlice';
-import { isEmpty } from 'lodash';
+import { getCategories } from '@/components/home/api/getCategories';
 import { useTypedDispatch } from './reduxHooks';
 
 /**
- * Fetches all category documents
+ * Fetches all categories
  */
 const useCategory = () => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>();
   const dispatch = useTypedDispatch();
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    async function getCategories() {
-      try {
-        const response = await fetch(`${ShopBaseUrl('categories')}`, {
-          method: 'GET',
-          credentials: 'include',
-          signal,
-        });
-        return await response.json();
-      } catch (error) {
-        console.log(error);
-      }
-    }
 
-    getCategories().then((response) => {
-      if (response && !isEmpty(response.message || !response.message.categories)) {
-        dispatch(addCategories(response.message?.categories));
+    getCategories(signal).then((response) => {
+      setLoading(false);
+      if (response && response.message.categories) {
+        dispatch(addCategories(response.message.categories));
       }
+    }).catch((err) => {
+      setLoading(false);
+      setError((err as Error).message);
+      console.log(err);
     });
 
     return () => abortController.abort();
-  }, []);
+  }, [dispatch]);
+  return [loading, error] as const;
 };
 
 export default useCategory;

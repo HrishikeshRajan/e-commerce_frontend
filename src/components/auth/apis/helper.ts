@@ -4,13 +4,28 @@ import {
 import { IAddress, IUser } from '../../user';
 
 const AuthHelper = {
-  authenticate: (user:any, cb?:()=>void) => {
+  add: (user:any, cb?:()=>void) => {
     if (typeof window !== undefined) {
       localStorage.setItem('user', JSON.stringify(user));
     }
     if (cb) {
       cb();
     }
+  },
+  authenticate: (status:boolean) => {
+    if (typeof window !== undefined) {
+      localStorage.setItem('authenticated', String(status));
+    }
+  },
+  isLoggedIn: ():boolean => {
+    if (typeof window !== undefined) {
+      const status = (localStorage.getItem('authenticated')
+       && JSON.parse(localStorage.getItem('authenticated')!)) || null;
+      if (status) {
+        return true;
+      }
+    }
+    return false;
   },
   updateAuthenticatedUserData: (user:IUser) => {
     if (typeof window !== undefined) {

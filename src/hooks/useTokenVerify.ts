@@ -24,7 +24,7 @@ export const useTokenVerify = (search:URLSearchParams) => {
       });
     } catch (error:any) {
       setLoading(false);
-      setIsError({ error: true, message: 'We\'re unable to process your signup request. Please try again later.' });
+      setIsError({ error: true, message: 'We\'re unable to process your token verification request. Please try again later.' });
     }
   }, [search]);
   return [response, loading, isError] as const;
