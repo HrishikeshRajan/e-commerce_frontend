@@ -4,4 +4,4 @@ export const baseURL = (port?: number) => `http://localhost:${port || PORT}/api/
 export const registerURL = () => `${baseURL()}/register`;
 export const signinURL = () => `${baseURL()}/login`;
 export const signoutURL = `${baseURL()}/signout`;
-export const forgotURL = `${baseURL()}/forgot/password`;
+export const forgotURL = `${baseURL()}/forgot/reset`;

@@ -15,6 +15,7 @@ import Label from './Label';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
 import { Status } from '.';
+import ReCaptchaInfo from './ReCaptchaInfo';
 /**
  * @description
  * Signup component allows users to register new account.
@@ -153,7 +154,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
               </Button>
             )
           )}
-
+          <ReCaptchaInfo />
         </Form>
       )}
     </Formik>

@@ -1,8 +1,8 @@
 import { forgotURL } from './constants';
 
-export const updatePassword = async (user:any, id:string) => {
+export const updatePassword = async (user:any) => {
   try {
-    const url = `${forgotURL}/${id}`;
+    const url = `${forgotURL}`;
     const response = await fetch(url, {
       method: 'PUT',
       headers: {

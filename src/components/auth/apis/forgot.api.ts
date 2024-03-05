@@ -6,8 +6,11 @@
  * @returns {Promise<any>} A promise that resolves to the response data from the server.
  * @throws {Error} Throws an error if the signup request fails.
  */
-
-export const forgot = async (email: string):Promise<any> => {
+type ForgotProps = {
+  email:string
+  recaptchaToken:string
+};
+export const forgot = async (data:ForgotProps):Promise<any> => {
   //  Request headers
   const headers = new Headers();
   headers.set('Accept', 'application/json');
@@ -17,7 +20,7 @@ export const forgot = async (email: string):Promise<any> => {
   const requestOptions:RequestInit = {
     method: 'POST',
     headers,
-    body: JSON.stringify({ email }),
+    body: JSON.stringify(data),
     redirect: 'follow',
   };
   try {

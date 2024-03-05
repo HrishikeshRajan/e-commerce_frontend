@@ -137,16 +137,6 @@ const App = () => {
             </AuthenticationWrapper>
           ),
         },
-
-        {
-          path: 'reset-password/:id',
-          element: (
-            <RedirectIfAuthenticated authentication={false}>
-              <NewPassword />
-            </RedirectIfAuthenticated>
-          ),
-        },
-
         {
           path: '/account',
           element: (
@@ -223,6 +213,14 @@ const App = () => {
       element: (
         <RedirectIfAuthenticated authentication={false}>
           <ForgotForm />
+        </RedirectIfAuthenticated>
+      ),
+    },
+    {
+      path: 'forgotConfirm',
+      element: (
+        <RedirectIfAuthenticated authentication={false}>
+          <NewPassword />
         </RedirectIfAuthenticated>
       ),
     },

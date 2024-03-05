@@ -8,16 +8,20 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
 import { useNavigate } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { merge } from 'lodash';
 import { emailSchema } from './helpers/validationSchema.helper';
 import { forgot } from './apis/forgot.api';
 import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import useAuthPage from '../../hooks/user/useAuthPage';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
+import { Status } from '.';
+import ReCaptchaInfo from './ReCaptchaInfo';
 
 function ForgotForm() {
   const navigate = useNavigate();
-
+  const recaptchaRef = React.createRef<ReCAPTCHA>();
   useAuthPage();
 
   return (
@@ -25,25 +29,47 @@ function ForgotForm() {
       <Formik
         initialValues={{
           email: '',
+          recaptchaToken: '',
 
         }}
         validationSchema={toFormikValidationSchema(emailSchema)}
-        onSubmit={(values, actions) => {
+        onSubmit={async (values, actions) => {
           actions.setStatus('');
-          forgot(values.email).then((response) => {
+          actions.setSubmitting(true);
+          if (import.meta.env.VITE_PROCESS_ENV === 'production') {
+            const recaptchaToken = await recaptchaRef.current?.executeAsync();
+            recaptchaRef.current?.reset();
+
+            if (!recaptchaToken) {
+              const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+              actions.setStatus(errorObj);
+              actions.setSubmitting(false);
+              return;
+            }
+            merge(values, { recaptchaToken });
+          }
+          forgot(values).then((response) => {
             actions.setSubmitting(false);
             if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
             }
             if (response.success) {
-              actions.setStatus(response.message?.message);
+              const resObj:Status = { success: true, message: response.message?.message };
+              actions.setStatus(resObj);
+            } else {
+              const errorObj:Status = { success: false, message: response.message.error };
+              actions.setStatus(errorObj);
             }
+          }).catch((error) => {
+            actions.setSubmitting(false);
+            const errorObj:Status = { success: false, message: (error as Error).message };
+            actions.setStatus(errorObj);
           });
         }}
       >
         {(form) => (
           <Form
-            className="w-11/12 lg:w-4/12   justify-center border-gray-300 rounded-xl bg-white mt-20  flex flex-col p-2 lg:p-5"
+            className="w-11/12 xl:w-4/12   justify-center border-gray-300 rounded-xl bg-white mt-20  flex flex-col p-2 lg:p-5"
           >
             <h1 className="text-xl my-2 font-semibold leading-7 text-cyan-400 text-center mt-2">
               WonderCart
@@ -51,7 +77,11 @@ function ForgotForm() {
             <h2 className="text-xl my-2 font-semibold leading-7 text-gray-500 text-left mt-2">
               Forgot Password
             </h2>
-            {form.status && <h4 className="p-5 bg-green-100">{form.status}</h4>}
+            {form.status && (
+              <h4 data-testid="h4" className={`${form.status.success ? 'text-green-500  bg-green-50' : 'text-red-500 bg-red-50'} p-3 font-bold  mt-2 rounded`}>
+                {form.status.message}
+              </h4>
+            )}
 
             <label htmlFor="email" className="py-2 text-slate-700 text-left ml-1">Enter your registered email address</label>
             <Field
@@ -64,6 +94,15 @@ function ForgotForm() {
             />
 
             <FormFieldError name="email" />
+
+            {import.meta.env.VITE_PROCESS_ENV === 'production'
+          && (
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              ref={recaptchaRef}
+              size="invisible"
+            />
+          )}
 
             {
               form.isSubmitting ? (
@@ -96,6 +135,7 @@ function ForgotForm() {
             >
               Back to Login ?
             </Button>
+            <ReCaptchaInfo />
           </Form>
         )}
       </Formik>

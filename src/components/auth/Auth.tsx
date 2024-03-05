@@ -4,7 +4,6 @@ import Signin from './Signin';
 import Signup from './Signup';
 import DontHaveAccount from './DontHaveAccount';
 import HaveAnAccount from './HaveAnAccount';
-import useAuthPage from '../../hooks/user/useAuthPage';
 import Button from './ui/Button';
 /**
  * @author Hrishikesh Rajan

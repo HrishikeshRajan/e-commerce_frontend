@@ -13,7 +13,6 @@ import { StatusCodes } from 'http-status-codes';
 import useFetchUser from '@/hooks/user/useFetchUser';
 import Logo from '../../assets/smartshop.png';
 import DefaultUser from '../../assets/defaultUser.png';
-import { useUpdateLocalStore } from '../../hooks/user/useUpdateLocalStore';
 import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
 
 import { DropdownProfile } from './constants';

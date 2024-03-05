@@ -8,6 +8,8 @@ import {
 import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { StatusCodes } from 'http-status-codes';
+import ReCAPTCHA from 'react-google-recaptcha';
+import { merge } from 'lodash';
 import { signin } from './apis/signin.api';
 
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
@@ -19,10 +21,12 @@ import Label from './Label';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
 import AuthHelper from './apis/helper';
+import ReCaptchaInfo from './ReCaptchaInfo';
+import { Status } from '.';
 
 function Signin():React.JSX.Element {
   const dispatch = useTypedDispatch();
-
+  const recaptchaRef = React.createRef<ReCAPTCHA>();
   const [mainError, setMainError] = useState({
     accountError: false,
     message: '',
@@ -36,11 +40,24 @@ function Signin():React.JSX.Element {
   return (
     <Formik
       initialValues={{
-        email: 'hrishikeshrajan3@gmail.com',
-        password: 'Best@#1234@#',
+        email: '',
+        password: '',
+        recaptchaToken: '',
       }}
       validationSchema={toFormikValidationSchema(loginSchema)}
-      onSubmit={(values, actions) => {
+      onSubmit={async (values, actions) => {
+        if (import.meta.env.VITE_PROCESS_ENV === 'production') {
+          const recaptchaToken = await recaptchaRef.current?.executeAsync();
+          recaptchaRef.current?.reset();
+
+          if (!recaptchaToken) {
+            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+            actions.setStatus(errorObj);
+            actions.setSubmitting(false);
+            return;
+          }
+          merge(values, { recaptchaToken });
+        }
         signin({ ...values }).then((response: any) => {
           actions.setSubmitting(false);
           if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
@@ -100,6 +117,14 @@ function Signin():React.JSX.Element {
             className={`block flex-1 rounded-lg border-2 bg-transparent  p-4 xl:p-3  text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.password && form.touched.password && 'border-2 border-red-500'}`}
           />
           <FormFieldError name="password" />
+          {import.meta.env.VITE_PROCESS_ENV === 'production'
+          && (
+            <ReCAPTCHA
+              sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+              ref={recaptchaRef}
+              size="invisible"
+            />
+          )}
           {
             form.isSubmitting ? (
               <Button
@@ -122,9 +147,11 @@ function Signin():React.JSX.Element {
               </Button>
             )
           }
-          <div className="flex justify-end">
+          <div className="flex justify-end mb-3">
             <ForgotPassword />
           </div>
+
+          <ReCaptchaInfo />
         </Form>
       )}
     </Formik>

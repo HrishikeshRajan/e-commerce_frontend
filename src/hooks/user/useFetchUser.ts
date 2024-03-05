@@ -16,7 +16,6 @@ const useFetchUser = () => {
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    // console.log(checkCookie('token'),AuthHelper.isLoggedIn());
     if (((!user || isEmpty(user)) && AuthHelper.isLoggedIn())) {
       getUser(signal)
         .then((response: any) => {
