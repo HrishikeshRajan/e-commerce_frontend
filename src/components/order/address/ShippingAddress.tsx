@@ -5,14 +5,19 @@ import { Address, ClientOrder } from '@/types/Orders';
 import cart from '@/utils/cart.helper';
 import Button from '@/components/auth/ui/Button';
 import { useNavigate } from 'react-router-dom';
-import { isFetchSuccess } from '@/types/Fetch';
+import BackButton from '@/utils/BackButton';
+import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
+import { toast } from 'react-toastify';
 import AddressCard from './AddressCard';
 import PrimaryAddressFactory from '../factory/PrimaryAddressFactory';
 import ProceedToPaymentButton from '../../payment/ProceedToPaymentButton';
 import { getAddresses } from '../apis/getAddress';
+import { isFetchSuccess } from '.';
+import 'react-toastify/dist/ReactToastify.css';
 
 const getDefaultAddress = (addressArray:Address[]) => addressArray
   .find((addre:Address) => addre.isDefault === true);
+const notify = (message:string) => toast(message);
 
 function ShippingAddress() {
   const [addresses, setAddresses] = useState<Address[]>();
@@ -38,19 +43,25 @@ function ShippingAddress() {
     const { signal } = abortController;
 
     getAddresses('api/v1/users/address', signal).then((result) => {
-      if (isFetchSuccess(result!)) {
+      if (isFetchSuccess(result)) {
         setAddresses(result.message.user.address);
         orderObj.cartId = cart.getCartId();
         orderObj.shippingAddress = getDefaultAddress(result.message.user.address) || {};
         setAddress(orderObj.shippingAddress);
         localStorage.setItem('order', JSON.stringify(orderObj));
       }
-    });
+    }).catch((error:unknown) => { notify((error as Error).name); });
     return () => abortController.abort();
   }, []);
 
   return (
-    <div className="lg:container w-full mt-28 lg:-mt-10  flex justify-center item-center  flex-col">
+    <div className="lg:container w-full mt-20 lg:-mt-10  flex justify-center item-center  flex-col">
+      <BackButton>
+        {' '}
+        <HiOutlineArrowNarrowLeft />
+        {' '}
+        Back to CART
+      </BackButton>
       <div className="w-full flex justify-center items-center">
         <div className="lg:mt-36 lg:w-6/12 w-full px-2 flex justify-between items-center">
           <h1 className="font-bold my-1 text-xs">Select Delivery Address</h1>

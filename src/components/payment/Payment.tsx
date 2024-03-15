@@ -9,6 +9,8 @@ import {
   FetchResponse, isFetchError404, isFetchSuccess,
 } from '@/types/Fetch';
 import { notifyError } from '@/utils/toast';
+import BackButton from '@/utils/BackButton';
+import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
 import CheckoutPage from './CheckoutPage';
 import Desclaimer from './Desclaimer';
 import { hasPaymentProperties } from '.';
@@ -23,7 +25,7 @@ function Payment() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetch('http://localhost:4000/api/v1/orders/create', {
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/orders/create`, {
       method: 'POST',
       body: JSON.stringify({
         paymentMethodTypes: 'card', currency: 'inr', cartId, orderId,
@@ -63,11 +65,20 @@ function Payment() {
 
   return (
     <>
-      <div className="p-5 mt-20 lg:mt-20 ">
+
+      <div className=" mt-20 lg:mt-20 ">
+        <BackButton>
+          {' '}
+          <HiOutlineArrowNarrowLeft />
+          {' '}
+          Back to Address
+        </BackButton>
         <h2 className="font-bold text-lg text-center text-slate-500 mt-5 py-2">Credit/Debit Card</h2>
-        <Desclaimer />
+        <div className="p-5">
+          <Desclaimer />
+        </div>
       </div>
-      <div className="w-full relative flex flex-col justify-center items-center">
+      <div className="w-full p-5 relative flex flex-col justify-center items-center">
 
         {clientSecret && (
           <Elements options={options} stripe={stripePromise} key={clientSecret}>

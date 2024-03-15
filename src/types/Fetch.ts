@@ -69,3 +69,7 @@ export function isFetchError422(response: ErrorResponse): response is Http422 {
 export function isFetchError500(response: ErrorResponse): response is Http500 {
   return (response as Http500).statusCode === 500;
 }
+
+export function isNull(x: unknown): x is null {
+  return x === null;
+}

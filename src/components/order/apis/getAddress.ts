@@ -21,8 +21,7 @@ export async function getAddresses(
     );
     return (await response.json()) as unknown as FetchResponse;
   } catch (error: unknown) {
-    if ((error as Error).name !== 'AbortError') {
-      throw new Error('Failed to fetch user addresses. Please retry later.');
-    }
+    if ((error as Error).name === 'AbortError') return null;
+    throw new Error('Failed to fetch user addresses. Please retry later.');
   }
 }
