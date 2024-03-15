@@ -15,6 +15,8 @@ function PaymentSuccess() {
   useEffect(() => {
     cart.clearCart();
     orderHelper.clearOrderId();
+    orderHelper.clearOrder();
+
     dispatch(clearCart());
     dispatch(clearOrderId());
     dispatch(clearAddressId());

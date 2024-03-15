@@ -1,10 +1,10 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
-import { Cart, CartDocument } from '../../types/Cart';
+import { ClientCart } from '../../types/Cart';
 
 interface InitialState {
-  cart:Cart
-  cartResponse:CartDocument
+  cart:ClientCart
+  cartResponse:ClientCart
   isQtyDialogueOpen:boolean
 }
 const initialState:InitialState = {
@@ -17,13 +17,10 @@ const initialState:InitialState = {
   },
   cartResponse: {
     userId: '',
-    products: null,
+    products: {},
     grandTotalPrice: 0,
-    grandTotalPriceString: '',
     grandTotalQty: 0,
     cartId: '',
-    _id: '',
-    updatedAt: '',
   },
   isQtyDialogueOpen: false,
 };
@@ -31,10 +28,10 @@ const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addToCart: (state, action:PayloadAction<Cart>) => {
+    addToCart: (state, action:PayloadAction<ClientCart>) => {
       state.cart = action.payload;
     },
-    addToCartResponse: (state, action:PayloadAction<CartDocument>) => {
+    addToCartResponse: (state, action:PayloadAction<ClientCart>) => {
       state.cartResponse = action.payload;
     },
     clearCart: (state) => {
@@ -42,27 +39,36 @@ const cartSlice = createSlice({
         products: {},
         grandTotalPrice: 0,
         grandTotalQty: 0,
+        userId: '',
+        cartId: '',
       };
     },
     clearCartResponse: (state) => {
       state.cartResponse = {
         userId: '',
-        products: null,
+        products: {},
         grandTotalPrice: 0,
-        grandTotalPriceString: '',
         grandTotalQty: 0,
         cartId: '',
-        _id: '',
-        updatedAt: '',
       };
     },
     toggleQtyDialogueBox: (state) => {
       state.isQtyDialogueOpen = !state.isQtyDialogueOpen;
+    },
+
+    updateCartAndUserId: (state, action:PayloadAction<{ userId:string, cartId:string }>) => {
+      state.cart.cartId = action.payload.cartId;
+      state.cart.userId = action.payload.userId;
     },
   },
 });
 
 export default cartSlice.reducer;
 export const {
-  addToCart, addToCartResponse, toggleQtyDialogueBox, clearCart, clearCartResponse,
+  addToCart,
+  addToCartResponse,
+  toggleQtyDialogueBox,
+  clearCart,
+  clearCartResponse,
+  updateCartAndUserId,
 } = cartSlice.actions;

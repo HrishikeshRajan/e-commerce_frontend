@@ -1,3 +1,5 @@
+import { Address } from '@/types/Orders';
+
 export interface IAddress {
   fullname: string
   city: string
@@ -18,7 +20,7 @@ export interface IUser {
     secure_url: string
     url: string
   }
-  address?:IAddress[]
+  address?:Address[]
   seller:boolean
   role:string
 }

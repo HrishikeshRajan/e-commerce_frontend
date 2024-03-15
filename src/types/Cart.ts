@@ -8,7 +8,7 @@ export type ProductWithOptions = ProductCore & Options;
 export type Item = {
   product:ProductCore,
   qty:number
-  totalPrice:number
+  totalPrice?:number
   options:Options
 };
 
@@ -17,8 +17,8 @@ export interface Options {
   size:string
 }
 export type Cart = {
-  products:{ [x:string]:Item }
-  grandTotalPrice:number
+  products:Record<string, Item>
+  grandTotalPrice?:number
   grandTotalQty:number
   userId?:string
   cartId?:string
@@ -26,12 +26,12 @@ export type Cart = {
 export type ModifiedItem = {
   productId:string,
   qty:number
-  totalPrice:number
+  totalPrice?:number
   options:Options
 };
 export type ModifiedCart = {
   products:{ [x:string]:ModifiedItem }
-  grandTotalPrice:number
+  grandTotalPrice?:number
   grandTotalQty:number
 };
 
@@ -60,13 +60,57 @@ export interface CartItemDocument {
   taxAmount:number;
 }
 
-export interface CartDocument {
+export interface CartCore {
   userId: string;
   products: Map<string, CartItemDocument> | null;
   grandTotalPrice: number;
   grandTotalPriceString: string;
   grandTotalQty: number;
-  _id:string
   updatedAt:string
   cartId:string
 }
+
+/**
+ *  New Type
+ *
+ */
+
+export interface ServerCartItem {
+  productId: ProductCore
+  qty: number
+  options: Options
+  totalPrice: number
+  totalPriceBeforeTax: number
+  totalPriceAfterTax:number
+  orderStatus:ORDER_STATUS
+  gstInPercentage:number
+  taxAmount:number
+}
+export interface ServerCart {
+  userId: string
+  cartId:string
+  products: Record<string, ServerCartItem> | null
+  grandTotalPrice: number
+  grandTotalQty: number
+
+}
+export type ClientCartItem = {
+  product: ProductCore
+  qty: number
+  options: Options
+  totalPrice: number
+  totalPriceBeforeTax: number
+  totalPriceAfterTax:number
+  orderStatus:ORDER_STATUS
+  gstInPercentage:number
+  taxAmount:number
+};
+export type ClientCart = {
+  userId: string
+  cartId:string
+  products: Record<string, ClientCartItem>
+  grandTotalPrice: number
+  grandTotalQty: number
+};
+
+export type CartData = ClientCart | ServerCart;

@@ -8,7 +8,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyingGlass';
 import { isEmpty } from 'lodash';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useUpdateLocalStore } from 'hooks/user/useUpdateLocalStore';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import Logo from '@/assets/smartshop.png';
 import DefaultUser from '@/assets/defaultUser.png';
@@ -46,7 +45,6 @@ function SellerNavbar() {
   };
 
   // Keeps local storage sync with redux store change
-  useUpdateLocalStore();
 
   return (
     <>

@@ -30,7 +30,6 @@ import SettingSWapper from './components/marketplace/dashboard/pages/settings/Se
 import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop';
 import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
 import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
-import Sidebar from './components/user/ui/sidebar/Sidebar';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
@@ -44,6 +43,7 @@ import Orders from './components/order/Orders';
 import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderWrapper';
 import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
 import ConfirmEmail from './components/auth/ConfirmEmail';
+import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -51,7 +51,7 @@ const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboar
 const Element = () => (
   <div className="h-screen relative ">
     <Navbar />
-    <Sidebar />
+    {/* <Sidebar /> */}
     <Outlet />
   </div>
 );
@@ -89,7 +89,7 @@ const App = () => {
           ),
         },
         {
-          path: 'product/:prodId',
+          path: 'product/:productId',
           element: (
             <AuthenticationWrapper authentication={false}>
               <ProductView />
@@ -189,7 +189,14 @@ const App = () => {
 
           ],
         },
-
+        {
+          path: 'flashsale/:saleId/product/:productId',
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <FlashSaleProductPage />
+            </AuthenticationWrapper>
+          ),
+        },
       ],
     },
     {

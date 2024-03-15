@@ -16,7 +16,6 @@ function Categories() {
 
   return (
     <div className="">
-
       {!error
       && (
         <>

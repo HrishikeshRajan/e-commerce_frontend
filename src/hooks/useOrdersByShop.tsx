@@ -1,12 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { CartDocument } from '@/types/Cart';
+import { ClientCart } from '@/types/Cart';
 import { useEffect, useState } from 'react';
 import { addMyOrders } from '@/utils/reduxSlice/orderSlice';
 import { useTypedDispatch } from './user/reduxHooks';
 
 export interface Order {
   userId: string
-  cartId: CartDocument
+  cartId: ClientCart
   shippingAddress: any
   paymentDetails: any
   orderDetails: any
@@ -35,7 +35,7 @@ const useOrdersByShop = () => {
       signal,
     };
 
-    fetch('http://localhost:4000/api/v1/orders/list', requestOptions)
+    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/orders/list`, requestOptions)
       .then((result) => result.json())
       .then((result) => {
         setLoading(false);

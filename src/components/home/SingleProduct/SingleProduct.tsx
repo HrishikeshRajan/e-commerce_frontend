@@ -1,9 +1,8 @@
 import Ratings from '@/components/products/Ratings';
-import { useSingleProduct } from '@/hooks/useSigleProduct';
 
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { ReactNode } from 'react';
 
+import { ProductCore } from '@/types/Product';
 import Line from '../ui/Line';
 import Brand from './ui/Brand';
 import ProductName from './ui/ProductName';
@@ -11,24 +10,21 @@ import LineSmall from '../ui/LineSmall';
 import CustomerReview from './ui/CustomerReview';
 import Price from './ui/Price';
 import Description from './ui/Description';
-import Sizes from './ui/Sizes';
-import Colors from './ui/Colors';
-import AddToCartButton from './ui/AddToCartButton';
 import DetailsItem from './ui/DetailsItem';
 import Heading from './ui/Heading';
 import ShopDetails from './ui/ShopDetails';
 import Images from './Images';
 
-function SingleProduct() {
-  const params = useParams();
-  const [product, loading] = useSingleProduct(params.prodId!);
-
-  if (!product) return;
-  if (loading) return <h1>Loading</h1>;
+  type SingleProductProps = {
+    product:ProductCore
+    children:ReactNode
+    discount?:number
+  };
+function SingleProduct({ product, children, discount }:SingleProductProps) {
   return (
-    <div className="w-full flex flex-col lg:flex-row lg:justify-center items-center lg:mt-10 lg:container">
-      <div className="w-full lg:w-5/12 mt-40"><Images src={product.images} /></div>
-      <div className="w-full lg:w-7/12 pt-10  lg:pt-10">
+    <div className="w-full flex flex-col xl:flex-row  lg:justify-center    lg:container">
+      <div className="w-full xl:w-6/12  mt-20"><Images src={product.images} /></div>
+      <div className="w-full xl:w-6/12 pt-10  lg:pt-1">
         <ProductName name={product.name} />
         <Brand brand={product.brand} />
 
@@ -37,13 +33,18 @@ function SingleProduct() {
           <CustomerReview numberOfReviews={product.numberOfReviews} />
         </p>
         <LineSmall />
-        <Price price={product.price} />
+        {!discount ? <Price price={product.price} />
+          : (
+            <div className="flex gap-2">
+              <Price price={discount!} />
+              <del className="text-slate-400 ">
+                <Price price={product.price} />
+              </del>
+
+            </div>
+          )}
         <Description description={product.description} />
-        <Sizes sizes={product.sizes} />
-        <Colors color={product.color} />
-        <div className="my-10">
-          <AddToCartButton />
-        </div>
+        {children}
         <Line />
         <div>
           <Heading heading="Product Details" />
@@ -71,3 +72,6 @@ function SingleProduct() {
 }
 
 export default SingleProduct;
+SingleProduct.defaultProps = {
+  discount: 0,
+};

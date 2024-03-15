@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { IFlashSale } from '@/types/Sale';
 import { IUser } from '../../components/user';
 
 enum Screen {
@@ -13,7 +14,9 @@ interface IAPP {
   sidebarIsOpen:boolean,
   doSignout:boolean,
   sidebar:boolean,
-  screen:Screen
+  screen:Screen,
+  flashSaleLive:boolean
+  flashSaleItem: IFlashSale | null
 }
 
 const initialState:IAPP = {
@@ -24,6 +27,8 @@ const initialState:IAPP = {
   doSignout: false,
   sidebar: false,
   screen: Screen.USER,
+  flashSaleLive: false,
+  flashSaleItem: null,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -66,6 +71,12 @@ const appSlice = createSlice({
     setScreen: (state, action:PayloadAction<Screen>) => {
       state.screen = action.payload;
     },
+    toggleFlashSale: (state, action:PayloadAction<boolean>) => {
+      state.flashSaleLive = action.payload;
+    },
+    addFlashSaleItem: (state, action:PayloadAction<IFlashSale>) => {
+      state.flashSaleItem = action.payload;
+    },
 
   },
 });
@@ -81,6 +92,8 @@ export const {
   toggleSignout,
   toggleUserSidebar,
   setScreen,
+  toggleFlashSale,
+  addFlashSaleItem,
 } = appSlice.actions;
 
 export default appSlice.reducer;

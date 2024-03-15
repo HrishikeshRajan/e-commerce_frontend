@@ -4,17 +4,23 @@ import { Elements } from '@stripe/react-stripe-js';
 import { StripeElementsOptions, loadStripe } from '@stripe/stripe-js';
 import cart from '@/utils/cart.helper';
 import { useNavigate } from 'react-router-dom';
-import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import orderHelper from '@/utils/order.helper';
+import {
+  FetchResponse, isFetchError404, isFetchSuccess,
+} from '@/types/Fetch';
+import { notifyError } from '@/utils/toast';
 import CheckoutPage from './CheckoutPage';
 import Desclaimer from './Desclaimer';
+import { hasPaymentProperties } from '.';
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
+
 function Payment() {
   const [clientSecret, setClientSecret] = useState('');
 
-  const cartId = useTypedSelector((store) => store.cart.cartResponse.cartId);
+  const cartId = cart.get()?.cartId;
   const orderId = orderHelper.getOrderId();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:4000/api/v1/orders/create', {
@@ -25,9 +31,19 @@ function Payment() {
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
     }).then((result) => result.json())
-      .then((result) => setClientSecret(result.message.clientSecret))
-      .catch((error:any) => console.log(error));
-  }, []);
+      .then((result:FetchResponse) => {
+        if (isFetchSuccess(result)) {
+          if (hasPaymentProperties(result.message)) {
+            setClientSecret(result.message.clientSecret);
+          }
+        } else if (isFetchError404(result)) {
+          return navigate('/cart');
+        } else {
+          notifyError(result.error);
+        }
+      })
+      .catch((error:unknown) => notifyError((error as Error).message));
+  }, [cartId, navigate, orderId]);
 
   const appearance:any = {
     theme: 'stripe',
@@ -36,8 +52,6 @@ function Payment() {
     clientSecret,
     appearance,
   };
-
-  const navigate = useNavigate();
 
   const userCart = cart.get();
 

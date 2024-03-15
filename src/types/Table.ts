@@ -1,4 +1,4 @@
-import { IUser } from "@/components/user"
+import { IUser } from '@/components/user';
 
 export interface Address {
   fullname: string
@@ -61,5 +61,3 @@ export interface TOrder {
     paymentId: string
   }
 }
-
-

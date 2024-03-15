@@ -1,11 +1,11 @@
 /* eslint-disable no-param-reassign */
-import { Order } from '@/hooks/useOrders';
+import { FinalOrder } from '@/types/Orders';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface InitialState {
   orderId:string
   addressId:string
-  myOrders:Order[]
+  myOrders:FinalOrder[]
 }
 const initialState:InitialState = {
   orderId: '',
@@ -28,7 +28,7 @@ const orderSlice = createSlice({
     clearAddressId: (state) => {
       state.addressId = '';
     },
-    addMyOrders: (state, action:PayloadAction<Order[]>) => {
+    addMyOrders: (state, action:PayloadAction<FinalOrder[]>) => {
       state.myOrders = action.payload;
     },
   },

@@ -1,25 +1,26 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable no-restricted-syntax */
 import {
-  Cart, ModifiedCart, ModifiedItem,
+  ClientCart,
+  Options,
 } from '@/types/Cart';
 
-export const replaceCartProductsWithIds = (cart:Cart) => {
+export type UploadCartData = {
+  productId:string
+  qty:number
+  options:Options
+};
+export const getItemsFromLocalCart = (cart:ClientCart) => {
+  const cartArray:UploadCartData[] = [];
   const oldCart = cart;
-  const newCart:ModifiedCart = {
-    products: {},
-    grandTotalPrice: oldCart.grandTotalPrice,
-    grandTotalQty: oldCart.grandTotalQty,
-  };
 
   const { products } = oldCart;
   const keys = Object.keys(products);
 
   for (const key of keys) {
-    const modifiedItem:ModifiedItem = {
+    const modifiedItem:UploadCartData = {
       productId: '',
       qty: 0,
-      totalPrice: 0,
       options: {
         color: '',
         size: '',
@@ -28,12 +29,11 @@ export const replaceCartProductsWithIds = (cart:Cart) => {
     const item = products[key];
     modifiedItem.options = item.options;
     modifiedItem.qty = item.qty;
-    modifiedItem.totalPrice = item.totalPrice;
 
     modifiedItem.productId = key;
 
-    newCart.products[key] = modifiedItem;
+    cartArray.push(modifiedItem);
   }
 
-  return { cart: newCart };
+  return cartArray;
 };

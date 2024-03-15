@@ -5,7 +5,7 @@ import Image from './Image';
 
 function Images({ src }:{ src:ProductCore['images'] }) {
   return (
-    <div>
+    <div className="flex flex-wrap">
       {src.map((item) => <Image secure_url={item.secure_url} key={item._id} />)}
     </div>
   );

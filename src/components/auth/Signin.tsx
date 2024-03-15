@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
 import {
   Formik, Form, Field,
 } from 'formik';
@@ -31,17 +30,11 @@ function Signin():React.JSX.Element {
     accountError: false,
     message: '',
   });
-  const [redirects, setRedirect] = useState(false);
-
-  if (redirects) {
-    return <Navigate to="/" />;
-  }
-
   return (
     <Formik
       initialValues={{
-        email: '',
-        password: '',
+        email: 'hrishikeshrajan3@gmail.com',
+        password: 'Best@#1234@#',
         recaptchaToken: '',
       }}
       validationSchema={toFormikValidationSchema(loginSchema)}
@@ -78,7 +71,6 @@ function Signin():React.JSX.Element {
             dispatch(addUser(response.message?.userDetails));
             dispatch(confirmAuthentication(true));
             AuthHelper.authenticate(true);
-            setRedirect(true);
           }
         });
       }}

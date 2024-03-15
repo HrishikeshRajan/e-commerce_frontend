@@ -25,6 +25,14 @@ const orderHelper = {
       console.log(error);
     }
   },
+  clearOrder: () => {
+    try {
+      if (typeof window === 'undefined') return;
+      localStorage.removeItem('order');
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default orderHelper;

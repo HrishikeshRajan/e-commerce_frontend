@@ -5,14 +5,11 @@ import { IconContext } from 'react-icons';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { useNavigate } from 'react-router-dom';
 import useQuantityObserver from '@/hooks/useQuantityObserver';
-import cart from '@/utils/cart.helper';
 
-function CartNavIcon() {
-  const qty = useTypedSelector((store) => store.cart?.cart?.grandTotalQty) || 0;
-  const localCount = cart.getCount();
+function CartNavIcon({ qty } :{ qty:number }) {
+  const qtyFromRedux = useTypedSelector((store) => store.cart.cart.grandTotalQty) || 0;
   const navigate = useNavigate();
-
-  const shouldAnimate = useQuantityObserver(qty);
+  const shouldAnimate = useQuantityObserver(qtyFromRedux);
   const handleNavigation = () => {
     navigate('cart');
   };
@@ -24,7 +21,7 @@ function CartNavIcon() {
         </span>
       </IconContext.Provider>
       <span className="sr-only">Notifications</span>
-      {(qty || localCount) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qty || localCount || 0}</small></div>}
+      {(qtyFromRedux || qty) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qtyFromRedux || qty}</small></div>}
     </button>
   );
 }
