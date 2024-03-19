@@ -1,52 +1,53 @@
 import { useEffect, useState } from 'react';
 
-import { StatusCodes } from 'http-status-codes';
 import { getUser } from '@/components/auth/apis/getUser';
-import { addUser, confirmAuthentication } from '@/utils/reduxSlice/appSlice';
-import { isEmpty } from 'lodash';
-import AuthHelper from '@/components/auth/apis/helper';
-import { useTypedDispatch, useTypedSelector } from './reduxHooks';
+// import { addUser, confirmAuthentication } from '@/utils/reduxSlice/appSlice';
+import { FetchResponse, hasFetchSucceeded, isFetchUnauthorizedError } from '@/types/Fetch';
+import { IUser } from '@/components/user';
+import { useTypedDispatch } from './reduxHooks';
 
+// if this error to make logot in client side
 const useFetchUser = () => {
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
+  const [isUserFetching, setIsUserFetching] = useState(true);
+  const [isUserfetchError, setIsUserFetchError] = useState<string>();
+  const [isUserFetchEnabled, setIsUserFetchEnable] = useState<boolean>(false);
+  const [newUser, setNewUser] = useState<IUser>();
   const dispatch = useTypedDispatch();
-  const user = useTypedSelector((store) => store.app.user);
 
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    if (((!user || isEmpty(user)) && AuthHelper.isLoggedIn())) {
+    if (isUserFetchEnabled) {
       getUser(signal)
-        .then((response: any) => {
-          if (
-            response
-            && response.success
-            && response.statusCode === StatusCodes.OK
-          ) {
-            setLoading(false);
-            dispatch(confirmAuthentication(true));
-            dispatch(addUser(response.message.user));
+        .then((response: FetchResponse) => {
+          if (hasFetchSucceeded(response)) {
+            setIsUserFetching(false);
+            setNewUser(response.message.user);
           } else {
-            setLoading(false);
-            setError(true);
-            setError(response && response.message.err);
+            setIsUserFetching(false);
+            setIsUserFetchError(response.error);
+
+            if (isFetchUnauthorizedError(response)) {
+              setIsUserFetching(false);
+              setIsUserFetchError('login');
+            }
           }
         })
-        .catch((e: unknown) => {
-          console.log(e);
-          setLoading(false);
-          setError(true);
+        .catch((err: unknown) => {
+          setIsUserFetching(false);
+          setIsUserFetchError((err as Error).message);
         });
     }
 
     return () => abortController.abort();
-  }, [dispatch, user]);
+  }, [dispatch, isUserFetchEnabled, setIsUserFetchEnable]);
 
   return {
-    loading,
-    error,
-  };
+    isUserFetching,
+    isUserfetchError,
+    setIsUserFetchEnable,
+    newUser,
+  } as const;
 };
 
 export default useFetchUser;

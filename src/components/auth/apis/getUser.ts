@@ -22,10 +22,10 @@ export const getUser = async (signal:AbortSignal):Promise<any> => {
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/read`;
     const response = await fetch(url, requestOptions);
-    return await response.json();
+    return await response.json() as unknown;
   } catch (error) {
     if ((error as Error).name === 'AbortError') {
-      return;
+      return null;
     }
     throw new Error('We\'re unable to process your signup request. Please try again later.');
   }

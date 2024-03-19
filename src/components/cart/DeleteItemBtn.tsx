@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
@@ -20,7 +21,7 @@ function DeleteItemBtn({ productId, cartId }:{ productId:string, cartId:string }
   const notify = () => toast('Deleted successfully');
 
   const deleteCartItem = () => {
-    if (isLoggedIn && cartId) {
+    if (isLoggedIn && cartId && false) {
       deleteCartItemByIds(productId, cartId)
         .then((result) => {
           if (result.status === StatusCodes.OK) {
@@ -39,11 +40,10 @@ function DeleteItemBtn({ productId, cartId }:{ productId:string, cartId:string }
             }
           }
         });
-    } else {
-      const updatedCart = cart.clearItemFromLocalStoarge(productId);
-      dispatch(addToCart(updatedCart!));
-      notify();
     }
+    const updatedCart = cart.clearItemFromLocalStoarge(productId);
+    dispatch(addToCart(updatedCart!));
+    notify();
   };
   return (
     <>

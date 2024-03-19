@@ -10,7 +10,6 @@ import {
 import { isEmpty } from 'lodash';
 import { faBars, faStore } from '@fortawesome/free-solid-svg-icons';
 import { StatusCodes } from 'http-status-codes';
-import useFetchUser from '@/hooks/user/useFetchUser';
 import { ClientCart } from '@/types/Cart';
 import Logo from '../../assets/smartshop.png';
 import DefaultUser from '../../assets/defaultUser.png';
@@ -43,9 +42,9 @@ function Navbar() {
   }, [qtyRef]);
 
   // Clears all user data from redux and local storage
-  const signOut = async () => {
-    await signout().then((result:any) => {
-      if (result.statusCode === StatusCodes.OK) {
+  const signOut = () => {
+    signout().then((result:any) => {
+      if (result.statusCode === StatusCodes.OK || result.statusCode === StatusCodes.UNAUTHORIZED) {
         AuthHelper.clearSignedOnData(() => {
           setAccountTab(false);
           dispatch(removeUser());
@@ -60,7 +59,7 @@ function Navbar() {
   const redirectToSignIn = () => {
     navigate('/auth');
   };
-  useFetchUser();
+  // useFetchUser();
 
   return (
     <nav className="  fixed top-0 z-40 w-full shadow-md bg-white  p-2 ">

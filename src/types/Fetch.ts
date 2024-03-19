@@ -1,8 +1,10 @@
 /**
- *  Author : Hrishikesh Rajan
+ *  @author : Hrishikesh Rajan
  *
  *  Type predicates for Fetch API
  */
+
+import { StatusCodes } from 'http-status-codes';
 
 export interface IResponse {
   statuCode: number;
@@ -28,6 +30,12 @@ export function isFetchSuccess(
   return (response as SuccessResponse).message !== undefined;
 }
 
+export function hasFetchSucceeded(
+  response: SuccessResponse | ErrorResponse | null,
+): response is SuccessResponse {
+  return ((response !== null && 'message' in response) && (response !== null && response.statusCode === StatusCodes.OK));
+}
+
 export interface IErrorResponse {
   error: any;
   success: false;
@@ -50,24 +58,24 @@ export interface Http401 extends IErrorResponse {
 
 export type ErrorResponse = Http400 | Http401 | Http404 | Http422 | Http500;
 
-export function isFetchError404(response: ErrorResponse): response is Http404 {
-  return (response as Http404).statusCode === 404;
+export function isFetchNotFoundError(response: ErrorResponse): response is Http404 {
+  return ((response !== null && 'error' in response) && (response as Http404).statusCode === StatusCodes.NOT_FOUND);
 }
 
-export function isFetchError400(response: ErrorResponse): response is Http400 {
-  return (response as Http400).statusCode === 400;
+export function isFetchBadRequestError(response: ErrorResponse): response is Http400 {
+  return ((response !== null && 'error' in response) && (response as Http400).statusCode === StatusCodes.BAD_REQUEST);
 }
 
-export function isFetchError401(response: ErrorResponse): response is Http401 {
-  return (response as Http401).statusCode === 401;
+export function isFetchUnauthorizedError(response: ErrorResponse): response is Http401 {
+  return ((response !== null && 'error' in response) && (response as Http401).statusCode === StatusCodes.UNAUTHORIZED);
 }
 
-export function isFetchError422(response: ErrorResponse): response is Http422 {
-  return (response as Http422).statusCode === 422;
+export function isFetchUnprocessableEntityError(response: ErrorResponse): response is Http422 {
+  return ((response !== null && 'error' in response) && (response as Http422).statusCode === StatusCodes.UNPROCESSABLE_ENTITY);
 }
 
-export function isFetchError500(response: ErrorResponse): response is Http500 {
-  return (response as Http500).statusCode === 500;
+export function isFetchInternalServerError(response: ErrorResponse): response is Http500 {
+  return ((response !== null && 'error' in response) && (response as Http500).statusCode === StatusCodes.INTERNAL_SERVER_ERROR);
 }
 
 export function isNull(x: unknown): x is null {

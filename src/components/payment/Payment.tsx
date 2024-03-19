@@ -6,7 +6,7 @@ import cart from '@/utils/cart.helper';
 import { useNavigate } from 'react-router-dom';
 import orderHelper from '@/utils/order.helper';
 import {
-  FetchResponse, isFetchError404, isFetchSuccess,
+  FetchResponse, isFetchNotFoundError, isFetchSuccess,
 } from '@/types/Fetch';
 import { notifyError } from '@/utils/toast';
 import BackButton from '@/utils/BackButton';
@@ -38,7 +38,7 @@ function Payment() {
           if (hasPaymentProperties(result.message)) {
             setClientSecret(result.message.clientSecret);
           }
-        } else if (isFetchError404(result)) {
+        } else if (isFetchNotFoundError(result)) {
           return navigate('/cart');
         } else {
           notifyError(result.error);

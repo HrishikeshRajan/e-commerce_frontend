@@ -1,12 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
+import cart from '@/utils/cart.helper';
 import { addProductSize } from '@/utils/reduxSlice/productSlice';
 import React from 'react';
 
-function Sizes({ sizes }:{ sizes:string[] }) {
+function Sizes({ sizes, productId }:{ sizes:string[], productId:string }) {
   const dispatch = useTypedDispatch();
   const handleSize = (size:string) => {
     dispatch(addProductSize(size));
+    cart.updateSize(size, productId);
   };
   return (
     <>

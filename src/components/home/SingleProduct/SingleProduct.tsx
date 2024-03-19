@@ -1,8 +1,10 @@
+/* eslint-disable react/require-default-props */
 import Ratings from '@/components/products/Ratings';
 
 import React, { ReactNode } from 'react';
 
 import { ProductCore } from '@/types/Product';
+import { Offers } from '@/utils/cart.helper';
 import Line from '../ui/Line';
 import Brand from './ui/Brand';
 import ProductName from './ui/ProductName';
@@ -18,9 +20,10 @@ import Images from './Images';
   type SingleProductProps = {
     product:ProductCore
     children:ReactNode
-    discount?:number
+    offers?:Offers
   };
-function SingleProduct({ product, children, discount }:SingleProductProps) {
+
+function SingleProduct({ product, offers, children }:SingleProductProps) {
   return (
     <div className="w-full flex flex-col xl:flex-row  lg:justify-center    lg:container">
       <div className="w-full xl:w-6/12  mt-20"><Images src={product.images} /></div>
@@ -33,16 +36,26 @@ function SingleProduct({ product, children, discount }:SingleProductProps) {
           <CustomerReview numberOfReviews={product.numberOfReviews} />
         </p>
         <LineSmall />
-        {!discount ? <Price price={product.price} />
-          : (
-            <div className="flex gap-2">
-              <Price price={discount!} />
-              <del className="text-slate-400 ">
+
+        <div className="flex gap-2">
+          <Price price={(offers
+            && offers.flashsale
+            && Number(offers.flashsale.priceAfterDiscount)) || product.price}
+          />
+          {offers && offers.flashsale && (
+            <>
+              <del className="text-slate-400 text-sm ">
                 <Price price={product.price} />
               </del>
-
-            </div>
+              <span className="text-slate-400 text-xl font-bold">
+                {offers && offers.flashsale && offers.flashsale.discountPercentage}
+                {' '}
+                OFF
+              </span>
+            </>
           )}
+
+        </div>
         <Description description={product.description} />
         {children}
         <Line />
@@ -72,6 +85,3 @@ function SingleProduct({ product, children, discount }:SingleProductProps) {
 }
 
 export default SingleProduct;
-SingleProduct.defaultProps = {
-  discount: 0,
-};

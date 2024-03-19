@@ -1,8 +1,12 @@
+/* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 import { ClientCartItem } from '@/types/Cart';
 import React, { useState } from 'react';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
+import { IFlashSale } from '@/types/Sale';
+import { getTax } from '@/utils/tax.util';
+import { getFinalPriceIncludeTax } from '@/utils/price.utils';
 import LineSmall from '../home/ui/LineSmall';
 import QtyBox from '../dialougeBox/QtyBox';
 import SizeBox from '../dialougeBox/SizeBox';
@@ -11,7 +15,6 @@ import DeleteItemBtn from './DeleteItemBtn';
 function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string }) {
   const [selectSize, setSelectSize] = useState(false);
   const [selectQty, setSelectQty] = useState(false);
-
   const { product } = cartItem;
   return (
     <div className={`flex  border  rounded-xl p-2  my-2 shadow-sm justify-start relative ${product.stock < 1 ? 'border-red-500' : 'border-none'}`}>
@@ -67,7 +70,30 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             )}
           </div>
         </div>
-        <p className="font-normal my-2">{formattedAmount(cartItem.product.price)}</p>
+        <div className="font-normal my-2">
+
+          { (cartItem && cartItem.offers) ? (
+            <div>
+              <div className="flex gap-3 my-2">
+                {('flashsale' in cartItem.offers) && (<span className="font-extrabold">{formattedAmount((cartItem.offers.flashsale as unknown as IFlashSale).priceAfterDiscount || 0)}</span>)}
+
+                <span className="text-slate-500 ">
+                  {('flashsale' in cartItem.offers) ? ((cartItem.offers.flashsale) as IFlashSale).discountPercentage : 0}
+                  % OFF
+                </span>
+              </div>
+
+              <span className="text-slate-500 flex text-sm gap-1">
+                MRP &nbsp;
+                <del>
+                  {formattedAmount(cartItem.product.price
+                  + getTax(cartItem.offers.flashsale.priceAfterDiscount!))}
+                </del>
+                <small> include all tax</small>
+              </span>
+            </div>
+          ) : formattedAmount(cartItem.product.price) }
+        </div>
         {product.stock > 0 ? (
           <div className="font-bold my-2">
             <p className="text-xs text-slate-900 font-base pt-2  ">
@@ -76,24 +102,21 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             </p>
             <p className="text-xs text-slate-900 font-base pt-2">
               <span className="font-light">TAX: </span>
-              {formattedAmount(cartItem.taxAmount)}
+              {cartItem.offers
+               && cartItem.offers.flashsale
+                ? formattedAmount(
+                  getTax(cartItem.offers.flashsale.priceAfterDiscount!)
+                 || 0,
+                )
+                : cartItem.taxAmount}
             </p>
 
-            <p className="text-xs text-slate-900 font-base pt-2 hidden ">
-              <span className="font-light">Price before tax applied: </span>
-              {formattedAmount(cartItem.totalPriceBeforeTax)}
-            </p>
-
-            <p className="text-xs text-slate-900 font-base pt-2 hidden ">
-              <span className="font-light">Price after tax applied: </span>
-              {formattedAmount(cartItem.totalPriceAfterTax)}
-            </p>
             <LineSmall />
             <span className="text-slate-950 font-normal pt-2">
               SubTotal:
             </span>
             <span className="text-sm pl-1">
-              {formattedAmount(cartItem.totalPriceAfterTax)}
+              {formattedAmount(getFinalPriceIncludeTax(cartItem.offers?.flashsale?.priceAfterDiscount ?? 0))}
             </span>
           </div>
         ) : <div className="text-red-500 my-2 p-2 font-bold">Out of Stock</div>}

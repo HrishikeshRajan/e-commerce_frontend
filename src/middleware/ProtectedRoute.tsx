@@ -5,6 +5,10 @@ import {
 
 import { isEmpty } from 'lodash';
 
+import AuthHelper from '@/components/auth/apis/helper';
+import { useDispatch } from 'react-redux';
+import { addUser, removeUser } from '@/utils/reduxSlice/appSlice';
+import useFetchUser from '@/hooks/user/useFetchUser';
 import { IsLoggedIn, ProtectedRouteProps } from '../components/auth';
 import { useTypedSelector } from '../hooks/user/reduxHooks';
 
@@ -44,18 +48,42 @@ export const AuthenticationWrapper = ({
   children,
   authentication = true,
 }:AuthWrapper):React.JSX.Element | string => {
-  const user = useTypedSelector((store) => store.app.user);
+  const userRedux = useTypedSelector((store) => store.app.user);
+  const user = AuthHelper.getUserFromLocalStorage();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
-
+  const dispatch = useDispatch();
+  const {
+    isUserFetching, isUserfetchError, setIsUserFetchEnable, newUser,
+  } = useFetchUser();
   useEffect(() => {
-  // compares the condition and current user status
-    if (authentication && isEmpty(user)) {
-      navigate('/auth');
-    }
+    // compares the condition and current user status
 
+    if (authentication && isEmpty(user)) {
+      setIsUserFetchEnable(true);
+      if (isUserfetchError === 'login') {
+        AuthHelper.clearSignedOnData(() => {
+          dispatch(removeUser());
+          navigate('/auth');
+        });
+      }
+      if (newUser) {
+        AuthHelper.add(newUser);
+        dispatch(addUser(newUser));
+      }
+    } else if (isEmpty(userRedux) && !isEmpty(user)) {
+      dispatch(addUser(user));
+    }
     setLoading(false);
-  }, [user, navigate, authentication]);
+  }, [user,
+    navigate,
+    authentication,
+    userRedux,
+    dispatch,
+    setIsUserFetchEnable,
+    newUser,
+    isUserfetchError,
+    isUserFetching]);
 
   return loading ? 'Loading' : children;
 };

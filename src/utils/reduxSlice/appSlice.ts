@@ -34,8 +34,10 @@ const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
-    addUser: (state, action:PayloadAction<IUser>) => {
-      state.user = action.payload;
+    addUser: (state, action:PayloadAction<IUser | null>) => {
+      if (action.payload) {
+        state.user = action.payload;
+      }
     },
     removeUser: (state) => {
       state.user = null;

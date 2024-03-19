@@ -91,9 +91,10 @@ function FlashSale() {
   if (new Date().toString() > new Date(sale.endTime).toString()) {
     return;
   }
+
   if ((days || hours || mins || secs) === undefined) return null;
   return (
-    <Link to={`flashsale/${sale._id}}/product/${sale.product}`}>
+    <Link to={`flashsale/${sale._id}}/product/${sale.product._id}`}>
       <div className="p-1 mt-24 md:mt-28 relative ">
         <picture>
           <source media="(min-width: 768px)" className="w-full h-fit xl:scale-90 object-cover " srcSet={sale.banner.secure_url} />

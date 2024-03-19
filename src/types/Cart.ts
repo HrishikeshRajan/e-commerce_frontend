@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { ProductCore } from './Product';
+import { IFlashSale } from './Sale';
 
 export type CartClient = { [x:string]:ProductCore };
 
@@ -104,6 +105,9 @@ export type ClientCartItem = {
   orderStatus:ORDER_STATUS
   gstInPercentage:number
   taxAmount:number
+  offers?:{
+    flashsale:IFlashSale
+  }
 };
 export type ClientCart = {
   userId: string
@@ -111,6 +115,7 @@ export type ClientCart = {
   products: Record<string, ClientCartItem>
   grandTotalPrice: number
   grandTotalQty: number
+  mode?:string
 };
 
 export type CartData = ClientCart | ServerCart;

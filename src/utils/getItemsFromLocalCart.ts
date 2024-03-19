@@ -9,6 +9,7 @@ export type UploadCartData = {
   productId:string
   qty:number
   options:Options
+  saleId?:string
 };
 export const getItemsFromLocalCart = (cart:ClientCart) => {
   const cartArray:UploadCartData[] = [];
@@ -26,11 +27,16 @@ export const getItemsFromLocalCart = (cart:ClientCart) => {
         size: '',
       },
     };
+
     const item = products[key];
     modifiedItem.options = item.options;
     modifiedItem.qty = item.qty;
 
     modifiedItem.productId = key;
+
+    if (item.offers?.flashsale) {
+      modifiedItem.saleId = item.offers.flashsale._id!;
+    }
 
     cartArray.push(modifiedItem);
   }

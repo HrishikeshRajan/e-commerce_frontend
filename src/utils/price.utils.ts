@@ -19,3 +19,5 @@ export class CartPrice {
     return this.productTax;
   }
 }
+
+export const getFinalPriceIncludeTax = (price:number) => Math.floor(price + getTax(price));

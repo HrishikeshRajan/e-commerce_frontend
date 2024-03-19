@@ -8,19 +8,20 @@ import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { getItemsFromLocalCart } from '@/utils/getItemsFromLocalCart';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import { isFetchSuccess } from '@/types/Fetch';
-
+import { isFetchSuccess, isFetchUnauthorizedError } from '@/types/Fetch';
+import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { notifyError } from '@/utils/toast';
 import Button from '../auth/ui/Button';
 import { submitCart } from './apis/addToCart';
 import { hasUserCart } from '.';
 import 'react-toastify/dist/ReactToastify.css';
+import AuthHelper from '../auth/apis/helper';
 
 function Checkout({ summary }:{ summary:ClientCart }) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
-  const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
+  const hasUser = useTypedSelector((store) => store.app.user);
   const dispatch = useTypedDispatch();
 
   /**
@@ -33,7 +34,14 @@ function Checkout({ summary }:{ summary:ClientCart }) {
     if (!cartData) return;
     const modifiedCart = getItemsFromLocalCart(cartData!);
 
-    submitCart(modifiedCart, 'api/v1/cart/')
+    let path = '';
+
+    if (cartData.mode && cartData.mode === 'flash') {
+      path = 'api/v1/cart/flash';
+    } else {
+      path = 'api/v1/cart';
+    }
+    submitCart(modifiedCart, path)
       .then((result) => {
         setLoading(false);
         if (isFetchSuccess(result)) {
@@ -43,6 +51,11 @@ function Checkout({ summary }:{ summary:ClientCart }) {
             dispatch(addToCart(result.message.mycart || copyCart!));
             navigate('/address');
           }
+        } else if (isFetchUnauthorizedError(result)) {
+          AuthHelper.clearSignedOnData(() => {
+            dispatch(removeUser());
+            navigate('/auth');
+          });
         }
       }).catch((error: unknown) => {
         setLoading(false);
@@ -51,7 +64,7 @@ function Checkout({ summary }:{ summary:ClientCart }) {
   };
 
   return (
-    isLoggedIn
+    hasUser && Object.values(hasUser).length > 1
 
       ? (
         loading ? (

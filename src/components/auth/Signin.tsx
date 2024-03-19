@@ -70,7 +70,8 @@ function Signin():React.JSX.Element {
           if (response.success && response.statusCode === StatusCodes.OK) {
             dispatch(addUser(response.message?.userDetails));
             dispatch(confirmAuthentication(true));
-            AuthHelper.authenticate(true);
+            // AuthHelper.authenticate(true);
+            AuthHelper.add(response.message?.userDetails);
           }
         });
       }}

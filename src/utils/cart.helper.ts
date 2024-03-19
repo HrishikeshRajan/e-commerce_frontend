@@ -3,10 +3,8 @@
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable security/detect-object-injection */
 import {
-  Cart,
   ClientCart,
   ClientCartItem,
-  Item,
   ORDER_STATUS,
   Options,
 } from '@/types/Cart';
@@ -16,19 +14,6 @@ import currency from 'currency.js';
 import { IFlashSale } from '@/types/Sale';
 import { v4 as uuidv4 } from 'uuid';
 import { CartPrice } from './price.utils';
-
-function sumQty(products: Record<string, Item>) {
-  return Object.values(products).reduce(
-    (totalQty, item) => totalQty + item.qty,
-    0,
-  );
-}
-function sumPrice(products: Record<string, Item>) {
-  return Object.values(products).reduce(
-    (totalPrice, item) => totalPrice + item.product.price * item.qty,
-    0,
-  );
-}
 
 /* New APIs */
 const totalQty = (products: Record<string, ClientCartItem>): number => {
@@ -52,6 +37,14 @@ const getLocalStorageItem = <T>(key: string): T | null => {
   return JSON.parse(item);
 };
 
+export type Offers = {
+  flashsale: IFlashSale
+  coupon: Record<string, unknown>
+  voucher: Record<string, unknown>
+};
+// export const hasFlashsale = (offer: Offer | undefined): offer is IFlashSale => {
+//   return offer !== undefined && 'flashsale' in offer;
+// };
 const cart = {
   // Updated
   addToCart: (product: ProductCore, options: Options) => {
@@ -64,6 +57,7 @@ const cart = {
         products: {},
         grandTotalPrice: 0,
         grandTotalQty: 0,
+        mode: 'normal',
       };
       const gstInPercentage = 12;
       const isCartExists = getLocalStorageItem<ClientCart>('cart');
@@ -112,47 +106,99 @@ const cart = {
     }
   },
   addToCartFlash: (
-    product: ProductCore,
+    product: any,
     options: Options,
-    sale: IFlashSale,
+    offers: Offers,
   ) => {
     const productId = product._id;
     try {
       if (typeof window === 'undefined') return;
-      const emptyCart: Cart = {
+      const emptyCart: ClientCart = {
+        userId: uuidv4(),
+        cartId: '',
         products: {},
         grandTotalPrice: 0,
         grandTotalQty: 0,
+        mode: 'flash',
       };
-      const userCart: Cart = JSON.parse(localStorage.getItem('cart')!) || emptyCart;
+      const gstInPercentage = 12;
+      const userCart: ClientCart = emptyCart;
 
-      if (!isEmpty(userCart) && userCart.products[productId]) {
-        const item = userCart.products[productId];
-        item.qty += 1;
-        item.totalPrice = Math.floor(item.product.price * item.qty);
-        item.options.color = options.color;
-        item.options.size = options.size;
-        userCart.products[productId] = item;
-      } else {
-        const item: Item = {
-          product,
-          qty: 1,
-          totalPrice: sale.priceAfterDiscount!, // assgin discounted price
-          options,
-        };
-        userCart.products[productId] = item;
-      }
+      const price = new CartPrice(product.price);
+      const item: ClientCartItem = {
+        qty: 1,
+        totalPrice: price.getInitialPrice(),
+        options,
+        product,
+        orderStatus: ORDER_STATUS.NOT_PROCESSED,
+        gstInPercentage,
+        taxAmount: price.getTaxAmount(),
+        totalPriceBeforeTax: price.getInitialPrice(),
+        totalPriceAfterTax: price.getMRP(),
+        offers: {
+          flashsale: offers.flashsale,
+        },
+      };
+      userCart.products[productId] = item;
 
-      const grandTotalQty = sumQty(userCart.products);
+      const grandTotalQty = totalQty(userCart.products);
       userCart.grandTotalQty = grandTotalQty;
-      const grandTotalPrice = sumPrice(userCart.products);
-      userCart.grandTotalPrice = grandTotalPrice;
-      localStorage.setItem('cart', JSON.stringify(userCart));
+      userCart.grandTotalPrice = Number(getGrandTotal(userCart.products));
+      setToLocalStorage<ClientCart>('cart', userCart);
       return userCart;
     } catch (error) {
       console.log(error);
     }
   },
+  // addToCartFlash: (
+  //   product: ProductCore,
+  //   options: Options,
+  //   sale: IFlashSale,
+  // ) => {
+  //   const productId = product._id;
+  //   try {
+  //     if (typeof window === 'undefined') return;
+  //     const emptyCart: ClientCart = {
+  //       products: {},
+  //       grandTotalPrice: 0,
+  //       grandTotalQty: 0,
+  //       userId: '',
+  //       cartId: '',
+  //     };
+  //     const userCart: ClientCart = JSON.parse(localStorage.getItem('cart')!) || emptyCart;
+
+  //     if (!isEmpty(userCart) && userCart.products[productId]) {
+  //       const item = userCart.products[productId];
+  //       item.qty = 1;
+  //       item.totalPrice = Math.floor(item.product.price * item.qty);
+  //       item.options.color = options.color;
+  //       item.options.size = options.size;
+  //       userCart.products[productId] = item;
+  //     } else {
+  //       const item: ClientCartItem = {
+  //         product,
+  //         qty: 1,
+  //         totalPrice: sale.priceAfterDiscount!, // assgin discounted price
+  //         options,
+  //         totalPriceBeforeTax: sale.priceAfterDiscount!,
+  //         totalPriceAfterTax: 0,
+  //         orderStatus: ORDER_STATUS.NOT_PROCESSED,
+  //         gstInPercentage: 0,
+  //         taxAmount: 0,
+  //       };
+  //       userCart.products[productId] = item;
+  //     }
+
+  //     const grandTotalQty = sumQty(userCart.products);
+  //     userCart.grandTotalQty = grandTotalQty;
+  //     const grandTotalPrice = sumPrice(userCart.products);
+  //     userCart.grandTotalPrice = grandTotalPrice;
+  //     localStorage.setItem('cart', JSON.stringify(userCart));
+  //     return userCart;
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // },
   updateCart: (userCart: ClientCart) => {
     try {
       if (typeof window === 'undefined') return;
@@ -243,7 +289,22 @@ const cart = {
     }
     return userCart;
   },
-
+  updateColor: (color: string, productId: string):ClientCart | null => {
+    if (typeof window === 'undefined') return null;
+    const userCart = getLocalStorageItem<ClientCart>('cart');
+    if (!userCart) return null;
+    try {
+      if (!isEmpty(userCart) && userCart.products[productId]) {
+        const item = userCart.products[productId];
+        item.options.color = color;
+        userCart.products[productId] = item;
+      }
+      setToLocalStorage<ClientCart>('cart', userCart);
+    } catch (error) {
+      console.log(error);
+    }
+    return userCart;
+  },
   clearCart: () => {
     try {
       if (typeof window === 'undefined') return;

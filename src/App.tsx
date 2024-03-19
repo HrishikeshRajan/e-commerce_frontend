@@ -2,7 +2,10 @@
 /* eslint-disable react/function-component-definition */
 import React, { Suspense, lazy } from 'react';
 import './App.css';
-import { createBrowserRouter, RouterProvider, Outlet } from 'react-router-dom';
+import {
+  createBrowserRouter, RouterProvider, Outlet, defer,
+  LoaderFunctionArgs,
+} from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import Auth from './components/auth/Auth';
@@ -44,6 +47,7 @@ import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderW
 import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
 import ConfirmEmail from './components/auth/ConfirmEmail';
 import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
+import { getSingleProduct } from './components/products/apis/getSingleProduct';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -196,6 +200,10 @@ const App = () => {
               <FlashSaleProductPage />
             </AuthenticationWrapper>
           ),
+          loader: async ({ params }:
+          LoaderFunctionArgs<{ saleId:string,
+            productId:string }>) => defer({ product: getSingleProduct(params.productId!) }),
+
         },
       ],
     },

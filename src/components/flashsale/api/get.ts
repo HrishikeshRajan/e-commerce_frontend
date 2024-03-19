@@ -21,7 +21,7 @@ export const getSale = async ():Promise<any> => {
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/api/v1/seller/flashsale`;
     const response = await fetch(url, requestOptions);
-    return await response.json();
+    return (await response.json()) as unknown;
   } catch (error) {
     throw new Error('We\'re unable fetch sale. Please try again later.');
   }

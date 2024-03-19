@@ -16,8 +16,8 @@ function ProductView() {
   return (
     <div className="w-full h-screen flex justify-center container">
       <SingleProduct product={product}>
-        <Sizes sizes={product && product.sizes} />
-        <Colors color={product && product.color} />
+        <Sizes sizes={product && product.sizes} productId={product._id} />
+        <Colors color={product && product.color} productId={product._id} />
         {product.stock < 5 && product.stock > 0 && (
           <div className="my-1">
             <span className="text-red-500 font-bold">
