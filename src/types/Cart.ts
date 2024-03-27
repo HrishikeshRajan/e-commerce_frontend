@@ -1,6 +1,7 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable @typescript-eslint/naming-convention */
+import { OfferProps } from '@/components/home/SingleProduct';
 import { ProductCore } from './Product';
-import { IFlashSale } from './Sale';
 
 export type CartClient = { [x:string]:ProductCore };
 
@@ -95,6 +96,32 @@ export interface ServerCart {
   grandTotalQty: number
 
 }
+
+export type Percentage = {
+  type:'PERCENTAGE',
+  originalAmount:number,
+  discountPercentage: number,
+  discountedPrice:number,
+  tax:number,
+  discountedPriceAftTax:number,
+  yourSavings:number
+  couponId:string
+  productId?:string
+  promoCode: string
+};
+export type Flat = {
+  type:'FLAT',
+  originalAmount:number,
+  discountFixedAmount: number,
+  discountedPrice:number,
+  tax:number
+  discountedPriceAftTax:number,
+  yourSavings:number
+  couponId:string
+  productId?:string
+  promoCode: string
+};
+
 export type ClientCartItem = {
   product: ProductCore
   qty: number
@@ -105,9 +132,8 @@ export type ClientCartItem = {
   orderStatus:ORDER_STATUS
   gstInPercentage:number
   taxAmount:number
-  offers?:{
-    flashsale:IFlashSale
-  }
+  offers:OfferProps
+  appliedOffer?:Percentage | Flat
 };
 export type ClientCart = {
   userId: string

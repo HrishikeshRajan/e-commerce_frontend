@@ -1,14 +1,22 @@
 /* eslint-disable max-len */
-import { ClientCart } from '@/types/Cart';
+
 import React from 'react';
 import { isEmpty } from 'lodash';
+import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import CartCard from './CartCard';
 import ClearCartBtn from './ClearCartBtn';
+import PromoField from '../coupons/PromoField';
 
-function CartItem({ myCart }:{ myCart:ClientCart }) {
+function CartItem() {
+  const myCart = useTypedSelector((store) => store.cart.cart);
+  if (!myCart) {
+    return <h1>Loading cart</h1>;
+  }
+
   return (
     <div className="lg:w-5/12 w-full mt-32 md:mt-40 lg:mt-32 shadow-sm  rounded ">
-      <div className="flex w-full justify-between">
+      <div className="flex  w-full justify-between">
+
         <h1 className="text-slate-900 font-bold text-lg py-3">
           Cart Items
           <span className="text-slate-600 font-light">
@@ -24,6 +32,7 @@ function CartItem({ myCart }:{ myCart:ClientCart }) {
       { myCart && myCart.products && !isEmpty(myCart.products) && Object.entries(myCart.products)
         .map(([id, product]) => <CartCard key={id} cartItem={product} cartId={myCart.cartId} />)}
 
+      <PromoField />
     </div>
   );
 }

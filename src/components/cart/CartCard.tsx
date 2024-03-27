@@ -4,30 +4,50 @@ import { ClientCartItem } from '@/types/Cart';
 import React, { useState } from 'react';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
-import { IFlashSale } from '@/types/Sale';
-import { getTax } from '@/utils/tax.util';
-import { getFinalPriceIncludeTax } from '@/utils/price.utils';
-import LineSmall from '../home/ui/LineSmall';
 import QtyBox from '../dialougeBox/QtyBox';
 import SizeBox from '../dialougeBox/SizeBox';
 import DeleteItemBtn from './DeleteItemBtn';
+import { OfferProps } from '../home/SingleProduct';
+import CouponDiscount from './CouponDiscount';
 
+export const isFlashSaleActive = (startTime:Date, endTime:Date) => {
+  const current = new Date().toString();
+  const start = new Date(startTime).toString();
+  const end = new Date(endTime).toString();
+
+  if (current > start && current < end) {
+    return true;
+  }
+  return false;
+};
+
+export function isCouponExists(offer:OfferProps | undefined) {
+  if (!offer) return false;
+  if (!offer.coupons) return false;
+  if (offer.coupons.length < 1) return false;
+  return true;
+}
+
+// Current problem, qty chaning not relfeing in discount
 function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string }) {
   const [selectSize, setSelectSize] = useState(false);
   const [selectQty, setSelectQty] = useState(false);
   const { product } = cartItem;
   return (
     <div className={`flex  border  rounded-xl p-2  my-2 shadow-sm justify-start relative ${product.stock < 1 ? 'border-red-500' : 'border-none'}`}>
-      <DeleteItemBtn productId={product._id} cartId={cartId} />
+      <DeleteItemBtn
+        productId={product._id}
+        cartId={cartId}
+      />
       <div className=" w-28 flex items-center  ">
         <img src={product.images[0].secure_url} alt="product" />
       </div>
       <div className="w-6/12 p-2">
         <h1 className="text-xs font-bold text-slate-900">{product.name}</h1>
-        <p className="text-slate-500 my-1 text-xs font-base">
+        {/* <p className="text-slate-500 my-1 text-xs font-base">
           shop:
           {product.shopId.name}
-        </p>
+        </p> */}
         <div className="text-slate-700 text-xs my-2">
           color: &nbsp;
           {cartItem.options.color}
@@ -72,7 +92,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
         </div>
         <div className="font-normal my-2">
 
-          { (cartItem && cartItem.offers) ? (
+          {/* { (cartItem && cartItem.offers) ? (
             <div>
               <div className="flex gap-3 my-2">
                 {('flashsale' in cartItem.offers) && (<span className="font-extrabold">{formattedAmount((cartItem.offers.flashsale as unknown as IFlashSale).priceAfterDiscount || 0)}</span>)}
@@ -86,40 +106,26 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
               <span className="text-slate-500 flex text-sm gap-1">
                 MRP &nbsp;
                 <del>
-                  {formattedAmount(cartItem.product.price
-                  + getTax(cartItem.offers.flashsale.priceAfterDiscount!))}
+                  { cartItem.offers && formattedAmount(cartItem.product.price
+                  + getTax(cartItem.offers.flashsale?.priceAfterDiscount || 0))}
                 </del>
                 <small> include all tax</small>
               </span>
             </div>
-          ) : formattedAmount(cartItem.product.price) }
-        </div>
-        {product.stock > 0 ? (
-          <div className="font-bold my-2">
-            <p className="text-xs text-slate-900 font-base pt-2  ">
-              <span className="font-light">GST: </span>
-              {`${cartItem.gstInPercentage}%`}
-            </p>
-            <p className="text-xs text-slate-900 font-base pt-2">
-              <span className="font-light">TAX: </span>
-              {cartItem.offers
-               && cartItem.offers.flashsale
-                ? formattedAmount(
-                  getTax(cartItem.offers.flashsale.priceAfterDiscount!)
-                 || 0,
-                )
-                : cartItem.taxAmount}
-            </p>
+          ) : */}
 
-            <LineSmall />
-            <span className="text-slate-950 font-normal pt-2">
-              SubTotal:
+          {/** Show discoutn only when discount is applied */}
+
+          {/* one coupon per transaction. So remove the array from appliesCoupons */}
+          {cartItem.appliedOffer && <CouponDiscount coupon={cartItem.appliedOffer} />}
+          {!cartItem.appliedOffer && (
+            <span className="text-slate-700 font-semibold">
+              <small className="text-slate-500 ">MRP </small>
+              {formattedAmount(cartItem.totalPrice)}
             </span>
-            <span className="text-sm pl-1">
-              {formattedAmount(getFinalPriceIncludeTax(cartItem.offers?.flashsale?.priceAfterDiscount ?? 0))}
-            </span>
-          </div>
-        ) : <div className="text-red-500 my-2 p-2 font-bold">Out of Stock</div>}
+          ) }
+        </div>
+        {product.stock > 0 ? <div className="text-green-500 text-xs  ">In Stock</div> : <div className="text-red-500 text-xs font-bold">Out of Stock</div>}
 
       </div>
     </div>

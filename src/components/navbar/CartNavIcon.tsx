@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import useQuantityObserver from '@/hooks/useQuantityObserver';
 
 function CartNavIcon({ qty } :{ qty:number }) {
-  const qtyFromRedux = useTypedSelector((store) => store.cart.cart.grandTotalQty) || 0;
+  const qtyFromRedux = useTypedSelector((store) => store.cart.cart?.grandTotalQty) || 0;
   const navigate = useNavigate();
   const shouldAnimate = useQuantityObserver(qtyFromRedux);
   const handleNavigation = () => {

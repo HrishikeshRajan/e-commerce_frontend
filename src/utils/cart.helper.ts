@@ -13,17 +13,22 @@ import { isEmpty } from 'lodash';
 import currency from 'currency.js';
 import { IFlashSale } from '@/types/Sale';
 import { v4 as uuidv4 } from 'uuid';
+import { OfferProps } from '@/components/home/SingleProduct';
 import { CartPrice } from './price.utils';
 
 /* New APIs */
-const totalQty = (products: Record<string, ClientCartItem>): number => {
+export const totalQty = (products: Record<string, ClientCartItem>): number => {
   return Object.values(products).reduce((total, item) => total + item.qty, 0);
 };
-const getGrandTotal = (products: Record<string, ClientCartItem>) => {
+export const getGrandTotal = (products: Record<string, ClientCartItem>) => {
   const productsArray = Object.values(products);
   let total = 0;
   for (const item of productsArray) {
-    total = currency(total).add(item.totalPriceAfterTax).value;
+    if (item.appliedOffer?.couponId) {
+      total = currency(total).add(item.appliedOffer.discountedPriceAftTax).value;
+    } else {
+      total = currency(total).add(item.totalPriceAfterTax).value;
+    }
   }
   return total.toFixed();
 };
@@ -47,7 +52,7 @@ export type Offers = {
 // };
 const cart = {
   // Updated
-  addToCart: (product: ProductCore, options: Options) => {
+  addToCart: (product: ProductCore, options: Options, offers:OfferProps, appliedOffer?:any) => {
     const productId = product._id;
     try {
       if (typeof window === 'undefined') return;
@@ -62,7 +67,6 @@ const cart = {
       const gstInPercentage = 12;
       const isCartExists = getLocalStorageItem<ClientCart>('cart');
       const userCart: ClientCart = isCartExists ?? emptyCart;
-
       if (
         !isEmpty(userCart)
         && !isEmpty(userCart.products)
@@ -80,6 +84,9 @@ const cart = {
         item.taxAmount = price.getTaxAmount();
         item.totalPriceBeforeTax = price.getInitialPrice();
         item.totalPriceAfterTax = price.getMRP();
+        if (appliedOffer) {
+          item.appliedOffer = appliedOffer;
+        }
         userCart.products[productId] = item;
       } else {
         const price = new CartPrice(product.price);
@@ -93,7 +100,12 @@ const cart = {
           taxAmount: price.getTaxAmount(),
           totalPriceBeforeTax: price.getInitialPrice(),
           totalPriceAfterTax: price.getMRP(),
+          offers: offers ?? {},
         };
+
+        if (appliedOffer) {
+          item.appliedOffer = appliedOffer;
+        }
         userCart.products[productId] = item;
       }
       const grandTotalQty = totalQty(userCart.products);
@@ -137,6 +149,7 @@ const cart = {
         totalPriceAfterTax: price.getMRP(),
         offers: {
           flashsale: offers.flashsale,
+          coupons: [],
         },
       };
       userCart.products[productId] = item;

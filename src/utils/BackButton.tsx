@@ -10,7 +10,7 @@ function BackButton({ children }:{ children:React.ReactNode }) {
       type="button"
       disabled={false}
       className="w-full  shadow-lg  xl:hidden sm:mt-28 font-bold mb-5 flex justify-center gap-2 p-3 items-center text-slate-500"
-      onClick={() => navigate(-1)}
+      onClick={() => navigate('/cart')}
     >
       {children}
     </Button>

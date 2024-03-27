@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react';
-import { ProductCore } from '@/types/Product';
-import { addSingleProduct } from '@/utils/reduxSlice/productSlice';
+import { addSingleProduct, SingleProduct } from '@/utils/reduxSlice/productSlice';
 import { IResponse } from '@/types/Fetch';
 import { getSingleProduct } from '@/components/home/SingleProduct/api/getSingleProduct.api';
 import { useTypedDispatch } from './user/reduxHooks';
 
 interface Success extends IResponse {
-  message: {
-    product: ProductCore;
-  }
+  message: SingleProduct
 }
 interface Error extends IResponse {
   message: {
@@ -28,7 +25,7 @@ function isPromiseSuccess(response: Response): response is Success {
 }
 
 export const useSingleProduct = (productId:string) => {
-  const [product, setProduct] = useState<ProductCore>();
+  const [response, setResponse] = useState<SingleProduct>();
   const [loading, setLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<{ error:boolean, message:string }>({ error: false, message: '' });
   const dispatch = useTypedDispatch();
@@ -38,8 +35,8 @@ export const useSingleProduct = (productId:string) => {
     getSingleProduct(productId).then((result: Response) => {
       setLoading(false);
       if (isPromiseSuccess(result)) {
-        setProduct(result.message.product);
-        dispatch(addSingleProduct(result.message.product));
+        setResponse(result.message);
+        dispatch(addSingleProduct(result.message));
       } else {
         throw new Error(result.message.error);
       }
@@ -50,5 +47,5 @@ export const useSingleProduct = (productId:string) => {
 
     return () => controller.abort();
   }, [dispatch, productId]);
-  return [product, loading, isError] as const;
+  return [response, loading, isError] as const;
 };

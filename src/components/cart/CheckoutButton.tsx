@@ -8,7 +8,7 @@ import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { getItemsFromLocalCart } from '@/utils/getItemsFromLocalCart';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import { isFetchSuccess, isFetchUnauthorizedError } from '@/types/Fetch';
+import { isFetchBadRequestError, isFetchSuccess, isFetchUnauthorizedError } from '@/types/Fetch';
 import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { notifyError } from '@/utils/toast';
 import Button from '../auth/ui/Button';
@@ -41,6 +41,7 @@ function Checkout({ summary }:{ summary:ClientCart }) {
     } else {
       path = 'api/v1/cart';
     }
+
     submitCart(modifiedCart, path)
       .then((result) => {
         setLoading(false);
@@ -56,6 +57,8 @@ function Checkout({ summary }:{ summary:ClientCart }) {
             dispatch(removeUser());
             navigate('/auth');
           });
+        } else if (isFetchBadRequestError(result)) {
+          notifyError((result.error).message);
         }
       }).catch((error: unknown) => {
         setLoading(false);

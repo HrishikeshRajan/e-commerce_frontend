@@ -4,7 +4,7 @@
 import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import cart from '@/utils/cart.helper';
-import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
+import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
 import { updateCartQty } from '../cart/apis/quantityUpdate';
@@ -20,7 +20,7 @@ interface IDialougeBox {
 }
 
 function QtyBox({
-  title, info, qty, close, productId, cartId, stock,
+  title, info, qty, close, productId, stock,
 }:IDialougeBox) {
   /**
    * This hook hides the veritical scroll
@@ -34,7 +34,7 @@ function QtyBox({
     return false;
   });
   const dispatch = useTypedDispatch();
-  const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
+  // const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
 
   const handleQty = (selectedQty:number) => {
     const updatedCart = cart.updateQty(selectedQty, productId);
@@ -42,11 +42,6 @@ function QtyBox({
       return setStockOver(true);
     }
     dispatch(addToCart(updatedCart!));
-    if (isLoggedIn && false) {
-      updateCartQty(selectedQty, productId, cartId).then(() => {
-
-      }).catch((error) => console.log(error));
-    }
     close(false);
   };
 

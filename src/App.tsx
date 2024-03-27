@@ -48,6 +48,7 @@ import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/O
 import ConfirmEmail from './components/auth/ConfirmEmail';
 import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 import { getSingleProduct } from './components/products/apis/getSingleProduct';
+import CouponWrapper from './components/coupons/CouponWrapper';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -203,6 +204,16 @@ const App = () => {
           loader: async ({ params }:
           LoaderFunctionArgs<{ saleId:string,
             productId:string }>) => defer({ product: getSingleProduct(params.productId!) }),
+
+        },
+        {
+          path: 'coupons',
+          element: (
+            <AuthenticationWrapper authentication>
+              <CouponWrapper />
+            </AuthenticationWrapper>
+          ),
+          loader: async () => fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/promo?method=coupon`,{credentials: "include"}),
 
         },
       ],

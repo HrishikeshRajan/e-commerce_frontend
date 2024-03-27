@@ -16,7 +16,7 @@ function CheckoutForm() {
   const [paid, setPaid] = useState(false);
   const [loading, setLoading] = useState(false);
   const [inputError, setInputError] = useState('');
-  const grandTotal = useTypedSelector((store) => store.cart.cart.grandTotalPrice);
+  const grandTotal = useTypedSelector((store) => store.cart.cart?.grandTotalPrice);
 
   const stripe = useStripe();
   const elements = useElements();
@@ -120,7 +120,7 @@ function CheckoutForm() {
               type="submit"
             >
               PAY &nbsp;
-              {formattedAmount(grandTotal)}
+              {formattedAmount(grandTotal!)}
             </Button>
           )
         )}

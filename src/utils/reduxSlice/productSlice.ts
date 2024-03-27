@@ -1,6 +1,7 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-param-reassign */
+import { OfferProps } from '@/components/home/SingleProduct';
 import { IProduct } from '@/components/marketplace/dashboard/pages/products/types';
 import { ProductUser } from '@/components/products/types';
 import {
@@ -15,6 +16,12 @@ import {
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { remove } from 'lodash';
 
+export type SingleProduct = {
+
+  product:ProductCore,
+  offers:OfferProps
+
+};
 interface InitialState {
   productListResponse:ProductListResponse
   confirmDelete:DeleteProductMeta
@@ -29,7 +36,7 @@ interface InitialState {
   }
   currentPage:number
   brandCount:Array<BrandCount>
-  singleProduct:ProductCore
+  singleProduct: SingleProduct
   selectedSize:string
   selectedColor:string
   sizeNotSelected: boolean
@@ -77,42 +84,50 @@ const initialState:InitialState = {
   currentPage: 1,
   brandCount: [],
   singleProduct: {
-    _id: '',
-    name: '',
-    price: 0,
-    currencyCode: CurrencyCode.currencyCode,
-    description: '',
-    image: {
-      url: '',
-      secure_url: '',
-    },
-    images: [],
-    category: '',
-    brand: '',
-    ratings: 0,
-    numberOfReviews: 0,
-    sellerId: '',
-    shopId: {
+    product: {
       _id: '',
       name: '',
-      logo: {
+      price: 0,
+      currencyCode: CurrencyCode.currencyCode,
+      description: '',
+      image: {
         url: '',
         secure_url: '',
       },
-      description: '',
-      address: '',
-      owner: '',
-      email: '',
+      images: [],
+      category: '',
+      brand: '',
+      ratings: 0,
+      numberOfReviews: 0,
+      sellerId: '',
+      shopId: {
+        _id: '',
+        name: '',
+        logo: {
+          url: '',
+          secure_url: '',
+        },
+        description: '',
+        address: '',
+        owner: '',
+        email: '',
+      },
+      reviews: [],
+      sizes: [],
+      color: '',
+      gender: '',
+      isDiscontinued: false,
+      keywords: [],
+      updatedAt: '',
+      createdAt: '',
+      stock: 0,
     },
-    reviews: [],
-    sizes: [],
-    color: '',
-    gender: '',
-    isDiscontinued: false,
-    keywords: [],
-    updatedAt: '',
-    createdAt: '',
-    stock: 0,
+    offers: {
+      coupons: [],
+      vouchers: undefined,
+      flashsale: undefined,
+      clearance: undefined,
+    },
   },
   selectedSize: '',
   selectedColor: '',
@@ -131,7 +146,7 @@ const productSlice = createSlice({
         .productListResponse
         .products = action.payload.products;
     },
-    addSingleProduct: (state, action:PayloadAction<ProductCore>) => {
+    addSingleProduct: (state, action:PayloadAction<SingleProduct>) => {
       state.singleProduct = action.payload;
     },
     removeProductFromListById: (state) => {

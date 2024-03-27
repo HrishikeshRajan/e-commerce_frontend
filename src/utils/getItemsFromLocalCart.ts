@@ -10,6 +10,7 @@ export type UploadCartData = {
   qty:number
   options:Options
   saleId?:string
+  promoCode?:string
 };
 export const getItemsFromLocalCart = (cart:ClientCart) => {
   const cartArray:UploadCartData[] = [];
@@ -26,6 +27,7 @@ export const getItemsFromLocalCart = (cart:ClientCart) => {
         color: '',
         size: '',
       },
+      promoCode: '',
     };
 
     const item = products[key];
@@ -36,6 +38,10 @@ export const getItemsFromLocalCart = (cart:ClientCart) => {
 
     if (item.offers?.flashsale) {
       modifiedItem.saleId = item.offers.flashsale._id!;
+    }
+
+    if (item.appliedOffer && item.appliedOffer.couponId) {
+      modifiedItem.promoCode = item.appliedOffer.promoCode;
     }
 
     cartArray.push(modifiedItem);

@@ -1,10 +1,26 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable security/detect-object-injection */
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { Options } from '@/types/Cart';
+import { ClientCartItem, Options } from '@/types/Cart';
 import cart from '@/utils/cart.helper';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { addPromo, addToCart } from '@/utils/reduxSlice/cartSlice';
 import { isEmpty } from 'lodash';
 import React from 'react';
 import { HiShoppingBag } from 'react-icons/hi2';
+import { Promo } from '@/types/Promo';
+
+function findAllPromos(cartItems:ClientCartItem[]) {
+  if (!cartItems.length) return null;
+  const arr = new Set<Promo>();
+  for (let i = 0; i < cartItems.length; i += 1) {
+    const cartItem = cartItems[i];
+
+    for (const cop of cartItem.offers.coupons) {
+      arr.add(cop);
+    }
+  }
+  return arr;
+}
 
 function AddToCartButton() {
   const singleProduct = useTypedSelector((store) => store.products.singleProduct);
@@ -15,13 +31,20 @@ function AddToCartButton() {
 
   const handleAddToCart = () => {
     const options:Options = {
-      color: color || singleProduct.color,
-      size: size || singleProduct.sizes[singleProduct.sizes.length - 1],
+      color: color || singleProduct.product.color,
+      size: size || singleProduct.product.sizes[singleProduct.product.sizes.length - 1],
 
     };
-    const cartData = cart.addToCart(singleProduct, options);
+    const cartData = cart.addToCart(singleProduct.product, options, singleProduct.offers);
     if (!cartData) return null;
-    dispatch(addToCart(cartData!));
+
+    dispatch(addToCart(cartData));
+    const response = findAllPromos(Object.values(cartData.products));
+    if (response) {
+      response.forEach((item) => {
+        dispatch(addPromo(item));
+      });
+    }
   };
   return (
     <button
@@ -31,7 +54,6 @@ function AddToCartButton() {
       onClick={() => handleAddToCart()}
     >
       <HiShoppingBag />
-      {' '}
       ADD TO BAG
     </button>
   );

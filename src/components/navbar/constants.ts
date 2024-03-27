@@ -15,8 +15,13 @@ export const DropdownProfile = [
     id: '3',
   },
   {
+    title: 'Coupons',
+    path: 'coupons',
+    id: '4',
+  },
+  {
     title: 'Settings',
     path: 'account',
-    id: '4',
+    id: '5',
   },
 ];
