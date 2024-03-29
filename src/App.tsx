@@ -49,6 +49,8 @@ import ConfirmEmail from './components/auth/ConfirmEmail';
 import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 import { getSingleProduct } from './components/products/apis/getSingleProduct';
 import CouponWrapper from './components/coupons/CouponWrapper';
+import OfferWrapper from './components/marketplace/dashboard/pages/offers/OfferWrapper';
+import CreateCouponForm from './components/marketplace/dashboard/pages/offers/ui/CreateCouponForm';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -213,7 +215,7 @@ const App = () => {
               <CouponWrapper />
             </AuthenticationWrapper>
           ),
-          loader: async () => fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/promo?method=coupon`,{credentials: "include"}),
+          loader: async () => fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/promo?method=coupon`, { credentials: 'include' }),
 
         },
       ],
@@ -360,6 +362,26 @@ const App = () => {
               <SalesWrapper />
             </AuthenticationWrapper>
           ),
+        },
+        {
+          path: 'offers',
+          element: (
+            <AuthenticationWrapper authentication>
+              <OfferWrapper />
+            </AuthenticationWrapper>
+          ),
+          children: [
+            {
+
+              index: true,
+              path: 'create',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <CreateCouponForm />
+                </AuthenticationWrapper>
+              ),
+            },
+          ],
         },
         {
           path: 'settings',
