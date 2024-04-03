@@ -1,7 +1,7 @@
 import React from 'react';
 
 export type Offer = {
-  children: React.JSX.Element
+  children: React.ReactNode
   offer:boolean
 };
 

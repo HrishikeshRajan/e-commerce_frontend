@@ -6,9 +6,15 @@ import {
 } from 'formik';
 import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { StatusCodes } from 'http-status-codes';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { merge } from 'lodash';
+import {
+  ErrorResponse,
+  FetchApiResponse,
+  hasRequestSucceeded,
+  isFetchTooManyRequests,
+  isFetchUnprocessableEntityError,
+} from '@/types/Fetch';
 import { signin } from './apis/signin.api';
 
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
@@ -21,9 +27,10 @@ import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
 import AuthHelper from './apis/helper';
 import ReCaptchaInfo from './ReCaptchaInfo';
-import { Status } from '.';
+import { Status } from './types';
+import { IUser } from '../user';
 
-function Signin():React.JSX.Element {
+function Signin() {
   const dispatch = useTypedDispatch();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
   const [mainError, setMainError] = useState({
@@ -33,8 +40,8 @@ function Signin():React.JSX.Element {
   return (
     <Formik
       initialValues={{
-        email: 'hrishikeshrajan3@gmail.com',
-        password: 'Best@#1234@#',
+        email: '',
+        password: '',
         recaptchaToken: '',
       }}
       validationSchema={toFormikValidationSchema(loginSchema)}
@@ -51,29 +58,24 @@ function Signin():React.JSX.Element {
           }
           merge(values, { recaptchaToken });
         }
-        signin({ ...values }).then((response: any) => {
-          actions.setSubmitting(false);
-          if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
-            actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-          }
-          if (
-            !response.success
-            && response.message.error
-            && (
-              (response.statusCode === StatusCodes.BAD_REQUEST)
-               || (response.statusCode === StatusCodes.INTERNAL_SERVER_ERROR)
-            )
-          ) {
-            setMainError({ accountError: true, message: response.message?.error });
-            return;
-          }
-          if (response.success && response.statusCode === StatusCodes.OK) {
-            dispatch(addUser(response.message?.userDetails));
-            dispatch(confirmAuthentication(true));
-            // AuthHelper.authenticate(true);
-            AuthHelper.add(response.message?.userDetails);
-          }
-        });
+        signin({ ...values })
+          .then((response:FetchApiResponse<{ user:IUser }> | ErrorResponse) => {
+            actions.setSubmitting(false);
+            if (hasRequestSucceeded(response)) {
+              dispatch(addUser(response.message.user));
+              dispatch(confirmAuthentication(true));
+              AuthHelper.add(response.message.user);
+            } else if (isFetchUnprocessableEntityError(response)) {
+              actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));
+            } else if (isFetchTooManyRequests(response)) {
+              const errorObj:Status = { success: false, message: response.error };
+              actions.setStatus(errorObj);
+            } else {
+              setMainError({ accountError: true, message: response.error });
+            }
+          }).catch((e) => {
+            setMainError({ accountError: true, message: (e as Error).message });
+          });
       }}
     >
       {(form) => (

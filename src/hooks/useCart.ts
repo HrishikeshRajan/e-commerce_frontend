@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ClientCart } from '@/types/Cart';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import { FetchApiResponse } from '@/types/Fetch';
 import { StatusCodes } from 'http-status-codes';
 import { useTypedDispatch, useTypedSelector } from './user/reduxHooks';
 
@@ -11,7 +9,7 @@ async function getCartLatestCart(signal:AbortSignal) {
       credentials: 'include',
       signal,
     });
-    const cartData:FetchApiResponse<{ cart:ClientCart }> = await response.json();
+    const cartData = await response.json();
     return cartData;
   } catch (error) {
     if (error instanceof Error) {

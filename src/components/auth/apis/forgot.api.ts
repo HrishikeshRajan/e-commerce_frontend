@@ -3,14 +3,14 @@
  * Makes a forgot password request to the server.
  *
  * @param {string} email - The field to be sent to the server.
- * @returns {Promise<any>} A promise that resolves to the response data from the server.
+ * @returns  A promise that resolves to the response data from the server.
  * @throws {Error} Throws an error if the signup request fails.
  */
 type ForgotProps = {
   email:string
   recaptchaToken:string
 };
-export const forgot = async (data:ForgotProps):Promise<any> => {
+export const forgot = async (data:ForgotProps) => {
   //  Request headers
   const headers = new Headers();
   headers.set('Accept', 'application/json');
@@ -28,6 +28,10 @@ export const forgot = async (data:ForgotProps):Promise<any> => {
     const response = await fetch(url, requestOptions);
     return await response.json();
   } catch (error) {
-    throw new Error('We\'re unable to process your password reset request. Please try again later.');
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

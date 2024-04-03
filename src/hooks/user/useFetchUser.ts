@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { getUser } from '@/components/auth/apis/getUser';
 // import { addUser, confirmAuthentication } from '@/utils/reduxSlice/appSlice';
-import { FetchResponse, hasFetchSucceeded, isFetchUnauthorizedError } from '@/types/Fetch';
+import { hasFetchSucceeded, isFetchUnauthorizedError } from '@/types/Fetch';
 import { IUser } from '@/components/user';
 import { useTypedDispatch } from './reduxHooks';
 
@@ -19,7 +19,7 @@ const useFetchUser = () => {
     const { signal } = abortController;
     if (isUserFetchEnabled) {
       getUser(signal)
-        .then((response: FetchResponse) => {
+        .then((response) => {
           if (hasFetchSucceeded(response)) {
             setIsUserFetching(false);
             setNewUser(response.message.user);

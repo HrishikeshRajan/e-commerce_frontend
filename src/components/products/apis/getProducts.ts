@@ -1,11 +1,9 @@
-import { ProductBaseUrl } from '../../../utils/uri/productUri';
-
 export async function getProductsByQuery(
   query:string,
   signal: AbortSignal,
 ) {
   try {
-    const response = await fetch(`${ProductBaseUrl(`list?${query}`)}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/list?${query}`, {
       method: 'GET',
       credentials: 'include',
       signal,

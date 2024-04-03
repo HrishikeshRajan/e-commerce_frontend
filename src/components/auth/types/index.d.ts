@@ -6,24 +6,8 @@ export interface SignupProps {
   email: string
   password: string
 }
-export type FetchErrorResponse = {
-  error: boolean
-  [x: string]: any
-};
 
-export type ProtectedRouteProps = {
-  authenticationPath: string
-  outlet: JSX.Element
-};
-
-export type IsLoggedIn = {
-  outlet: JSX.Element
-};
-
-export interface Index {
-  index: number
-}
-
+export interface SigninProps extends Omit<SignupProps, 'fullname'> {}
 /**
  * Use to type the fetch api response for formik status
  */

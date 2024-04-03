@@ -1,19 +1,25 @@
-import { IAddress } from '..';
-import { baseURL } from '../../auth/apis/constants';
+import { UploadAddress } from '../types';
 
-export const createAddress = async (address:Omit<IAddress, '_id'>) => {
+//  Request headers
+const headers = new Headers();
+headers.set('Accept', 'application/json');
+headers.set('Content-Type', 'application/json');
+
+export const createAddress = async (address:UploadAddress) => {
   try {
-    const response = await fetch(`${baseURL()}/address`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/address`;
+    const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers,
       credentials: 'include',
       body: JSON.stringify(address),
     });
     return await response.json();
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

@@ -1,19 +1,25 @@
-import { IUser } from '..';
-import { baseURL } from '../../auth/apis/constants';
+import { UploadProfile } from '../types';
 
-export const updateProfile = async (user:Pick<IUser, 'fullname' | 'email' | 'username' >) => {
+//  Request headers
+const headers = new Headers();
+headers.set('Accept', 'application/json');
+headers.set('Content-Type', 'application/json');
+
+export const updateProfile = async (user:UploadProfile) => {
   try {
-    const response = await fetch(`${baseURL()}/profile`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/profile`;
+    const response = await fetch(url, {
       method: 'PUT',
       credentials: 'include',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify(user),
     });
     return await response.json();
   } catch (error) {
-    // alert(error);
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

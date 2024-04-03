@@ -13,7 +13,7 @@ const useAuthPage = () => {
     return () => {
       dispatch(signInPage(false));
     };
-  }, []);
+  }, [dispatch]);
 };
 
 export default useAuthPage;

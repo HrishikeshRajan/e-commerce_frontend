@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import {
-  Navigate, useNavigate,
+  useNavigate,
 } from 'react-router-dom';
 
 import { isEmpty } from 'lodash';
@@ -9,34 +9,7 @@ import AuthHelper from '@/components/auth/apis/helper';
 import { useDispatch } from 'react-redux';
 import { addUser, removeUser } from '@/utils/reduxSlice/appSlice';
 import useFetchUser from '@/hooks/user/useFetchUser';
-import { IsLoggedIn, ProtectedRouteProps } from '../components/auth';
 import { useTypedSelector } from '../hooks/user/reduxHooks';
-
-/** *
- * This middleware is deprecated use AuthWrapper instead
- * @deprecated
- */
-export function ProtectedRoute({ authenticationPath, outlet }:ProtectedRouteProps) {
-  const app = useTypedSelector((store) => store.app);
-  if (app.authenticated) {
-    return outlet;
-  }
-  return (
-    <Navigate to={{ pathname: authenticationPath }} />
-  );
-}
-
-/** *
- * This middleware is deprecated use RedirectIfAuthenticated instead
- * @deprecated
- */
-export function RedirectIfUserExists({ outlet }:IsLoggedIn) {
-  const app = useTypedSelector((store) => store.app);
-  if (app.authenticated) {
-    return <Navigate to="/" />;
-  }
-  return (outlet);
-}
 
 export interface AuthWrapper {
   children:React.JSX.Element
@@ -47,7 +20,7 @@ export interface AuthWrapper {
 export const AuthenticationWrapper = ({
   children,
   authentication = true,
-}:AuthWrapper):React.JSX.Element | string => {
+}:AuthWrapper):React.ReactNode | string => {
   const userRedux = useTypedSelector((store) => store.app.user);
   const user = AuthHelper.getUserFromLocalStorage();
   const navigate = useNavigate();
@@ -93,7 +66,7 @@ export const AuthenticationWrapper = ({
 export const RedirectIfAuthenticated = ({
   children,
   authentication = true,
-}:AuthWrapper):React.JSX.Element | string => {
+}:AuthWrapper):React.ReactNode | string => {
   const user = useTypedSelector((store) => store.app.user);
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);

@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Formik, Field } from 'formik';
-import { StatusCodes } from 'http-status-codes';
 import React from 'react';
 import {
   Form, useNavigate,
@@ -11,21 +10,27 @@ import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { merge } from 'lodash';
+import {
+  ErrorResponse,
+  FetchApiResponse,
+  hasRequestSucceeded,
+  isFetchTooManyRequests,
+  isFetchUnauthorizedError,
+  isFetchUnprocessableEntityError,
+} from '@/types/Fetch';
 import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import { updatePassword } from './apis/updatePassword.api';
 import { passwordSchema } from './helpers/validationSchema.helper';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
-import { Status } from '.';
+import { Status } from './types';
 import ReCaptchaInfo from './ReCaptchaInfo';
 
 function NewPassword() {
   const navigate = useNavigate();
   const [search] = useSearchParams();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
-  // if (!search.get('token')) {
-  //   return navigate('/auth');
-  // }
+
   return (
     <div className="h-screen w-full flex justify-center items-center  bg-white">
       <Formik
@@ -49,18 +54,28 @@ function NewPassword() {
             }
             merge(values, { recaptchaToken });
           }
-          updatePassword({ ...values }).then((response) => {
-            actions.setSubmitting(false);
-            if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
-              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-            }
-            if (response.success) {
-              actions.setStatus(response.message?.message);
-            }
-            if (!response.success && response.statusCode === StatusCodes.UNAUTHORIZED) {
-              navigate('/expired');
-            }
-          });
+          updatePassword({ ...values })
+            .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
+              actions.setSubmitting(false);
+              if (hasRequestSucceeded(response)) {
+                const resObj:Status = { success: true, message: response.message.message };
+                actions.setStatus(resObj);
+              } else if (isFetchUnprocessableEntityError(response)) {
+                actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));
+              } else if (isFetchTooManyRequests(response)) {
+                const errorObj:Status = { success: false, message: response.error };
+                actions.setStatus(errorObj);
+              } else if (isFetchUnauthorizedError(response)) {
+                navigate('/expired');
+              } else {
+                const errorObj:Status = { success: false, message: response.error };
+                actions.setStatus(errorObj);
+              }
+            }).catch((error) => {
+              actions.setSubmitting(false);
+              const errorObj:Status = { success: false, message: (error as Error).message };
+              actions.setStatus(errorObj);
+            });
         }}
       >
         {(form) => (

@@ -1,34 +1,26 @@
-import { FetchErrorResponse, SignupProps } from '..';
-import { signinURL } from './constants';
+import { SigninProps } from '../types';
 
-export const errorParser = (response: any) => {
-  const errors = response.message.error;
-  const errorObj: FetchErrorResponse = {
-    error: false,
-  };
-  errors.map((err: any) => {
-    errorObj[err.path[0]] = err.message;
-  });
-  errorObj.error = true;
-  return errorObj;
-};
-
-export const signin = async (user: Omit<SignupProps, 'fullname'>) => {
+const headers = new Headers();
+headers.set('Accept', 'application/json');
+headers.set('Content-Type', 'application/json');
+export const signin = async (user: SigninProps) => {
   try {
-    const url = signinURL();
+    //  Request headers
+
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/login`;
     const response = await fetch(url, {
       method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers,
       credentials: 'include',
       body: JSON.stringify(user),
     });
     const result = await response.json();
     return result;
   } catch (error) {
-    // should remove in production
-    alert('There was an error during signin. Please try again.');
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

@@ -59,7 +59,7 @@ const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboar
 
 // All user components handled here
 const Element = () => (
-  <div className="h-screen relative ">
+  <div className=" relative ">
     <Navbar />
     {/* <Sidebar /> */}
     <Outlet />
@@ -68,7 +68,7 @@ const Element = () => (
 
 // All markplace components handled here
 const MarketPlace = () => (
-  <div className=" min-h-screen relative ">
+  <div className="min-h-screen relative ">
     <SellerNavbar />
     <Dashboard />
   </div>

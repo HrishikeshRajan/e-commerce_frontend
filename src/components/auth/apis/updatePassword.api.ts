@@ -1,20 +1,22 @@
-import { forgotURL } from './constants';
-
-export const updatePassword = async (user:any) => {
+export const updatePassword = async (user: any) => {
   try {
-    const url = `${forgotURL}`;
+    //  Request headers
+    const headers = new Headers();
+    headers.set('Accept', 'application/json');
+    headers.set('Content-Type', 'application/json');
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/forgot/reset`;
     const response = await fetch(url, {
       method: 'PUT',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
+      headers,
       body: JSON.stringify(user),
     });
     const result = await response.json();
     return result;
   } catch (error) {
-    // should remove in production
-    alert('There was an error during signin. Please try again.');
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

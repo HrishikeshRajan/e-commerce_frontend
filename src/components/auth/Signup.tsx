@@ -6,16 +6,24 @@ import {
   Field, Form, Formik,
 } from 'formik';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { StatusCodes } from 'http-status-codes';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { merge } from 'lodash';
+import {
+  ErrorResponse,
+  FetchApiResponse,
+  hasRequestSucceeded,
+  isFetchTooManyRequests,
+  isFetchUnprocessableEntityError,
+} from '@/types/Fetch';
+import { ZodError } from 'zod';
 import { signup } from './apis/signup.api';
 import { registerSchema } from './helpers/validationSchema.helper';
 import Label from './Label';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
-import { Status } from '.';
+import { Status } from './types';
 import ReCaptchaInfo from './ReCaptchaInfo';
+import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 /**
  * @description
  * Signup component allows users to register new account.
@@ -50,22 +58,27 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
         }
         actions.setStatus(null);
 
-        signup({ ...values }).then((response: any) => {
-          actions.setSubmitting(false);
-
-          if (response.success && response.statusCode === StatusCodes.CREATED) {
-            const resObj:Status = { success: true, message: response.message?.message };
-            actions.setStatus(resObj);
-            setSuccess(true);
-          } else {
-            const errorObj:Status = { success: false, message: response.message?.error };
+        signup({ ...values })
+          .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
+            actions.setSubmitting(false);
+            if (hasRequestSucceeded(response)) {
+              const resObj:Status = { success: true, message: response.message.message };
+              actions.setStatus(resObj);
+              setSuccess(true);
+            } else if (isFetchUnprocessableEntityError(response)) {
+              actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));
+            } else if (isFetchTooManyRequests(response)) {
+              const errorObj:Status = { success: false, message: response.error };
+              actions.setStatus(errorObj);
+            } else {
+              const errorObj:Status = { success: false, message: response.error };
+              actions.setStatus(errorObj);
+            }
+          }).catch((e) => {
+            actions.setSubmitting(false);
+            const errorObj:Status = { success: false, message: (e as Error).message };
             actions.setStatus(errorObj);
-          }
-        }).catch((error) => {
-          actions.setSubmitting(false);
-          const errorObj:Status = { success: false, message: (error as Error).message };
-          actions.setStatus(errorObj);
-        });
+          });
       }}
     >
       {(form) => (

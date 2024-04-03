@@ -5,18 +5,24 @@ import {
 } from 'formik';
 import React from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { StatusCodes } from 'http-status-codes';
 import { ZodError } from 'zod';
 import { useNavigate } from 'react-router-dom';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { merge } from 'lodash';
+import {
+  ErrorResponse,
+  FetchApiResponse,
+  hasRequestSucceeded,
+  isFetchTooManyRequests,
+  isFetchUnprocessableEntityError,
+} from '@/types/Fetch';
 import { emailSchema } from './helpers/validationSchema.helper';
 import { forgot } from './apis/forgot.api';
 import { transformZodToFormikErrors } from '../user/address/helpers/validationSchema';
 import useAuthPage from '../../hooks/user/useAuthPage';
 import Button from './ui/Button';
 import FormFieldError from './ui/FormFieldError';
-import { Status } from '.';
+import { Status } from './types';
 import ReCaptchaInfo from './ReCaptchaInfo';
 
 function ForgotForm() {
@@ -48,16 +54,18 @@ function ForgotForm() {
             }
             merge(values, { recaptchaToken });
           }
-          forgot(values).then((response) => {
+          forgot(values).then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
             actions.setSubmitting(false);
-            if (!response.success && response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
-              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-            }
-            if (response.success) {
-              const resObj:Status = { success: true, message: response.message?.message };
+            if (hasRequestSucceeded(response)) {
+              const resObj:Status = { success: true, message: response.message.message };
               actions.setStatus(resObj);
+            } else if (isFetchUnprocessableEntityError(response)) {
+              actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));
+            } else if (isFetchTooManyRequests(response)) {
+              const errorObj:Status = { success: false, message: response.error };
+              actions.setStatus(errorObj);
             } else {
-              const errorObj:Status = { success: false, message: response.message.error };
+              const errorObj:Status = { success: false, message: response.error };
               actions.setStatus(errorObj);
             }
           }).catch((error) => {

@@ -1,16 +1,22 @@
-import { baseURL } from '../../auth/apis/constants';
+//  Request headers
+const headers = new Headers();
+headers.set('Accept', 'application/json');
+headers.set('Content-Type', 'application/json');
 
-export const deleteAddress = async (id:string) => {
+export const deleteAddress = async (addressId:string) => {
   try {
-    const response = await fetch(`${baseURL()}/address/${id}`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/address/${addressId}`;
+    const response = await fetch(url, {
       method: 'DELETE',
-      headers: {
-        Accept: 'application/json',
-      },
       credentials: 'include',
+      headers,
     });
     return await response.json();
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throw new Error('Something went wrong. Please try again later.');
+    } else {
+      throw new Error('Something went wrong.');
+    }
   }
 };

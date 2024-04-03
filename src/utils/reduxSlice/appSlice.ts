@@ -15,7 +15,6 @@ interface IAPP {
   doSignout:boolean,
   sidebar:boolean,
   screen:Screen,
-  flashSaleLive:boolean
   flashSaleItem: ClientFlashSale | null
 }
 
@@ -27,7 +26,6 @@ const initialState:IAPP = {
   doSignout: false,
   sidebar: false,
   screen: Screen.USER,
-  flashSaleLive: false,
   flashSaleItem: null,
 };
 const appSlice = createSlice({
@@ -73,9 +71,6 @@ const appSlice = createSlice({
     setScreen: (state, action:PayloadAction<Screen>) => {
       state.screen = action.payload;
     },
-    toggleFlashSale: (state, action:PayloadAction<boolean>) => {
-      state.flashSaleLive = action.payload;
-    },
     addFlashSaleItem: (state, action:PayloadAction<ClientFlashSale>) => {
       state.flashSaleItem = action.payload;
     },
@@ -94,7 +89,6 @@ export const {
   toggleSignout,
   toggleUserSidebar,
   setScreen,
-  toggleFlashSale,
   addFlashSaleItem,
 } = appSlice.actions;
 

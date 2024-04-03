@@ -1,7 +1,7 @@
 import React from 'react';
 /**
  * Form
- * 
+ *
  */
 function Label({ value, id }:{ value:string, id:string }) {
   return (

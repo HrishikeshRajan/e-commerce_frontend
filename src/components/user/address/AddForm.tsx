@@ -31,29 +31,25 @@ function AddAddress() {
       }}
       validationSchema={toFormikValidationSchema(AddressSchema)}
       onSubmit={(values, actions) => {
-        try {
-          createAddress({ ...values }).then((response) => {
-            actions.setSubmitting(false);
-            if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
-              actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
+        createAddress({ ...values }).then((response) => {
+          actions.setSubmitting(false);
+          if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
+            actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
+          } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
               && response?.success === false) {
-              AuthHelper.clearSignedOnData();
-              dispatch(removeUser());
-              navigate('/auth');
-            }
-            if (response.statusCode === StatusCodes.OK) {
-              toast.success('Successfully saved');
-              AuthHelper
-                .pushAuthenticatedUserAddress((response.message?.user?.address.pop()), () => {
-                  const user = AuthHelper.getUserFromLocalStorage();
-                  dispatch(addUser(user));
-                });
-            }
-          });
-        } catch (error) {
-          console.error(error);
-        }
+            AuthHelper.clearSignedOnData();
+            dispatch(removeUser());
+            navigate('/auth');
+          }
+          if (response.statusCode === StatusCodes.OK) {
+            toast.success('Successfully saved');
+            AuthHelper
+              .pushAuthenticatedUserAddress((response.message?.user?.address.pop()), () => {
+                const user = AuthHelper.getUserFromLocalStorage();
+                dispatch(addUser(user));
+              });
+          }
+        });
       }}
     >
 
