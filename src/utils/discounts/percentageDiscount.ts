@@ -10,7 +10,8 @@ export function applyPercentageDiscount(cartItem:ClientCartItem, promo:Promo, gs
   if (promo.type === 'PERCENTAGE') {
     const savings = computeSavings(cartItem, promo);
     promoObject = {
-      type: 'PERCENTAGE',
+      type: promo.type,
+      method: promo.method,
       originalAmount: cartItem.totalPrice,
       discountPercentage: getDiscountPercentage(promo) ?? 0,
       discountedPrice: computeDiscountAmount(cartItem.totalPrice, savings),

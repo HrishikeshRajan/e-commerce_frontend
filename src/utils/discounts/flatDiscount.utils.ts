@@ -9,7 +9,8 @@ export function applyFlatDiscount(cartItem:ClientCartItem, promo:Promo, gstInPer
   let promoObject: Flat;
   if (promo.type === 'FLAT') {
     promoObject = {
-      type: 'FLAT',
+      type: promo.type,
+      method: promo.method,
       originalAmount: cartItem.totalPrice,
       discountFixedAmount: getFixedDiscountAmount(promo) ?? 0,
       discountedPrice: computeDiscountAmount(cartItem.totalPrice, getFixedDiscountAmount(promo) ?? 0),

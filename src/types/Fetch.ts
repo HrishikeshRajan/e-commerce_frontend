@@ -18,6 +18,10 @@ export interface SuccessResponse {
   success: boolean;
 }
 
+export interface FetchApiResponse<T> extends IResponse {
+  message:T
+}
+
 export type FetchResponse = SuccessResponse | ErrorResponse;
 /**
  *

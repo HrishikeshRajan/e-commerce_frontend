@@ -3,7 +3,7 @@ import React from 'react';
 
 function Price({ price }:{ price:number }) {
   return (
-    <p className="font-bold text-lg">{formattedAmount(price)}</p>
+    <p className="font-semibold text-base ">{formattedAmount(price)}</p>
   );
 }
 

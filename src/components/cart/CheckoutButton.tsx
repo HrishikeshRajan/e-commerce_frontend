@@ -36,8 +36,9 @@ function Checkout({ summary }:{ summary:ClientCart }) {
 
     let path = '';
 
+    // currently flash sale cart is not handled properly
     if (cartData.mode && cartData.mode === 'flash') {
-      path = 'api/v1/cart/flash';
+      path = 'api/v1/cart';
     } else {
       path = 'api/v1/cart';
     }

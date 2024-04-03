@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLanguage } from '@fortawesome/free-solid-svg-icons/faLanguage';
 import { Link, useNavigate } from 'react-router-dom';
@@ -10,7 +10,8 @@ import {
 import { isEmpty } from 'lodash';
 import { faBars, faStore } from '@fortawesome/free-solid-svg-icons';
 import { StatusCodes } from 'http-status-codes';
-import { ClientCart } from '@/types/Cart';
+import useCartSyncToLocalStorage from '@/hooks/useCartSyncToLocalStorage';
+import useFlashSyncToLocalStorage from '@/hooks/useFlashSyncToLocalStorage';
 import Logo from '../../assets/smartshop.png';
 import DefaultUser from '../../assets/defaultUser.png';
 import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
@@ -24,22 +25,10 @@ import CartNavIcon from './CartNavIcon';
 function Navbar() {
   const app = useTypedSelector((store) => store.app);
   const user = useTypedSelector((store) => store.app.user);
-  const qtyRef = useTypedSelector((store) => store.cart.cart);
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
 
   const [accountTab, setAccountTab] = useState(false);
-  const [qty, setQty] = useState(0);
-
-  useEffect(() => {
-    const initialCount = () => {
-      const cart = window.localStorage.getItem('cart') as string;
-      if (!cart) return 0;
-
-      return Number((JSON.parse(window.localStorage.getItem('cart') as string) as ClientCart).grandTotalQty);
-    };
-    setQty(initialCount());
-  }, [qtyRef]);
 
   // Clears all user data from redux and local storage
   const signOut = () => {
@@ -60,6 +49,9 @@ function Navbar() {
     navigate('/auth');
   };
   // useFetchUser();
+
+  useCartSyncToLocalStorage();
+  useFlashSyncToLocalStorage();
 
   return (
     <nav className="  fixed top-0 z-40 w-full shadow-md bg-white  p-2 ">
@@ -162,8 +154,8 @@ function Navbar() {
                 </div>
 
               </li>
-              <li className="pr-2 sm:px-3 flex items-center" key={qty} aria-label="cart">
-                <CartNavIcon qty={qty} />
+              <li className="pr-2 sm:px-3 flex items-center" aria-label="cart">
+                <CartNavIcon />
               </li>
             </ul>
           </>

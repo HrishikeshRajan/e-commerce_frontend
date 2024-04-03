@@ -8,7 +8,7 @@ import { FaHome, FaSignOutAlt } from 'react-icons/fa';
 import { CiBoxList, CiCircleList } from 'react-icons/ci';
 import { IconType } from 'react-icons';
 import { BiSolidShoppingBags, BiSolidOffer } from 'react-icons/bi';
-import { IoAddCircleOutline } from 'react-icons/io5';
+import { IoAddCircleOutline, IoFlashOutline } from 'react-icons/io5';
 
 export type SidebarItemTypes = {
   title:string
@@ -71,19 +71,35 @@ export const menu:SidebarItemTypes[] = [
     },
     children: [
       {
-        title: 'Create', id: 8.1, path: 'offers/create', icon: IoAddCircleOutline,
+        title: 'Create', id: 8, path: 'offers/create', icon: IoAddCircleOutline,
       },
       {
-        title: 'My Coupons', id: 8.2, path: 'offers/lists', icon: CiCircleList,
+        title: 'My Coupons', id: 8.2, path: 'offers/list', icon: CiCircleList,
       },
 
     ],
   },
   {
-    title: 'Back to home', id: 9, path: '/', icon: FaHome,
+    title: 'Flash Sales',
+    id: 9,
+    path: 'flashsale',
+    icon: IoFlashOutline,
+    childrenIcons: {
+      arrowRight: IoIosArrowForward,
+      arrowDown: IoIosArrowDown,
+    },
+    children: [
+      {
+        title: 'Create', id: 9, path: 'flashsale/create', icon: IoAddCircleOutline,
+      },
+
+    ],
   },
   {
-    title: 'Sign out', id: 10, path: '#', icon: FaSignOutAlt,
+    title: 'Back to home', id: 10, path: '/', icon: FaHome,
+  },
+  {
+    title: 'Sign out', id: 11, path: '#', icon: FaSignOutAlt,
   },
 
 ];

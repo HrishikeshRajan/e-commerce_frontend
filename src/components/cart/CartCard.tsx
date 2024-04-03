@@ -28,7 +28,6 @@ export function isCouponExists(offer:OfferProps | undefined) {
   return true;
 }
 
-// Current problem, qty chaning not relfeing in discount
 function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string }) {
   const [selectSize, setSelectSize] = useState(false);
   const [selectQty, setSelectQty] = useState(false);
@@ -44,10 +43,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
       </div>
       <div className="w-6/12 p-2">
         <h1 className="text-xs font-bold text-slate-900">{product.name}</h1>
-        {/* <p className="text-slate-500 my-1 text-xs font-base">
-          shop:
-          {product.shopId.name}
-        </p> */}
+
         <div className="text-slate-700 text-xs my-2">
           color: &nbsp;
           {cartItem.options.color}
@@ -92,32 +88,13 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
         </div>
         <div className="font-normal my-2">
 
-          {/* { (cartItem && cartItem.offers) ? (
-            <div>
-              <div className="flex gap-3 my-2">
-                {('flashsale' in cartItem.offers) && (<span className="font-extrabold">{formattedAmount((cartItem.offers.flashsale as unknown as IFlashSale).priceAfterDiscount || 0)}</span>)}
-
-                <span className="text-slate-500 ">
-                  {('flashsale' in cartItem.offers) ? ((cartItem.offers.flashsale) as IFlashSale).discountPercentage : 0}
-                  % OFF
-                </span>
-              </div>
-
-              <span className="text-slate-500 flex text-sm gap-1">
-                MRP &nbsp;
-                <del>
-                  { cartItem.offers && formattedAmount(cartItem.product.price
-                  + getTax(cartItem.offers.flashsale?.priceAfterDiscount || 0))}
-                </del>
-                <small> include all tax</small>
-              </span>
-            </div>
-          ) : */}
+          {/** Merge flashsale to input form */}
 
           {/** Show discoutn only when discount is applied */}
 
           {/* one coupon per transaction. So remove the array from appliesCoupons */}
-          {cartItem.appliedOffer && <CouponDiscount coupon={cartItem.appliedOffer} />}
+          {cartItem.appliedOffer && cartItem.appliedOffer.method === 'FLASHSALE' && <CouponDiscount coupon={cartItem.appliedOffer} />}
+          {cartItem.appliedOffer && cartItem.appliedOffer.method === 'COUPON' && <CouponDiscount coupon={cartItem.appliedOffer} />}
           {!cartItem.appliedOffer && (
             <span className="text-slate-700 font-semibold">
               <small className="text-slate-500 ">MRP </small>

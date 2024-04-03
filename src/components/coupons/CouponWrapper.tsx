@@ -5,14 +5,7 @@ import ExpiredCard from '@/utils/PromoDecorators/ExpiredCard';
 import Coupon from './Coupon';
 import LineSmall from '../home/ui/LineSmall';
 
-const isCouponExpired = (endTime:string) => {
-  const currentDate = new Date().toString();
-  const endDateModified = new Date(endTime).toString();
-  if (currentDate > endDateModified) {
-    return true;
-  }
-  return false;
-};
+const isCouponExpired = (coupon:Promo) => coupon.status === 'Expired';
 function CouponWrapper() {
   const data = useLoaderData() as any;
   return (
@@ -24,7 +17,7 @@ function CouponWrapper() {
         </div>
         <div className="flex gap-10">
           {data.message.tes.map((coupon:Promo) => {
-            if (isCouponExpired(coupon.endTime)) {
+            if (isCouponExpired(coupon)) {
               return <ExpiredCard key={coupon._id}><Coupon coupon={coupon} /></ExpiredCard>;
             }
             return <Coupon key={coupon._id} coupon={coupon} />;

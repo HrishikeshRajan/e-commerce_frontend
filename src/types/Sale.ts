@@ -1,21 +1,47 @@
-import { ProductCore } from './Product';
+/* eslint-disable import/no-cycle */
+import { Promo } from './Promo';
 
-export interface IFlashSale {
+export interface UploadFlashSale {
+  _id:string;
   name: string;
-  category: string;
-  banner: { secure_url: string };
+  method: 'FLASHSALE'
+  type: 'PERCENTAGE' | 'FLAT'
+  image:string
+  startTime: string;
+  endTime: string;
+  discountAmount?:number;
+  discountPercentage?: number;
+  product: string;
+  totalQuantityToSell: number;
+  currentStock: number;
+  status: 'ACTIVE' | 'PENDING' | 'EXPIRED';
+  position : 'TOP' | 'MIDDLE' | 'BOTTOM'
+}
+
+export interface ClientFlashSale {
+  name: string;
+  method: 'FLASHSALE';
+  type: 'PERCENTAGE' | 'FLAT';
+  banner: {
+    secure_url: string;
+  };
   startTime: Date;
   endTime: Date;
   discountPercentage?: number;
+  discountAmount?:number;
   priceAfterDiscount?: number;
-  product: ProductCore;
-  totalQuantityToSell?: number;
-  currentStock?: number;
+  product: string;
+  totalQuantityToSell: number;
+  currentStock: number;
   users: {
     maxUsersCount: number;
     usedBy: string[];
   };
   status: string;
   createdAt: Date;
-  _id:string
+  shop?: string;
+  position: 'TOP' | 'MIDDLE' | 'BOTTOM'
+  _id:string;
 }
+
+export type MethodParams = Promo | ClientFlashSale;

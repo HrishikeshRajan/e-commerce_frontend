@@ -51,6 +51,9 @@ import { getSingleProduct } from './components/products/apis/getSingleProduct';
 import CouponWrapper from './components/coupons/CouponWrapper';
 import OfferWrapper from './components/marketplace/dashboard/pages/offers/OfferWrapper';
 import CreateCouponForm from './components/marketplace/dashboard/pages/offers/ui/CreateCouponForm';
+import CouponList from './components/marketplace/dashboard/pages/offers/ui/CouponList';
+import FlashSaleWrapper from './components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper';
+import FlashSaleForm from './components/marketplace/dashboard/pages/flashsale/FlashSaleForm';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -111,7 +114,6 @@ const App = () => {
             </AuthenticationWrapper>
           ),
         },
-
         {
           path: 'address',
           element: (
@@ -378,6 +380,34 @@ const App = () => {
               element: (
                 <AuthenticationWrapper authentication>
                   <CreateCouponForm />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              path: 'list',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <CouponList />
+                </AuthenticationWrapper>
+              ),
+            },
+          ],
+        },
+        {
+          path: 'flashsale',
+          element: (
+            <AuthenticationWrapper authentication>
+              <FlashSaleWrapper />
+            </AuthenticationWrapper>
+          ),
+          children: [
+            {
+
+              index: true,
+              path: 'create',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <FlashSaleForm />
                 </AuthenticationWrapper>
               ),
             },

@@ -1,13 +1,14 @@
 import { getSale } from '@/components/flashsale/api/get';
 import { ErrorMessage, IResponse } from '@/types/Fetch';
-import { IFlashSale } from '@/types/Sale';
+import { ClientFlashSale } from '@/types/Sale';
 import { useEffect, useState } from 'react';
 import { addFlashSaleItem } from '@/utils/reduxSlice/appSlice';
+// import flashHelper from '@/utils/flash.helper';
 import { useTypedDispatch } from './user/reduxHooks';
 
 interface Success extends IResponse {
   message: {
-    sale: IFlashSale;
+    sale: ClientFlashSale;
   }
 }
 interface Error extends IResponse {
@@ -28,7 +29,7 @@ function isPromiseSuccess(response: Response): response is Success {
 }
 
 const useFlashSale = () => {
-  const [response, setResponse] = useState<IFlashSale>();
+  const [response, setResponse] = useState<ClientFlashSale>();
   const [loading, setLoading] = useState<boolean>(true);
   const [isError, setIsError] = useState<ErrorMessage>({
     error: false,
@@ -43,6 +44,7 @@ const useFlashSale = () => {
         if (isPromiseSuccess(result)) {
           setResponse(result.message.sale);
           dispatch(addFlashSaleItem(result.message.sale));
+          // flashHelper.storeToLocal(result.message.sale);
         } else {
           throw new Error(result.message.error);
         }
@@ -51,7 +53,7 @@ const useFlashSale = () => {
         setLoading(false);
         setIsError({ error: true, message: err.message });
       });
-  }, []);
+  }, [dispatch]);
   return [response, loading, isError] as const;
 };
 

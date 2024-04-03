@@ -22,35 +22,39 @@ function CheckoutForm() {
   const elements = useElements();
 
   useEffect(() => {
-    if (!stripe) {
-      return;
-    }
-
-    const clientSecret = new URLSearchParams(window.location.search).get(
-      'payment_intent_client_secret',
-    );
-
-    if (!clientSecret) {
-      return;
-    }
-
-    stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
-      switch (paymentIntent?.status) {
-        case 'succeeded':
-          setInputError('Payment succeeded!');
-
-          break;
-        case 'processing':
-          setInputError('Your payment is processing.');
-          break;
-        case 'requires_payment_method':
-          setInputError('Your payment was not successful, please try again.');
-          break;
-        default:
-          setInputError('Something went wrong.');
-          break;
+    try {
+      if (!stripe) {
+        return;
       }
-    });
+
+      const clientSecret = new URLSearchParams(window.location.search).get(
+        'payment_intent_client_secret',
+      );
+
+      if (!clientSecret) {
+        return;
+      }
+
+      stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
+        switch (paymentIntent?.status) {
+          case 'succeeded':
+            setInputError('Payment succeeded!');
+
+            break;
+          case 'processing':
+            setInputError('Your payment is processing.');
+            break;
+          case 'requires_payment_method':
+            setInputError('Your payment was not successful, please try again.');
+            break;
+          default:
+            setInputError('Something went wrong.');
+            break;
+        }
+      });
+    } catch (error) {
+      console.log('s',error);
+    }
   }, [stripe]);
 
   if (!stripe || !elements) {

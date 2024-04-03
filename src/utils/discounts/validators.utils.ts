@@ -2,6 +2,7 @@
 import { IUser } from '@/components/user';
 import { ClientCartItem, ClientCart } from '@/types/Cart';
 import { Promo, PromoArgsSuccess } from '@/types/Promo';
+import { MethodParams } from '@/types/Sale';
 import currency from 'currency.js';
 
 // Type predicate
@@ -74,7 +75,7 @@ export function isCouponAtUsageLimit(promo:Promo) {
 }
 
 export function isMinimumAmountPresentInCart(promo:Promo, usercart:ClientCart) {
-  return (usercart.grandTotalPrice < promo.minAmountInCart);
+  return (usercart.grandTotalPrice > promo.minAmountInCart);
 }
 
 export function computeTax(totalPriceBeforeTax:number, gstInPercentage:number) {
@@ -82,24 +83,24 @@ export function computeTax(totalPriceBeforeTax:number, gstInPercentage:number) {
   return tax.value;
 }
 
-export function computeSavings(cartItem:ClientCartItem, promo:Promo) {
+export function computeSavings(cartItem:ClientCartItem, promo:MethodParams) {
   const discountPercentage = promo.discountPercentage || 100;
   const savings = (cartItem.totalPrice / 100) * discountPercentage;
   return savings;
 }
 
 export function computeDiscountAmount(originalPrice:number, amountToDiscount:number) {
-  return currency(originalPrice).subtract(amountToDiscount).value;
+  return Math.round(currency(originalPrice).subtract(amountToDiscount).value);
 }
 
-export function getDiscountPercentage(promo:Promo) {
+export function getDiscountPercentage(promo:MethodParams) {
   if (promo.type === 'PERCENTAGE') {
     return promo.discountPercentage;
   }
   return null;
 }
 
-export function getFixedDiscountAmount(promo:Promo) {
+export function getFixedDiscountAmount(promo:MethodParams) {
   if (promo.type === 'FLAT') {
     return promo.discountAmount;
   }
@@ -107,5 +108,6 @@ export function getFixedDiscountAmount(promo:Promo) {
 }
 
 export function isPromoApplied(cartItem:ClientCartItem) {
-  return cartItem.appliedOffer !== undefined;
+  return cartItem.appliedOffer !== undefined
+  && cartItem.appliedOffer.productId === cartItem.product._id;
 }

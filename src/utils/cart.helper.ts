@@ -11,10 +11,11 @@ import {
 import { ProductCore } from '@/types/Product';
 import { isEmpty } from 'lodash';
 import currency from 'currency.js';
-import { IFlashSale } from '@/types/Sale';
+import { ClientFlashSale, MethodParams } from '@/types/Sale';
 import { v4 as uuidv4 } from 'uuid';
 import { OfferProps } from '@/components/home/SingleProduct';
 import { CartPrice } from './price.utils';
+import { calculatePercentageDiscount } from './discounts/calculatePercentageDiscount';
 
 /* New APIs */
 export const totalQty = (products: Record<string, ClientCartItem>): number => {
@@ -43,9 +44,9 @@ const getLocalStorageItem = <T>(key: string): T | null => {
 };
 
 export type Offers = {
-  flashsale: IFlashSale
-  coupon: Record<string, unknown>
-  voucher: Record<string, unknown>
+  flashsale: ClientFlashSale
+  coupon?: Record<string, unknown>
+  voucher?: Record<string, unknown>
 };
 // export const hasFlashsale = (offer: Offer | undefined): offer is IFlashSale => {
 //   return offer !== undefined && 'flashsale' in offer;
@@ -111,7 +112,7 @@ const cart = {
       const grandTotalQty = totalQty(userCart.products);
       userCart.grandTotalQty = grandTotalQty;
       userCart.grandTotalPrice = Number(getGrandTotal(userCart.products));
-      setToLocalStorage<ClientCart>('cart', userCart);
+      // setToLocalStorage<ClientCart>('cart', userCart);
       return userCart;
     } catch (error) {
       console.log(error);
@@ -120,7 +121,7 @@ const cart = {
   addToCartFlash: (
     product: any,
     options: Options,
-    offers: Offers,
+    offer: MethodParams,
   ) => {
     const productId = product._id;
     try {
@@ -148,16 +149,31 @@ const cart = {
         totalPriceBeforeTax: price.getInitialPrice(),
         totalPriceAfterTax: price.getMRP(),
         offers: {
-          flashsale: offers.flashsale,
           coupons: [],
+          vouchers: undefined,
+          flashsale: undefined,
+          clearance: undefined,
         },
       };
+      // console.log('offers',offers)
+      if (offer && offer.method === 'FLASHSALE' && offer.type === 'PERCENTAGE') {
+        item.offers.flashsale = offer;
+        const result = calculatePercentageDiscount(
+          item,
+          offer,
+          gstInPercentage,
+        );
+        if (!result) {
+          throw new Error('Flash sale is not applied');
+        }
+        item.appliedOffer = result;
+      }
       userCart.products[productId] = item;
 
       const grandTotalQty = totalQty(userCart.products);
       userCart.grandTotalQty = grandTotalQty;
       userCart.grandTotalPrice = Number(getGrandTotal(userCart.products));
-      setToLocalStorage<ClientCart>('cart', userCart);
+      // setToLocalStorage<ClientCart>('cart', userCart);
       return userCart;
     } catch (error) {
       console.log(error);
@@ -212,7 +228,7 @@ const cart = {
   //     console.log(error);
   //   }
   // },
-  updateCart: (userCart: ClientCart) => {
+  updateCart: (userCart: ClientCart | null) => {
     try {
       if (typeof window === 'undefined') return;
       if (!userCart || typeof userCart === 'undefined') return;

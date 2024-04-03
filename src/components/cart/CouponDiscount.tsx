@@ -9,7 +9,7 @@ function CouponDiscount({ coupon }:{ coupon: Percentage | Flat }) {
   return (
     <div className="flex flex-col my-2">
 
-      <span className="bg-red-700 w-fit px-1 text-xs my-1  text-white font-semibold">{isCoupon(coupon) ? `{${coupon.discountPercentage}%` : `${formattedAmount(coupon.discountFixedAmount)} OFF`}</span>
+      <span className="bg-red-700 w-fit px-1 text-xs my-1  text-white font-semibold">{isCoupon(coupon) ? `${coupon.discountPercentage}%` : `${formattedAmount(coupon.discountFixedAmount)} OFF`}</span>
 
       <div className="flex w-full items-center my-1  gap-4 text-sm">
         {/* Offer price */}

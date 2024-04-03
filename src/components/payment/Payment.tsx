@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { Elements } from '@stripe/react-stripe-js';
 import { StripeElementsOptions, loadStripe } from '@stripe/stripe-js';
-import cart from '@/utils/cart.helper';
 import { useNavigate } from 'react-router-dom';
 import orderHelper from '@/utils/order.helper';
 import {
@@ -11,6 +10,8 @@ import {
 import { notifyError } from '@/utils/toast';
 import BackButton from '@/utils/BackButton';
 import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
+import useFetchCart from '@/hooks/useCart';
+import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import CheckoutPage from './CheckoutPage';
 import Desclaimer from './Desclaimer';
 import { hasPaymentProperties } from '.';
@@ -20,32 +21,37 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PK);
 function Payment() {
   const [clientSecret, setClientSecret] = useState('');
 
-  const cartId = cart.get()?.cartId;
   const orderId = orderHelper.getOrderId();
   const navigate = useNavigate();
+  const cart = useTypedSelector((store) => store.cart.cart);
+
+  useFetchCart(false);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/orders/create`, {
-      method: 'POST',
-      body: JSON.stringify({
-        paymentMethodTypes: 'card', currency: 'inr', cartId, orderId,
-      }),
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }).then((result) => result.json())
-      .then((result:FetchResponse) => {
-        if (isFetchSuccess(result)) {
-          if (hasPaymentProperties(result.message)) {
-            setClientSecret(result.message.clientSecret);
+    if (cart && cart.cartId) {
+      const { cartId } = cart;
+      fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/orders/create`, {
+        method: 'POST',
+        body: JSON.stringify({
+          paymentMethodTypes: 'card', currency: 'inr', cartId, orderId,
+        }),
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      }).then((result) => result.json())
+        .then((result:FetchResponse) => {
+          if (isFetchSuccess(result)) {
+            if (hasPaymentProperties(result.message)) {
+              setClientSecret(result.message.clientSecret);
+            }
+          } else if (isFetchNotFoundError(result)) {
+            return navigate('/cart');
+          } else {
+            notifyError(result.error);
           }
-        } else if (isFetchNotFoundError(result)) {
-          return navigate('/cart');
-        } else {
-          notifyError(result.error);
-        }
-      })
-      .catch((error:unknown) => notifyError((error as Error).message));
-  }, [cartId, navigate, orderId]);
+        })
+        .catch((err) => notifyError((err as Error).message));
+    }
+  }, [cart, navigate, orderId]);
 
   const appearance:any = {
     theme: 'stripe',
@@ -55,13 +61,7 @@ function Payment() {
     appearance,
   };
 
-  const userCart = cart.get();
-
-  useEffect(() => {
-    if (!userCart) {
-      return navigate('/');
-    }
-  }, [navigate, userCart]);
+  if (!cart) return <p>Loading</p>;
 
   return (
     <>

@@ -11,11 +11,11 @@ import AuthHelper from '../auth/apis/helper';
 import Button from '../auth/ui/Button';
 
 function ClearCartBtn({ cartId }:{ cartId:string }) {
-  const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
   const dispatch = useTypedDispatch();
   const navigate = useNavigate();
+  const user = useTypedSelector((store) => store.app.user);
   const handleClearCart = () => {
-    if (isLoggedIn) {
+    if (cartId && (user && Object.values(user).length > 0)) {
       deleteCart(cartId).then((result) => {
         if (result.status === 200) {
           cart.clearCart();

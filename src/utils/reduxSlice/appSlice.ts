@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { IFlashSale } from '@/types/Sale';
+import { ClientFlashSale } from '@/types/Sale';
 import { IUser } from '../../components/user';
 
 enum Screen {
@@ -16,7 +16,7 @@ interface IAPP {
   sidebar:boolean,
   screen:Screen,
   flashSaleLive:boolean
-  flashSaleItem: IFlashSale | null
+  flashSaleItem: ClientFlashSale | null
 }
 
 const initialState:IAPP = {
@@ -76,7 +76,7 @@ const appSlice = createSlice({
     toggleFlashSale: (state, action:PayloadAction<boolean>) => {
       state.flashSaleLive = action.payload;
     },
-    addFlashSaleItem: (state, action:PayloadAction<IFlashSale>) => {
+    addFlashSaleItem: (state, action:PayloadAction<ClientFlashSale>) => {
       state.flashSaleItem = action.payload;
     },
 

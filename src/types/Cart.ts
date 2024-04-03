@@ -3,6 +3,9 @@
 import { OfferProps } from '@/components/home/SingleProduct';
 import { ProductCore } from './Product';
 
+/**
+ * @deprecated
+ */
 export type CartClient = { [x:string]:ProductCore };
 
 export type ProductWithOptions = ProductCore & Options;
@@ -96,9 +99,10 @@ export interface ServerCart {
   grandTotalQty: number
 
 }
-
+export type Method = 'COUPON' | 'VOUCHER' | 'FLASHSALE' | 'CLEARENCE_SALE';
 export type Percentage = {
   type:'PERCENTAGE',
+  method: Method,
   originalAmount:number,
   discountPercentage: number,
   discountedPrice:number,
@@ -107,10 +111,11 @@ export type Percentage = {
   yourSavings:number
   couponId:string
   productId?:string
-  promoCode: string
+  promoCode?: string
 };
 export type Flat = {
   type:'FLAT',
+  method:Method,
   originalAmount:number,
   discountFixedAmount: number,
   discountedPrice:number,
@@ -119,7 +124,7 @@ export type Flat = {
   yourSavings:number
   couponId:string
   productId?:string
-  promoCode: string
+  promoCode?: string
 };
 
 export type ClientCartItem = {

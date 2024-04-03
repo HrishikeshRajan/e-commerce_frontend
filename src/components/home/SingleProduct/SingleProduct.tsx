@@ -5,6 +5,8 @@ import React, { ReactNode } from 'react';
 
 import { ProductCore } from '@/types/Product';
 import { Offers } from '@/utils/cart.helper';
+import { formattedAmount } from '@/utils/convertToRupees';
+import { getFinalAmount } from '@/utils/discounts/offer.helper';
 import Line from '../ui/Line';
 import Brand from './ui/Brand';
 import ProductName from './ui/ProductName';
@@ -38,21 +40,20 @@ function SingleProduct({ product, offers, children }:SingleProductProps) {
         <LineSmall />
 
         <div className="flex gap-2">
-          <Price price={(offers
-            && offers.flashsale
-            && Number(offers.flashsale.priceAfterDiscount)) || product.price}
-          />
+
+          {(!offers || (offers && !offers.flashsale)) && (
+            <Price price={product.price} />
+          )}
           {offers && offers.flashsale && (
-            <>
-              <del className="text-slate-400 text-sm ">
+            <span className="text-slate-600 text-base flex gap-2 items-center font-bold">
+              {offers && offers.flashsale
+               && formattedAmount(getFinalAmount(product, offers.flashsale, 12))}
+              <del className="text-slate-400 text-xs ">
                 <Price price={product.price} />
               </del>
-              <span className="text-slate-400 text-xl font-bold">
-                {offers && offers.flashsale && offers.flashsale.discountPercentage}
-                {' '}
-                OFF
-              </span>
-            </>
+              {offers.flashsale.discountPercentage}
+              % OFF
+            </span>
           )}
 
         </div>

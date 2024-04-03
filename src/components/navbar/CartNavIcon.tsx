@@ -6,8 +6,9 @@ import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { useNavigate } from 'react-router-dom';
 import useQuantityObserver from '@/hooks/useQuantityObserver';
 
-function CartNavIcon({ qty } :{ qty:number }) {
+function CartNavIcon() {
   const qtyFromRedux = useTypedSelector((store) => store.cart.cart?.grandTotalQty) || 0;
+  console.log(qtyFromRedux);
   const navigate = useNavigate();
   const shouldAnimate = useQuantityObserver(qtyFromRedux);
   const handleNavigation = () => {
@@ -21,7 +22,7 @@ function CartNavIcon({ qty } :{ qty:number }) {
         </span>
       </IconContext.Provider>
       <span className="sr-only">Notifications</span>
-      {(qtyFromRedux || qty) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qtyFromRedux || qty}</small></div>}
+      {(qtyFromRedux) && <div className={`absolute inline-flex items-center justify-center w-5 h-5 p-2  text-xs font-bold text-whit e bg-red-500 border-2 border-white rounded-full -top-2 -end-2  ${shouldAnimate ? 'animate-bounce' : ''}`}><small>{qtyFromRedux}</small></div>}
     </button>
   );
 }

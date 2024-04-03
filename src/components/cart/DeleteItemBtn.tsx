@@ -16,12 +16,12 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function DeleteItemBtn({ productId, cartId }:{ productId:string, cartId:string }) {
   const dispatch = useTypedDispatch();
-  const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
+  const user = useTypedSelector((store) => store.app.user);
   const navigate = useNavigate();
   const notify = () => toast('Deleted successfully');
 
   const deleteCartItem = () => {
-    if (isLoggedIn && cartId && false) {
+    if (cartId && (user && Object.values(user).length > 0)) {
       deleteCartItemByIds(productId, cartId)
         .then((result) => {
           if (result.status === StatusCodes.OK) {

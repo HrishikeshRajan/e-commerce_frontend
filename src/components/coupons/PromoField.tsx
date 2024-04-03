@@ -12,7 +12,6 @@ import React, { useEffect, useState } from 'react';
 import {
   updateAppliedOffer,
 } from '@/utils/reduxSlice/cartSlice';
-import { formattedAmount } from '@/utils/convertToRupees';
 import {
   findCartItemsByCode,
   isPromoCodeFound,
@@ -103,15 +102,11 @@ function PromoField() {
           throw new Error('This coupon blocked');
         }
 
-        if (isMinimumAmountPresentInCart(promo, myCart)) {
-          throw new Error(`Unable to apply. Cart Should contain minimum ${formattedAmount(promo.minAmountInCart)}`);
-        }
-
         // Now do the calculations
         const gstInPercentage = 12;
 
         // Remove promo type and add  flat or percenta union type
-        if (promo.type === 'FLAT') {
+        if (promo.type === 'FLAT' && isMinimumAmountPresentInCart(promo, myCart)) {
           const promoObject = applyFlatDiscount(cartItem, promo, gstInPercentage);
           if (!isPromoApplied(cartItem)) {
             if (promoObject) {
@@ -120,7 +115,7 @@ function PromoField() {
           }
         }
 
-        if (promo.type === 'PERCENTAGE') {
+        if (promo.type === 'PERCENTAGE' && isMinimumAmountPresentInCart(promo, myCart)) {
           const promoObject = applyPercentageDiscount(cartItem, promo, gstInPercentage);
           if (!isPromoApplied(cartItem)) {
             if (promoObject) {

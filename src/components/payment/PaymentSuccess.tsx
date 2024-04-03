@@ -20,7 +20,7 @@ function PaymentSuccess() {
     dispatch(clearCart());
     dispatch(clearOrderId());
     dispatch(clearAddressId());
-  }, []);
+  }, [dispatch]);
 
   const handleClick = () => {
     navigate('/');
