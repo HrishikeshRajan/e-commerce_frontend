@@ -1,17 +1,13 @@
-/* eslint-disable react/jsx-props-no-spreading */
+import Sidebar from '@/components/home/sidebar/Sidebar';
 import React from 'react';
+import Pagination from '../Pagination';
 
-import Products from './Products';
-import Sidebar from '../home/sidebar/Sidebar';
-import Pagination from './Pagination';
-
-function ProductCardsWrapper() {
+function ProductCardsWrapper({ children }:{ children:React.ReactNode }) {
   return (
-
     <div className="flex flex-col">
       <div className="w-full flex lg:mt-36">
         <Sidebar />
-        <Products />
+        {children}
       </div>
       <Pagination />
     </div>

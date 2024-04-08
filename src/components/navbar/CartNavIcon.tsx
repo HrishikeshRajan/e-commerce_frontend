@@ -8,7 +8,6 @@ import useQuantityObserver from '@/hooks/useQuantityObserver';
 
 function CartNavIcon() {
   const qtyFromRedux = useTypedSelector((store) => store.cart.cart?.grandTotalQty) || 0;
-  console.log(qtyFromRedux);
   const navigate = useNavigate();
   const shouldAnimate = useQuantityObserver(qtyFromRedux);
   const handleNavigation = () => {
@@ -16,7 +15,7 @@ function CartNavIcon() {
   };
   return (
     <button onClick={handleNavigation} type="button" className="relative inline-flex items-center p-1 text-sm font-medium text-center text-white">
-      <IconContext.Provider value={{ className: 'text-slate-700', size: '25' }}>
+      <IconContext.Provider value={{ className: 'text-slate-700', size: '20' }}>
         <span>
           <GiShoppingBag />
         </span>

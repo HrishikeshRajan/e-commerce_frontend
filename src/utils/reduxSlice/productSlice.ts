@@ -41,6 +41,7 @@ interface InitialState {
   selectedColor:string
   sizeNotSelected: boolean
   colorNotSelected:boolean
+  isSearchSuggestionOpen:boolean
 }
 
 const initialState:InitialState = {
@@ -133,6 +134,7 @@ const initialState:InitialState = {
   selectedColor: '',
   sizeNotSelected: false,
   colorNotSelected: false,
+  isSearchSuggestionOpen: false
 };
 
 const productSlice = createSlice({
@@ -172,6 +174,9 @@ const productSlice = createSlice({
     addProducts: (state, action:PayloadAction<ProductUser[]>) => {
       state.userProducts = [...action.payload];
     },
+    clearProducts: (state) => {
+      state.userProducts = [];
+    },
     addProductsMeta: (state, action:PayloadAction<any>) => {
       state.userProductsMeta = action.payload;
     },
@@ -193,6 +198,9 @@ const productSlice = createSlice({
     addColorNotSelectedError: (state, action:PayloadAction<boolean>) => {
       state.colorNotSelected = action.payload;
     },
+    toggleSearchSuggstionList: (state, action:PayloadAction<boolean>) => {
+      state.isSearchSuggestionOpen = action.payload;
+    },
   },
 });
 
@@ -213,6 +221,8 @@ export const {
   addProductSize,
   addColorNotSelectedError,
   addSizeNotSelectedError,
+  clearProducts,
+  toggleSearchSuggstionList,
 
 } = productSlice.actions;
 export default productSlice.reducer;

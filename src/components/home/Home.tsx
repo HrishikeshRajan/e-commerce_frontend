@@ -9,6 +9,7 @@ import Coupon from '../coupons/Coupon';
 import Line from './ui/Line';
 import Card from '../products/Card';
 import { ProductUser } from '../products/types';
+import ProductCardsWrapper from '../products/v2/ProductWrapper';
 
 async function getAllpromos() {
   try {
@@ -30,6 +31,7 @@ async function getPurchasedProducts() {
 }
 function Home() {
   const cart = useTypedSelector((store) => store.cart.cart);
+  const searchProductsList = useTypedSelector((store) => store.products.userProducts);
   const num = (cart && Object.values(cart).length < 1) || false;
   const [promos, setPromos] = useState<Promo[]>();
   const [products, setProducts] = useState<ProductUser[]>();
@@ -37,7 +39,6 @@ function Home() {
 
   useEffect(() => {
     getAllpromos().then((result) => {
-      console.log('all prodmos', result);
       setPromos(result.message.promos);
     }).catch((err) => {
       console.log(err);
@@ -46,7 +47,6 @@ function Home() {
 
   useEffect(() => {
     getPurchasedProducts().then((result) => {
-      console.log('all orders', result);
       // setPromos(result.message.promos);
       setProducts(result.message.orders);
     }).catch((err) => {
@@ -54,27 +54,35 @@ function Home() {
     });
   }, []);
   return (
-    <>
-      <FlashSaleBanner />
-      <Categories />
-      <div className="container">
-        <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">OFFERS</h2>
-        <Line />
-        <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
-          {promos?.map((coupon:Promo) => <Coupon key={coupon._id} coupon={coupon} />)}
-        </div>
-      </div>
-      {/** Coupons ads */}
-      {/** Purchased products */}
-      <div className="container">
-        <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">PREVIOUS PURCHASES</h2>
-        <Line />
-        <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
-          {products?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
-        </div>
-      </div>
+    searchProductsList && searchProductsList.length ? (
 
-    </>
+      <ProductCardsWrapper>
+        {
+          searchProductsList.map((item) => <Card key={item._id} {...item} />)
+
+        }
+      </ProductCardsWrapper>
+    ) : (
+      <>
+        <FlashSaleBanner />
+        <Categories />
+        <div className="container">
+          <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">OFFERS</h2>
+          <Line />
+          <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
+            {promos?.map((coupon: Promo) => <Coupon key={coupon._id} coupon={coupon} />)}
+          </div>
+        </div>
+        <div className="container">
+          <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">PREVIOUS PURCHASES</h2>
+          <Line />
+          <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
+            {products?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
+          </div>
+        </div>
+      </>
+    )
+
   );
 }
 

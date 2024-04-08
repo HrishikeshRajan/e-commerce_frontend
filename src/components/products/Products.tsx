@@ -20,14 +20,14 @@ function Products() {
   if (loading) return <ProductsShimmer />;
   return (
 
-    <div className="w-full flex  bg-red-20 ">
+    <div className="w-full flex bg-red-20 ">
       <div className="w-full">
         <SortWrapper />
-        {products && (
+        {products && products.length ? (
           <div className="w-full flex flex-wrap md:gap-2 lg:p-2 justify-center">
             {products.map((item) => <Card key={item._id} {...item} />)}
           </div>
-        )}
+        ) : <ProductNotFoundError /> }
         <div className="w-full flex justify-center">
           {loading && <Loading />}
           {!hasMore && <ProductNotFoundError />}

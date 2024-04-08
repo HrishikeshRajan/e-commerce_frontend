@@ -22,8 +22,6 @@ const useProductsQuery = (
     const abortController = new AbortController();
     const { signal } = abortController;
     setLoading(true);
-    setError(false);
-
     getProductsByQuery(searchParams.toString(), signal)
       .then((response) => {
         if (response && response.success) {

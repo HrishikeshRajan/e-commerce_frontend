@@ -3,7 +3,7 @@ export async function getProductsByQuery(
   signal: AbortSignal,
 ) {
   try {
-    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/list?${query}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/product/list?${query}`, {
       method: 'GET',
       credentials: 'include',
       signal,

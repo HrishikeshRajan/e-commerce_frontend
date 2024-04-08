@@ -18,3 +18,51 @@
   -webkit-text-size-adjust: 100%;
 }
 
+.menu {
+  width: 100%;
+}
+
+.menu-item {
+  width: 100px;
+  display: block;
+  font-size: 14px;
+  border-bottom: 1px solid #fff;
+  transition: background-color .5s;
+}
+
+.menu-item:hover {
+  background-color: rgba(22, 22, 22, .5);
+}
+.menu-item-title {
+  padding: .5rem;
+  width: 100%;
+  right: 0;
+  background-color: white;
+}
+.menu-item-title span {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-title span i {
+  display: inline-block;
+  width: 1.5em;
+}
+
+.menu-item-title .toggle-button {
+  cursor: pointer;
+}
+.menu-item-title:hover{
+  background-color: rgba(22, 22, 22);
+  border-radius: .75rem;
+  color: #fff;
+}
+.menu-content{
+  height: 0;
+  overflow: hidden;
+  width: 240px;
+}
+
+.menu-item.open .menu-content{
+  height: auto;
+}

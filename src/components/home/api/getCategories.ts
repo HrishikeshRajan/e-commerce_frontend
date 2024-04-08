@@ -24,9 +24,10 @@ export const getCategories = async (signal:AbortSignal):Promise<any> => {
     const response = await fetch(url, requestOptions);
     return await response.json();
   } catch (error) {
-    if ((error as Error).name === 'AbortError') {
-      return;
+    if (error instanceof Error) {
+      if (error.name !== 'AbortError') {
+        throw new Error('Something went wrong. Please try again later.');
+      }
     }
-    throw new Error('We\'re unable to fetch the categories. Please try again later.');
   }
 };

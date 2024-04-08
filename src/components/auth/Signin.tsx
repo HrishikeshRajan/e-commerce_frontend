@@ -15,6 +15,7 @@ import {
   isFetchTooManyRequests,
   isFetchUnprocessableEntityError,
 } from '@/types/Fetch';
+import { useNavigate } from 'react-router-dom';
 import { signin } from './apis/signin.api';
 
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
@@ -33,6 +34,7 @@ import { IUser } from '../user';
 function Signin() {
   const dispatch = useTypedDispatch();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
+  const navigate = useNavigate();
   const [mainError, setMainError] = useState({
     accountError: false,
     message: '',
@@ -59,12 +61,13 @@ function Signin() {
           merge(values, { recaptchaToken });
         }
         signin({ ...values })
-          .then((response:FetchApiResponse<{ user:IUser }> | ErrorResponse) => {
+          .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
             actions.setSubmitting(false);
             if (hasRequestSucceeded(response)) {
-              dispatch(addUser(response.message.user));
+              dispatch(addUser(response.message.userDetails));
               dispatch(confirmAuthentication(true));
-              AuthHelper.add(response.message.user);
+              AuthHelper.add(response.message.userDetails);
+              navigate('/');
             } else if (isFetchUnprocessableEntityError(response)) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));
             } else if (isFetchTooManyRequests(response)) {
