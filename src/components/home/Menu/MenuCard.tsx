@@ -5,13 +5,13 @@ import { Link } from 'react-router-dom';
 function MenuCard({ name, secure_url, offer = '' }:{ name:string, secure_url:string, offer?:string }) {
   return (
 
-    <div className="relative w-44 h-fit transition delay-50 ease-linear hover:scale-105 active:scale-105   border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="relative w-28  lg:w-40 transition delay-50 ease-linear hover:scale-105 active:scale-105   border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
       <Link to={{
         pathname: '/products',
         search: `?category=${name}`,
       }}
       >
-        <img className="" src={secure_url} alt="" />
+        <img className="w-full h-full " src={secure_url} alt="" />
 
         <div className="bg-black text-center w-full absolute bottom-0 bg-opacity-80 ">
           <p className="   mb-3 text-white font-extrabold">{name}</p>

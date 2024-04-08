@@ -38,7 +38,7 @@ function Navbar() {
     dispatch(clearProducts());
   };
   return (
-    <nav className=" flex items-center  fixed top-0 z-40 w-full shadow-md bg-white  p-2  ">
+    <nav className=" flex items-center h-20 fixed top-0 z-40 w-full shadow-md bg-white  p-2  ">
 
       {!app.authPage && <Logo />}
       {!isSearchEnable && (

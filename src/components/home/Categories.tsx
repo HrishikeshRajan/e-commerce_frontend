@@ -15,12 +15,12 @@ function Categories() {
   }
 
   return (
-    <div className="">
+    <div className="top-full mt-20">
       {!error
       && (
         <>
-          <h2 className="text-3xl  text-slate-700  md:mt-52 lg:mt-44 p-5 lg:ms-20 font-normal">SHOP BY CATEGORY</h2>
-          <div className="w-full flex flex-wrap gap-2 p-2 justify-center">
+          <h2 className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center  lg:mt-28 p-10  font-bold">SHOP BY CATEGORY</h2>
+          <div className="w-full  flex flex-wrap   gap-2 p-2 justify-center">
             {categories?.map((cate) => (
               <MenuCard
                 name={cate.name}

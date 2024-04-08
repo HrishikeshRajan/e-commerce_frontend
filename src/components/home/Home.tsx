@@ -10,6 +10,7 @@ import Line from './ui/Line';
 import Card from '../products/Card';
 import { ProductUser } from '../products/types';
 import ProductCardsWrapper from '../products/v2/ProductWrapper';
+import Heading from './ui/Heading';
 
 async function getAllpromos() {
   try {
@@ -63,24 +64,29 @@ function Home() {
         }
       </ProductCardsWrapper>
     ) : (
-      <>
+      <div>
         <FlashSaleBanner />
         <Categories />
         <div className="container">
-          <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">OFFERS</h2>
+          <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
+            LATEST OFFERS
+          </Heading>
           <Line />
           <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
             {promos?.map((coupon: Promo) => <Coupon key={coupon._id} coupon={coupon} />)}
           </div>
         </div>
         <div className="container">
-          <h2 className="text-4xl text-orange-500 font-bold mt-5 text-center">PREVIOUS PURCHASES</h2>
+          <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
+            PREVIOUS PURCHASES
+          </Heading>
+
           <Line />
           <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
             {products?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
           </div>
         </div>
-      </>
+      </div>
     )
 
   );
