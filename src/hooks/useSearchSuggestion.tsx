@@ -1,5 +1,6 @@
 import { toggleSearchSuggstionList } from '@/utils/reduxSlice/productSlice';
 import { useCallback, useState } from 'react';
+import { ErrorResponse, FetchApiResponse, hasFetchSucceeded } from '@/types/Fetch';
 import { useTypedDispatch } from './user/reduxHooks';
 
 const fetchSearchSuggestions = async (word:string) => {
@@ -24,19 +25,20 @@ const useSearchSuggestion = (
   const getSuggestions = useCallback(() => {
     if (word) {
       setSuggestionLoading(true);
-      fetchSearchSuggestions(word).then((result) => {
-        setSuggestionLoading(false);
-        if (result.statusCode === 200) {
-          setSuggestions(result.message.suggestions);
+      fetchSearchSuggestions(word)
+        .then((result :FetchApiResponse<{ suggestions:Array<Suggestion> }> | ErrorResponse) => {
+          setSuggestionLoading(false);
+          if (hasFetchSucceeded(result)) {
+            setSuggestions(result.message.suggestions);
+            dispatch(toggleSearchSuggstionList(true));
+          } else {
+            dispatch(toggleSearchSuggstionList(false));
+          }
+        }).catch((e) => {
+          setSuggestionLoading(false);
           dispatch(toggleSearchSuggstionList(true));
-        } else {
-          dispatch(toggleSearchSuggstionList(false));
-        }
-      }).catch((e) => {
-        setSuggestionLoading(false);
-        dispatch(toggleSearchSuggstionList(true));
-        setSuggestionError((e as Error).message);
-      });
+          setSuggestionError((e as Error).message);
+        });
     } else {
       dispatch(toggleSearchSuggstionList(false));
     }

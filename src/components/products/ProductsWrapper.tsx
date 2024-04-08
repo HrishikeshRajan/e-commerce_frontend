@@ -2,19 +2,20 @@
 import React from 'react';
 
 import Products from './Products';
-import Sidebar from '../home/sidebar/Sidebar';
+// import Sidebar from '../home/sidebar/Sidebar';
 import Pagination from './Pagination';
+import Div from '../CustomElements/Div';
 
 function ProductCardsWrapper() {
   return (
 
-    <div className="flex flex-col">
-      <div className="w-full flex lg:mt-36">
-        <Sidebar />
+    <Div className="flex flex-col">
+      <Div className="w-full flex lg:mt-36">
+        {/* <Sidebar /> */}
         <Products />
-      </div>
+      </Div>
       <Pagination />
-    </div>
+    </Div>
   );
 }
 

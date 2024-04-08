@@ -9,7 +9,6 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons/faMagnifyin
 import { isEmpty } from 'lodash';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
-import Logo from '@/assets/smartshop.png';
 import DefaultUser from '@/assets/defaultUser.png';
 import {
   removeAuthentication, removeUser, toggleSidebar, toggleSignout,
@@ -18,6 +17,7 @@ import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
 
 import AuthHelper from '@/components/auth/apis/helper';
 import { signout } from '@/components/auth/apis/signout';
+import Logo from '../Logo';
 
 function SellerNavbar() {
   const app = useTypedSelector((store) => store.app);
@@ -52,11 +52,7 @@ function SellerNavbar() {
         <div className="border-gray-200 flex justify-between items-center sm:px-4 ">
           {/* Logo only visible from md screens */}
           <Link to="/" className="hidden md:block ">
-            <img
-              src={Logo}
-              alt="Logo"
-              className="w-16 object-cover cursor-pointer rounded-full "
-            />
+            <Logo />
           </Link>
           <button type="button" onClick={() => dispatch(toggleSidebar())} className="mb-10 m-2 mt-4 ms-3  text-slate-700 absolute top-0 left-0  rounded-lg">
             <span className="sr-only">Open sidebar</span>

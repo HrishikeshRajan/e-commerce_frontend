@@ -3,6 +3,7 @@ import React from 'react';
 import ReactPaginate from 'react-paginate';
 import { useSearchParams } from 'react-router-dom';
 import PaginationShimmer from '../shimmer/PaginationShimmer';
+import Div from '../CustomElements/Div';
 
 function Pagination() {
   const productsDetails = useTypedSelector((store) => store.products.userProductsMeta);
@@ -20,11 +21,11 @@ function Pagination() {
   if (productsDetails.totalPages < 1) return <PaginationShimmer />;
 
   return (
-    <div className="w-full flex  justify-center items-center">
-      <div className="text-slate-500 flex items-center">
+    <Div className="w-full flex  justify-center items-center mt-5 flex-col lg:flex-row">
+      <Div className="text-slate-500 flex items-center flex-col">
         Total Pages:
         {productsDetails.totalPages}
-      </div>
+      </Div>
       <ReactPaginate
         breakLabel="..."
         nextLabel="next "
@@ -35,14 +36,14 @@ function Pagination() {
         renderOnZeroPageCount={null}
         forcePage={parseInt(searchParams.get('page')!, 10) - 1 || 0}
         pageClassName="p-3 border-2"
-        className="flex p-3"
+        className="flex p-3 "
         previousClassName="p-3 border-2"
         nextClassName="p-3 border-2"
         breakClassName="font-bold p-3"
         activeClassName="bg-slate-700"
         activeLinkClassName="text-white font-bold"
       />
-    </div>
+    </Div>
   );
 }
 

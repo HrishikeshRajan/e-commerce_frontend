@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { addCategories } from '@/utils/reduxSlice/productSlice';
 import { getCategories } from '@/components/home/api/getCategories';
+import { ErrorResponse, FetchApiResponse, hasFetchSucceeded } from '@/types/Fetch';
 import { useTypedDispatch } from './reduxHooks';
 
 /**
@@ -14,16 +15,16 @@ const useCategory = () => {
     const abortController = new AbortController();
     const { signal } = abortController;
 
-    getCategories(signal).then((response) => {
-      setLoading(false);
-      if (response && response.message.categories) {
-        dispatch(addCategories(response.message.categories));
-      }
-    }).catch((err) => {
-      setLoading(false);
-      setError((err as Error).message);
-      console.log(err);
-    });
+    getCategories(signal)
+      .then((response: FetchApiResponse<{ categories:[] }> | ErrorResponse) => {
+        setLoading(false);
+        if (hasFetchSucceeded(response)) {
+          dispatch(addCategories(response.message.categories));
+        }
+      }).catch((err) => {
+        setLoading(false);
+        setError((err as Error).message);
+      });
 
     return () => abortController.abort();
   }, [dispatch]);

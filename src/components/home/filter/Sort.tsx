@@ -1,7 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import { SlArrowDown } from 'react-icons/sl';
-import React from 'react';
+import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import Span from '@/components/CustomElements/Span';
+import Div from '@/components/CustomElements/Div';
+import ListWrapper from '@/components/CustomElements/List/ListWrapper';
+import ListItem from '@/components/CustomElements/List/ListItem';
 import { SORT_OPTIONS } from './SORT_OPTIONS';
 
 function Filter() {
@@ -16,24 +20,30 @@ function Filter() {
     return option?.label;
   };
 
-  return (
-    <div tabIndex={0} role="button" className="w-full relative flex justify-end    p-2 lg:mr-20 items-center gap-2 text-slate-700">
-      <div className="group w-4/12 flex items-center gap-2 p-3  ">
-        <span className="text-normal">Sort by:</span>
-        <span className="font-medium">{findLabel(searchParams.get('sort')!) || ''}</span>
-        <SlArrowDown />
-        <div className="absolute top-10 z-10 bg-white w-4/12    ">
-          <ul className="hidden flex-col gap-2 p-3  shadow-lg left-0 group-hover:flex">
-            {SORT_OPTIONS.map((option) => (
-              <li key={option.id} className="hover:bg-slate-200 active:bg-slate-200 p-3 w-full cursor-pointer">
-                <button onClick={() => handleSort(option)} className="text-base" type="button">{option.label}</button>
-              </li>
-            ))}
+  const [open, setOpen] = useState(false);
 
-          </ul>
-        </div>
-      </div>
-    </div>
+  return (
+    <Div tabIndex={0} role="button" className="w-full relative flex  items-center">
+      <Div className="group w-full justify-end flex lg:flex-row items-center gap-2 p-3  ">
+        <button type="button" className="flex items-center mr-5  gap-2 outline-none" onClick={() => setOpen(!open)}>
+          <Span className="text-normal">Sort by:</Span>
+          <Span className="font-xs hidden lg:block">{findLabel(searchParams.get('sort')!) || ''}</Span>
+          {open ? <SlArrowUp /> : <SlArrowDown /> }
+        </button>
+        {open && (
+          <Div className="absolute top-10 z-10 bg-white w-auto    ">
+            <ListWrapper className="flex-col gap-2 p-3 rounded-xl  shadow-lg left-0">
+              { SORT_OPTIONS.map((option) => (
+                <ListItem key={option.id} className={`${searchParams.has('sort', option.value) ? 'text-red-500' : 'text-black'}hover:bg-slate-200   hover:rounded-xl p-3 w-full cursor-pointer`}>
+                  <button onClick={() => handleSort(option)} className={`${searchParams.has('sort', option.value) ? ' text-slate-500 bg-slate-50' : 'text-black'}"text-xs"`} type="button">{option.label}</button>
+                </ListItem>
+              ))}
+
+            </ListWrapper>
+          </Div>
+        )}
+      </Div>
+    </Div>
   );
 }
 export default Filter;

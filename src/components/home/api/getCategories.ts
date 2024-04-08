@@ -8,7 +8,7 @@
  * @throws {Error} Throws an error if the signup request fails.
  */
 
-export const getCategories = async (signal:AbortSignal):Promise<any> => {
+export const getCategories = async (signal:AbortSignal) => {
   //  Request headers
   const headers = new Headers();
   headers.set('Accept', 'application/json');

@@ -7,7 +7,12 @@ export async function getSingleProduct(
       credentials: 'include',
     });
     return (await response.json()) as unknown;
-  } catch (error:any) {
-    throw new Error('Product fetch failed');
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        return;
+      }
+      throw new Error('Oops, something went wrong');
+    }
   }
 }

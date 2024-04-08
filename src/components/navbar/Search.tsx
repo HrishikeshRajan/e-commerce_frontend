@@ -13,8 +13,8 @@ import useSearchSuggestion from '@/hooks/useSearchSuggestion';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { toggleSearchSuggstionList } from '@/utils/reduxSlice/productSlice';
 import { SearchSuggestionShimmer } from '../shimmer/SearchSuggestionShimmer';
-import ListWrapper from './utils/ListWrapper';
-import ListItem from './utils/ListItem';
+import ListWrapper from '../CustomElements/List/ListWrapper';
+import ListItem from '../CustomElements/List/ListItem';
 
 function Search() {
   const [word, setWord] = useState('');

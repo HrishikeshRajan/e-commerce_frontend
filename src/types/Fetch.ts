@@ -55,26 +55,26 @@ export interface Http429 extends IErrorResponse {
 export type ErrorResponse = Http400 | Http401 | Http404 | Http422 | Http429 | Http500;
 
 export function isFetchNotFoundError(response: ErrorResponse): response is Http404 {
-  return ((response !== null && 'error' in response) && (response as Http404).statusCode === StatusCodes.NOT_FOUND);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http404).statusCode === StatusCodes.NOT_FOUND);
 }
 
 export function isFetchBadRequestError(response: ErrorResponse): response is Http400 {
-  return ((response !== null && 'error' in response) && (response as Http400).statusCode === StatusCodes.BAD_REQUEST);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http400).statusCode === StatusCodes.BAD_REQUEST);
 }
 
 export function isFetchUnauthorizedError(response: ErrorResponse): response is Http401 {
-  return ((response !== null && 'error' in response) && (response as Http401).statusCode === StatusCodes.UNAUTHORIZED);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http401).statusCode === StatusCodes.UNAUTHORIZED);
 }
 
 export function isFetchUnprocessableEntityError(response: ErrorResponse): response is Http422 {
-  return ((response !== null && 'error' in response) && (response as Http422).statusCode === StatusCodes.UNPROCESSABLE_ENTITY);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http422).statusCode === StatusCodes.UNPROCESSABLE_ENTITY);
 }
 
 export function isFetchInternalServerError(response: ErrorResponse): response is Http500 {
-  return ((response !== null && 'error' in response) && (response as Http500).statusCode === StatusCodes.INTERNAL_SERVER_ERROR);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http500).statusCode === StatusCodes.INTERNAL_SERVER_ERROR);
 }
 export function isFetchTooManyRequests(response: ErrorResponse): response is Http429 {
-  return ((response !== null && 'error' in response) && (response as Http429).statusCode === StatusCodes.TOO_MANY_REQUESTS);
+  return ((response !== null && response !== undefined && 'error' in response) && (response as Http429).statusCode === StatusCodes.TOO_MANY_REQUESTS);
 }
 
 export function isNull(x: unknown): x is null {
@@ -108,5 +108,5 @@ export function isFetchSuccess(
 export function hasFetchSucceeded(
   response: SuccessResponse | ErrorResponse | null,
 ): response is SuccessResponse {
-  return ((response !== null && 'message' in response) && (response !== null && response.statusCode === StatusCodes.OK));
+  return ((response !== null && response !== undefined && 'message' in response) && (response !== null && response !== undefined && response.statusCode === StatusCodes.OK));
 }

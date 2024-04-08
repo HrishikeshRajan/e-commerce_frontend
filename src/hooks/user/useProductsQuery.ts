@@ -5,9 +5,23 @@ import {
   addProducts, addProductsMeta,
 } from '@/utils/reduxSlice/productSlice';
 import { URLSearchParams } from 'url';
-import { StatusCodes } from 'http-status-codes';
-import { useTypedDispatch, useTypedSelector } from './reduxHooks';
+import {
+  ErrorResponse, FetchApiResponse, hasFetchSucceeded, isFetchNotFoundError,
+} from '@/types/Fetch';
+import { ProductUser } from '@/components/products/types';
+import { BrandCount } from '@/types/Product';
+import { useTypedDispatch } from './reduxHooks';
 
+type ProductQueryResponse = {
+  products:Array<ProductUser>;
+  itemsShowing:number;
+  totalItems:number;
+  totalPages:number;
+  brandsCount: Array<BrandCount>;
+};
+const hasBrandCount = (response:
+FetchApiResponse<ProductQueryResponse>) => response.message.brandsCount
+   && response.message.brandsCount.length;
 const useProductsQuery = (
   page: number,
   searchParams:URLSearchParams,
@@ -22,37 +36,40 @@ const useProductsQuery = (
     const abortController = new AbortController();
     const { signal } = abortController;
     setLoading(true);
+
     getProductsByQuery(searchParams.toString(), signal)
-      .then((response) => {
-        if (response && response.success) {
+      .then((response: FetchApiResponse<ProductQueryResponse> | ErrorResponse) => {
+        if (hasFetchSucceeded(response)) {
           dispatch(addProductsMeta({
             itemsShowing: response.message.itemsShowing,
             totalItems: response.message.totalItems,
             totalPages: response.message.totalPages,
           }));
 
-          dispatch(addProducts(response.message?.products));
-          dispatch(addBrandCount(response.message?.brandsCount));
+          dispatch(addProducts(response.message.products));
+          if (hasBrandCount(response)) {
+            dispatch(addBrandCount(response.message.brandsCount));
+          }
+
           setHasMore(response.message.products.length > 0);
           setLoading(false);
-        } else if (response && !response.success && response.statusCode === StatusCodes.NOT_FOUND) {
+        } else if (isFetchNotFoundError(response)) {
           dispatch(addProducts([]));
           setHasMore(false);
           setLoading(false);
         }
       })
-      .catch((e: unknown) => {
+      .catch((e) => {
         console.log(e);
         setError(true);
+        setLoading(false);
       });
 
     return () => abortController.abort();
   }, [page, dispatch, searchParams]);
-  const products = useTypedSelector((store) => store.products.userProducts);
 
   return {
     loading,
-    products,
     hasMore,
     error,
   };

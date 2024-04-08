@@ -5,8 +5,8 @@ import React, { ElementRef, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Submenu } from './Submenu';
 import { NavbarMenu, NavOptions } from '.';
-import ListWrapper from './utils/ListWrapper';
-import ListItem from './utils/ListItem';
+import ListWrapper from '../CustomElements/List/ListWrapper';
+import ListItem from '../CustomElements/List/ListItem';
 
 export function Menu() {
   const [data, setData] = useState<NavbarMenu[]>(NavOptions);

@@ -9,10 +9,12 @@ export async function getProductsByQuery(
       signal,
     });
     return await response.json();
-  } catch (error:any) {
-    if (error.name === 'AbortError') {
-      return;
+  } catch (error) {
+    if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        return;
+      }
+      throw new Error('Oops, something went wrong');
     }
-    console.log(error);
   }
 }

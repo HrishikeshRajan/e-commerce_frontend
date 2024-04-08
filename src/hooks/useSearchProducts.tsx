@@ -1,4 +1,6 @@
 import { generalProductSearch } from '@/components/products/apis/generalSearch';
+import { ProductUser } from '@/components/products/types';
+import { ErrorResponse, FetchApiResponse, hasFetchSucceeded } from '@/types/Fetch';
 import { addProducts } from '@/utils/reduxSlice/productSlice';
 import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
@@ -14,9 +16,11 @@ const useSearchProducts = () => {
 
     if (search.size && search.get('name')) {
       generalProductSearch(search.toString(), signal)
-        .then((result) => {
-          dispatch(addProducts(result.message?.products));
-          setSearch(search);
+        .then((result:FetchApiResponse<{ products:ProductUser[] }> | ErrorResponse) => {
+          if (hasFetchSucceeded(result)) {
+            dispatch(addProducts(result.message.products));
+            setSearch(search);
+          }
         })
         .catch((e) => {
           setSearchError((e as Error).message);
