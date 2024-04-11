@@ -5,7 +5,7 @@ import ExpiredCard from '@/utils/PromoDecorators/ExpiredCard';
 import Coupon from './Coupon';
 import LineSmall from '../home/ui/LineSmall';
 
-const isCouponExpired = (coupon:Promo) => coupon.status === 'Expired';
+const isCouponExpired = (coupon:Promo) => coupon.status === 'EXPIRED';
 function CouponWrapper() {
   const data = useLoaderData() as any;
   return (

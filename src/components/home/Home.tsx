@@ -20,6 +20,7 @@ import Sort from './filter/Sort';
 import FilterBox from './sidebar/FilterBox';
 import ShimmerCoupon from '../shimmer/Coupons';
 
+const isCouponExpired = (coupon:Promo) => coupon.status === 'EXPIRED';
 function Home() {
   const cart = useTypedSelector((store) => store.cart.cart);
   const searchProductsList = useTypedSelector((store) => store.products.userProducts);
@@ -81,7 +82,12 @@ function Home() {
             </Heading>
             <Line />
             <div className="flex w-full gap-2 justify-center mt-10 overflow-y-auto">
-              {promos?.map((coupon: Promo) => <Coupon key={coupon._id} coupon={coupon} />)}
+              {promos?.map((coupon:Promo) => {
+                if (!isCouponExpired(coupon)) {
+                  return <Coupon key={coupon._id} coupon={coupon} />;
+                }
+                return null;
+              })}
             </div>
           </div>
         ) : <ShimmerCoupon /> }
