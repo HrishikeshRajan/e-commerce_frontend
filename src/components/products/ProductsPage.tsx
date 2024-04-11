@@ -56,7 +56,7 @@ function ProductsPage() {
           ) : <FilterShimmer />}
         {products && products.length && !productsLoading ? (
           <Div className=" flex  xl:right-0 xl:w-9/12 w-full  justify-end  ">
-            <ProductCardsWrapper className="flex w-full xl:gap-2 ">
+            <ProductCardsWrapper className="flex  w-full xl:gap-2  ">
               <Div className="w-full justify-center xl:justify-start flex flex-wrap xl:px-5  ">
                 {
                   products.map((item) => <Card key={item._id} {...item} />)

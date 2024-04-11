@@ -25,7 +25,7 @@ function Card({
   }).format(parseFloat(price));
 
   return (
-    <Link to={`/product/${_id}`} className="relative lg:m-1 flex lg:w-56 w-6/12  xl:rounded-xl   flex-col h-80  bg-white shadow-sm">
+    <Link to={`/product/${_id}`} className="relative lg:m-1 flex     w-6/12 lg:w-fit  xl:rounded-xl   flex-col h-80   shadow-sm">
       <Div className="relative px-1 flex w-full  h-52 overflow-hidden ">
         <img className="object-cover " src={(images && images[0].secure_url) || 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'} alt="product image" />
       </Div>
