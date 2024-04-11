@@ -22,12 +22,6 @@ function FlashSale() {
   const flashsale = useTypedSelector((store) => store.app.flashSaleItem);
   const userId = useTypedSelector((store) => store.app.user?._id);
 
-  // useEffect(() => {
-  //   if (flash._id) {
-  //     dispatch(addFlashSaleItem(flash));
-  //   }
-  // }, [dispatch, flash]);
-
   const handleRequest = (response:any, options:any, offer: MethodParams) => {
     const cartData = cart.addToCartFlash(response, options, offer);
     if (!cartData) return null;

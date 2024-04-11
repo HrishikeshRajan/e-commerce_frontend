@@ -44,7 +44,6 @@ const useFlashSale = () => {
         if (isPromiseSuccess(result)) {
           setResponse(result.message.sale);
           dispatch(addFlashSaleItem(result.message.sale));
-          // flashHelper.storeToLocal(result.message.sale);
         } else {
           throw new Error(result.message.error);
         }

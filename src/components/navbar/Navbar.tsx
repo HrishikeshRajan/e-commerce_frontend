@@ -7,9 +7,8 @@ import useCartSyncToLocalStorage from '@/hooks/useCartSyncToLocalStorage';
 import useFlashSyncToLocalStorage from '@/hooks/useFlashSyncToLocalStorage';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { clearProducts } from '@/utils/reduxSlice/productSlice';
 import { useSearchParams } from 'react-router-dom';
-import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
+import { useTypedSelector } from '../../hooks/user/reduxHooks';
 import Search from './Search';
 import CartNavIcon from './CartNavIcon';
 
@@ -22,7 +21,7 @@ function Navbar() {
   const app = useTypedSelector((store) => store.app);
   const [isSearchEnable, setSearchEnable] = useState(false);
   const [search, setSearch] = useSearchParams();
-  const dispatch = useTypedDispatch();
+  // const dispatch = useTypedDispatch();
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
   const enableSearch = () => {
@@ -35,7 +34,6 @@ function Navbar() {
       search.delete('name');
       setSearch(search);
     }
-    dispatch(clearProducts());
   };
   return (
     <nav className=" flex items-center h-20 fixed top-0 z-40 w-full shadow-md bg-white  p-2  ">

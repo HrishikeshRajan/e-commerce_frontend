@@ -27,7 +27,7 @@ const useProductsQuery = (
   searchParams:URLSearchParams,
 ) => {
   const [hasMore, setHasMore] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [error, setError] = useState(false);
   const dispatch = useTypedDispatch();
 
@@ -35,7 +35,7 @@ const useProductsQuery = (
     if (page === 0) return;
     const abortController = new AbortController();
     const { signal } = abortController;
-    setLoading(true);
+    setProductsLoading(true);
 
     getProductsByQuery(searchParams.toString(), signal)
       .then((response: FetchApiResponse<ProductQueryResponse> | ErrorResponse) => {
@@ -52,24 +52,24 @@ const useProductsQuery = (
           }
 
           setHasMore(response.message.products.length > 0);
-          setLoading(false);
+          setProductsLoading(false);
         } else if (isFetchNotFoundError(response)) {
           dispatch(addProducts([]));
           setHasMore(false);
-          setLoading(false);
+          setProductsLoading(false);
         }
       })
       .catch((e) => {
         console.log(e);
         setError(true);
-        setLoading(false);
+        setProductsLoading(false);
       });
 
     return () => abortController.abort();
   }, [page, dispatch, searchParams]);
 
   return {
-    loading,
+    productsLoading,
     hasMore,
     error,
   };

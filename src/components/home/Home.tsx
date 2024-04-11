@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import useFetchCart from '@/hooks/useCart';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { Promo } from '@/types/Promo';
+import { useSearchParams } from 'react-router-dom';
+import useFilter from '@/hooks/useFilter';
 import Categories from './Categories';
 import FlashSaleBanner from '../flashsale/FlashSaleBanner';
 import Coupon from '../coupons/Coupon';
@@ -11,6 +13,9 @@ import Card from '../products/Card';
 import { ProductUser } from '../products/types';
 import ProductCardsWrapper from '../products/v2/ProductWrapper';
 import Heading from './ui/Heading';
+import Div from '../CustomElements/Div';
+import Sort from './filter/Sort';
+import FilterBox from './sidebar/FilterBox';
 
 async function getAllpromos() {
   try {
@@ -37,7 +42,7 @@ function Home() {
   const [promos, setPromos] = useState<Promo[]>();
   const [products, setProducts] = useState<ProductUser[]>();
   useFetchCart(num);
-
+  const [searchParams] = useSearchParams();
   useEffect(() => {
     getAllpromos().then((result) => {
       setPromos(result.message.promos);
@@ -54,15 +59,44 @@ function Home() {
       console.log(err);
     });
   }, []);
+  const { filter, loading } = useFilter();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleBottomSheet = () => {
+    setIsOpen(!isOpen);
+  };
   return (
-    searchProductsList && searchProductsList.length ? (
+    searchParams.toString() ? (
 
-      <ProductCardsWrapper>
-        {
-          searchProductsList.map((item) => <Card key={item._id} {...item} />)
+      <Div className="w-full ">
+        <Div className="w-full container  top-full mt-28  flex justify-end">
+          <Sort />
+        </Div>
 
-        }
-      </ProductCardsWrapper>
+        {filter && !loading
+        && (
+          <Div className={`fixed left-0 xl:hidden bg-white right-0 bottom-0  delay-75 duration-150 ease overflow-y-auto  z-40  xl:bottom-10 xl:left-0 ${isOpen ? 'h-full ' : 'h-20'}`}>
+            <FilterBox filter={filter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
+          </Div>
+        )}
+        <Div className="flex">
+          {filter && !loading
+        && (
+          <Div className="fixed bg-white w-3/12 left-0 hidden xl:flex right-auto  py-2  delay-75 duration-150 ease overflow-y-auto  z-40 h-5/6 ">
+            <FilterBox filter={filter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
+          </Div>
+        )}
+          <Div className="fixed flex  xl:right-0 xl:w-9/12 w-full  justify-end overflow-y-auto">
+            <ProductCardsWrapper className="flex w-full xl:gap-2">
+              <Div className="w-full flex flex-wrap xl:px-5 ">
+                {
+                  searchProductsList.map((item) => <Card key={item._id} {...item} />)
+                }
+              </Div>
+            </ProductCardsWrapper>
+          </Div>
+        </Div>
+      </Div>
     ) : (
       <div>
         <FlashSaleBanner />

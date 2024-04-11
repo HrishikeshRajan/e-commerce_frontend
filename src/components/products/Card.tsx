@@ -25,9 +25,9 @@ function Card({
   }).format(parseFloat(price));
 
   return (
-    <Link to={`/product/${_id}`} className="w-6/12 relative lg:m-1 flex lg:w-56  xl:rounded-xl   flex-col overflow-hidden  border border-gray-100 bg-white shadow-sm">
-      <Div className="relative px-1 flex h-52 overflow-hidden ">
-        <img className="object-cover w-full" src={(images && images[0].secure_url) || 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'} alt="product image" />
+    <Link to={`/product/${_id}`} className="relative lg:m-1 flex lg:w-56 w-6/12  xl:rounded-xl   flex-col h-80  bg-white shadow-sm">
+      <Div className="relative px-1 flex w-full  h-52 overflow-hidden ">
+        <img className="object-cover  w-full" src={(images && images[0].secure_url) || 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'} alt="product image" />
       </Div>
       <Div className="mt-1 px-2 ">
         <Div className=" overflow-hidden ">
@@ -39,7 +39,7 @@ function Card({
           </Para>
         </Div>
 
-        <Div className=" mb-2 flex  items-start justify-between flex-col">
+        <Div className="w-full mb-2 flex  items-start justify-between flex-col">
           <Para className="flex gap-1 items-center">
             <Span className="text-slate-400 text-xs ">
               MRP:

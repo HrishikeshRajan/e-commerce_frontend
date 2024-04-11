@@ -1,15 +1,11 @@
-import Sidebar from '@/components/home/sidebar/Sidebar';
+/* eslint-disable react/require-default-props */
 import React from 'react';
-import Pagination from '../Pagination';
 
-function ProductCardsWrapper({ children }:{ children:React.ReactNode }) {
+type ProductCardWrapperProps = { children:React.ReactNode, className?:string };
+function ProductCardsWrapper({ children, className }:ProductCardWrapperProps) {
   return (
-    <div className="flex flex-col">
-      <div className="w-full flex lg:mt-36">
-        <Sidebar />
-        {children}
-      </div>
-      <Pagination />
+    <div className={`${className ?? 'flex flex-col'}`}>
+      {children}
     </div>
   );
 }

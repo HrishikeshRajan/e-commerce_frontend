@@ -36,7 +36,7 @@ import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
-import ProductCardsWrapper from './components/products/ProductsWrapper';
+import ProductsPage from './components/products/ProductsPage';
 import ProductView from './components/home/SingleProduct/ProductView';
 import Cart from './components/cart/Cart';
 import ShippingAddress from './components/order/address/ShippingAddress';
@@ -94,7 +94,7 @@ const App = () => {
           path: 'products',
           element: (
             <AuthenticationWrapper authentication={false}>
-              <ProductCardsWrapper />
+              <ProductsPage />
             </AuthenticationWrapper>
           ),
         },

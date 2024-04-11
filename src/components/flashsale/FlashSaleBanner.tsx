@@ -42,7 +42,6 @@ function FlashSaleBanner() {
 
   const setTimer = (startDate:Date) :null => {
     const date = new Date(startDate).getTime();
-    console.log('get time', date)
     timer.current = setInterval(() => {
       const now = new Date().getTime();
       const distance = date - now;

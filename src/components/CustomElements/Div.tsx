@@ -4,7 +4,7 @@
 import React, { forwardRef, HTMLAttributes } from 'react';
 
 type DivProps = {
-  children:React.ReactNode;
+  children?:React.ReactNode;
   className?:string;
 };
 type Props = DivProps & HTMLAttributes<HTMLDivElement>;

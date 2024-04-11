@@ -1,39 +1,38 @@
-import { ProductBaseUrl } from '@/components/marketplace/urlConstants';
+import { getSidebarOptions } from '@/components/home/api/getSidebarOptions';
+import { FilterBoxItem } from '@/components/home/sidebar/options';
+import {
+  ErrorResponse, FetchApiResponse, hasFetchSucceeded,
+} from '@/types/Fetch';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-type Filter = { filter:{ brands:string[], colors:string[] } };
-async function getFilterOptions(signal:AbortSignal) {
-  try {
-    const response = await fetch(ProductBaseUrl('filter_menu'), { signal });
-    const filter = await response.json();
-    return filter;
-  } catch (error:any) {
-    if (error.name === 'AbortError') return;
-    console.log(error);
-  }
-}
 const useFilter = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [filter, setFilter] = useState<Filter>({ filter: { brands: [], colors: [] } });
+  const [filters, setFilters] = useState<Array<FilterBoxItem>>();
+
+  const [search] = useSearchParams();
+  const category = search.get('category');
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
     try {
-      getFilterOptions(signal).then((response) => {
-        setLoading(false);
-        if (response) {
-          setFilter(response.message);
-        }
-      });
+      getSidebarOptions(signal, category || '')
+        .then((response:FetchApiResponse<{ filters:Array<FilterBoxItem> }> | ErrorResponse) => {
+          setLoading(false);
+          if (hasFetchSucceeded(response)) {
+            setFilters(response.message.filters);
+          }
+        });
     } catch (err) {
       setError(true);
-      console.log(err);
     }
-    return () => abortController.abort();
-  }, []);
+    return () => {
+      abortController.abort();
+    };
+  }, [category]);
 
-  return { filter: filter.filter, loading, error };
+  return { filter: filters, loading, error };
 };
 
 export default useFilter;

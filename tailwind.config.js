@@ -17,8 +17,14 @@ module.exports = {
       },
       colors:{
         'test':'#F0FFF0'
+      },
+      transitionProperty: {
+        'height': 'height'
       }
     },
+    variants: {
+      height: ['responsive', 'hover', 'focus']
+  },
     extend: {
       colors: {
         border: "hsl(var(--border))",

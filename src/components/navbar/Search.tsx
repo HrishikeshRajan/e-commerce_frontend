@@ -22,6 +22,14 @@ function Search() {
   const isSuggestionOpen = useTypedSelector((store) => store.products.isSearchSuggestionOpen);
   const dispatch = useTypedDispatch();
   const handleClick = () => {
+    search.delete('category');
+    search.delete('brand');
+    search.delete('color');
+    search.delete('sort');
+    search.delete('page');
+    search.delete('price[gte]');
+    search.delete('price[lte]');
+    search.delete('name');
     search.set('name', word);
     setSearch(search, { replace: true });
     setWord('');
