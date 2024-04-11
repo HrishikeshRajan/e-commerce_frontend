@@ -1,14 +1,14 @@
 /**
  * @author Hrishikesh Rajan
  *
- * Fetches all products categories from server
+ * Fetches all success Orders
  *
  * @param {AbortSignal} signal
  * @returns {Promise<any>} A promise that resolves to the response data from the server.
  * @throws {Error} Throws an error if fetch fails
  */
 
-export const getCategories = async (signal:AbortSignal) => {
+export const getAllOrders = async (signal:AbortSignal) => {
   //  Request headers
   const headers = new Headers();
   headers.set('Accept', 'application/json');
@@ -18,10 +18,10 @@ export const getCategories = async (signal:AbortSignal) => {
     method: 'GET',
     headers,
     signal,
+    credentials: 'include',
   };
   try {
-    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/seller/categories`;
-    const response = await fetch(url, requestOptions);
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/orders/success/all`, requestOptions);
     return await response.json();
   } catch (error) {
     if (error instanceof Error) {
