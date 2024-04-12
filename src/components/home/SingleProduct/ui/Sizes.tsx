@@ -12,7 +12,7 @@ function Sizes({ sizes, productId }:{ sizes:string[], productId:string }) {
   };
   return (
     <>
-      <h4 className="mt-4 font-bold text-slate-800">SELECT SIZE</h4>
+      <h4 className="mt-4 font-bold text-slate-500">SELECT SIZE</h4>
       <ul className="flex justify-start gap-4 mb-3 py-2">
         {sizes.map((item, index) => (
           <li key={index} className="flex items-center gap-1">

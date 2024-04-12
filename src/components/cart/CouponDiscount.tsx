@@ -13,7 +13,8 @@ function CouponDiscount({ coupon }:{ coupon: Percentage | Flat }) {
 
       <div className="flex w-full items-center my-1  gap-4 text-sm">
         {/* Offer price */}
-        <span className="font-semibold text-sm">{formattedAmount(coupon.discountedPriceAftTax)}</span>
+        <span className="font-semibold text-sm">{formattedAmount(Math.round(coupon.discountedPriceAftTax))}</span>
+
         {/* {orinal price} */}
         <span className="text-slate-400">
           MRP
@@ -22,6 +23,7 @@ function CouponDiscount({ coupon }:{ coupon: Percentage | Flat }) {
         {/* offer type */}
 
       </div>
+      <span className="text-blue-500 py-2 flex text-xs">Tax included</span>
       <span className="text-green-500 text-xs">
         You saved&nbsp;
         {formattedAmount(Number(coupon.yourSavings.toFixed()))}

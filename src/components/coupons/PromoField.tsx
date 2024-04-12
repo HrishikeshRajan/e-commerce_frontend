@@ -10,6 +10,7 @@ import {
 import cart from '@/utils/cart.helper';
 import React, { useEffect, useState } from 'react';
 import {
+  promoError,
   updateAppliedOffer,
 } from '@/utils/reduxSlice/cartSlice';
 import {
@@ -22,9 +23,11 @@ import {
   getProductId,
   isPromoApplied,
   isNull,
+  isUserAlreadyAppliedThePromoCode,
 } from '@/utils/discounts/validators.utils';
 import { applyFlatDiscount } from '@/utils/discounts/flatDiscount.utils';
 import { applyPercentageDiscount } from '@/utils/discounts/percentageDiscount';
+import { formattedAmount } from '@/utils/convertToRupees';
 
 /**
  * Tracks couper usage per user count
@@ -53,7 +56,9 @@ export function isPercentage(promo:PromoPercentage | PromoFlat) : promo is Promo
 }
 function PromoField() {
   const [userCode, setUserCode] = useState<string>('');
-  const [promoError, setPromoError] = useState<string>();
+  // const [promoError, setPromoError] = useState<string>();
+  const promoErrors = useTypedSelector((store) => store.cart.promoError);
+  const user = useTypedSelector((store) => store.app.user);
   const dispatch = useTypedDispatch();
   const myCart = useTypedSelector((store) => store.cart.cart);
 
@@ -90,6 +95,12 @@ function PromoField() {
         const { cartItem, couponIndex } = obj;
         const promo:Promo = cartItem.offers.coupons[couponIndex];
 
+        // This break when try to apply coupon to again to the discounted gtand total
+        // Keep origial grandTotal seprate
+        if (!isMinimumAmountPresentInCart(promo, myCart)) {
+          throw new Error(`Cart should ahve minimum of ${formattedAmount(promo.minAmountInCart)}`);
+        }
+
         if (!isCouponActivated(promo)) {
           throw new Error('Coupon is not activated');
         }
@@ -106,7 +117,7 @@ function PromoField() {
         const gstInPercentage = 12;
 
         // Remove promo type and add  flat or percenta union type
-        if (promo.type === 'FLAT' && isMinimumAmountPresentInCart(promo, myCart)) {
+        if (promo.type === 'FLAT' && isMinimumAmountPresentInCart(promo, myCart) && !isUserAlreadyAppliedThePromoCode(user, promo, getProductId(cartItem))) {
           const promoObject = applyFlatDiscount(cartItem, promo, gstInPercentage);
           if (!isPromoApplied(cartItem)) {
             if (promoObject) {
@@ -115,7 +126,7 @@ function PromoField() {
           }
         }
 
-        if (promo.type === 'PERCENTAGE' && isMinimumAmountPresentInCart(promo, myCart)) {
+        if (promo.type === 'PERCENTAGE' && isMinimumAmountPresentInCart(promo, myCart) && !isUserAlreadyAppliedThePromoCode(user, promo, getProductId(cartItem))) {
           const promoObject = applyPercentageDiscount(cartItem, promo, gstInPercentage);
           if (!isPromoApplied(cartItem)) {
             if (promoObject) {
@@ -125,9 +136,8 @@ function PromoField() {
         }
       }
     } catch (error) {
-      console.log(error);
       if (error instanceof Error) {
-        setPromoError(error.message);
+        dispatch(promoError(error.message));
       }
     }
   };
@@ -138,12 +148,16 @@ function PromoField() {
       if (!userCode) {
         throw new Error('Promo Code Required');
       } else {
-        setPromoError('');
+        // setPromoError('');
+        dispatch(promoError(''));
       }
       applyPromoCode(userCode);
     } catch (error) {
+      console.log(error);
       if (error instanceof Error) {
-        setPromoError(error.message);
+        console.log(error);
+        // setPromoError(error.message);
+        dispatch(promoError(error.message));
       }
     }
   };
@@ -151,9 +165,9 @@ function PromoField() {
     <div className="border-2 border-cyan-100 w-full items-center  rounded-xl flex justify-between flex-col xl:flex-row p-2">
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-        {promoError && <label htmlFor="promo" className="text-red-500">{promoError}</label>}
+        {promoErrors && <label htmlFor="promo" className="text-red-500">{promoErrors}</label>}
         <div className="flex gap-2">
-          <input type="text" name="promo" id="promo" value={userCode} onChange={(e) => setUserCode(e.target.value)} className={`border-2 p-2 rounded-xl  w-full ${promoError ? 'border-2 border-red-500' : 'border-2'}`} placeholder="Promo Code" />
+          <input type="text" name="promo" id="promo" value={userCode} onChange={(e) => setUserCode(e.target.value)} className={`border-2 p-2 rounded-xl  w-full ${promoErrors ? 'border-2 border-red-500' : 'border-2'}`} placeholder="Promo Code" />
           <button type="submit" className="px-2 py-2 bg-orange-400 rounded-xl font-bold active:scale-105 text-white">Apply </button>
 
         </div>

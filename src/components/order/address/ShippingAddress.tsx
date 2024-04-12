@@ -57,9 +57,7 @@ function ShippingAddress() {
   return (
     <div className="lg:container w-full mt-20 lg:-mt-10  flex justify-center item-center  flex-col">
       <BackButton>
-        {' '}
         <HiOutlineArrowNarrowLeft />
-        {' '}
         Back to CART
       </BackButton>
       <div className="w-full flex justify-center items-center">
@@ -78,8 +76,8 @@ function ShippingAddress() {
         <LineSmall />
       </div>
 
-      <div className="w-full  flex justify-center">
-        <div className=" w-full px-2 rounded lg:w-6/12 flex flex-col justify-center items-center ">
+      <div className="w-full  flex justify-center overflow-y-auto">
+        <div className=" w-full px-2 rounded lg:w-6/12 flex flex-col justify-center items-center overflow-y-auto ">
           {
             addresses
            && addresses

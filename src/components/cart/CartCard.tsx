@@ -102,6 +102,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             </span>
           ) }
         </div>
+
         {product.stock > 0 ? <div className="text-green-500 text-xs  ">In Stock</div> : <div className="text-red-500 text-xs font-bold">Out of Stock</div>}
 
       </div>

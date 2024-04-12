@@ -12,7 +12,8 @@ function Summary({ summary }:{ summary:ClientCart }) {
       <LineSmall />
 
       <h3 className="font-normal text-slate-800">
-        <span className="text-normal"> Total  Amount: &nbsp;</span>
+        <span className="text-blue-500 space-x-2 flex text-base">Tax included</span>
+        <span className="text-base"> Total  Amount: &nbsp;</span>
         <span>
           {formattedAmount(summary.grandTotalPrice)}
         </span>

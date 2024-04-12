@@ -4,16 +4,14 @@ import { useSingleProduct } from '@/hooks/useSigleProduct';
 import { isEmpty } from 'lodash';
 import { MdStars } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
+import { Promo } from '@/types/Promo';
 import SingleProduct from './SingleProduct';
 import AddToCartButton from '../../cart/AddToCartButton';
 import Colors from './ui/Colors';
 import Sizes from './ui/Sizes';
 import { OfferProps } from '.';
 
-const isOfferActive = (startTime:string, endTime:string) => {
-  const current = new Date();
-  return (current > new Date(startTime) && current < new Date(endTime));
-};
+const isOfferActive = (promo:Promo) => promo.status === 'ACTIVE';
 function Offers({ offers }:{ offers:OfferProps }) {
   return (
     <div className="mt-10  p-2 border-orange-200 border-2 rounded-xl">
@@ -32,7 +30,7 @@ function Offers({ offers }:{ offers:OfferProps }) {
             <h3 className="text-orange-500 font-semibold  px-1 py-2">Coupons</h3>
             <div className="px-1 flex flex-col font-semibold text-slate-900 gap-y-1">
               {offers.coupons.map((coupon) => (
-                isOfferActive(coupon.startTime, coupon.endTime) && (
+                isOfferActive(coupon) && (
                   <Link to="/coupons" key={coupon._id}>
                     {coupon.offername}
                     {coupon.type === 'PERCENTAGE' && `${coupon.discountPercentage}% OFF`}
@@ -62,8 +60,9 @@ function ProductView() {
   if (error.error) return;
   if (loading) return;
   if (isEmpty(response)) return;
+
   return (
-    <div className="w-full h-screen flex justify-center container">
+    <div className="w-full h-screen flex justify-center px-2 xl:container">
       <SingleProduct product={response.product}>
         <Sizes
           sizes={response.product && response.product.sizes}
@@ -88,7 +87,10 @@ function ProductView() {
           </span>
         ) }
         {response.product.stock > 0 && <AddToCartButton /> }
-        {response.offers && <Offers offers={response.offers} /> }
+        {response.offers
+         && response.offers.coupons
+          && response.offers.coupons.length
+          ? <Offers offers={response.offers} /> : '' }
 
       </SingleProduct>
     </div>

@@ -48,17 +48,27 @@ export function getProductId(cartItem:ClientCartItem) {
 export function getUserId(userStore:IUser) {
   return userStore._id;
 }
+export function isUserAlreadyAppliedThePromoCode(
+  userStore:IUser | null,
+  promo:Promo,
+  productId:string,
+) {
+  if (!userStore) return false;
+
+  const userId = getUserId(userStore);
+  const userIndex = promo.usedBy.findIndex((user) => user.userId === userId);
+  const userData = promo.usedBy[userIndex];
+  if (!userData) return false;
+  const productIndex = userData.products.findIndex((id) => id === productId);
+  return productIndex > -1;
+}
 
 export function isCouponActivated(promo:Promo) {
-  const currentDate = new Date();
-  const startDate = new Date(promo.startTime);
-  return (currentDate > startDate);
+  return promo.status === 'ACTIVE';
 }
 
 export function isCouponExpired(promo:Promo) {
-  const currentDate = new Date();
-  const endDate = new Date(promo.endTime);
-  return currentDate > endDate;
+  return promo.status === 'EXPIRED';
 }
 /**
    * @deprecated
@@ -80,7 +90,7 @@ export function isMinimumAmountPresentInCart(promo:Promo, usercart:ClientCart) {
 
 export function computeTax(totalPriceBeforeTax:number, gstInPercentage:number) {
   const tax = currency(totalPriceBeforeTax).multiply(gstInPercentage).divide(100);
-  return tax.value;
+  return Math.round(tax.value);
 }
 
 export function computeSavings(cartItem:ClientCartItem, promo:MethodParams) {

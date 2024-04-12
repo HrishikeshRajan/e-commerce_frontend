@@ -71,7 +71,7 @@ function Payment() {
           {' '}
           <HiOutlineArrowNarrowLeft />
           {' '}
-          Back to Address
+          Back to Cart
         </BackButton>
         <h2 className="font-bold text-lg text-center text-slate-500 mt-5 py-2">Credit/Debit Card</h2>
         <div className="p-5">

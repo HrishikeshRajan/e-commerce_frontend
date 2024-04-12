@@ -2,15 +2,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ClientCart } from '@/types/Cart';
 import { isEmpty } from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { getItemsFromLocalCart } from '@/utils/getItemsFromLocalCart';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { addToCart, promoError } from '@/utils/reduxSlice/cartSlice';
 import { isFetchBadRequestError, isFetchSuccess, isFetchUnauthorizedError } from '@/types/Fetch';
 import { removeUser } from '@/utils/reduxSlice/appSlice';
-import { notifyError } from '@/utils/toast';
 import Button from '../auth/ui/Button';
 import { submitCart } from './apis/addToCart';
 import { hasUserCart } from '.';
@@ -42,7 +41,6 @@ function Checkout({ summary }:{ summary:ClientCart }) {
     } else {
       path = 'api/v1/cart';
     }
-
     submitCart(modifiedCart, path)
       .then((result) => {
         setLoading(false);
@@ -59,13 +57,18 @@ function Checkout({ summary }:{ summary:ClientCart }) {
             navigate('/auth');
           });
         } else if (isFetchBadRequestError(result)) {
-          notifyError((result.error).message);
+          dispatch(promoError(result.error));
         }
-      }).catch((error: unknown) => {
+      }).catch((error) => {
         setLoading(false);
-        notifyError((error as Error).message);
+        console.log(error);
       });
   };
+
+  /** Clear the error message */
+  useEffect(() => () => {
+    dispatch(promoError(''));
+  }, [dispatch]);
 
   return (
     hasUser && Object.values(hasUser).length > 1

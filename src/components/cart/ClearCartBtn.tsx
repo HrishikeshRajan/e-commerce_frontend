@@ -18,7 +18,6 @@ function ClearCartBtn({ cartId }:{ cartId:string }) {
     if (cartId && (user && Object.values(user).length > 0)) {
       deleteCart(cartId).then((result) => {
         if (result.status === 200) {
-          cart.clearCart();
           dispatch(clearCart());
 
           navigate('/');

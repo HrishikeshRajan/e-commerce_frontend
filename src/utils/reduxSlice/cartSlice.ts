@@ -12,11 +12,13 @@ interface InitialState {
   cart: ClientCart | null;
   isQtyDialogueOpen: boolean;
   promo:Promo[]
+  promoError:string
 }
 const initialState: InitialState = {
   cart: null,
   isQtyDialogueOpen: false,
   promo: [],
+  promoError: '',
 };
 
 const cartSlice = createSlice({
@@ -94,13 +96,14 @@ const cartSlice = createSlice({
     },
     addPromo: (state, action:PayloadAction<Promo>) => {
       const index = state.promo.findIndex((item) => item._id === action.payload._id);
-      console.log(index);
       if (index < 0) {
-        console.log('pu');
         state.promo.push(action.payload);
       }
     },
 
+    promoError: (state, action:PayloadAction<string>) => {
+      state.promoError = action.payload;
+    },
   },
 });
 
@@ -116,4 +119,5 @@ export const {
   promoUsedCount,
   updateUsedCount,
   addPromo,
+  promoError,
 } = cartSlice.actions;

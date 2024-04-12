@@ -27,12 +27,11 @@ import Images from './Images';
 
 function SingleProduct({ product, offers, children }:SingleProductProps) {
   return (
-    <div className="w-full flex flex-col xl:flex-row  lg:justify-center    lg:container">
+    <div className="w-full flex flex-col xl:flex-row  lg:justify-center   lg:container">
       <div className="w-full xl:w-6/12  mt-20"><Images src={product.images} /></div>
-      <div className="w-full xl:w-6/12 pt-10  lg:pt-1">
+      <div className="w-full  xl:w-6/12 pt-10 px-2 lg:pt-1">
         <ProductName name={product.name} />
         <Brand brand={product.brand} />
-
         <p className="mt-5">
           <Ratings ratings={product.ratings} />
           <CustomerReview numberOfReviews={product.numberOfReviews} />
@@ -40,7 +39,6 @@ function SingleProduct({ product, offers, children }:SingleProductProps) {
         <LineSmall />
 
         <div className="flex gap-2">
-
           {(!offers || (offers && !offers.flashsale)) && (
             <Price price={product.price} />
           )}

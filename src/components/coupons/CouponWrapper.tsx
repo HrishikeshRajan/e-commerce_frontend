@@ -3,19 +3,18 @@ import { useLoaderData } from 'react-router-dom';
 import { Promo } from '@/types/Promo';
 import ExpiredCard from '@/utils/PromoDecorators/ExpiredCard';
 import Coupon from './Coupon';
-import LineSmall from '../home/ui/LineSmall';
 
 const isCouponExpired = (coupon:Promo) => coupon.status === 'EXPIRED';
 function CouponWrapper() {
   const data = useLoaderData() as any;
   return (
-    <div className="container">
+    <div className="xl:container">
       <div className="w-full flex flex-col ">
         <div className="mt-28">
-          <h1 className="text-3xl my-2 font-semibold text-slate-400">My Promos</h1>
-          <LineSmall />
+          <h1 className="text-3xl text-center xl:text-left p-5 font-semibold text-slate-400">MY PROMOS</h1>
+
         </div>
-        <div className="flex gap-10">
+        <div className="flex w-full flex-wrap justify-center gap-2 ">
           {data.message.tes.map((coupon:Promo) => {
             if (isCouponExpired(coupon)) {
               return <ExpiredCard key={coupon._id}><Coupon coupon={coupon} /></ExpiredCard>;

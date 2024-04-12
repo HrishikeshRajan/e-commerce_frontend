@@ -220,7 +220,12 @@ function CreateCouponForm() {
         Apply to:
         <Button type="button" variant="outline" onClick={() => setTagProducts(!tagProducts)}>Products</Button>
       </div>
-      {tagProducts && <ProductSelectBox tagProductId={addProductId} />}
+      {tagProducts
+      && (
+        <ProductSelectBox
+          tagProductId={addProductId}
+        />
+      )}
 
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Status:

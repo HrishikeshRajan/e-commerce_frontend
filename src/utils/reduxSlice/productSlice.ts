@@ -134,7 +134,7 @@ const initialState:InitialState = {
   selectedColor: '',
   sizeNotSelected: false,
   colorNotSelected: false,
-  isSearchSuggestionOpen: false
+  isSearchSuggestionOpen: false,
 };
 
 const productSlice = createSlice({

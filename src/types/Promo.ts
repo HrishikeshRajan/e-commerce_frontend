@@ -14,7 +14,7 @@ export interface Promo {
   discountPercentage?: number;
   maxUsage: number;
   maxUsagePerUser: number;
-  usedBy: [{ userId: string; count: number }];
+  usedBy: [{ userId: string, count: number, products:string[] }]
   discountAmount?: number;
   minAmountInCart: number;
   tags: {

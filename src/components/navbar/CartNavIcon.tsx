@@ -5,9 +5,11 @@ import { IconContext } from 'react-icons';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { useNavigate } from 'react-router-dom';
 import useQuantityObserver from '@/hooks/useQuantityObserver';
+import cart from '@/utils/cart.helper';
 
 function CartNavIcon() {
-  const qtyFromRedux = useTypedSelector((store) => store.cart.cart?.grandTotalQty) || 0;
+  const qtyFromRedux = useTypedSelector((store) => store.cart.cart?.grandTotalQty)
+   || cart.getCount() || 0;
   const navigate = useNavigate();
   const shouldAnimate = useQuantityObserver(qtyFromRedux);
   const handleNavigation = () => {
