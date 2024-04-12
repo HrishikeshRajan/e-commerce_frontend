@@ -84,7 +84,7 @@ function PromoField() {
         throw new Error('This coupon is not applicable');
       }
       if (!isPromoCodeFound(response)) {
-        throw new Error('This coupon is not applicable to any product');
+        throw new Error('This coupon is not applicable to cart products');
       }
 
       if (isUserReachedCouponLimit(response)) {
