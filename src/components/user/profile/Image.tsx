@@ -86,7 +86,7 @@ function Image() {
   return (
     <>
       <div className="p-5 w-full">
-        <h2 className="text-2xl text-slate-800 font-bold ">Manage Profile Picture</h2>
+        <h2 className="text-xl text-slate-700 font-bold ">Manage Profile Picture</h2>
         <img src={dataUrl as string || clientImage || defaultUser} alt="userphoto" width="100px" height="100px" className=" my-3 w-[100px] h-[100px] object-cover rounded" />
         <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
           <input {...getInputProps()} hidden onChange={handleImageSubmit} />
@@ -98,7 +98,7 @@ function Image() {
         </div>
         <div className="my-2">
           {file && (imageSubmit ? <button type="button" className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold disabled:opacity-70" disabled>Updating</button> : <button type="button" onClick={handleImageSubmit} className="bg-cyan-300 mx-1 py-1 w-20 px-2 shadow-md rounded text-white fond-bold">Upload</button>) }
-          {(dataUrl || clientImage) && !imageSubmit && <button type="button" onClick={deleteProfilePicture} className="bg-red-300 mx-1 py-1 px-2 w-20 shadow-md rounded text-white fond-bold">Delete</button> }
+          {(dataUrl || clientImage) && !imageSubmit && <button type="button" onClick={deleteProfilePicture} className="bg-red-500 mx-1 py-1 px-2 w-20 shadow-md rounded text-white fond-bold">Delete</button> }
         </div>
       </div>
       <ToastContainer
