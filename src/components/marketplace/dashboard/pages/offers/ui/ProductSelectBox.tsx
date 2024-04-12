@@ -42,8 +42,6 @@ function ProductSelectBox({ tagProductId }:{ tagProductId:(e:React.ChangeEvent<H
   const {
     getSuggestions,
     suggestions,
-    suggestionLoading,
-    suggestionError,
   } = useSearchSuggestion(search);
   useDebounce(getSuggestions, 200, search);
 

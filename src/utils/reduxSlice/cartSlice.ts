@@ -56,38 +56,7 @@ const cartSlice = createSlice({
         state.cart.grandTotalPrice = Number(getGrandTotal(state.cart.products));
       }
     },
-    promoUsedCount: (
-      state,
-      action: PayloadAction<{
-        userId:string,
-        promoId:string
-      }>,
-    ) => {
-      if (state.cart) {
-        const index = state.promo.findIndex((item) => item._id.toString() === action.payload.promoId.toString());
-        if (index > -1) {
-          const userIndex = state.promo[index].usedBy.findIndex((usedUser) => usedUser.userId === action.payload.userId);
-          if (userIndex < 0) {
-            state.promo[index].usedBy.push({ count: 1, userId: action.payload.userId });
-          }
-        }
-      }
-    },
-    updateUsedCount: (
-      state,
-      action: PayloadAction<{
-        code: string,
-        productId:string,
-        userId:string,
-        couponIndex:number,
-        count:number,
-        usedUserIndex:number
-      }>,
-    ) => {
-      if (state.cart && state.cart.products[action.payload.productId] && state.cart.products[action.payload.productId].offers) {
-        state.cart.products[action.payload.productId].offers.coupons[action.payload.couponIndex].usedBy[action.payload.usedUserIndex].count = action.payload.count;
-      }
-    },
+
     clearCart: (state) => {
       state.cart = null;
     },
@@ -116,8 +85,6 @@ export const {
   updateGrandTotalPrice,
   updateGrandTotalQty,
   updateAppliedOffer,
-  promoUsedCount,
-  updateUsedCount,
   addPromo,
   promoError,
 } = cartSlice.actions;
