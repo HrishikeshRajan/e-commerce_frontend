@@ -33,7 +33,7 @@ function Profile() {
   const userDetails = useTypedSelector((store) => store.app.user);
 
   return (
-    <div className=" w-full md:w-8/12  flex flex-col   shadow-sm">
+    <div className=" w-full xl:w-4/12 mx-auto xl:mx-0  flex flex-col   shadow-sm">
 
       {/* Image upload section */}
       <Image />
@@ -66,7 +66,7 @@ function Profile() {
         }}
       >
         {(form) => (
-          <Form method="post" className="w-full   p-5 ">
+          <Form method="post" className="w-full    p-5 ">
             <hr className="my-3" />
             <div className="">
               <h2 className="text-lg text-slate-800 font-bold ">{edit ? 'Edit Your Profile' : 'Manage Profile'}</h2>

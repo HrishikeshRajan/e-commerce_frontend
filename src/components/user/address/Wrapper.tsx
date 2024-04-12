@@ -10,7 +10,7 @@ function AddressList() {
 
   if (!user) return <List />;
   return (
-    <div className="flex flex-col p-4 h-fit  md:w-8/12  ">
+    <div className="flex flex-col p-4 h-fit  md:w-8/12 mx-auto xl:mx-0  ">
       <h1 className="text-2xl text-slate-800 font-bold  ">Manage Address</h1>
       <hr className="mb-10" />
 

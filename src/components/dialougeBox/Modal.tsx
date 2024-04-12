@@ -1,6 +1,4 @@
-import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { usePageFreeze } from '@/hooks/user/usePageFreeze';
-import { toggleModal } from '@/utils/reduxSlice/appSlice';
 import React, {
   ElementRef, HTMLAttributes, useRef,
 } from 'react';
@@ -9,11 +7,11 @@ import { createPortal } from 'react-dom';
 type ModalProps = {
   children:React.ReactNode;
   className?:string;
-  title?:string
+  title?:string;
+  togglerFn:() => void;
 } & HTMLAttributes<HTMLDivElement>;
 
 const Modal = (props:ModalProps) => {
-  const dispatch = useTypedDispatch();
   /**
    * This hook hides the veritical scroll
    */
@@ -32,7 +30,8 @@ const Modal = (props:ModalProps) => {
   window.addEventListener('click', (e: MouseEvent) => {
     if (refModal && refModal.current) {
       if (isClickOutSideOfModal(e) && isClickOnBackdrop(e)) {
-        dispatch(toggleModal());
+        // dispatch(toggleModal());
+        props.togglerFn();
       }
     }
   });

@@ -3,8 +3,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { removeAuthentication, removeUser, toggleModal } from '@/utils/reduxSlice/appSlice';
+import { useTypedDispatch } from '@/hooks/user/reduxHooks';
+import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';
 
 import AuthHelper from '../auth/apis/helper';
 import { options } from './Options';
@@ -13,7 +13,10 @@ import { signout } from '../auth/apis/signout';
 
 function Account() {
   const dispatch = useTypedDispatch();
-  const modal = useTypedSelector((store) => store.app.modal);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const navigate = useNavigate();
   const [navs, setNavs] = useState(options);
 
@@ -42,8 +45,8 @@ function Account() {
 
   return (
     <>
-      <div className=" md:top-full   left-0 w-full  flex flex-col mt-10  lg:mt-20 lg:flex-row  p-3 gap-2">
-        <div className=" w-full top-full mt-10 flex lg:flex-col  md:w-[300px] ">
+      <div className=" md:top-full   left-0 w-full  flex flex-col mt-10  lg:mt-20 xl:flex-row  p-3 gap-2">
+        <div className=" w-full top-full mt-10 flex xl:flex-col  md:w-full xl:w-4/12">
           {navs.map((option) => {
             if (option.title === 'Signout') {
               return (
@@ -51,7 +54,7 @@ function Account() {
                   key={option.id}
                   onClick={() => {
                     handleTabChange(option.title);
-                    dispatch(toggleModal());
+                    toggleModal();
                   }}
                   to={option.path}
                   className={`${option.active ? 'bg-slate-200 text-black' : 'bg-white'} h-14 rounded-sm flex  w-full items-center justify-center  xl:justify-start xl:ps-10 border-2 border-slate-100 text-slate-500 font-semibold`}
@@ -59,7 +62,7 @@ function Account() {
 
                   <>
                     {option.icon && <option.icon />}
-                    <p className="hidden lg:inline-block px-2">{option.title}</p>
+                    <p className="hidden xl:inline-block px-2">{option.title}</p>
                   </>
 
                 </NavLink>
@@ -82,13 +85,13 @@ function Account() {
         <Outlet />
 
       </div>
-      {modal && (
-        <Modal className="rounded-xl border-2 w-6/12">
+      {isModalOpen && (
+        <Modal className="rounded-xl border-2 w-6/12" togglerFn={toggleModal}>
           <p className="py-4 text-slate-500 font-semibold"> Do you want to signout?</p>
           <div className="flex gap-2 ">
             <button
               onClick={() => {
-                dispatch(toggleModal());
+                toggleModal();
               }}
               className="border-2 px-4 py-2 rounded-xl bg-green-600 text-white font-bold"
               type="button"

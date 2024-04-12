@@ -1,44 +1,46 @@
 /* eslint-disable import/order */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable react/no-unused-prop-types */
-import React from 'react';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { deleteAddress } from '../apis/deleteAddress';
 import AuthHelper from '../../auth/apis/helper';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { StatusCodes } from 'http-status-codes';
 import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
-import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { addUser } from '../../../utils/reduxSlice/appSlice';
+import Modal from '@/components/dialougeBox/Modal';
 
 interface IProps {
   address:any
 }
 function Address({ address }:IProps) {
   const dispatch = useTypedDispatch();
-  const navigate = useNavigate();
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   const handleDelete = () => {
-    AuthHelper.removeAuthenticatedUserAddress(address._id);
-
     deleteAddress(address._id).then((response) => {
-      toast.success('Successfully Deleted');
       if (response?.success && response?.statusCode <= StatusCodes.OK) {
+        AuthHelper.removeAuthenticatedUserAddress(address._id);
         dispatch(addUser(response.message?.user));
         AuthHelper.updateAuthenticatedUserData(response.message?.user);
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
+        toast.success('Successfully Deleted');
+      } else {
+        toast.error('Failed to deleted address');
       }
     });
   };
+
   return (
     <>
-      <div className=" shadow-md px-5 w-full lg:w-5/12 py-3  ">
+      <div className=" shadow-md px-5 w-full lg:w-5/12 py-3 rounded-xl  ">
         <div className="flex w-full justify-between">
           <div className="w-full">
             <h1 className="font-bold text-sm text-slate-800">{address.fullname}</h1>
@@ -46,7 +48,7 @@ function Address({ address }:IProps) {
           </div>
           <div className="w-20 flex my-2 items-center">
             <Link to={`edit/${address._id}`} className="px-2 mr-3 py-1 text-slate-600 rounded"><FontAwesomeIcon icon={faPenToSquare} /></Link>
-            <button type="button" onClick={handleDelete} className="px-2 py-1 mr-3 text-slate-600 rounded"><FontAwesomeIcon icon={faTrash} /></button>
+            <button type="button" onClick={() => toggleModal()} className="px-2 py-1 mr-3 text-slate-600 rounded"><FontAwesomeIcon icon={faTrash} /></button>
 
           </div>
         </div>
@@ -71,6 +73,24 @@ function Address({ address }:IProps) {
         draggable
         pauseOnHover
       />
+      {isModalOpen && (
+        <Modal className="rounded-xl border-2 w-6/12" togglerFn={toggleModal}>
+          <p className="py-4 text-slate-500 font-semibold"> Are you sure you want to delete this address?</p>
+          <div className="flex gap-2 ">
+            <button
+              onClick={() => {
+                toggleModal();
+              }}
+              className="border-2 px-4 py-2 rounded-xl bg-green-600 text-white font-bold"
+              type="button"
+            >
+              Cancel
+            </button>
+            <button onClick={handleDelete} className="border-2 px-4 py-2 rounded-xl bg-red-600 font-bold text-white" type="button">Delete</button>
+
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

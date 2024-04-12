@@ -35,7 +35,7 @@ function Marketplace() {
   };
 
   return (
-    <div className="flex flex-col lg:px-10">
+    <div className="flex flex-col lg:px-10 mx-auto xl:mx-0">
       <h1 className=" text-2xl mt-5 lg:text-3xl text-slate-800 font-bold">Manage Marketplace</h1>
       <div className="flex flex-col">
         <h4 className=" text-slate-500 text-xl font-bold mt-10">Activate Seller Account</h4>
