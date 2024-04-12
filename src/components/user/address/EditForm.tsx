@@ -3,12 +3,13 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React from 'react';
 import {
-  Formik, Field, Form, ErrorMessage,
+  Formik, Field, Form,
 } from 'formik';
 import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
+import FormFieldError from '@/utils/FormikError';
 import { updateAddress } from '../apis/updateAddress.api';
 import AuthHelper from '../../auth/apis/helper';
 import { AddressSchema, transformZodToFormikErrors } from './helpers/validationSchema';
@@ -69,10 +70,9 @@ function EditAddress() {
     >
 
       { (form) => (
-        <Form className="w-full md:8/12 p-4 h-fit bg-white">
+        <Form className="w-full xl:5/12  bg-white">
           <h2 className="text-2xl text-slate-600 font-bold py-10">Edit Address</h2>
-          <div>
-
+          <div className="flex justify-center flex-col xl:w-8/12">
             <label htmlFor="fullname">Fullname</label>
             <Field
               type="text"
@@ -80,97 +80,60 @@ function EditAddress() {
               name="fullname"
               className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.fullname && form.touched.fullname && 'border-2 border-red-500'}`}
             />
-            <ErrorMessage
-              name="fullname"
-              render={(msg) => (
-                <div className="text-red-500 pb-2">
-                  {msg}
-                </div>
-              )}
-            />
+            <FormFieldError name="fullname" />
             <label htmlFor="homeAddress">Home/Flat Name</label>
             <Field
               type="text"
               name="homeAddress"
               className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.homeAddress && form.touched.homeAddress && 'border-2 border-red-500'}`}
             />
-            <ErrorMessage
-              name="homeAddress"
-              render={(msg) => (
-                <div className="text-red-500 pb-2">
-                  {msg}
-                </div>
-              )}
-            />
-            <div className="flex  justify-between">
+            <FormFieldError name="homeAddress" />
+            <div className="flex flex-col  justify-between">
               <div>
                 <label htmlFor="city">City</label>
                 <Field
                   type="text"
                   name="city"
-                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.city && form.touched.city && 'border-2 border-red-500'}`}
+                  className={`block flex-1 border-2 bg-transparent w-full xl:4/12 py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.city && form.touched.city && 'border-2 border-red-500'}`}
                 />
-                <ErrorMessage
-                  name="city"
-                  render={(msg) => (
-                    <div className="text-red-500 pb-2">
-                      {msg}
-                    </div>
-                  )}
-                />
+                <FormFieldError name="city" />
               </div>
-              <div>
-                <label htmlFor="state">State</label>
-                <Field
-                  type="text"
-                  name="state"
-                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.state && form.touched.state && 'border-2 border-red-500'}`}
-                />
-                <ErrorMessage
-                  name="state"
-                  render={(msg) => (
-                    <div className="text-red-500 pb-2">
-                      {msg}
-                    </div>
-                  )}
-                />
+
+              <div className="xl:flex xl:flex-row flex-col">
+                <div className="w-full">
+                  <label htmlFor="state">State</label>
+
+                  <Field
+                    type="text"
+                    name="state"
+                    className={`block flex-1 w-full xl:4/12 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.state && form.touched.state && 'border-2 border-red-500'}`}
+                  />
+
+                  <FormFieldError name="state" />
+                </div>
               </div>
-            </div>
-            <div className="flex justify-between">
-              <span className="flex flex-col w-1/3 mr-10">
-                <label htmlFor="postalCode">Postal Code</label>
-                <Field
-                  type="text"
-                  name="postalCode"
-                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.postalCode && form.touched.postalCode && 'border-2 border-red-500'}`}
-                />
-                <ErrorMessage
-                  name="postalCode"
-                  render={(msg) => (
-                    <div className="text-red-500 pb-2">
-                      {msg}
-                    </div>
-                  )}
-                />
-              </span>
+              <div className="flex justify-between w-full flex-col xl:flex-row ">
+                <span className="flex flex-col w-full ">
+                  <label htmlFor="postalCode">Postal Code</label>
+                  <Field
+                    type="text"
+                    name="postalCode"
+                    className={`block w-full xl:4/12 flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.postalCode && form.touched.postalCode && 'border-2 border-red-500'}`}
+                  />
+                  <FormFieldError name="postalCode" />
+                </span>
 
-              <span className="flex flex-col w-4/6">
-                <label htmlFor="phoneNo">Phone Number</label>
-                <Field
-                  type="text"
-                  name="phoneNo"
-                  className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.phoneNo && form.touched.phoneNo && 'border-2 border-red-500'}`}
+                <span className="flex flex-col w-full">
+                  <label htmlFor="phoneNo">Phone Number</label>
+                  <Field
+                    type="text"
+                    name="phoneNo"
+                    className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.phoneNo && form.touched.phoneNo && 'border-2 border-red-500'}`}
 
-                />
-                <ErrorMessage
-                  name="phoneNo"
-                  render={(msg) => (
-                    <div className="text-red-500 pb-2">
-                      {msg}
-                    </div>
-                  )}
-                />
-              </span>
+                  />
+                  <FormFieldError name="phoneNo" />
+                </span>
+              </div>
             </div>
             <label htmlFor="country">Country</label>
             <Field
@@ -179,16 +142,9 @@ function EditAddress() {
               className={`block flex-1 border-2 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.country && form.touched.country && 'border-2 border-red-500'}`}
 
             />
-            <ErrorMessage
-              name="country"
-              render={(msg) => (
-                <div className="text-red-500 pb-2">
-                  {msg}
-                </div>
-              )}
-            />
+            <FormFieldError name="country" />
           </div>
-          <div className="w-full flex justify-between my-2">
+          <div className="w-full flex gap-2 my-2">
             <button type="button" onClick={() => navigate(-1)} className="text-white bg-slate-500 dark:bg-slate-500  font-medium rounded text-sm px-5 py-2.5 ">Back</button>
             {form.isSubmitting
               ? (

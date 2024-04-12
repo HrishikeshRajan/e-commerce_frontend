@@ -29,8 +29,8 @@ function Account() {
   };
 
   return (
-    <div className="fixed top-36 md:top-10  left-0 w-full  flex flex-col  mt-10 lg:flex-row  min-h-full p-3 gap-2">
-      <div className=" w-full flex lg:flex-col  md:w-[300px] ">
+    <div className=" md:top-10  left-0 w-full  flex flex-col  mt-10 lg:flex-row  p-3 gap-2">
+      <div className=" w-full top-full mt-10 flex lg:flex-col  md:w-[300px] ">
         <NavLink to="orders" className="h-14 flex w-full items-center px-3  bg-white border-2 border-slate-100 text-slate-500 font-semibold">
           <>
             <FontAwesomeIcon icon={faBasketShopping} className="lg:hiden" />

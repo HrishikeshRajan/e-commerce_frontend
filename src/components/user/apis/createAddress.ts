@@ -7,7 +7,7 @@ headers.set('Content-Type', 'application/json');
 
 export const createAddress = async (address:UploadAddress) => {
   try {
-    const url = `${import.meta.env.VITE_BASE_URL}/address`;
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/address`;
     const response = await fetch(url, {
       method: 'POST',
       headers,
