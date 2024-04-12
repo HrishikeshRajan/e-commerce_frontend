@@ -155,6 +155,7 @@ const App = () => {
           ),
           children: [
             {
+              index: true,
               path: 'profile',
               element: (
                 <AuthenticationWrapper authentication>

@@ -16,6 +16,7 @@ interface IAPP {
   sidebar:boolean,
   screen:Screen,
   flashSaleItem: ClientFlashSale | null
+  modal:boolean
 }
 
 const initialState:IAPP = {
@@ -27,6 +28,7 @@ const initialState:IAPP = {
   sidebar: false,
   screen: Screen.USER,
   flashSaleItem: null,
+  modal: false,
 };
 const appSlice = createSlice({
   name: 'app',
@@ -74,6 +76,9 @@ const appSlice = createSlice({
     addFlashSaleItem: (state, action:PayloadAction<ClientFlashSale>) => {
       state.flashSaleItem = action.payload;
     },
+    toggleModal: (state) => {
+      state.modal = !state.modal;
+    },
 
   },
 });
@@ -90,6 +95,7 @@ export const {
   toggleUserSidebar,
   setScreen,
   addFlashSaleItem,
+  toggleModal,
 } = appSlice.actions;
 
 export default appSlice.reducer;
