@@ -18,6 +18,7 @@ import Logo from './Logo';
 import CompanyName from './CompanyName';
 import { Menu } from './Menu';
 import LensIconButton from './utils/LensIconButton';
+import Nav from '../CustomElements/Nabar/Nav';
 
 function Navbar() {
   const app = useTypedSelector((store) => store.app);
@@ -38,7 +39,7 @@ function Navbar() {
     }
   };
   return (
-    <nav className=" flex items-center h-20 fixed top-0 z-40 w-full shadow-md bg-white  p-2  ">
+    <Nav className=" flex items-center h-20 fixed top-0 z-40 w-full shadow-md bg-white  p-2  ">
 
       {!app.authPage && <Logo />}
       {!isSearchEnable && (
@@ -90,7 +91,7 @@ function Navbar() {
           </>
         )}
       </div>
-    </nav>
+    </Nav>
 
   );
 }

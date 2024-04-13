@@ -53,6 +53,7 @@ import CreateCouponForm from './components/marketplace/dashboard/pages/offers/ui
 import CouponList from './components/marketplace/dashboard/pages/offers/ui/CouponList';
 import FlashSaleWrapper from './components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper';
 import FlashSaleForm from './components/marketplace/dashboard/pages/flashsale/FlashSaleForm';
+import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -67,7 +68,7 @@ const Element = () => (
 // All markplace components handled here
 const MarketPlace = () => (
   <div className="w-full h-auto relative">
-    <Navbar />
+    <SellerNavbar />
     <Dashboard />
   </div>
 );
