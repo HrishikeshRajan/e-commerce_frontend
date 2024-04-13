@@ -6,9 +6,7 @@ function CreateShop() {
   useClearShop();
 
   return (
-    <div className="w-full sm:w-8/12">
-      <AddForm />
-    </div>
+    <AddForm />
   );
 }
 

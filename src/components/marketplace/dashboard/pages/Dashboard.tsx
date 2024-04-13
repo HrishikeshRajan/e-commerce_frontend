@@ -4,12 +4,12 @@ import SidebarWrapper from '../ui/sidenav/SidebarWrapper';
 
 function Dashboard() {
   return (
-    <div className="flex w-full">
+    <>
       <SidebarWrapper />
-      <div className="w-full h-screen overflow-y-scroll">
+      <div className="flex w-full h-auto xl:6/12 overflow-y-auto absolute  top-0 left-0 right-0 justify-end">
         <Outlet />
       </div>
-    </div>
+    </>
   );
 }
 

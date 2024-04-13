@@ -39,20 +39,20 @@ function AddLogo({ form }:FormProps) {
       dispatch(setShopLogo(reader.result as string));
     };
     reader.readAsDataURL(image);
-  }, []);
+  }, [dataUrl, dispatch, form]);
   const {
     getRootProps, getInputProps, isDragActive,
   } = useDropzone({ onDrop });
 
   return (
-    <div className="p-2 mb-2">
+    <div className="p-2 shadow-md rounded-xl mb-2">
       <img src={dataUrl as string || existingImage || defaultLogo} alt="userphoto" width="100px" height="100px" className={`my-3 w-[100px] h-[100px] object-cover rounded ${form.values.logo === '' && form.touched.logo ? 'border border-red-900' : ''}`} />
       {(form.values.logo === '') && form.touched.logo ? (
         <div className="text-red-500 pb-2">
           Required
         </div>
       ) : ''}
-      <div {...getRootProps()} className="border-2 border-dashed border-gray-400 p-10 bg-gray-100">
+      <div {...getRootProps()} className="border-2 border-dashed rounded-xl border-gray-400 p-10 bg-gray-100">
         <input {...getInputProps()} hidden />
         {
           isDragActive

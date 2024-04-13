@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-constructed-context-values */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
@@ -5,18 +6,21 @@ import React, { useState } from 'react';
 import Sidebar from '@/components/CustomElements/Sidebar/Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from '@/components/dialougeBox/Modal';
-import { useDispatch } from 'react-redux';
-import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';
+import { removeAuthentication, removeUser, toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
 import AuthHelper from '@/components/auth/apis/helper';
 import { signout } from '@/components/auth/apis/signout';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
+import { IconContext } from 'react-icons';
+import { RxCross1 } from 'react-icons/rx';
 import { list, SidebarItemTypes } from './List';
 import { hasChildren, isColletion, isOpen } from './helper';
 import Submenu from './Submenu';
 
 function SidebarWrapper() {
+  const sidebarOpen = useTypedSelector((store) => store.app.marketSidebar);
+  const dispatch = useTypedDispatch();
   const [menu, setMenu] = useState(list);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -52,8 +56,17 @@ function SidebarWrapper() {
   };
   return (
     <>
-      <Sidebar className="w-80 relative top-full mt-20 shadow-lg h-screen overflow-y-auto">
-        <ul data-id="menu" className="flex flex-col justify-start absolute top-10 w-full px-5 ">
+      <Sidebar className={`${sidebarOpen ? 'w-11/12 h-screen   top-0 left-0 z-50 bg-white' : 'w-0 bg-white h-0 z-0 xl:w-80 xl:h-screen  '} fixed left-0   w-80  xl:mt-20 z-50  shadow-lg  overflow-y-auto`}>
+        <button type="button" aria-label="close" className="absolute top-6  xl:hidden outline-none left-10 " onClick={() => dispatch(toggleSidebarMarketplace())}>
+
+          <IconContext.Provider value={{ className: 'text-black active:rotate-90', size: '30' }}>
+
+            <RxCross1 />
+
+          </IconContext.Provider>
+        </button>
+        <ul data-id="menu" className="flex  flex-col justify-start relative top-20 xl:top-10 w-full px-5 ">
+
           {menu.map((option) => (
             <li key={option.id}>
 

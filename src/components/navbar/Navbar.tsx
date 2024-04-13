@@ -8,7 +8,9 @@ import useFlashSyncToLocalStorage from '@/hooks/useFlashSyncToLocalStorage';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
 import { useSearchParams } from 'react-router-dom';
-import { useTypedSelector } from '../../hooks/user/reduxHooks';
+import { toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
+import { FaBars } from 'react-icons/fa6';
+import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
 import Search from './Search';
 import CartNavIcon from './CartNavIcon';
 
@@ -21,7 +23,7 @@ function Navbar() {
   const app = useTypedSelector((store) => store.app);
   const [isSearchEnable, setSearchEnable] = useState(false);
   const [search, setSearch] = useSearchParams();
-  // const dispatch = useTypedDispatch();
+  const dispatch = useTypedDispatch();
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
   const enableSearch = () => {
@@ -40,7 +42,18 @@ function Navbar() {
 
       {!app.authPage && <Logo />}
       {!isSearchEnable && (
-        <CompanyName className="text-gray-600 font-semibold items-center xl:hidden text-sm lg:pl-4" />
+        <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => {
+              dispatch(toggleSidebarMarketplace());
+            }}
+            className="xl:hidden"
+          >
+            <FaBars />
+          </button>
+          <CompanyName className="text-gray-600 font-semibold items-center xl:hidden text-sm lg:pl-4" />
+        </div>
 
       )}
 
