@@ -33,7 +33,6 @@ import SettingSWapper from './components/marketplace/dashboard/pages/settings/Se
 import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop';
 import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
 import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
-import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
 import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
 import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
 import ProductsPage from './components/products/ProductsPage';
@@ -69,7 +68,7 @@ const Element = () => (
 // All markplace components handled here
 const MarketPlace = () => (
   <div className="min-h-screen relative ">
-    <SellerNavbar />
+    <Navbar />
     <Dashboard />
   </div>
 );

@@ -1,15 +1,14 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import Sidebar from '../ui/sidebar/Sidebar';
+import SidebarWrapper from '../ui/sidenav/SidebarWrapper';
 
 function Dashboard() {
   return (
     <div className="flex w-full">
-      <Sidebar />
+      <SidebarWrapper />
       <div className="w-full h-screen overflow-y-scroll">
         <Outlet />
       </div>
-
     </div>
   );
 }

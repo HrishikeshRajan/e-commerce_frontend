@@ -97,7 +97,6 @@ function Home() {
             <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
               PREVIOUS PURCHASES
             </Heading>
-
             <Line />
             <div className="flex w-full gap-2 justify-start mt-10 overflow-y-auto">
               {orders?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}

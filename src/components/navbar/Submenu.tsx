@@ -60,7 +60,6 @@ export function Submenu(
 
     <>
       <ListWrapper className="bg-white  rounded-md pl-1 pe-1 py-1 shadow-md top-50 w-40 right-0 mr-1 absolute">
-
         {menus.map((option) => (
           <ListItem key={option.id} className="text-xs">
             {option.type === 'collection'
