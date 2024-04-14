@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { PromoUpload } from '@/types/Promo';
-import { StatusCodes } from 'http-status-codes';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import ProductSelectBox from './ProductSelectBox';
 import 'react-toastify/dist/ReactToastify.css';
+import { createPromo } from '../api/createPromo';
 
 function makeid(length:number) {
   let result = '';
@@ -20,21 +20,21 @@ function makeid(length:number) {
 
 function CreateCouponForm() {
   const [formData, setFormData] = useState<Partial<PromoUpload>>({
-    offername: 'Onam offer 40',
-    type: 'PERCENTAGE',
-    method: 'COUPON',
-    startTime: '2024-03-29T10:24',
-    endTime: '2024-03-30T10:24',
-    code: 'Z054O',
+    offername: '',
+    type: undefined,
+    method: undefined,
+    startTime: '',
+    endTime: '',
+    code: '',
     image: '',
-    discountPercentage: 60,
-    maxUsage: 100,
+    discountPercentage: 0,
+    maxUsage: 0,
     discountAmount: 0,
-    minAmountInCart: 2000,
-    status: 'Active',
-    maxUsagePerUser: 3,
+    minAmountInCart: 0,
+    status: '',
+    maxUsagePerUser: 0,
     tags: {
-      products: ['65d082faac6ecdaa6fa58073'],
+      products: [],
     },
   });
 
@@ -63,75 +63,14 @@ function CreateCouponForm() {
     }
   };
 
-  const notify = (message:string) => toast.success(message, {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    transition: Bounce,
-  });
-  const notifyError = (message:string) => toast.error(message, {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    transition: Bounce,
-  });
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    const form = new FormData();
-    const Tags:{ products:string[] } = { products: [] };
-    formData.tags?.products.forEach((productId) => {
-      Tags.products.push(productId);
-    });
-    form.append('offername', formData.offername!);
-    form.append('image', formData.image!);
-    form.append('type', formData.type!);
-    form.append('method', formData.method!);
-    form.append('startTime', formData.startTime!);
-    form.append('endTime', formData.endTime!);
-    form.append('code', formData.code!);
-    if (formData.type === 'PERCENTAGE') {
-      form.append('discountPercentage', String(formData.discountPercentage!));
-    }
-    if (formData.type === 'FLAT') {
-      form.append('discountAmount', String(formData.discountAmount!));
-    }
-    form.append('maxUsage', formData.maxUsage?.toString() || '');
-    form.append('maxUsagePerUser', formData.maxUsagePerUser?.toString() || '');
-    formData.usedBy?.forEach((usedByItem, index) => {
-      form.append(`usedBy[${index}].userId`, usedByItem.userId);
-      form.append(`usedBy[${index}].count`, usedByItem.count.toString());
-    });
-    form.append('minAmountInCart', formData.minAmountInCart?.toString() || '');
-    form.append('tags', JSON.stringify(Tags));
-    form.append('status', formData.status!);
-    try {
-      const data = await fetch('http://localhost:4000/api/v1/seller/promo', {
-        method: 'POST',
-        credentials: 'include',
-        body: form,
-      });
-      const response = await data.json();
-
-      if (response.statusCode === StatusCodes.CREATED) {
-        notify('Coupon Created');
-      }
-      if (response.statusCode === StatusCodes.CONFLICT) {
-        notifyError(response.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    createPromo(formData)
+      .then(() => {
+        toast('Successfully created');
+      })
+      .catch(() => toast.error('Failed to create promo'));
   };
 
   const genCode = () => {
@@ -142,7 +81,7 @@ function CreateCouponForm() {
   };
 
   return (
-    <form className="mt-40 md:mt-44 xl:mt-28 flex p-2 md:p-3 flex-col w-full xl:w-6/12 gap-2 rounded-xl bg-white-200  ">
+    <form className="top-full mt-20 md:mt-44 xl:mt-28 flex p-2 md:p-3 flex-col w-full md:w-8/12 xl:w-6/12 gap-2 rounded-xl bg-white-200  ">
       <h1 className="text-lg py-1 font-bold text-slate-400 text-center">Create promo codes</h1>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Offer Name:
@@ -183,7 +122,7 @@ function CreateCouponForm() {
         </label>
       </div>
 
-      <label className="py-2 w-full gap-2 flex  text-left items-center ">
+      <label className="py-2 w-full gap-2 flex justify-between  text-left items-center ">
         Coupon Code:
         <input type="text" value={formData.code} name="code" className="border-2 py-2 text-slate-700 w-4/12 bg-slate-50 outline-none pl-2 rounded-lg" min={5} max={10} onChange={handleChange} placeholder="xxxxxxx" />
         <Button className="w-4/12 py-2" variant="secondary" onClick={genCode} type="button">Generate Code</Button>

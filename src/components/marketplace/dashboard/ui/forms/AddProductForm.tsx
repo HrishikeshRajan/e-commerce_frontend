@@ -6,28 +6,24 @@ import {
 } from 'formik';
 
 import { toFormikValidationSchema } from 'zod-formik-adapter';
-import { StatusCodes } from 'http-status-codes';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
-import { useTypedDispatch } from 'hooks/user/reduxHooks';
-import { useNavigate, useParams } from 'react-router-dom';
-import { removeUser } from 'utils/reduxSlice/appSlice';
+import { useParams } from 'react-router-dom';
 import Loading from '@/utils/animations/Loading';
 import { merge } from 'lodash';
-import AuthHelper from '../../../../auth/apis/helper';
-import { createNewProduct } from '../../pages/products/apis/createProduct';
+import { ErrorResponse, FetchApiResponse, hasRequestSucceeded } from '@/types/Fetch';
+import FormFieldError from '@/utils/FormikError';
+import { createNewProduct, Product } from '../../pages/products/apis/createProduct';
 import AddProductPhoto from './AddProductPhoto';
 import { ProductCoreSchema } from '../../pages/products/types';
 
 function AddProductForm() {
-  const dispatch = useTypedDispatch();
   const [discontinued, setDiscontinued] = useState(false);
   const [files, setFiles] = useState<File[]>();
   const params = useParams();
 
   const setFilesData = (buffers:File[]) => setFiles(buffers);
 
-  const navigate = useNavigate();
   const toggleDiscontinued = () => {
     setDiscontinued(!discontinued);
   };
@@ -39,12 +35,12 @@ function AddProductForm() {
   };
 
   return (
-    <div className="flex  mt-36 lg:mt-20   w-full justify-center p-5">
+    <div className="flex top-full mt-20 lg:mt-20 xl:w-6/12  xl:left-96  mx-auto xl:absolute w-full justify-center ">
 
       <Formik
         initialValues={{
           name: '',
-          price: 0,
+          price: '',
           currencyCode: 'INR',
           description: '',
           category: '',
@@ -55,27 +51,25 @@ function AddProductForm() {
           isDiscontinued: false,
           keywords: '',
           shopId: params.id!,
-          stock: 0,
+          stock: '',
         }}
         validationSchema={toFormikValidationSchema(ProductCoreSchema.omit({ id: true }))}
         onSubmit={(values, actions) => {
           merge(values, fileObj);
-          createNewProduct({ ...values }).then((response) => {
-            actions.setSubmitting(false);
-            if (response.statusCode === StatusCodes.OK && response.OK) {
-              toast.success('Successfully saved');
-            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-              && response?.success === false) {
-              AuthHelper.clearSignedOnData();
-              dispatch(removeUser());
-              navigate('/auth');
-            }
-          }).catch((e) => console.log(e));
+          createNewProduct({ ...values })
+            .then((response:FetchApiResponse<{ product:Product } | ErrorResponse>) => {
+              actions.setSubmitting(false);
+              if (hasRequestSucceeded(response)) {
+                toast.success('Successfully saved');
+              }
+            }).catch((e) => {
+              toast.error((e as Error).message);
+            });
         }}
       >
         {(form) => (
-          <Form className=" shadow-md  sm:w-5/6 p-5">
-            <h1 className=" text-slate-500 py-2 mb-1 text-4xl font-semibold">
+          <Form className=" shadow-md sm:w-5/6 p-2">
+            <h1 className=" text-slate-500 py-2 mb-1 text-xl font-semibold">
               Add New Product
             </h1>
 
@@ -88,14 +82,7 @@ function AddProductForm() {
                 className={`bg-gray-50  text-gray-900 border text-sm rounded-lg block w-full p-2.5    ${form.errors.name && form.touched.name && 'border-2 border-red-500'}`}
                 placeholder="Your product name"
               />
-              <ErrorMessage
-                name="name"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="name" />
             </div>
 
             <div className="mb-5">
@@ -109,14 +96,7 @@ function AddProductForm() {
                 className={`outline-none block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border ${form.errors.description && form.touched.description && 'border-2 border-red-500'}`}
                 placeholder="Write description about your product"
               />
-              <ErrorMessage
-                name="description"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="description" />
             </div>
             <div className="mb-5">
               <label htmlFor="category" className="block mb-2 text-sm font-medium text-gray-900 ">Category of Product</label>
@@ -127,14 +107,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.category && form.touched.category && 'border-2 border-red-500'} `}
                 placeholder="Category of product"
               />
-              <ErrorMessage
-                name="category"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="category" />
             </div>
             <div className="mb-5">
               <label htmlFor="gender" className="block mb-2 text-sm font-medium text-gray-900 ">Genders</label>
@@ -155,14 +128,7 @@ function AddProductForm() {
 
               </div>
 
-              <ErrorMessage
-                name="gender"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="gender" />
             </div>
 
             <div className="mb-5">
@@ -174,14 +140,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.brand && form.touched.brand && 'border-2 border-red-500'} `}
                 placeholder="Your brand name"
               />
-              <ErrorMessage
-                name="brand"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="brand" />
             </div>
 
             <div className="mb-5">
@@ -193,14 +152,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.color && form.touched.color && 'border-2 border-red-500'} `}
                 placeholder="Color of Product"
               />
-              <ErrorMessage
-                name="color"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="color" />
             </div>
 
             <div className="mb-5">
@@ -212,14 +164,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.sizes && form.touched.sizes && 'border-2 border-red-500'} `}
                 placeholder="Your product sizes"
               />
-              <ErrorMessage
-                name="sizes"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="sizes" />
             </div>
 
             <div className="mb-5">
@@ -231,14 +176,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.price && form.touched.price && 'border-2 border-red-500'} `}
                 placeholder="Your Product price"
               />
-              <ErrorMessage
-                name="price"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="price" />
             </div>
 
             <div className="mb-5">
@@ -250,14 +188,7 @@ function AddProductForm() {
                 className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.price && form.touched.price && 'border-2 border-red-500'} `}
                 placeholder="Your product stock"
               />
-              <ErrorMessage
-                name="stock"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
+              <FormFieldError name="stock" />
             </div>
             <div className="mb-5">
 
@@ -282,24 +213,6 @@ function AddProductForm() {
               </div>
               <ErrorMessage
                 name="isDiscontinued"
-                render={(msg) => (
-                  <div className="text-red-500 pb-2">
-                    {msg}
-                  </div>
-                )}
-              />
-            </div>
-            <div className="mb-5">
-              <label htmlFor="keywords" className="block mb-2 text-sm font-medium text-gray-900 ">Enter 5 keywords for this product</label>
-              <Field
-                type="text"
-                id="keywords"
-                name="keywords"
-                className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.keywords && form.touched.keywords && 'border-2 border-red-500'} `}
-                placeholder="Write 5 keywords for your products"
-              />
-              <ErrorMessage
-                name="keywords"
                 render={(msg) => (
                   <div className="text-red-500 pb-2">
                     {msg}

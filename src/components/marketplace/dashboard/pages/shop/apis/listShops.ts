@@ -1,9 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const getShops = async (signal:any, query:string) => {
   try {
-    const response = await fetch(`${ShopBaseUrl('shops?')}${query}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/shops?${query}`, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -14,6 +13,10 @@ export const getShops = async (signal:any, query:string) => {
     });
     return await response.json();
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      if (error.name !== 'AbortError') {
+        throw new Error('Something went wrong!');
+      }
+    }
   }
 };

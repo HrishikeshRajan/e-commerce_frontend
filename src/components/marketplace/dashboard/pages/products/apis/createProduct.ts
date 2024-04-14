@@ -7,7 +7,7 @@ export interface FileTypes {
   files?:any
 }
 export type Product = IProduct & FileTypes;
-export const createNewProduct = async (product:Omit<Product, 'id'>) => {
+export const createNewProduct = async (product:Omit<Product, 'id' | 'price' | 'stock' > & { price:string, stock:string }) => {
   try {
     const formData = new FormData();
     formData.append('name', product.name);
@@ -45,7 +45,8 @@ export const createNewProduct = async (product:Omit<Product, 'id'>) => {
     });
     return await response.json();
   } catch (error) {
-    console.log(error);
-    return { response: { message: { error: 'Product creation failed' } } };
+    if (error instanceof Error) {
+      throw new Error('Something went wrong! try again later.');
+    }
   }
 };

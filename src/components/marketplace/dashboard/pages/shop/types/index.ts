@@ -13,13 +13,12 @@ const ShopSchema = z.object({
   email: z.string().email(),
   owner: OwnerSchema,
   created: z.string(),
-  totalProducts: z.number(),
+  isActive: z.boolean(),
 });
 
 // Define the main schema for the entire JSON structure
 const MainSchema = z.object({
   shops: z.array(ShopSchema),
-  itemsShowing: z.number(),
   totalItems: z.number(),
 });
 

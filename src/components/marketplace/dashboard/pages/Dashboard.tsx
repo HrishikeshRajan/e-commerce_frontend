@@ -6,7 +6,7 @@ function Dashboard() {
   return (
     <>
       <SidebarWrapper />
-      <div className="flex w-full h-auto xl:6/12 overflow-y-auto absolute  top-0 left-0 right-0 justify-end">
+      <div className=" flex mx-auto w-full  h-auto justify-center xl:justify-end xl:pr-20 overflow-y-auto ">
         <Outlet />
       </div>
     </>

@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 
 function FlashsaleWrapper() {
   return (
-    <div><Outlet /></div>
+    <Outlet />
   );
 }
 

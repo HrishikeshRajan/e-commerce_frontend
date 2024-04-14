@@ -4,7 +4,7 @@ import { IoIosArrowForward } from 'react-icons/io';
 
 function ShopListCard({ shop }:{ shop:any }) {
   return (
-    <div className="w-5/12  bg-white gap-2 p-5 h-fit hover:bg-pink-50 rounded-2xl shadow-md flex justify-between items-center  ">
+    <div className="w-full  bg-white gap-2 p-5 h-fit hover:bg-pink-50 rounded-2xl shadow-md flex justify-between items-center  ">
       {shop.logo && <img src={shop.logo.secure_url} alt="shop" className="w-20 h-20 m-2 rounded-full " />}
       <div className="flex-1">
         <h1 className="text-slate-700 py-1 font-bold">{shop.name}</h1>

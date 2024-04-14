@@ -57,7 +57,7 @@ function SidebarWrapper() {
   return (
     <>
       <Sidebar className={`${sidebarOpen ? 'w-11/12 h-screen   top-0 left-0 z-50 bg-white' : 'w-0 bg-white h-0 z-0 xl:w-80 xl:h-screen  '} fixed left-0   w-80  xl:mt-20 z-50  shadow-lg  overflow-y-auto`}>
-        <button type="button" aria-label="close" className="absolute top-6  xl:hidden outline-none left-10 " onClick={() => dispatch(toggleSidebarMarketplace())}>
+        <button type="button" aria-label="close" className="absolute top-6  xl:hidden  outline-none left-10 " onClick={() => dispatch(toggleSidebarMarketplace())}>
 
           <IconContext.Provider value={{ className: 'text-black active:rotate-90', size: '30' }}>
 

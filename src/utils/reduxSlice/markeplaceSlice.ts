@@ -67,7 +67,6 @@ const initialState:IAPP = {
   productImages: [],
   shopsList: {
     shops: [],
-    itemsShowing: 0,
     totalItems: 0,
   },
   confirmShopDelete: {

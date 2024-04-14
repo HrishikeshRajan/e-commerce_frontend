@@ -29,7 +29,7 @@ function AddForm() {
   const logo = useTypedSelector((store) => store.marketplace.shop.logo);
 
   return (
-    <div className="flex  w-full justify-center p-5 z-10 rounded-xl">
+    <div className="flex  w-full top-full mt-20 xl:left-96 xl:absolute xl:mt-20 justify-center bg-white z-10  xl:w-6/12 md:8/12 ">
 
       <Formik
         initialValues={{
@@ -55,7 +55,7 @@ function AddForm() {
         }}
       >
         {(form) => (
-          <Form className=" shadow-md  bg-white  w-full xl:w-4/12  top-full mt-10 xl:mt-20 p-5">
+          <Form className=" shadow-md rounded-xl      p-2 ">
             <h1 className="text-xl text-slate-500 py-2 mb-1">
               Create Shop
             </h1>

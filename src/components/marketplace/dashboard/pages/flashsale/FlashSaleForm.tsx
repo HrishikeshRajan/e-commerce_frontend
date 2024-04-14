@@ -1,23 +1,23 @@
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-import { StatusCodes } from 'http-status-codes';
-import { Bounce, ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UploadFlashSale } from '@/types/Sale';
 import ProductSelectBox from '../offers/ui/ProductSelectBox';
 import Position from './Position';
+import { createFlashsale } from './api/createFlashsale';
 
 function FlashSaleForm() {
   const [formData, setFormData] = useState<Partial<UploadFlashSale>>({
-    name: 'Onam offer 40',
-    type: 'PERCENTAGE',
+    name: '',
+    type: undefined,
     method: 'FLASHSALE',
     startTime: '',
     endTime: '',
     image: '',
-    discountPercentage: 60,
+    discountPercentage: 0,
     discountAmount: 0,
-    status: 'ACTIVE',
+    status: 'PENDING',
     product: '',
     totalQuantityToSell: 0,
     position: undefined,
@@ -35,7 +35,6 @@ function FlashSaleForm() {
 
   const addProductId = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { checked, value } = e.target;
-    console.log(checked, value);
     if (checked) {
       setFormData((prevState) => ({
         ...prevState,
@@ -49,72 +48,16 @@ function FlashSaleForm() {
     }
   };
 
-  const notify = (message:string) => toast.success(message, {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    transition: Bounce,
-  });
-  const notifyError = (message:string) => toast.error(message, {
-    position: 'top-center',
-    autoClose: 5000,
-    hideProgressBar: true,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'light',
-    transition: Bounce,
-  });
   const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
 
-    const form = new FormData();
-
-    form.append('name', formData.name!);
-    form.append('image', formData.image!);
-    form.append('type', formData.type!);
-    form.append('method', formData.method!);
-    form.append('startTime', formData.startTime!);
-    form.append('endTime', formData.endTime!);
-    form.append('totalQuantityToSell', String(formData.totalQuantityToSell!));
-
-    if (formData.type === 'PERCENTAGE') {
-      form.append('discountPercentage', String(formData.discountPercentage!));
-    }
-    if (formData.type === 'FLAT') {
-      form.append('discountAmount', String(formData.discountAmount!));
-    }
-
-    form.append('product', formData.product!);
-    form.append('status', formData.status!);
-    form.append('position', formData.position!);
-    try {
-      const data = await fetch('http://localhost:4000/api/v1/seller/flashsale', {
-        method: 'POST',
-        credentials: 'include',
-        body: form,
-      });
-      const response = await data.json();
-      console.log(response);
-      if (response.statusCode === StatusCodes.CREATED) {
-        notify('Coupon Created');
-      }
-      if (response.statusCode === StatusCodes.CONFLICT) {
-        notifyError(response.error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    createFlashsale(formData)
+      .then(() => toast.success('Successfully Created'))
+      .catch(() => toast.error('Failed to create flash sale'));
   };
 
   return (
-    <form className="mt-40 md:mt-44 xl:mt-28 flex p-2 md:p-3 flex-col w-full xl:w-6/12 gap-2 rounded-xl bg-white-200  ">
+    <form className="mt-40 w-full  md:w-8/12 md:mt-44 xl:left-96 xl:absolute xl:mt-28 flex p-2 md:p-3 flex-col xl:w-6/12 gap-2 rounded-xl bg-white  ">
       <h1 className="text-lg py-1 font-bold text-slate-400 text-center">Create Flash Sale</h1>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Name:

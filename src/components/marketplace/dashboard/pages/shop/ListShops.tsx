@@ -1,37 +1,33 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { addShopList, confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
-import { StatusCodes } from 'http-status-codes';
 
 import { Button } from '@/components/ui/button';
 import {
   Table, TableHeader, TableRow, TableHead, TableBody, TableCell,
 } from '@/components/ui/table';
 import {
-  decPreviousProductPageNumber, addProductsList, incNextProductPageNumber, confirmDelete,
+  confirmDelete,
 } from '@/utils/reduxSlice/productSlice';
-import {
-  DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem,
-} from '@radix-ui/react-dropdown-menu';
+
 import { ChevronDownIcon } from '@radix-ui/react-icons';
 import {
-  SortingState,
-  ColumnFiltersState,
-  VisibilityState,
   RowSelectionState,
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
   flexRender,
-  RowData,
+  PaginationState,
+  getPaginationRowModel,
 } from '@tanstack/react-table';
-import { isEmpty } from 'lodash';
-import { Input } from '@/components/ui/input';
-import queryString from 'query-string';
 import { ToastContainer, toast } from 'react-toastify';
 import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
-import { ShopBaseUrl } from '@/components/marketplace/urlConstants';
+import {
+  DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { ErrorResponse, FetchApiResponse, hasFetchSucceeded } from '@/types/Fetch';
+import { useSearchParams } from 'react-router-dom';
 import { getShops } from './apis/listShops';
 import { useShopColumn } from './columns';
 
@@ -40,68 +36,49 @@ import { deleteShop } from './apis/deleteShop';
 import { IShop } from './types';
 import { deleteShops } from './apis/deleteShopsbyIds';
 
-declare module '@tanstack/table-core' {
-  interface TableMeta<TData extends RowData> {
-    handleDeleteProduct:(product:SellerProduct) => void
-    handleDeleteShop:(shop:IShop) => void
-  }
-}
+type MyShopsList = {
+  shops:Array<IShop>;
+  totalItems: number;
+};
 
 function ListShops() {
-  const queryObj:{ [x:string]:any } = {};
-  queryObj.page = 1;
-  const dispatch = useTypedDispatch();
   const userId = useTypedSelector((store) => store.app.user?._id);
-  queryObj.owner = userId;
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [next, setNext] = React.useState<boolean>(false);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
+  const [search, setSearch] = useSearchParams({
+    page: String(1),
+    owner: userId || '',
+    limit: '1',
+  });
+
+  const dispatch = useTypedDispatch();
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+  });
+
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   const shops = useTypedSelector((store) => store.marketplace.shopsList);
   const isDeleteShop = useTypedSelector((store) => store.marketplace.confirmShopDelete);
 
-  const [searchQuery, setQuery] = useState<string>('');
-  const getKeywords = async () => {
-    const response = await fetch(`${ShopBaseUrl('shops?name')}${searchQuery}`, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-    });
-    const json = await response.json();
-    return json;
-  };
-
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    let timer :any;
-    if (searchQuery) {
-      timer = setTimeout(() => {
-        getKeywords().then((response) => {
-          if (!response.message.error) {
-            dispatch(addProductsList(response.message));
-          }
-        });
-      }, 200);
-    } else if (userId) {
-      getShops(signal, queryString.stringify(queryObj)).then((response) => {
-        if (response && response.statusCode === StatusCodes.OK && response.success) {
+
+    getShops(signal, search.toString())
+      .then((response:FetchApiResponse<MyShopsList> | ErrorResponse) => {
+        if (hasFetchSucceeded(response)) {
           dispatch(addShopList(response.message));
         }
+      }).catch((error) => {
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
       });
-    }
+
     return function cleanup() {
-      clearTimeout(timer);
       abortController.abort();
     };
-  }, [dispatch, userId, isDeleteShop.confirm, searchQuery]);
+  }, [dispatch, search, setSearch]);
 
   const columns = useShopColumn();
 
@@ -116,16 +93,16 @@ function ListShops() {
     }));
   };
 
-  const handleDeleteShops = () => {
-    dispatch(confirmShopDelete({
-      confirm: true,
-      name: '',
-      id: '',
-      title: 'Are you sure to delete all selected shops?',
-      info: '',
-      bulk: true,
-    }));
-  };
+  // const handleDeleteShops = () => {
+  //   dispatch(confirmShopDelete({
+  //     confirm: true,
+  //     name: '',
+  //     id: '',
+  //     title: 'Are you sure to delete all selected shops?',
+  //     info: '',
+  //     bulk: true,
+  //   }));
+  // };
 
   const confirmDeleteShops = (shopsIds:string[]) => {
     deleteShops(shopsIds).then((response) => {
@@ -172,19 +149,16 @@ function ListShops() {
   const table = useReactTable({
     data: shops.shops,
     columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
+    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
+    getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
     onRowSelectionChange: setRowSelection,
     state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
       rowSelection,
+      pagination,
     },
     getRowId: ((row) => row._id),
     meta: {
@@ -194,91 +168,43 @@ function ListShops() {
   });
 
   const handleNext = () => {
-    if (!table.getCanNextPage()) {
-      dispatch(incNextProductPageNumber());
-
-      if (!queryObj.page) return;
-      queryObj.page += 1;
-      const abortController = new AbortController();
-      const { signal } = abortController;
-      getShops(signal, queryString.stringify(queryObj)).then((response) => {
-        if (response.success) {
-          dispatch(addProductsList(response.message));
-        } else {
-          setNext(true);
-        }
-        abortController.abort();
-      });
-    }
-
     table.nextPage();
   };
 
   const handlePrevious = () => {
-    if (!table.getCanPreviousPage()) {
-      dispatch(decPreviousProductPageNumber());
-
-      if (!queryObj.page) return;
-      queryObj.page -= 1;
-      const abortController = new AbortController();
-      const { signal } = abortController;
-      getShops(signal, queryString.stringify(queryObj)).then((response) => {
-        if (response.success) {
-          dispatch(addProductsList(response.message));
-        } else {
-          setNext(true);
-        }
-        abortController.abort();
-      });
-    }
     table.previousPage();
   };
 
   return (
     <>
-      <div className="w-full sm:w-11/12 mt-24 lg:mt-10  flex justify-center items-center mx-auto">
-        <div className="md:mt-24  p-2 w-full">
-          <div className=" flex items-center py-4">
-            <Input
-              placeholder="Filter by shop name..."
-              value={searchQuery}
-              onChange={(e) => setQuery(e.target.value)}
-              className="max-w-sm"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              className="ml-5"
-              onClick={handleDeleteShops}
-              disabled={isEmpty(rowSelection)}
-            >
-              Bulk Delete
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns
-                  <ChevronDownIcon className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="bg-slate-50 active:opacity-100 opacity-100">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="rounded-md border">
+      <div className="top-full flex justify-center   xl:justify-end  mt-32  w-full container ">
+        <div className="p-2 flex justify-center xl:justify-end  w-full">
+          <div className="rounded-md flex justify-center flex-col border overflow-y-auto">
+            <div className=" flex justify-end items-center p-2 py-4">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto">
+                    Columns
+                    <ChevronDownIcon className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => (
+                      <DropdownMenuCheckboxItem
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                      >
+                        {column.id}
+                      </DropdownMenuCheckboxItem>
+                    ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
             <Table>
               <TableHeader>
                 {table.getHeaderGroups().map((headerGroup) => (
@@ -325,49 +251,64 @@ function ListShops() {
                 )}
               </TableBody>
             </Table>
-          </div>
-          <div className="flex items-center justify-end space-x-2 py-4">
-            <div className="flex-1 text-sm text-muted-foreground">
-              {table.getFilteredSelectedRowModel().rows.length}
-              {' '}
-              of
-              {' '}
-              {table.getFilteredRowModel().rows.length}
-              {' '}
-              row(s) selected.
-            </div>
-            <div className="flex-1 text-sm text-muted-foreground">
-              page:
-              {' '}
-              {queryObj.page}
-            </div>
-            <div className="flex-1 text-sm text-muted-foreground">
-              showing
-              {' '}
-              {table.getFilteredRowModel().rows.length}
+            <div className="flex items-center justify-end p-2 py-4">
+              {table.getFilteredSelectedRowModel().rows.length ? (
+                <div className="flex-1 text-sm  lg:block text-muted-foreground">
+                  {table.getFilteredSelectedRowModel().rows.length}
+                  {' '}
+                  of
+                  {' '}
+                  {table.getFilteredRowModel().rows.length}
+                  {' '}
+                  selected.
+                </div>
+              ) : null}
 
-              {' '}
-              of
-              {' '}
-              {shops.totalItems}
-            </div>
-            <div className="space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handlePrevious}
-                disabled={!table.getCanPreviousPage()}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleNext}
-                disabled={next}
-              >
-                Next
-              </Button>
+              <div className="flex-1  items-center gap-1 lg:flex text-sm text-muted-foreground">
+                <div>Page</div>
+                <span>
+                  <strong>
+                    {table.getState().pagination.pageIndex + 1}
+                    of
+                    {table.getPageCount().toLocaleString()}
+                  </strong>
+                </span>
+              </div>
+              <div className="flex-1  items-center gap-1 lg:flex text-sm text-muted-foreground">
+                <select
+                  value={table.getState().pagination.pageSize}
+                  onChange={(e) => {
+                    table.setPageSize(Number(e.target.value));
+                  }}
+                >
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      Show
+                      {' '}
+                      {pageSize}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex-1 flex-col  lg:flex-row items-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handlePrevious}
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  Previous
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleNext}
+                  disabled={!table.getCanNextPage()}
+                >
+                  Next
+                </Button>
+              </div>
             </div>
           </div>
         </div>

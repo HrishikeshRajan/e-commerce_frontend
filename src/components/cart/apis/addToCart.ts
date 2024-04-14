@@ -14,7 +14,7 @@ export async function submitCart(cart: UploadCartData[], path:string):Promise<Fe
   try {
     const response = await fetch(`${import.meta.env.VITE_BASE_URL}/${path}`, requestOptions);
     return await response.json() as unknown as FetchResponse;
-  } catch (error: any) {
+  } catch (error) {
     console.log(error)
     throw new Error('Failed to add item to cart. Please retry later.');
   }

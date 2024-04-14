@@ -67,7 +67,7 @@ const Element = () => (
 
 // All markplace components handled here
 const MarketPlace = () => (
-  <div className="w-full h-auto relative">
+  <div className="relative">
     <SellerNavbar />
     <Dashboard />
   </div>
@@ -291,7 +291,9 @@ const App = () => {
               path: 'myshops',
               element: (
                 <AuthenticationWrapper authentication>
+
                   <ListShops />
+
                 </AuthenticationWrapper>
               ),
             },

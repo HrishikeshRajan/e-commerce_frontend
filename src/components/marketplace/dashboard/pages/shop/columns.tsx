@@ -48,6 +48,22 @@ export const useShopColumn = () => {
       enableHiding: false,
     },
     {
+      accessorKey: '_id',
+      header: ({ column }) => (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Shop ID
+          <CaretSortIcon className="ml-2 h-4 w-4" />
+        </Button>
+      ),
+      cell: ({ row }) => (
+        <div className="capitalize pl-4">{row.original._id}</div>
+      ),
+      footer: (props) => props.column.id,
+    },
+    {
       accessorKey: 'name',
       header: ({ column }) => (
         <Button
@@ -61,19 +77,7 @@ export const useShopColumn = () => {
       cell: ({ row }) => (
         <div className="capitalize pl-4">{row.original.name}</div>
       ),
-    },
-    {
-      accessorKey: 'owner',
-      header: ({ column }) => (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-        >
-          Seller Name
-          <CaretSortIcon className="ml-2 h-4 w-4" />
-        </Button>
-      ),
-      cell: ({ row }) => <div className="lowercase pl-4">{row.original.owner.fullname}</div>,
+      footer: (props) => props.column.id,
     },
     {
       accessorKey: 'email',
@@ -87,19 +91,21 @@ export const useShopColumn = () => {
         </Button>
       ),
       cell: ({ row }) => <div className="lowercase pl-4">{row.original.email}</div>,
+      footer: (props) => props.column.id,
     },
     {
-      accessorKey: 'totalProducts',
+      accessorKey: 'isActive',
       header: ({ column }) => (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Total Products
+          Shop Status
           <CaretSortIcon className="ml-2 h-4 w-4" />
         </Button>
       ),
-      cell: ({ row }) => <div className="lowercase pl-4">{row.original.totalProducts}</div>,
+      cell: ({ row }) => <div className="lowercase pl-4">{row.original.isActive ? <span className="text-green-400">Active</span> : <span className="text-green-red">false</span>}</div>,
+      footer: (props) => props.column.id,
     },
     {
       id: 'actions',
