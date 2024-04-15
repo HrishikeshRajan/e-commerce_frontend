@@ -9,6 +9,7 @@ import { ProductCore } from '@/types/Product';
 import { toggleSearchSuggstionList } from '@/utils/reduxSlice/productSlice';
 import React, { useState } from 'react';
 import { CiSearch } from 'react-icons/ci';
+import { toast } from 'react-toastify';
 
 function Items({
   productName, productId, tagProductId,
@@ -31,12 +32,12 @@ function ProductSelectBox({ tagProductId }:{ tagProductId:(e:React.ChangeEvent<H
     e.preventDefault();
     try {
       dispatch(toggleSearchSuggstionList(false));
-      const result = await fetch(`http://localhost:4000/api/v1/product/search?name=${search}`);
+      const result = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/product/search?name=${search}`);
       const response = await result.json();
 
       setProductsList([...response.message.products, ...productsList]);
     } catch (error) {
-      console.log(error);
+      toast.error('Something went wrong.')
     }
   }
   const {

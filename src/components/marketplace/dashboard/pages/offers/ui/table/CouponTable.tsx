@@ -2,254 +2,217 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-closing-bracket-location */
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  flexRender, getCoreRowModel, useReactTable, SortingState,
+  flexRender, getCoreRowModel, useReactTable,
   getSortedRowModel,
   PaginationState,
-  ColumnFiltersState,
   getFilteredRowModel,
+  getPaginationRowModel,
+  RowSelectionState,
 } from '@tanstack/react-table';
-import { useSearchParams } from 'react-router-dom';
 import { Promo } from '@/types/Promo';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import {
+ DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import {
+ Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+} from '@/components/ui/table';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 import { useColumn } from './TableHeaders';
 
 function CouponTable() {
   const [data, setData] = useState<Promo[]>([]);
-  const [pages, setPages] = useState<number>(-1);
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [search, setSearchParams] = useSearchParams();
-const userId = useTypedSelector((store) => store.app.user?._id);
-  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
-      pageIndex: search.get('page') ? parseInt(search.get('page') as string, 10) - 1 : 0,
-      pageSize: 5,
-    });
 
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    [],
-  );
+  const userId = useTypedSelector((store) => store.app.user?._id);
 
-  // Debounced
-//   useEffect(() => {
-//     const timer = setTimeout(() => {
-//         if (columnFilters.length > 0) {
-//             search.set('search', `${columnFilters[0].id as string}:${columnFilters[0].value as string}`);
-//             setSearchParams(search);
-//         } else {
-//             search.delete('search');
-//             setSearchParams(search);
-//         }
-//     }, 200);
-//     return () => clearTimeout(timer);
-//   }, [columnFilters, search, setSearchParams]);
-//   const idTocode = (id:string, desc:boolean) => (desc ? `-${id}` : id);
-
-//   useEffect(() => {
-//     if (sorting && sorting.length > 0) {
-//       search.set('sort', idTocode(sorting[0].id, sorting[0].desc));
-//       setSearchParams(search);
-//     } else {
-//       search.delete('sort');
-//       setSearchParams(search);
-//     }
-//   }, [search, setSearchParams, sorting]);
-
-  const pagination = React.useMemo(
-    () => ({
-      pageIndex,
-      pageSize,
-    }),
-    [pageIndex, pageSize],
-  );
+  const [pagination, setPagination] = React.useState<PaginationState>({
+  pageIndex: 0,
+  pageSize: 10,
+  });
+  const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
 
   useEffect(() => {
     try {
-      search.set('resultPerPage', String(pageSize));
-      setSearchParams(search);
       const getOrders = async () => {
         const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/promo/all?ownerId=${userId}`, {
           credentials: 'include',
         });
         const result = await response.json();
-        console.log(result);
         setData(result.message.promos);
-        setPages(result.message.TotalPages);
       };
       getOrders();
     } catch (error) {
       console.log(error);
     }
-  }, [search, setSearchParams, sorting, pageIndex, pageSize, userId]);
+  }, [userId]);
 
   const columns = useColumn();
   const table = useReactTable({
     data,
     columns,
-    state: {
-      sorting,
-      pagination,
-      columnFilters,
-    },
-    manualSorting: true,
-    enableMultiSort: true,
-    onSortingChange: setSorting,
+    debugTable: true,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    manualPagination: true,
-    pageCount: pages ?? -1,
+    getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
-    onColumnFiltersChange: setColumnFilters,
-    manualFiltering: true,
+    onRowSelectionChange: setRowSelection,
+    state: {
+      rowSelection,
+      pagination,
+    },
+    getRowId: ((row) => row._id),
   });
 
-  useEffect(() => {
-     search.set('page', `${table.getState().pagination.pageIndex + 1}`);
-     setSearchParams(search, { replace: true });
- }, [pageIndex, search, setSearchParams, table]);
+ const handleNext = () => {
+  table.nextPage();
+};
+
+const handlePrevious = () => {
+  table.previousPage();
+};
 
  return (
-    <div className="w-full mt-24 p-2  flex flex-col justify-center    ">
-            <h1 className="text-lg font-bold text-slate-500">List Coupons</h1>
-      <div className=" shadow-md w-full p-2 rounded-lg bg-white overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-800    ">
-          <thead className=" ">
-            {table.getHeaderGroups().map((headerGroup) => (
-              <tr key={headerGroup.id} className="border-b-2">
-                {headerGroup.headers.map((header) => (
-                  <th key={header.id} colSpan={header.colSpan} className="p-2 ">
-                    {header.isPlaceholder ? null : (
-                      <button
-                        type="button"
-                        {...{
-                          className: header.column.getCanSort()
-                            ? 'cursor-pointer select-none flex  justify-center border-none  outline-none items-center'
-                            : '',
-                          onClick: header.column.getToggleSortingHandler(),
-                        }}
-                      >
-                        {flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
-                              {{
-                          asc: ' 🔼',
-                          desc: ' 🔽',
-                        }[header.column.getIsSorted() as string] ?? null}
-                      </button>
+  <div className="top-full flex justify-center  w-full   mt-32">
+  <div className="p-2 flex justify-center xl:justify-end  w-full">
+    <div className="flex justify-center flex-col border rounded-xl overflow-y-auto">
+      <div className=" flex justify-end items-center p-2 py-4 ">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto">
+              Columns
+              <ChevronDownIcon className="ml-2 h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <DropdownMenuCheckboxItem
+                  key={column.id}
+                  className="capitalize"
+                  checked={column.getIsVisible()}
+                  onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                >
+                  {column.id}
+                </DropdownMenuCheckboxItem>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      <Table>
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <TableHead key={header.id}>
+                  {header.isPlaceholder
+                    ? null
+                    : flexRender(
+                      header.column.columnDef.header,
+                      header.getContext(),
                     )}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <Fragment key={row.id}>
-                  <tr className="border-b-2">
-                    {row.getVisibleCells().map((cell) => (
-                      <td key={cell.id} className=" text-xs  rounded-xl px-3 pb-1 overflow-ellipsis">
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext(),
-                        )}
-                      </td>
-                    ))}
-                  </tr>
-                </Fragment>
-              ))) : (
-                <tr>
-                <td
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                  No results.
-                </td>
-                </tr>
-            )}
-          </tbody>
-        </table>
-        <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
-        <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1}
-              {' '}
-                  of
-                {' '}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
-          <input
-            type="number"
-            defaultValue={table.getState().pagination.pageIndex + 1}
-            onChange={(e) => {
-              const page = e.target.value ? Number(e.target.value) - 1 : 0;
-              table.setPageIndex(page);
-            }}
-            className="border p-1 rounded w-16"
-          />
-        </span>
-        <select
-          value={table.getState().pagination.pageSize}
-          onChange={(e) => {
-            table.setPageSize(Number(e.target.value));
-          }}
-        >
-          {[5, 10, 20, 30, 40, 50].map((size) => (
-            <option
-              key={size}
-              value={size}
-              onChange={(e) => {
-              search.set('resultPerPage', e as unknown as string);
-              setSearchParams(search);
-            }}>
-              Show
-              {' '}
-              {' '}
-              {size}
-            </option>
+                </TableHead>
+              ))}
+            </TableRow>
           ))}
-        </select>
+        </TableHeader>
+        <TableBody>
+          {table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && 'selected'}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(
+                      cell.column.columnDef.cell,
+                      cell.getContext(),
+                    )}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={columns.length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
+      <div className="flex items-center justify-end p-2 py-4">
+        {table.getFilteredSelectedRowModel().rows.length ? (
+          <div className="flex-1 text-sm  lg:block text-muted-foreground">
+            {table.getFilteredSelectedRowModel().rows.length}
+            {' '}
+            of
+            {' '}
+            {table.getFilteredRowModel().rows.length}
+            {' '}
+            selected.
+          </div>
+        ) : null}
+
+        <div className="flex-1  items-center gap-1 lg:flex text-sm text-muted-foreground">
+          <div>Page</div>
+          <span>
+            <strong>
+              {table.getState().pagination.pageIndex + 1}
+              of
+              {table.getPageCount().toLocaleString()}
+            </strong>
+          </span>
+        </div>
+        <div className="flex-1  items-center gap-1 lg:flex text-sm text-muted-foreground">
+          <select
+            value={table.getState().pagination.pageSize}
+            onChange={(e) => {
+              table.setPageSize(Number(e.target.value));
+            }}
+          >
+            {[10, 20, 30, 40, 50].map((pageSize) => (
+              <option key={pageSize} value={pageSize}>
+                Show
+                {' '}
+                {pageSize}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="flex-1 flex-col  lg:flex-row items-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handlePrevious}
+            disabled={!table.getCanPreviousPage()}
+          >
+            Previous
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleNext}
+            disabled={!table.getCanNextPage()}
+          >
+            Next
+          </Button>
         </div>
       </div>
     </div>
+  </div>
+  </div>
+
   );
 }
 

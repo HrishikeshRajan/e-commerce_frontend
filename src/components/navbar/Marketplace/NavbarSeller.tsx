@@ -17,7 +17,6 @@ function SellerNavbar() {
   const dispatch = useTypedDispatch();
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
-
   return (
     <Nav className=" flex items-center justify-between bg-white h-20  fixed top-0 z-40 w-full shadow-md   p-2  ">
 
@@ -27,7 +26,6 @@ function SellerNavbar() {
           onClick={() => {
             dispatch(toggleSidebarMarketplace());
           }}
-          className="xl:hidden"
         >
           <FaBars />
         </button>

@@ -11,7 +11,7 @@ import ShopOrderTab from '../../ui/tabs/ShopOrderTab';
 function OrderTableWrapper() {
   const params = useParams();
   return (
-    <div className="w-full mt-28 p-2">
+    <div className="w-full top-full mt-20">
             <ShopOrderTab />
             <TableTemplate paramsId={params.id!} />
     </div>

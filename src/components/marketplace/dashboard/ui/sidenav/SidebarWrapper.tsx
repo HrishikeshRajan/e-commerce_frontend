@@ -56,8 +56,8 @@ function SidebarWrapper() {
   };
   return (
     <>
-      <Sidebar className={`${sidebarOpen ? 'w-11/12 h-screen   top-0 left-0 z-50 bg-white' : 'w-0 bg-white h-0 z-0 xl:w-80 xl:h-screen  '} fixed left-0   w-80  xl:mt-20 z-50  shadow-lg  overflow-y-auto`}>
-        <button type="button" aria-label="close" className="absolute top-6  xl:hidden  outline-none left-10 " onClick={() => dispatch(toggleSidebarMarketplace())}>
+      <Sidebar className={`${sidebarOpen ? 'w-11/12 h-screen  xl:w-4/12  top-0 left-0  z-50' : 'w-0 bg-white h-0 z-0  '} fixed z-50  shadow-lg  bg-white overflow-y-auto`}>
+        <button type="button" aria-label="close" className="absolute top-6  xl:top-10 left-10 outline-none  " onClick={() => dispatch(toggleSidebarMarketplace())}>
 
           <IconContext.Provider value={{ className: 'text-black active:rotate-90', size: '30' }}>
 
@@ -65,7 +65,7 @@ function SidebarWrapper() {
 
           </IconContext.Provider>
         </button>
-        <ul data-id="menu" className="flex  flex-col justify-start relative top-20 xl:top-10 w-full px-5 ">
+        <ul data-id="menu" className="flex  flex-col justify-start relative top-20 xl:top-20 w-full px-5 ">
 
           {menu.map((option) => (
             <li key={option.id}>

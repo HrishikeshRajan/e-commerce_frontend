@@ -177,8 +177,8 @@ function ListShops() {
 
   return (
     <>
-      <div className="top-full flex justify-center   xl:justify-end  mt-32  w-full container ">
-        <div className="p-2 flex justify-center xl:justify-end  w-full">
+      <div className="top-full flex justify-center mt-32  w-full container ">
+        <div className="p-2 flex justify-center   w-full">
           <div className="rounded-md flex justify-center flex-col border overflow-y-auto">
             <div className=" flex justify-end items-center p-2 py-4">
               <DropdownMenu>

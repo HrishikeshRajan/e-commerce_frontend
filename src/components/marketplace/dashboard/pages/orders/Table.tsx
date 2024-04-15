@@ -18,7 +18,10 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
   const [data, setData] = useState<TOrder[]>([]);
   const [pages, setPages] = useState<number>(-1);
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [search, setSearchParams] = useSearchParams();
+  const [search, setSearchParams] = useSearchParams({
+    shopId: paramsId,
+
+  });
 
   const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
       pageIndex: search.get('page') ? parseInt(search.get('page') as string, 10) - 1 : 0,
@@ -64,7 +67,6 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
 
   useEffect(() => {
     try {
-      search.set('shopId', paramsId!);
       search.set('resultPerPage', String(pageSize));
       setSearchParams(search);
       const getOrders = async () => {
@@ -73,13 +75,13 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
         });
         const result = await response.json();
         setData(result.message.orders);
-        setPages(result.message.TotalPages);
+        setPages(result.message.totalOrders);
       };
       getOrders();
     } catch (error) {
       console.log(error);
     }
-  }, [paramsId, search, setSearchParams, sorting, pageIndex, pageSize]);
+  }, [pageSize, search, setSearchParams]);
 
   const columns = useColumn();
   const table = useReactTable({
@@ -97,7 +99,7 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     manualPagination: true,
-    pageCount: pages ?? -1,
+    pageCount: pages,
     onPaginationChange: setPagination,
     onColumnFiltersChange: setColumnFilters,
     manualFiltering: true,
@@ -109,10 +111,9 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
  }, [pageIndex, search, setSearchParams, table]);
 
  return (
-    <div className="w-full  flex flex-col justify-center    ">
-
-      <div className=" shadow-md w-full p-2 rounded-lg bg-white overflow-x-auto">
-        <table className="w-full text-sm text-left rtl:text-right text-gray-800    ">
+    <div className="w-full bg-white p-2  overflow-x-scroll  ">
+      <div className="shadow-md  w-full p-2 rounded-lg  overflow-x-scroll  ">
+        <table className="w-11/12 text-sm text-left rtl:text-right text-gray-800  overflow-y-scroll   ">
           <thead className=" ">
             {table.getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id} className="border-b-2">
@@ -185,56 +186,16 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
           </tbody>
         </table>
         <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(0)}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<<'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
-          {'<'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>'}
-        </button>
-        <button
-        type="button"
-          className="border rounded p-1"
-          onClick={() => table.setPageIndex(table.getPageCount() - 1)}
-          disabled={!table.getCanNextPage()}
-        >
-          {'>>'}
-        </button>
         <span className="flex items-center gap-1">
-          <div>Page</div>
-          <strong>
-            {table.getState().pagination.pageIndex + 1}
-              {' '}
-                  of
-                {' '}
-            {table.getPageCount()}
-          </strong>
-        </span>
-        <span className="flex items-center gap-1">
-          | Go to page:
+           Go to page:
           <input
             type="number"
             defaultValue={table.getState().pagination.pageIndex + 1}
             onChange={(e) => {
               const page = e.target.value ? Number(e.target.value) - 1 : 0;
               table.setPageIndex(page);
+              search.set('page', String(page + 1));
+              setSearchParams(search);
             }}
             className="border p-1 rounded w-16"
           />
