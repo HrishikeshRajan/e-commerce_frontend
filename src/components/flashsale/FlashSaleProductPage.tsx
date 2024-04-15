@@ -2,8 +2,10 @@ import React, { Suspense } from 'react';
 import { formattedAmount } from '@/utils/convertToRupees';
 import cart from '@/utils/cart.helper';
 import { useDispatch } from 'react-redux';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import { useLoaderData, Await, useNavigate } from 'react-router-dom';
+import { mergeToCart } from '@/utils/reduxSlice/cartSlice';
+import {
+  useLoaderData, Await, useNavigate, Link,
+} from 'react-router-dom';
 import useLocalStorage from '@/hooks/useLocalStorage';
 import { ClientFlashSale, MethodParams } from '@/types/Sale';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
@@ -13,7 +15,7 @@ import Button from '../auth/ui/Button';
 import Sizes from '../home/SingleProduct/ui/Sizes';
 import Colors from '../home/SingleProduct/ui/Colors';
 
-const isUserAlreadyPurchased = (flash:ClientFlashSale, userId:string = '1') => flash.users.usedBy.includes(userId || 'x');
+const isUserAlreadyPurchased = (flash:ClientFlashSale, userId:string = '1') => flash.users.usedBy.includes(userId);
 function FlashSale() {
   const dispatch = useDispatch();
   const data = useLoaderData() as any;
@@ -25,11 +27,10 @@ function FlashSale() {
   const handleRequest = (response:any, options:any, offer: MethodParams) => {
     const cartData = cart.addToCartFlash(response, options, offer);
     if (!cartData) return null;
-    dispatch(addToCart(cartData));
+    dispatch(mergeToCart(cartData));
     navigate('/cart');
   };
   if (!flashsale) return;
-
   return (
     <Suspense fallback={<div className="w-full h-screen bg-red-200">Fetching...</div>}>
       <Await resolve={data.product as any}>
@@ -77,7 +78,7 @@ function FlashSale() {
                 productId={response.message.product._id}
               />
             ) }
-            {isUserAlreadyPurchased(flash, userId) ? <p className="font-bold text-lg p-2 text-red-500">You&lsquo;ve already made the purchase.</p>
+            {isUserAlreadyPurchased(flash, userId) ? <p className="font-bold text-lg p-2  text-center bg-black text-white rounded-xl"><Link to="/cart">View Cart</Link></p>
               : (
                 <Button
                   mode="idle"

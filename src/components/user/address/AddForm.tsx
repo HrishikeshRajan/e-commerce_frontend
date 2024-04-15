@@ -56,9 +56,9 @@ function AddAddress() {
 
       { (form) => (
         <>
-          <Form className="w-full xl:w-8/12 " onSubmit={form.handleSubmit}>
+          <Form className="w-full sm:w-6/12  xl:w-4/12 xl:ml-20 flex flex-col " onSubmit={form.handleSubmit}>
             <h2 className="text-2xl text-slate-600 font-bold py-4">Enter Your Address</h2>
-            <div className="flex justify-center flex-col">
+            <div className="flex justify-center flex-col gap-2 ">
               <label htmlFor="fullname">Fullname</label>
               <Field
                 type="text"
@@ -98,7 +98,7 @@ function AddAddress() {
                     <FormFieldError name="state" />
                   </div>
                 </div>
-                <div className="flex justify-between w-full flex-col xl:flex-row ">
+                <div className="flex justify-between w-full flex-col ">
                   <span className="flex flex-col w-full ">
                     <label htmlFor="postalCode">Postal Code</label>
                     <Field

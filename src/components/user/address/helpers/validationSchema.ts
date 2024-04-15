@@ -1,3 +1,4 @@
+/* eslint-disable security/detect-object-injection */
 import { ZodError, z } from 'zod';
 
 export const AddressSchema = z.object({
@@ -6,7 +7,14 @@ export const AddressSchema = z.object({
   homeAddress: z.string().min(5),
   state: z.string().min(2),
   postalCode: z.string().length(6),
-  phoneNo: z.string().min(7),
+  phoneNo: z.string().refine((value) => {
+    const indianPhoneNumberRegex = /^[6-9]\d{9}$/;
+
+    if (indianPhoneNumberRegex.test(value)) {
+      return true;
+    }
+    return false;
+  }),
   country: z.string().min(2),
 });
 

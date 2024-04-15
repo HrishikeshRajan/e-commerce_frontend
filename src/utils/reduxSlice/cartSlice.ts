@@ -3,6 +3,7 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { Promo } from '@/types/Promo';
+import { merge } from 'lodash';
 import {
   ClientCart, ClientCartItem, Flat, Percentage,
 } from '../../types/Cart';
@@ -27,6 +28,16 @@ const cartSlice = createSlice({
   reducers: {
     addToCart: (state, action: PayloadAction<ClientCart>) => {
       state.cart = action.payload;
+    },
+    updateUserIdandCartId: (state, action: PayloadAction<{ userId:string, cartId:string }>) => {
+      if (state.cart) {
+        state.cart.cartId = action.payload.cartId;
+        state.cart.userId = action.payload.userId;
+      }
+    },
+    mergeToCart: (state, action: PayloadAction<ClientCart>) => {
+      state.cart = action.payload;
+      merge(state.cart, action.payload);
     },
     updateCartItem: (
       state,
@@ -87,4 +98,6 @@ export const {
   updateAppliedOffer,
   addPromo,
   promoError,
+  mergeToCart,
+  updateUserIdandCartId,
 } = cartSlice.actions;

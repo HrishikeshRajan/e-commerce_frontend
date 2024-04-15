@@ -7,12 +7,21 @@ import { useNavigate } from 'react-router';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { getItemsFromLocalCart } from '@/utils/getItemsFromLocalCart';
-import { addToCart, promoError } from '@/utils/reduxSlice/cartSlice';
-import { isFetchBadRequestError, isFetchSuccess, isFetchUnauthorizedError } from '@/types/Fetch';
+import {
+  promoError, updateUserIdandCartId,
+} from '@/utils/reduxSlice/cartSlice';
+import {
+  hasRequestSucceeded,
+  isFetchBadRequestError,
+  isFetchUnauthorizedError,
+  type ErrorResponse,
+  type FetchApiResponse,
+} from '@/types/Fetch';
 import { removeUser } from '@/utils/reduxSlice/appSlice';
+import { toast } from 'react-toastify';
+
 import Button from '../auth/ui/Button';
 import { submitCart } from './apis/addToCart';
-import { hasUserCart } from '.';
 import 'react-toastify/dist/ReactToastify.css';
 import AuthHelper from '../auth/apis/helper';
 
@@ -42,15 +51,11 @@ function Checkout({ summary }:{ summary:ClientCart }) {
       path = 'api/v1/cart';
     }
     submitCart(modifiedCart, path)
-      .then((result) => {
+      .then((result:FetchApiResponse<{ ids:{ userId:string, cartId:string } }> | ErrorResponse) => {
         setLoading(false);
-        if (isFetchSuccess(result)) {
-          if (hasUserCart(result.message)) {
-            const copyCart = cart.updateCart(result.message.mycart);
-            if (!copyCart) throw new Error('Cart not found');
-            dispatch(addToCart(result.message.mycart || copyCart!));
-            navigate('/address');
-          }
+        if (hasRequestSucceeded(result)) {
+          dispatch(updateUserIdandCartId(result.message.ids));
+          navigate('/address');
         } else if (isFetchUnauthorizedError(result)) {
           AuthHelper.clearSignedOnData(() => {
             dispatch(removeUser());
@@ -61,7 +66,9 @@ function Checkout({ summary }:{ summary:ClientCart }) {
         }
       }).catch((error) => {
         setLoading(false);
-        console.log(error);
+        if (error instanceof Error) {
+          toast.error(error.message);
+        }
       });
   };
 

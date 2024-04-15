@@ -96,7 +96,7 @@ export function computeTax(totalPriceBeforeTax:number, gstInPercentage:number) {
 export function computeSavings(cartItem:ClientCartItem, promo:MethodParams) {
   const discountPercentage = promo.discountPercentage || 100;
   const savings = (cartItem.totalPrice / 100) * discountPercentage;
-  return savings;
+  return Math.round(savings);
 }
 
 export function computeDiscountAmount(originalPrice:number, amountToDiscount:number) {

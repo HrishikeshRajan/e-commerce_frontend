@@ -61,7 +61,7 @@ function FlashSaleForm() {
       <h1 className="text-lg py-1 font-bold text-slate-400 text-center">Create Flash Sale</h1>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Name:
-        <input type="text" name="offername" placeholder="Enter the offer name" onChange={handleChange} className="border-2 py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" value={formData.name} />
+        <input type="text" name="name" value={formData.name} placeholder="Enter the offer name" onChange={handleChange} className="border-2 py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg"/>
       </label>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Banner Image:
@@ -87,12 +87,12 @@ function FlashSaleForm() {
       <div className="flex flex-col lg:flex-row w-full items-center gap-2 justify-between ">
         <label className="py-2 w-full lg:w-5/12 gap-2 flex flex-col text-left ">
           Start date:
-          <input type="datetime-local" className="border-2 w-full py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" name="startTime" onChange={handleChange} id="" />
+          <input type="datetime-local" value={formData.startTime} className="border-2 w-full py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" name="startTime" onChange={handleChange} id="" />
         </label>
 
         <label className="py-2  gap-2 w-full lg:w-5/12 flex-col text-left ">
           End date:
-          <input type="datetime-local" className="border-2 py-2 w-full text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" name="endTime" onChange={handleChange} id="" />
+          <input type="datetime-local" value={formData.endTime} className="border-2 py-2 w-full text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" name="endTime" onChange={handleChange} id="" />
         </label>
       </div>
       <label className="py-2 w-full gap-2 flex justify-between items-center">

@@ -135,7 +135,7 @@ const cart = {
         mode: 'flash',
       };
       const gstInPercentage = 12;
-      const userCart: ClientCart = emptyCart;
+      const userCart: ClientCart = (localStorage.getItem('cart') && JSON.parse(localStorage.getItem('cart')!)) || emptyCart;
 
       const price = new CartPrice(product.price);
       const item: ClientCartItem = {

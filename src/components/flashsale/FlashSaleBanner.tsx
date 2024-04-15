@@ -4,8 +4,6 @@ import { isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import small from '@/assets/flashSmall.png';
-
 function saleStatus(startTime:Date, endTime:Date):string | null {
   const currentDate = new Date();
   const startDate = new Date(startTime);
@@ -22,7 +20,7 @@ function saleStatus(startTime:Date, endTime:Date):string | null {
 
 function FormatDate({ time, label }:{ time:number | string, label:string }) {
   return (
-    <span className="text-slate-600 flex flex-col text-center lg:border-2 w-10 lg:w-20 rounded-xl">
+    <span className="text-white flex flex-col text-center border-white lg:border-2 w-10 lg:w-20 rounded-xl">
       <span className="font-semibold text-[.9rem] sm:text-2xl  ">
         { time.toString().padStart(2, '0')}
       </span>
@@ -94,30 +92,22 @@ function FlashSaleBanner() {
 
   if ((days || hours || mins || secs) === undefined) return null;
   return (
-    <Link to={`flashsale/${sale._id}}/product/${sale.product}`}>
-      <div className="p-1 mt-24 md:mt-28 relative ">
-        <picture>
-          <source media="(min-width: 768px)" className="w-full h-fit xl:scale-90 object-cover " srcSet={sale.banner.secure_url} />
-          <source media="(max-width: 768px)" srcSet={small} />
-          <img src={sale.banner.secure_url} className="w-full h-fit xl:scale-90 object-cover " alt="flashsale" />
-        </picture>
-
-        <div className="absolute  w-full  text-slate-600 flex-col   items-center justify-center text-xs xl:text-5xl top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/4 font-light flex gap-1">
-          <p className="flex items-center  text-[.7rem] lg:text-lg">{ saleStatus(sale.startTime, sale.endTime) === 'ACTIVE' ? <span>Sale ends  in</span> : <span>Sale starts in</span>}</p>
-          <div className="flex mb-20 items-center gap-1">
-            {days ? <FormatDate time={days} label="DAYS" /> : <FormatDate time="00" label="DAYS" />}
-            {' '}
-            :
-            {hours ? <FormatDate time={hours} label="HOURS" /> : <FormatDate time="00" label="HOURS" />}
-            {' '}
-            :
-            {mins ? <FormatDate time={mins} label="MINS" /> : <FormatDate time="00" label="MINS" />}
-            {' '}
-            :
-            {secs ? <FormatDate time={secs} label="SECS" /> : <FormatDate time="00" label="SECS" />}
-          </div>
+    <Link to={`flashsale/${sale._id}}/product/${sale.product}`} className="p-1 flex flex-col justify-center items-center top-full mt-20 h-fit relative bg-black">
+      <p className="text-white font-extrabold text-base lg:text-lg mt-5 xl:mt-10">{sale.name}</p>
+      <div className="p-1  relative flex flex-col  justify-center">
+        <p className="flex items-center    text-[.7rem] justify-center lg:text-lg text-white p-5 font-semibold">{ saleStatus(sale.startTime, sale.endTime) === 'ACTIVE' ? <span>Sale ends  in</span> : <span>Sale starts in</span>}</p>
+        <div className="flex justify-center  items-center xl:mb-20 mb-5  gap-1  ">
+          {days ? <FormatDate time={days} label="DAYS" /> : <FormatDate time="00" label="DAYS" />}
+          {' '}
+          :
+          {hours ? <FormatDate time={hours} label="HOURS" /> : <FormatDate time="00" label="HOURS" />}
+          {' '}
+          :
+          {mins ? <FormatDate time={mins} label="MINS" /> : <FormatDate time="00" label="MINS" />}
+          {' '}
+          :
+          {secs ? <FormatDate time={secs} label="SECS" /> : <FormatDate time="00" label="SECS" />}
         </div>
-
       </div>
     </Link>
   );
