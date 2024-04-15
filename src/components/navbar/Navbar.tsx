@@ -7,9 +7,10 @@ import useCartSyncToLocalStorage from '@/hooks/useCartSyncToLocalStorage';
 import useFlashSyncToLocalStorage from '@/hooks/useFlashSyncToLocalStorage';
 
 import { IoIosCloseCircleOutline } from 'react-icons/io';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
 import { FaBars } from 'react-icons/fa6';
+import { FaUserCircle } from 'react-icons/fa';
 import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
 import Search from './Search';
 import CartNavIcon from './CartNavIcon';
@@ -49,7 +50,7 @@ function Navbar() {
             onClick={() => {
               dispatch(toggleSidebarMarketplace());
             }}
-            className="xl:hidden"
+            className="hidden"
           >
             <FaBars />
           </button>
@@ -85,6 +86,9 @@ function Navbar() {
 
               <span className=" flex items-center" aria-label="cart">
                 <CartNavIcon />
+              </span>
+              <span className=" flex items-center xl:hidden">
+                <Link to="account" aria-label="user acoount"><FaUserCircle /></Link>
               </span>
 
             </div>

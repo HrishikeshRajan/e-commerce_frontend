@@ -78,7 +78,7 @@ function FlashSale() {
                 productId={response.message.product._id}
               />
             ) }
-            {isUserAlreadyPurchased(flash, userId) ? <p className="font-bold text-lg p-2  text-center bg-black text-white rounded-xl"><Link to="/cart">View Cart</Link></p>
+            {isUserAlreadyPurchased(flash, userId) ? <p className="font-bold text-lg p-2  text-center bg-black text-white rounded-xl"><Link to="/">You already purchased</Link></p>
               : (
                 <Button
                   mode="idle"
