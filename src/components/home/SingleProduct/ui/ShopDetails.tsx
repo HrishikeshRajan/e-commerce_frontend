@@ -2,6 +2,7 @@ import { ShopCore } from '@/types/Product';
 import ListItem from './ListItem';
 
 function ShopDetails({ shop }:{ shop:ShopCore }) {
+  if (!shop) return null;
   return (
     <ul>
       <ListItem name="Name">

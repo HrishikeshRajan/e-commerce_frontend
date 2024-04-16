@@ -73,10 +73,12 @@ function SingleProduct({ product, offers, children }:SingleProductProps) {
           </ul>
         </div>
         <LineSmall />
-        <div>
-          <Heading heading="Shop Details" />
-          <ShopDetails shop={product.shopId} />
-        </div>
+        {product.shopId && (
+          <div>
+            <Heading heading="Shop Details" />
+            <ShopDetails shop={product.shopId} />
+          </div>
+        )}
       </div>
 
     </div>
