@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import { ShopCore, addShop, addShops } from 'utils/reduxSlice/markeplaceSlice';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MdOutlineAdminPanelSettings, MdEdit, MdDelete } from 'react-icons/md';
 import { CgCalendarDates } from 'react-icons/cg';

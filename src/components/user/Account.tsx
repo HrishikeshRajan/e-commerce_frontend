@@ -1,7 +1,7 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';

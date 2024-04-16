@@ -1,5 +1,4 @@
 import { ShopCore } from '@/types/Product';
-import React from 'react';
 import ListItem from './ListItem';
 
 function ShopDetails({ shop }:{ shop:ShopCore }) {

@@ -1,7 +1,7 @@
 import useFlashSale from '@/hooks/useFlashSale';
 import Loading from '@/utils/animations/Loading';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function saleStatus(startTime:Date, endTime:Date):string | null {

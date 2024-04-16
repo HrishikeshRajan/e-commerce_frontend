@@ -2,7 +2,6 @@
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { addProductSize } from '@/utils/reduxSlice/productSlice';
-import React from 'react';
 
 function Sizes({ sizes, productId }:{ sizes:string[], productId:string }) {
   const dispatch = useTypedDispatch();

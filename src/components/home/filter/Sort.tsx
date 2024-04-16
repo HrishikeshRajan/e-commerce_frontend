@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import { SlArrowDown, SlArrowUp } from 'react-icons/sl';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Span from '@/components/CustomElements/Span';
 import Div from '@/components/CustomElements/Div';

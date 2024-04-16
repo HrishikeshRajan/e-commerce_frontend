@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import ReactSlider from 'react-slider';
 

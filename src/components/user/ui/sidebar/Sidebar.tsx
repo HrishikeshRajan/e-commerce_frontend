@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-nested-ternary */
-import React from 'react';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { isEmpty } from 'lodash';

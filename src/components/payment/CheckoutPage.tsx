@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable react/self-closing-comp */
 /* eslint-disable import/no-extraneous-dependencies */
-import React, { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 import {
   PaymentElement, useElements, useStripe,
 } from '@stripe/react-stripe-js';

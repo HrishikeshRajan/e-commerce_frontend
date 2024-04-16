@@ -1,6 +1,5 @@
-import React from 'react';
 /**
- * Form
+ * Form Label
  *
  */
 function Label({ value, id }:{ value:string, id:string }) {

@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { useTokenVerify } from '@/hooks/useTokenVerify';
-import React, { CSSProperties } from 'react';
+import { CSSProperties } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import PuffLoader from 'react-spinners/PuffLoader';
 import { MdOutlineMailLock } from 'react-icons/md';

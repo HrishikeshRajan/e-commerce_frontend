@@ -1,4 +1,3 @@
-import React from 'react';
 import useClearShop from '@/hooks/user/useClearShop';
 import AddForm from '../../ui/forms/AddForm';
 

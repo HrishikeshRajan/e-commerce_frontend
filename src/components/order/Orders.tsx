@@ -1,6 +1,5 @@
 import useOrders from '@/hooks/useOrders';
 import Loading from '@/utils/animations/Loading';
-import React from 'react';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { v4 as uuidV4 } from 'uuid';
 import Order from './Order';

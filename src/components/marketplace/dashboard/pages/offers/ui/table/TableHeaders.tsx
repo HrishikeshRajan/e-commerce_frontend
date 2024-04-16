@@ -9,7 +9,7 @@ import {
   flexRender,
 } from '@tanstack/react-table';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
 
 } from '@radix-ui/react-dropdown-menu';

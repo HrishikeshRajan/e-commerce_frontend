@@ -1,4 +1,3 @@
-import React from 'react';
 import { useLoaderData } from 'react-router-dom';
 import { Promo } from '@/types/Promo';
 import ExpiredCard from '@/utils/PromoDecorators/ExpiredCard';

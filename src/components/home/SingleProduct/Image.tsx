@@ -1,4 +1,3 @@
-import React from 'react';
 
 function Image({ secure_url }:{ secure_url:string }) {
   return (

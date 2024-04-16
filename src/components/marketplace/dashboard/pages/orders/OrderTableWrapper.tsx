@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/indent */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable react/jsx-closing-bracket-location */
-import React from 'react';
 
 import { useParams } from 'react-router-dom';
 import TableTemplate from './Table';

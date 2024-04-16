@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import LineSmall from '@/components/home/ui/LineSmall';
 import { Address, ClientOrder } from '@/types/Orders';
 import cart from '@/utils/cart.helper';

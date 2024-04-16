@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/function-component-definition */
-import React, { Suspense, lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import './App.css';
 import {
   createBrowserRouter, RouterProvider, Outlet, defer,

@@ -3,7 +3,6 @@ import {
   screen, cleanup, fireEvent,
 } from '@testing-library/react';
 import { expect } from 'vitest';
-import React from 'react';
 import { renderWithProviders } from '@/mocks/redux/test-utils';
 import Auth from '../Auth';
 

@@ -4,7 +4,6 @@ import {
 } from '@testing-library/react';
 import { expect } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
-import React from 'react';
 import Navbar from '../Navbar';
 
 describe.skip('<Navbar />', () => {

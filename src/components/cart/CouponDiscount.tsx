@@ -1,5 +1,4 @@
 /* eslint-disable security/detect-object-injection */
-import React from 'react';
 // import { Promo } from '@/types/Promo';
 import { Flat, Percentage } from '@/types/Cart';
 import { formattedAmount } from '@/utils/convertToRupees';

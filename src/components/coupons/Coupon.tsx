@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Promo } from '@/types/Promo';
 
 function Coupon({ coupon }:{ coupon:Promo }) {

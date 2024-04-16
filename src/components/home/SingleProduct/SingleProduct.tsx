@@ -1,7 +1,7 @@
 /* eslint-disable react/require-default-props */
 import Ratings from '@/components/products/Ratings';
 
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import { ProductCore } from '@/types/Product';
 import { Offers } from '@/utils/cart.helper';

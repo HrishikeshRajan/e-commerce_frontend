@@ -1,4 +1,3 @@
-import React from 'react';
 import CouponTable from './table/CouponTable';
 
 function CouponList() {

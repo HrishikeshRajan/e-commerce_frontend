@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { renderWithProviders } from '@/mocks/redux/test-utils';
 import { act, screen } from '@testing-library/react';
-import React from 'react';
 import userEvent from '@testing-library/user-event';
 import ForgotForm from '../ForgotForm';
 

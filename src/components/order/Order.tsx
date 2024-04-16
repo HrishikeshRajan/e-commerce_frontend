@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ORDER_STATUS } from '@/types/Cart';
 import { FinalOrder } from '@/types/Orders';
 import { useNavigate } from 'react-router-dom';

@@ -1,5 +1,4 @@
 /* eslint-disable max-len */
-import React from 'react';
 import { ClientCart } from '@/types/Cart';
 import { formattedAmount } from '@/utils/convertToRupees';
 import LineSmall from '../home/ui/LineSmall';

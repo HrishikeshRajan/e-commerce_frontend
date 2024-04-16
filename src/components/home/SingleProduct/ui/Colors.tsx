@@ -1,4 +1,3 @@
-import React from 'react';
 import convert from 'color-convert';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { addProductColor } from '@/utils/reduxSlice/productSlice';

@@ -2,7 +2,6 @@
 /* eslint-disable react/button-has-type */
 /* eslint-disable no-nested-ternary */
 import Loading from '@/utils/animations/Loading';
-import React from 'react';
 import { ButtonProps } from '.';
 
 /**

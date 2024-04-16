@@ -1,4 +1,3 @@
-import React from 'react';
 
 function CustomerReview({ numberOfReviews }:{ numberOfReviews:number }) {
   return (

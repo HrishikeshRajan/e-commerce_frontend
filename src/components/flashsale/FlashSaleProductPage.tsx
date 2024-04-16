@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { formattedAmount } from '@/utils/convertToRupees';
 import cart from '@/utils/cart.helper';
 import { useDispatch } from 'react-redux';

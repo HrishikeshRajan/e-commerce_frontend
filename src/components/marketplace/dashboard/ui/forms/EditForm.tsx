@@ -1,5 +1,5 @@
 /* eslint-disable import/no-cycle */
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik';

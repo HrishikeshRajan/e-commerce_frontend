@@ -1,6 +1,5 @@
 /* eslint-disable max-len */
 
-import React from 'react';
 import { isEmpty } from 'lodash';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import CartCard from './CartCard';

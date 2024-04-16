@@ -1,5 +1,3 @@
-import React from 'react';
-
 function FilterShimmer() {
   return (
     <div className="bg-white shadow p-4 rounded-md animate-pulse">

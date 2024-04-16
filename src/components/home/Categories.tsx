@@ -1,4 +1,3 @@
-import React from 'react';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import useCategory from '@/hooks/user/useCategories';
 import MenuCard from './Menu/MenuCard';

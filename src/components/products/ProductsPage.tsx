@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import useFilter from '@/hooks/useFilter';
 import { useSearchParams } from 'react-router-dom';

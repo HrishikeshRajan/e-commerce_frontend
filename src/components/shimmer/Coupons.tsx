@@ -1,6 +1,5 @@
 /* eslint-disable no-sparse-arrays */
 /* eslint-disable react/no-array-index-key */
-import React from 'react';
 
 function ShimmerCoupon() {
   return (

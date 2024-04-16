@@ -1,4 +1,3 @@
-import React from 'react';
 import Address from './Card';
 import AddButton from './AddButton';
 import { IAddress } from '..';

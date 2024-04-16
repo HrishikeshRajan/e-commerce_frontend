@@ -1,4 +1,3 @@
-import React from 'react';
 
 function ProductImage({ url }:{ url:string }) {
   return (

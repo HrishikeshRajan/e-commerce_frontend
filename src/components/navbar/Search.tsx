@@ -1,6 +1,6 @@
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React, {
+import {
   ElementRef, useRef, useState,
 } from 'react';
 import { CiSearch } from 'react-icons/ci';

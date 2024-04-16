@@ -1,7 +1,6 @@
 /* eslint-disable no-nested-ternary */
 import { faStar, faStarHalfStroke } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 
 function Ratings({ ratings }:{ ratings:number }) {
   return Array.from({ length: 5 }, (_, index) => {

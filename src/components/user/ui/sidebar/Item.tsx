@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable import/no-cycle */
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { setCurrentTab } from '@/utils/reduxSlice/markeplaceSlice';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';

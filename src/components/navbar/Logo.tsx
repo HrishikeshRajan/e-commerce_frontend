@@ -1,6 +1,5 @@
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { clearProducts } from '@/utils/reduxSlice/productSlice';
-import React from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 
 function Logo() {

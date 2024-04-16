@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/jsx-props-no-spreading */
 
-import React, { useCallback } from 'react';
+import { useCallback } from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';

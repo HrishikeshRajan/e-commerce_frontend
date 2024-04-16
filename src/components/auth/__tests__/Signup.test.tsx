@@ -6,7 +6,6 @@ import {
 
 import e from '@testing-library/user-event';
 import { expect } from 'vitest';
-import React from 'react';
 import { server } from '@/mocks/node';
 import { HttpResponse, http } from 'msw';
 import Signup from '../Signup';

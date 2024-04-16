@@ -5,7 +5,6 @@ import { ClientCartItem, Options } from '@/types/Cart';
 import cart from '@/utils/cart.helper';
 import { addPromo, addToCart } from '@/utils/reduxSlice/cartSlice';
 import { isEmpty } from 'lodash';
-import React from 'react';
 import { HiShoppingBag } from 'react-icons/hi2';
 import { Promo } from '@/types/Promo';
 

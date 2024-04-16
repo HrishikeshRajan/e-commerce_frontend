@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable import/no-extraneous-dependencies */
 import { screen } from '@testing-library/react';
-import React from 'react';
 import { renderWithProviders } from '@/mocks/redux/test-utils';
 import { server } from '@/mocks/node';
 import { HttpResponse, delay, http } from 'msw';

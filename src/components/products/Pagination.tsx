@@ -1,5 +1,4 @@
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
-import React from 'react';
 import ReactPaginate from 'react-paginate';
 import { useSearchParams } from 'react-router-dom';
 import PaginationShimmer from '../shimmer/PaginationShimmer';

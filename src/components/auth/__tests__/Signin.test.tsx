@@ -5,7 +5,6 @@ import {
   act,
 } from '@testing-library/react';
 import { expect } from 'vitest';
-import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { renderWithProviders } from '@/mocks/redux/test-utils';
 import { server } from '@/mocks/node';

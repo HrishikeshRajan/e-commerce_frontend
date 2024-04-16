@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-no-constructed-context-values */
-import React from 'react';
 import { GiShoppingBag } from 'react-icons/gi';
 import { IconContext } from 'react-icons';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';

@@ -2,7 +2,6 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 /* eslint-disable jsx-a11y/control-has-associated-label */
-import React from 'react';
 import useCartSyncToLocalStorage from '@/hooks/useCartSyncToLocalStorage';
 import useFlashSyncToLocalStorage from '@/hooks/useFlashSyncToLocalStorage';
 

@@ -1,5 +1,5 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import useFetchCart from '@/hooks/useCart';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { Promo } from '@/types/Promo';

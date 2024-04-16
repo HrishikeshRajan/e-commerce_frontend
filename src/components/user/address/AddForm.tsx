@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import { Formik, Field } from 'formik';
-import React from 'react';
 import { Form, useNavigate } from 'react-router-dom';
 import { ZodError } from 'zod';
 import { toFormikValidationSchema } from 'zod-formik-adapter';

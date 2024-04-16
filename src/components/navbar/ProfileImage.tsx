@@ -1,5 +1,4 @@
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
-import React from 'react';
 import defa from '@/assets/defaultUser.png';
 
 function ProfileImage() {

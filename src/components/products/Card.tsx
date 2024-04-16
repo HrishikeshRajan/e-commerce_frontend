@@ -1,7 +1,6 @@
 /* eslint-disable react/display-name */
 
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { ProductUser } from './types';
 import Ratings from './Ratings';

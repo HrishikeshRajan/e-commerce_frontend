@@ -2,7 +2,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ClientCart } from '@/types/Cart';
 import { isEmpty } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';

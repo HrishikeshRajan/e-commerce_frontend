@@ -153,9 +153,9 @@ function PromoField() {
       }
       applyPromoCode(userCode);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       if (error instanceof Error) {
-        console.log(error);
+        // console.log(error);
         // setPromoError(error.message);
         dispatch(promoError(error.message));
       }

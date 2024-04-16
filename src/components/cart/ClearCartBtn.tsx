@@ -1,7 +1,6 @@
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { clearCart } from '@/utils/reduxSlice/cartSlice';
-import React from 'react';
 import axios, { AxiosError } from 'axios';
 import { StatusCodes } from 'http-status-codes';
 import { removeUser } from '@/utils/reduxSlice/appSlice';

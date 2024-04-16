@@ -1,5 +1,5 @@
 import Button from '@/components/auth/ui/Button';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addOrderId } from '@/utils/reduxSlice/orderSlice';

@@ -1,5 +1,4 @@
 /* eslint-disable react/require-default-props */
-import React from 'react';
 import { Link } from 'react-router-dom';
 
 function MenuCard({ name, secure_url, offer = '' }:{ name:string, secure_url:string, offer?:string }) {

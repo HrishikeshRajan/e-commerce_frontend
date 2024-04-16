@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable react/no-array-index-key */
 import { ClientCartItem } from '@/types/Cart';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { MdKeyboardArrowDown } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
 import QtyBox from '../dialougeBox/QtyBox';

@@ -2,7 +2,6 @@ import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { toggleUserSidebar } from '@/utils/reduxSlice/appSlice';
 import { faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
 
 function ToggleButton() {
   const dispatch = useTypedDispatch();

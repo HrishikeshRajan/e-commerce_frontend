@@ -1,5 +1,4 @@
 import useShops from '@/hooks/useShops';
-import React from 'react';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import ShopListCard from '../../ui/cards/ShopListCard';
 

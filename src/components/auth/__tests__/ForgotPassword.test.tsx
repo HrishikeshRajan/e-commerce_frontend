@@ -1,6 +1,5 @@
 import { renderWithProviders } from '@/mocks/redux/test-utils';
 import { screen } from '@testing-library/react';
-import React from 'react';
 import ForgotPassword from '../ForgotPassword';
 
 describe('Forgot Password Button', () => {

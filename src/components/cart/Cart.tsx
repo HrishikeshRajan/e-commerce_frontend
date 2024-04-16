@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { isEmpty } from 'lodash';
 import cart from '@/utils/cart.helper';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';

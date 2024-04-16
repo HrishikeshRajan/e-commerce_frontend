@@ -1,6 +1,6 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable react/jsx-props-no-spreading */
-import React, { HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 
 function LineBreakSm({ props }:{ props?:HTMLAttributes<HTMLHRElement>, className?:string }) {
   return (

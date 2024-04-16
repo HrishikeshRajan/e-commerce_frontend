@@ -2,7 +2,7 @@
 /* eslint-disable react/require-default-props */
 /* eslint-disable no-param-reassign */
 import Div from '@/components/CustomElements/Div';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import LineBreakSm from '@/components/CustomElements/LineBreakSm';
 import ListWrapper from '@/components/CustomElements/List/ListWrapper';
 import ListItem from '@/components/CustomElements/List/ListItem';

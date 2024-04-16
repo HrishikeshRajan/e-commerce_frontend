@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { ProductCore } from '@/types/Product';
-import React from 'react';
 import Image from './Image';
 
 function Images({ src }:{ src:ProductCore['images'] }) {

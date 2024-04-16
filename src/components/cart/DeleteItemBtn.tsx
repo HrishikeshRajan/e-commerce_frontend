@@ -2,7 +2,6 @@
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import React from 'react';
 import { RxCross2 } from 'react-icons/rx';
 import { removeUser } from '@/utils/reduxSlice/appSlice';
 import axios, { AxiosError } from 'axios';

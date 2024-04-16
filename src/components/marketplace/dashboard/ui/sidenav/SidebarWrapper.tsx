@@ -2,7 +2,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-param-reassign */
 /* eslint-disable max-len */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Sidebar from '@/components/CustomElements/Sidebar/Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from '@/components/dialougeBox/Modal';

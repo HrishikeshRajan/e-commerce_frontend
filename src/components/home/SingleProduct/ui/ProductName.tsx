@@ -1,4 +1,3 @@
-import React from 'react';
 
 function ProductName({ name }:{ name:string }) {
   return (

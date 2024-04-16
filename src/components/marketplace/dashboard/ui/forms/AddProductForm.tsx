@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-cycle */
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   ErrorMessage, Field, Form, Formik,
 } from 'formik';

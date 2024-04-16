@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import React from 'react';
 import { SidebarItemTypes } from './constants';
 import Item from './Item';
 

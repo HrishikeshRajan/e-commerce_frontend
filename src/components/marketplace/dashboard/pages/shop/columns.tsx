@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 import { Checkbox } from '@/components/ui/checkbox';
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { IShop } from './types';
 

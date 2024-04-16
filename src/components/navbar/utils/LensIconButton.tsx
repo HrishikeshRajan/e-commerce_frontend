@@ -1,5 +1,5 @@
 /* eslint-disable react/require-default-props */
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { IconContext } from 'react-icons';
 import { CiSearch } from 'react-icons/ci';
 

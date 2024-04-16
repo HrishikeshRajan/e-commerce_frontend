@@ -1,4 +1,3 @@
-import React from 'react';
 import MenuCard from '../ui/cards/MenuCard';
 
 function Main() {
