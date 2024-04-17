@@ -1,14 +1,6 @@
 import { IUser } from '@/components/user';
+import { IAddress } from './User';
 
-export interface Address {
-  fullname: string
-  city: string
-  homeAddress: string
-  state: string
-  postalCode: string
-  phoneNo: string
-  country: string
-}
 interface TProductImage {
   url: string;
   secure_url: string;
@@ -52,7 +44,7 @@ export interface TOrder {
   product: TProduct;
   orderId: string;
   cartId:string
-  shippingAddress:Address
+  shippingAddress:IAddress
   orderDate:string
   customerId:Pick<IUser, '_id' | 'email' | 'fullname'>
   paymentDetails: {
