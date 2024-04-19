@@ -10,12 +10,8 @@ type ValidatingScreenProps = {
   response:{ message:string, meta:string } | undefined,
   loading:boolean,
   error:string };
-function ValidatingScreen({ response, loading, error }: ValidatingScreenProps) {    
+function ValidatingScreen({ response, loading, error }: ValidatingScreenProps) {
   const navigate = useNavigate();
-<<<<<<< HEAD:src/components/error/ValidatingScreen.tsx
-=======
-  const [response, loading, verifyError] = useTokenVerify(search);
->>>>>>> 9e1a1bc740c710eccd4f2baec2a76aee4bbe5ffa:src/components/error/ConfirmEmail.tsx
   const override: CSSProperties = {
     display: 'block',
     margin: '0 auto',
@@ -31,15 +27,9 @@ function ValidatingScreen({ response, loading, error }: ValidatingScreenProps) {
         </h2>
         {loading && <h2 className="text-xl text-slate-50 pb-10">Please wait while we confirm your email.</h2>}
 
-<<<<<<< HEAD:src/components/error/ValidatingScreen.tsx
         {error && (
           <h2 className="text-xl text-slate-50 my-5 flex  items-center justify-center gap-2">
             {error}
-=======
-        {verifyError && (
-          <h2 className="text-xl text-slate-50 my-5 flex  items-center justify-center gap-2">
-            {verifyError}
->>>>>>> 9e1a1bc740c710eccd4f2baec2a76aee4bbe5ffa:src/components/error/ConfirmEmail.tsx
             <FcExpired />
           </h2>
         )}
@@ -51,11 +41,7 @@ function ValidatingScreen({ response, loading, error }: ValidatingScreenProps) {
           aria-label="Loading Spinner"
           data-testid="loader"
         />
-<<<<<<< HEAD:src/components/error/ValidatingScreen.tsx
         {!loading && error && (
-=======
-        {!loading && verifyError && (
->>>>>>> 9e1a1bc740c710eccd4f2baec2a76aee4bbe5ffa:src/components/error/ConfirmEmail.tsx
           <Button
             className="mt-5 mb-5 rounded-lg bg-white p-3 text-xl font-bold text-slate-900 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
             mode="idle"
