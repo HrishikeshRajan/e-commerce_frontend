@@ -16,6 +16,7 @@ import {
   isFetchUnprocessableEntityError,
 } from '@/types/Fetch';
 import { useNavigate } from 'react-router-dom';
+import Loading from '@/utils/animations/Loading';
 import { signin } from './apis/signin.api';
 
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
@@ -30,7 +31,6 @@ import AuthHelper from './apis/helper';
 import ReCaptchaInfo from './ReCaptchaInfo';
 import { Status } from './types';
 import { IUser } from '../user';
-import Loading from '@/utils/animations/Loading';
 
 function Signin() {
   const dispatch = useTypedDispatch();

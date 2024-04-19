@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Formik, Field } from 'formik';
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Form, useNavigate,
   useSearchParams,
@@ -30,7 +30,7 @@ function NewPassword() {
   const navigate = useNavigate();
   const [search] = useSearchParams();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
-
+  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
     <div className="h-screen w-full flex justify-center items-center  bg-white">
       <Formik
@@ -41,6 +41,7 @@ function NewPassword() {
         }}
         validationSchema={toFormikValidationSchema(passwordSchema)}
         onSubmit={async (values, actions) => {
+          setIsSubmitting(true);
           actions.setStatus('');
           if (import.meta.env.VITE_PROCESS_ENV === 'production') {
             const recaptchaToken = await recaptchaRef.current?.executeAsync();
@@ -56,7 +57,7 @@ function NewPassword() {
           }
           updatePassword({ ...values })
             .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
-              actions.setSubmitting(false);
+              setIsSubmitting(false);
               if (hasRequestSucceeded(response)) {
                 const resObj:Status = { success: true, message: response.message.message };
                 actions.setStatus(resObj);
@@ -72,7 +73,7 @@ function NewPassword() {
                 actions.setStatus(errorObj);
               }
             }).catch((error) => {
-              actions.setSubmitting(false);
+              setIsSubmitting(false);
               const errorObj:Status = { success: false, message: (error as Error).message };
               actions.setStatus(errorObj);
             });
@@ -86,7 +87,11 @@ function NewPassword() {
             <h2 className="text-xl my-2 font-semibold leading-7 text-cyan-500 text-center mt-2">
               Wondercart
             </h2>
-            {form.status && <h4 className="p-5 bg-green-100">{form.status}</h4>}
+            {form.status && (
+              <h4 data-testid="h4" className={`${form.status.success ? 'text-green-500  bg-green-50' : 'text-red-500 bg-red-50'} p-3 font-bold  mt-2 rounded`}>
+                {form.status.message}
+              </h4>
+            )}
 
             <label htmlFor="password" className="py-2 text-slate-500 text-left">Enter your new password</label>
             <Field
@@ -108,7 +113,7 @@ function NewPassword() {
           )}
 
             {
-              form.isSubmitting ? (
+              isSubmitting ? (
                 <Button
                   type="button"
                   mode="loading"
