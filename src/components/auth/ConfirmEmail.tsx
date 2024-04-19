@@ -11,7 +11,6 @@ function ConfirmEmail() {
   const [search] = useSearchParams();
   const navigate = useNavigate();
   const [response, loading, error] = useTokenVerify(search);
-
   const override: CSSProperties = {
     display: 'block',
     margin: '0 auto',
@@ -30,7 +29,6 @@ function ConfirmEmail() {
         {error.error && (
           <h2 className="text-xl text-slate-50 my-5 flex  items-center justify-center gap-2">
             {error.message}
-            {' '}
             <FcExpired />
           </h2>
         )}
@@ -48,7 +46,7 @@ function ConfirmEmail() {
             mode="idle"
             disabled={false}
             type="button"
-            onClick={() => navigate('/auth')}
+            onClick={() => navigate('/')}
           >
             Try again
           </Button>
@@ -63,7 +61,7 @@ function ConfirmEmail() {
                 mode="idle"
                 disabled={false}
                 type="button"
-                onClick={() => navigate('/auth')}
+                onClick={() => navigate('/')}
               >
                 SHOP NOW
               </Button>
