@@ -5,7 +5,7 @@ import { renderWithProviders } from '@/mocks/redux/test-utils';
 import { server } from '@/mocks/node';
 import { HttpResponse, delay, http } from 'msw';
 import { StatusCodes } from 'http-status-codes';
-import ConfirmEmail from '../ConfirmEmail';
+import ConfirmEmail from '../../error/ConfirmEmail';
 
 describe('Confirm Email', () => {
   it('should render a heading', () => {

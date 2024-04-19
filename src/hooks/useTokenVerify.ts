@@ -1,31 +1,24 @@
 import { verifyEmail } from '@/components/auth/apis/verifyEmail';
-import { StatusCodes } from 'http-status-codes';
+import { ErrorResponse, FetchApiResponse, hasFetchSucceeded } from '@/types/Fetch';
 import { useEffect, useState } from 'react';
 
-type ErrorMessage = { error:boolean, message:string };
 export const useTokenVerify = (search:URLSearchParams) => {
-  const [response, setResponse] = useState<any>();
+  const [response, setResponse] = useState<{ message:string, meta:string }>();
   const [loading, setLoading] = useState<boolean>(true);
-  const [isError, setIsError] = useState<ErrorMessage>({ error: false, message: '' });
+  const [verifyError, setVerifyError] = useState<string>('');
 
   useEffect(() => {
-    try {
-      verifyEmail(search.get('token')!).then((result):any => {
-        setLoading(false);
-
-        if (result.success && result.statusCode === StatusCodes.ACCEPTED) {
-          setResponse(result.message);
-        } else {
-          throw new Error(result.message.error);
-        }
-      }).catch((err) => {
-        setLoading(false);
-        setIsError({ error: true, message: err.message });
-      });
-    } catch (error:any) {
+    verifyEmail(search.get('token')!).then((result:FetchApiResponse<{ message:string, meta:string }> | ErrorResponse) => {
       setLoading(false);
-      setIsError({ error: true, message: 'We\'re unable to process your token verification request. Please try again later.' });
-    }
+      if (hasFetchSucceeded(result)) {
+        setResponse({ message: result.message.message, meta: result.message.meta });
+      } else {
+        setVerifyError(result.error);
+      }
+    }).catch((err) => {
+      setLoading(false);
+      setVerifyError((err as Error).message);
+    });
   }, [search]);
-  return [response, loading, isError] as const;
+  return [response, loading, verifyError] as const;
 };

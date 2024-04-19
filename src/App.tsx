@@ -44,7 +44,7 @@ import PaymentSuccess from './components/payment/PaymentSuccess';
 import Orders from './components/order/Orders';
 import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderWrapper';
 import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
-import ConfirmEmail from './components/auth/ConfirmEmail';
+import ConfirmEmail from './components/error/ConfirmEmail';
 import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 import { getSingleProduct } from './components/products/apis/getSingleProduct';
 import CouponWrapper from './components/coupons/CouponWrapper';
