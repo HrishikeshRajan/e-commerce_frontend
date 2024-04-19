@@ -1,18 +1,4 @@
 /* eslint-disable import/no-extraneous-dependencies */
-<<<<<<< HEAD
-import { useTokenVerify } from '@/hooks/useTokenVerify';
-import { useSearchParams } from 'react-router-dom';
-import ValidatingScreen from './ValidatingScreen';
-
-function ConfirmEmail() {
-  const [search] = useSearchParams();
-  const [response, loading, verifyError] = useTokenVerify(search);
-
-  return <ValidatingScreen response={response} loading={loading} error={verifyError} />
-}
-
-export default ConfirmEmail;
-=======
 import { CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import PuffLoader from 'react-spinners/PuffLoader';
@@ -104,4 +90,3 @@ function ValidatingScreen({ response, loading, error }: ValidatingScreenProps) {
 }
 
 export default ValidatingScreen;
->>>>>>> 9e1a1bc740c710eccd4f2baec2a76aee4bbe5ffa
