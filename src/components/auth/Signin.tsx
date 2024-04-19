@@ -34,6 +34,7 @@ import { IUser } from '../user';
 function Signin() {
   const dispatch = useTypedDispatch();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const [mainError, setMainError] = useState({
     accountError: false,
@@ -48,6 +49,7 @@ function Signin() {
       }}
       validationSchema={toFormikValidationSchema(loginSchema)}
       onSubmit={async (values, actions) => {
+        setIsSubmitting(true);
         if (import.meta.env.VITE_PROCESS_ENV === 'production') {
           const recaptchaToken = await recaptchaRef.current?.executeAsync();
           recaptchaRef.current?.reset();
@@ -62,7 +64,7 @@ function Signin() {
         }
         signin({ ...values })
           .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
-            actions.setSubmitting(false);
+            setIsSubmitting(false);
             if (hasRequestSucceeded(response)) {
               dispatch(addUser(response.message.userDetails));
               dispatch(confirmAuthentication(true));
@@ -77,6 +79,7 @@ function Signin() {
               setMainError({ accountError: true, message: response.error });
             }
           }).catch((e) => {
+            setIsSubmitting(false);
             setMainError({ accountError: true, message: (e as Error).message });
           });
       }}
@@ -124,7 +127,7 @@ function Signin() {
             />
           )}
           {
-            form.isSubmitting ? (
+            isSubmitting ? (
               <Button
                 type="button"
                 className="mt-10 mb-5 cursor-wait rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
