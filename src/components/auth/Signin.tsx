@@ -30,6 +30,7 @@ import AuthHelper from './apis/helper';
 import ReCaptchaInfo from './ReCaptchaInfo';
 import { Status } from './types';
 import { IUser } from '../user';
+import Loading from '@/utils/animations/Loading';
 
 function Signin() {
   const dispatch = useTypedDispatch();
@@ -135,7 +136,7 @@ function Signin() {
                 disabled
                 loadingAnimation={false}
               >
-                Please wait
+                <Loading />
               </Button>
             ) : (
               <Button
