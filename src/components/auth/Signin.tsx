@@ -134,7 +134,7 @@ function Signin() {
                 className="mt-10 mb-5 cursor-wait rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 mode="loading"
                 disabled
-                loadingAnimation={false}
+                loadingAnimation
               >
                 <Loading />
               </Button>
