@@ -1,9 +1,8 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const deleteShops = async (shopsIds:string[]) => {
   try {
-    const response = await fetch(`${ShopBaseUrl('shop')}/multiples`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/shop/multiples`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',

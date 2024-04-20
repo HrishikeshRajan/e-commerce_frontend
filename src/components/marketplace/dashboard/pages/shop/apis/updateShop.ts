@@ -1,5 +1,4 @@
 /* eslint-disable import/no-cycle */
-import { ShopBaseUrl } from '../../../../urlConstants';
 
 type IShop = {
   name: string;
@@ -9,7 +8,7 @@ type IShop = {
 };
 export const updateShop = async (shop:IShop, shopId:string) => {
   try {
-    const response = await fetch(`${ShopBaseUrl('shop')}/${shopId}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/shop/${shopId}`, {
       method: 'PUT',
       headers: {
         Accept: 'application/json',

@@ -2,7 +2,7 @@ import { ShopBaseUrl } from '../../../../urlConstants';
 
 export const uploadImage = async function uploadImage(form: FormData) {
   try {
-    const response = await fetch(`${ShopBaseUrl('logo')}`, {
+    const response = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/logo`, {
       method: 'PUT',
       credentials: 'include',
       body: form,
