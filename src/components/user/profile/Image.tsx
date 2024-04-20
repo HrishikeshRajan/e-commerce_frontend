@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
-import { useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import { ToastContainer, toast } from 'react-toastify';
 import defaultUser from '../../../assets/defaultUser.png';
@@ -10,7 +9,7 @@ import { profilePicture } from '../helper/getProfilePicture';
 import { deleteImage, uploadImage } from '../apis/image.api';
 import AuthHelper from '../../auth/apis/helper';
 import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
-import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { addUser } from '../../../utils/reduxSlice/appSlice';
 import 'react-toastify/dist/ReactToastify.css';
 
 function Image() {
@@ -20,8 +19,6 @@ function Image() {
   const [imageSubmit, setImageSubmit] = useState(false);
 
   const dispatch = useTypedDispatch();
-  const navigate = useNavigate();
-
   // Wrapper function that changes the state of form submission
   const isSubmitting = (status:boolean) => setImageSubmit(status);
 
@@ -34,11 +31,8 @@ function Image() {
           setFile('');
         });
         toast.success('Profile Picture deleted.');
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
+      } else {
+        toast.error('Failed to delete profile picture');
       }
     });
   };
@@ -75,11 +69,8 @@ function Image() {
         dispatch(addUser(response.message?.user));
         AuthHelper.authenticate(response.message?.user);
         toast.success('Profile Picture saved.');
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
+      } else {
+        toast.error('Failed to upload profile picture');
       }
     });
   }

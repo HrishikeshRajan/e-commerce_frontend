@@ -3,16 +3,13 @@
 /* eslint-disable react/jsx-closing-tag-location */
 import React from 'react';
 import { createPortal } from 'react-dom';
-import cart from '@/utils/cart.helper';
-import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { useTypedDispatch } from '@/hooks/user/reduxHooks';
+import { updateCartItemSize } from '@/utils/reduxSlice/cartSlice';
 import { ProductCore } from '@/types/Product';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
-import { updateProductSize } from '../cart/apis/sizeUpdate';
 
 interface IDialougeBox {
   product:ProductCore
-  cartId:string
   title:string
   info?:string
   stockAvailable:boolean
@@ -21,21 +18,15 @@ interface IDialougeBox {
 }
 
 function SizeBox({
-  title, info, close, product, currentSize, cartId, stockAvailable,
+  title, info, close, product, currentSize, stockAvailable,
 }:IDialougeBox) {
   /**
    * This hook hides the veritical scroll
    */
   usePageFreeze();
   const dispatch = useTypedDispatch();
-  const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
   const handleSelectSize = (selectedSize:string) => {
-    const updatedCart = cart.updateSize(selectedSize, product._id);
-    dispatch(addToCart(updatedCart!));
-    if (isLoggedIn && false) {
-      updateProductSize(selectedSize, product._id, cartId).then(() => {
-      }).catch((error) => console.log(error));
-    }
+    dispatch(updateCartItemSize({ productId: product._id, size: selectedSize }));
     close(false);
   };
   return createPortal(

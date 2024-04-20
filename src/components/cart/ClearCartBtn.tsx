@@ -1,12 +1,9 @@
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import cart from '@/utils/cart.helper';
 import { clearCart } from '@/utils/reduxSlice/cartSlice';
-import axios, { AxiosError } from 'axios';
-import { StatusCodes } from 'http-status-codes';
-import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { deleteCart } from './apis/deleteCart';
-import AuthHelper from '../auth/apis/helper';
 import Button from '../auth/ui/Button';
 
 function ClearCartBtn({ cartId }:{ cartId:string }) {
@@ -21,15 +18,8 @@ function ClearCartBtn({ cartId }:{ cartId:string }) {
 
           navigate('/');
         }
-      }).catch((error:any) => {
-        if (axios.isAxiosError(error)) {
-          const axiosError = error as AxiosError;
-          if (axiosError.response?.status === StatusCodes.UNAUTHORIZED) {
-            AuthHelper.clearSignedOnData();
-            dispatch(removeUser());
-            navigate('/auth');
-          }
-        }
+      }).catch((error) => {
+        toast.error((error as Error).message);
       });
     }
     cart.clearCart();

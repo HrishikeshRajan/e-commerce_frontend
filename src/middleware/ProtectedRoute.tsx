@@ -3,13 +3,11 @@ import {
   useNavigate,
 } from 'react-router-dom';
 
-import { isEmpty } from 'lodash';
-
 import AuthHelper from '@/components/auth/apis/helper';
 import { useDispatch } from 'react-redux';
-import { addUser, removeUser } from '@/utils/reduxSlice/appSlice';
-import useFetchUser from '@/hooks/user/useFetchUser';
-import { useTypedSelector } from '../hooks/user/reduxHooks';
+import { resetUser } from '@/utils/reduxSlice/appSlice';
+import useCookieStatus from '@/hooks/user/useCookieStatus';
+import PageWaiting from '@/utils/animations/PageWaiting';
 
 export interface AuthWrapper {
   children:React.JSX.Element
@@ -17,49 +15,28 @@ export interface AuthWrapper {
 }
 
 // Allows only the authenticated users
-export const AuthenticationWrapper = ({
+export function AuthenticationWrapper({
   children,
   authentication = true,
-}:AuthWrapper):React.ReactNode | string => {
-  const userRedux = useTypedSelector((store) => store.app.user);
-  const user = AuthHelper.getUserFromLocalStorage();
+}:AuthWrapper):React.ReactNode | string {
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
   const dispatch = useDispatch();
-  const {
-    isUserFetching, isUserfetchError, setIsUserFetchEnable, newUser,
-  } = useFetchUser();
+
+  const { loadingStatus, tokenInfo } = useCookieStatus();
   useEffect(() => {
-    // compares the condition and current user status
-
-    if (authentication && isEmpty(user)) {
-      setIsUserFetchEnable(true);
-      if (isUserfetchError === 'login') {
-        AuthHelper.clearSignedOnData(() => {
-          dispatch(removeUser());
-          navigate('/auth');
-        });
-      }
-      if (newUser) {
-        AuthHelper.add(newUser);
-        dispatch(addUser(newUser));
-      }
-    } else if (isEmpty(userRedux) && !isEmpty(user)) {
-      dispatch(addUser(user));
+    if (authentication && !loadingStatus && !tokenInfo) {
+      AuthHelper.clearSignedOnData(() => {
+        dispatch(resetUser());
+        navigate('/auth');
+      });
     }
-    setLoading(false);
-  }, [user,
-    navigate,
-    authentication,
-    userRedux,
-    dispatch,
-    setIsUserFetchEnable,
-    newUser,
-    isUserfetchError,
-    isUserFetching]);
 
-  return loading ? 'Loading' : children;
-};
+    setLoading(false);
+  }, [authentication, dispatch, loadingStatus, navigate, tokenInfo]);
+
+  return loading ? <PageWaiting loading={loading} /> : children;
+}
 // Page loader animation here
 
 // Prevents signedin users from accessing auth pages
@@ -67,17 +44,17 @@ export const RedirectIfAuthenticated = ({
   children,
   authentication = true,
 }:AuthWrapper):React.ReactNode | string => {
-  const user = useTypedSelector((store) => store.app.user);
+  const { tokenInfo } = useCookieStatus();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
 
   useEffect(() => {
   // compares the condition and current user status
-    if (!authentication && !isEmpty(user)) {
+    if (!authentication && tokenInfo) {
       navigate('/');
     }
     setLoading(false);
-  }, [user, navigate, authentication]);
+  }, [navigate, authentication, tokenInfo]);
 
   return loading ? 'Loading' : children;
 };

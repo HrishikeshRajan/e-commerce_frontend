@@ -47,10 +47,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import queryString from 'query-string';
 import { isEmpty } from 'lodash';
-import { StatusCodes } from 'http-status-codes';
-import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { useNavigate } from 'react-router-dom';
-import AuthHelper from '@/components/auth/apis/helper';
 import { confirmShopDelete } from '@/utils/reduxSlice/markeplaceSlice';
 import { ProductBaseUrl } from '@/components/marketplace/urlConstants';
 import { getProductsBySellerId } from './apis/getProduct';
@@ -99,11 +96,6 @@ function ListProductsWrapper() {
       getProductsBySellerId(queryString.stringify(queryObj)).then((response) => {
         if (response.statusCode === 200) {
           dispatch(addProductsList(response.message));
-        } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-          AuthHelper.clearSignedOnData();
-          dispatch(removeUser());
-          navigate('/auth');
         }
       });
     }

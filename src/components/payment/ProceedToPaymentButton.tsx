@@ -8,6 +8,8 @@ import { ClientOrder } from '@/types/Orders';
 import orderHelper from '@/utils/order.helper';
 import { notifyError } from '@/utils/toast';
 import { isFetchSuccess } from '@/types/Fetch';
+import { ToastContainer, toast } from 'react-toastify';
+
 import { placeOrder } from '../cart/apis/placeOrder';
 import 'react-toastify/dist/ReactToastify.css';
 import { hasOrder } from '.';
@@ -25,22 +27,35 @@ function ProceedToPaymentButton() {
     if (!cartData || !orderData) {
       return navigate(-1);
     }
-    placeOrder(cartData.cartId!, orderData).then((result) => {
-      setLoading(false);
-      if (isFetchSuccess(result)) {
-        if (hasOrder(result.message.order)) {
-          dispatch(addOrderId(result.message.order.orderId));
-          orderHelper.addOrderId(result.message.order.orderId);
-          navigate('/payment');
-        }
-      } else {
-        setLoading(false);
-        notifyError(result.error);
+    try {
+      if (!orderData.shippingAddress
+         || (orderData.shippingAddress && !orderData.shippingAddress._id)) {
+        throw new Error('Please select an shipping address');
       }
-    }).catch((err:unknown) => {
+      placeOrder(cartData.cartId!, orderData).then((result) => {
+        setLoading(false);
+        if (isFetchSuccess(result)) {
+          if (hasOrder(result.message.order)) {
+            dispatch(addOrderId(result.message.order.orderId));
+            orderHelper.addOrderId(result.message.order.orderId);
+            navigate('/payment');
+          }
+        } else {
+          setLoading(false);
+          notifyError(result.error);
+        }
+      }).catch((err:unknown) => {
+        setLoading(false);
+        notifyError((err as Error).message);
+      });
+    } catch (error) {
       setLoading(false);
-      notifyError((err as Error).message);
-    });
+      if (error instanceof Error) {
+        toast.error(error.message, {
+          position: 'bottom-center',
+        });
+      }
+    }
   };
   return (
     loading ? (
@@ -54,15 +69,18 @@ function ProceedToPaymentButton() {
         Please wait
       </Button>
     ) : (
-      <Button
-        type="button"
-        onClick={createOrderAndRedirectToPayment}
-        className="bg-yellow-400 w-full lg:w-6/12 font-bold rounded text-slate-900 p-3"
-        mode="idle"
-        disabled={false}
-      >
-        PROCEED TO PAYMENT
-      </Button>
+      <>
+        <Button
+          type="button"
+          onClick={createOrderAndRedirectToPayment}
+          className="bg-yellow-400 w-full lg:w-6/12 font-bold rounded text-slate-900 p-3"
+          mode="idle"
+          disabled={false}
+        >
+          PROCEED TO PAYMENT
+        </Button>
+        <ToastContainer position="bottom-center" />
+      </>
     )
   );
 }

@@ -33,7 +33,7 @@ const useFetchUser = () => {
             }
           }
         })
-        .catch((err: unknown) => {
+        .catch((err) => {
           setIsUserFetching(false);
           setIsUserFetchError((err as Error).message);
         });

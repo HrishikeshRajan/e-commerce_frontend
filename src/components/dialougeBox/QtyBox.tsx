@@ -1,13 +1,14 @@
 /* eslint-disable no-constant-condition */
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable react/jsx-closing-tag-location */
-import React, { useState } from 'react';
+import React from 'react';
 import { createPortal } from 'react-dom';
 import cart from '@/utils/cart.helper';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
-import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import {
+  updateCartItem, updateCartItemQty, updateGrandTotalPrice, updateGrandTotalQty,
+} from '@/utils/reduxSlice/cartSlice';
 import { usePageFreeze } from '../../hooks/user/usePageFreeze';
-import { updateCartQty } from '../cart/apis/quantityUpdate';
 
 interface IDialougeBox {
   productId:string
@@ -27,21 +28,14 @@ function QtyBox({
    */
   usePageFreeze();
 
-  const [stockOver, setStockOver] = useState(() => {
-    if (stock < qty) {
-      return true;
-    }
-    return false;
-  });
   const dispatch = useTypedDispatch();
-  // const isLoggedIn = useTypedSelector((store) => store.app.authenticated);
-
   const handleQty = (selectedQty:number) => {
-    const updatedCart = cart.updateQty(selectedQty, productId);
-    if (!updateCartQty) {
-      return setStockOver(true);
-    }
-    dispatch(addToCart(updatedCart!));
+    dispatch(updateCartItemQty({ productId, qty: selectedQty }));
+    const updatedCartItem = cart.updateQty(selectedQty, productId);
+    if (!updatedCartItem) return;
+    dispatch(updateCartItem({ productId, item: updatedCartItem }));
+    dispatch(updateGrandTotalQty());
+    dispatch(updateGrandTotalPrice());
     close(false);
   };
 
@@ -69,13 +63,13 @@ function QtyBox({
           <span className="text-bold px-2 text-black">{info}</span>
         </p>
         <p>
-          {stock < qty && <span className=" w-full flex justify-center font-bold text-red-500">Out of stock</span>}
+          {stock < qty && <span className=" w-full flex justify-center font-bold text-red-500">Currenlty Unavailable </span>}
 
         </p>
         <div className=" w-full gap-3   p-5 flex flex-wrap justify-start items-center">
           {Array.from({ length: 10 }).map((_, index) => (
-            <button type="button" disabled={stockOver} onClick={() => handleQty(index + 1)} className={` rounded-full hover:bg-slate-200 hover:text-black hover:font-bold  h-10 w-10 text-xs ${qty === index + 1 ? 'border-2 text-slate-700 border-slate-700' : 'border border-slate-300 text-slate-700'} ${stockOver ? 'disabled:bg-slate-100 disabled:text-slate-800 border-dashed cursor-not-allowed' : 'bg-slate-200'} `} key={index}>
-              {stockOver ? (
+            <button type="button" disabled={index + 1 > stock} onClick={() => handleQty(index + 1)} className={` rounded-full hover:bg-slate-200 hover:text-black hover:font-bold  h-10 w-10 text-xs ${qty === index + 1 ? 'border-2 text-slate-700 border-slate-700' : 'border border-slate-300 text-slate-700'} ${index + 1 > stock ? 'bg-slate-50  border-dashed border-4 cursor-not-allowed' : 'bg-slate-200'} `} key={index}>
+              {index + 1 > stock ? (
                 <del>
                   {index + 1}
                 </del>

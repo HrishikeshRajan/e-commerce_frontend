@@ -10,11 +10,9 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { removeUser } from 'utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
 import { addShop, setShopLogo } from '@/utils/reduxSlice/markeplaceSlice';
 import { merge } from 'lodash';
-import AuthHelper from '../../../../auth/apis/helper';
 import AddLogo from './AddLogo';
 import { convertCloudinaryToDataUrl, updateShop } from '../../pages/shop/apis/updateShop';
 import { getShopById } from '../../pages/shop/apis/getShopById';
@@ -44,11 +42,6 @@ function EditForm() {
           dispatch(setShopLogo(res as string));
         });
         dispatch(addShop(response.message.shop));
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
       }
     });
     return () => abortController.abort();
@@ -71,13 +64,10 @@ function EditForm() {
             actions.setSubmitting(false);
             if (response.statusCode === StatusCodes.OK) {
               toast.success('Successfully saved');
-            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-              && response?.success === false) {
-              AuthHelper.clearSignedOnData();
-              dispatch(removeUser());
-              navigate('/auth');
             }
-          }).catch((e) => console.log(e));
+          }).catch(() => {
+            toast.error('Failed to saved');
+          });
         }}
         enableReinitialize
       >

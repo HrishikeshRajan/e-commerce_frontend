@@ -58,7 +58,7 @@ const cart = {
     try {
       if (typeof window === 'undefined') return;
       const emptyCart: ClientCart = {
-        userId: uuidv4(),
+        userId: '',
         cartId: '',
         products: {},
         grandTotalPrice: 0,
@@ -179,55 +179,7 @@ const cart = {
       console.log(error);
     }
   },
-  // addToCartFlash: (
-  //   product: ProductCore,
-  //   options: Options,
-  //   sale: IFlashSale,
-  // ) => {
-  //   const productId = product._id;
-  //   try {
-  //     if (typeof window === 'undefined') return;
-  //     const emptyCart: ClientCart = {
-  //       products: {},
-  //       grandTotalPrice: 0,
-  //       grandTotalQty: 0,
-  //       userId: '',
-  //       cartId: '',
-  //     };
-  //     const userCart: ClientCart = JSON.parse(localStorage.getItem('cart')!) || emptyCart;
 
-  //     if (!isEmpty(userCart) && userCart.products[productId]) {
-  //       const item = userCart.products[productId];
-  //       item.qty = 1;
-  //       item.totalPrice = Math.floor(item.product.price * item.qty);
-  //       item.options.color = options.color;
-  //       item.options.size = options.size;
-  //       userCart.products[productId] = item;
-  //     } else {
-  //       const item: ClientCartItem = {
-  //         product,
-  //         qty: 1,
-  //         totalPrice: sale.priceAfterDiscount!, // assgin discounted price
-  //         options,
-  //         totalPriceBeforeTax: sale.priceAfterDiscount!,
-  //         totalPriceAfterTax: 0,
-  //         orderStatus: ORDER_STATUS.NOT_PROCESSED,
-  //         gstInPercentage: 0,
-  //         taxAmount: 0,
-  //       };
-  //       userCart.products[productId] = item;
-  //     }
-
-  //     const grandTotalQty = sumQty(userCart.products);
-  //     userCart.grandTotalQty = grandTotalQty;
-  //     const grandTotalPrice = sumPrice(userCart.products);
-  //     userCart.grandTotalPrice = grandTotalPrice;
-  //     localStorage.setItem('cart', JSON.stringify(userCart));
-  //     return userCart;
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },
   updateCart: (userCart: ClientCart | null) => {
     try {
       if (typeof window === 'undefined') return;
@@ -290,7 +242,7 @@ const cart = {
     }
   },
   // Updated
-  updateQty: (qty: number, productId: string):ClientCart | null => {
+  updateQty: (qty: number, productId: string):ClientCartItem | null => {
     if (typeof window === 'undefined') return null;
     const userCart = getLocalStorageItem<ClientCart>('cart');
     if (!userCart) return null;
@@ -309,14 +261,10 @@ const cart = {
         item.totalPriceAfterTax = price.getMRP();
         userCart.products[productId] = item;
       }
-      const grandTotalQty = totalQty(userCart.products);
-      userCart.grandTotalQty = grandTotalQty;
-      userCart.grandTotalPrice = Number(getGrandTotal(userCart.products));
-      setToLocalStorage<ClientCart>('cart', userCart);
     } catch (error) {
       console.log(error);
     }
-    return userCart;
+    return userCart.products[productId] || null;
   },
   updateColor: (color: string, productId: string):ClientCart | null => {
     if (typeof window === 'undefined') return null;

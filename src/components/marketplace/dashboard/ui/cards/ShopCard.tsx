@@ -9,8 +9,6 @@ import { CgCalendarDates } from 'react-icons/cg';
 import { useDispatch } from 'react-redux';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import ConfirmBox from '@/components/dialougeBox/ConfirmBox';
-import AuthHelper from '@/components/auth/apis/helper';
-import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { StatusCodes } from 'http-status-codes';
 import { ToastContainer, toast } from 'react-toastify';
 import { deleteShop } from '../../pages/shop/apis/deleteShop';
@@ -40,13 +38,8 @@ function ShopCard({ item }:ShopCardPropTypes) {
     deleteShop(shopId).then((response) => {
       if (response.statusCode === StatusCodes.OK) {
         toast.success('Successfully Deleted');
-      } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-        && response?.success === false) {
-        AuthHelper.clearSignedOnData();
-        dispatch(removeUser());
-        navigate('/auth');
       }
-    }).catch((e) => console.log(e));
+    }).catch((  ) => toast.success('Failed to Deleted'));
   };
   const handleDelete = () => {
     setDelete({

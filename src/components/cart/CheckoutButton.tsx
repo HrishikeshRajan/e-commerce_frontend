@@ -13,17 +13,14 @@ import {
 import {
   hasRequestSucceeded,
   isFetchBadRequestError,
-  isFetchUnauthorizedError,
   type ErrorResponse,
   type FetchApiResponse,
 } from '@/types/Fetch';
-import { removeUser } from '@/utils/reduxSlice/appSlice';
 import { toast } from 'react-toastify';
 
 import Button from '../auth/ui/Button';
 import { submitCart } from './apis/addToCart';
 import 'react-toastify/dist/ReactToastify.css';
-import AuthHelper from '../auth/apis/helper';
 
 function Checkout({ summary }:{ summary:ClientCart }) {
   const navigate = useNavigate();
@@ -56,11 +53,6 @@ function Checkout({ summary }:{ summary:ClientCart }) {
         if (hasRequestSucceeded(result)) {
           dispatch(updateUserIdandCartId(result.message.ids));
           navigate('/address');
-        } else if (isFetchUnauthorizedError(result)) {
-          AuthHelper.clearSignedOnData(() => {
-            dispatch(removeUser());
-            navigate('/auth');
-          });
         } else if (isFetchBadRequestError(result)) {
           dispatch(promoError(result.error));
         }

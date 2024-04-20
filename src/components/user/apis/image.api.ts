@@ -4,7 +4,7 @@ imageUploadHeaders.set('Content-Type', 'image/png');
 
 export const uploadImage = async function uploadImage(form: FormData) {
   try {
-    const url = `${import.meta.env.VITE_BASE_URL}/profile-picture`;
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/profile-picture`;
     const response = await fetch(url, {
       method: 'PUT',
       credentials: 'include',

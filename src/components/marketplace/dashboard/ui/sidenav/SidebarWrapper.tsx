@@ -6,8 +6,7 @@ import { useState } from 'react';
 import Sidebar from '@/components/CustomElements/Sidebar/Sidebar';
 import { Link, useNavigate } from 'react-router-dom';
 import Modal from '@/components/dialougeBox/Modal';
-import { removeAuthentication, removeUser, toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
-import AuthHelper from '@/components/auth/apis/helper';
+import { resetUser, toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
 import { signout } from '@/components/auth/apis/signout';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { IconContext } from 'react-icons';
@@ -48,10 +47,8 @@ function SidebarWrapper() {
    */
   const signOut = async () => {
     await signout().then(() => {
-      dispatch(removeUser());
-      dispatch(removeAuthentication());
+      dispatch(resetUser());
       navigate('/auth');
-      AuthHelper.clearSignedOnData();
     });
   };
   return (

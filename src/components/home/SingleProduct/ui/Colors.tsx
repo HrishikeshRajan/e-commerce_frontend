@@ -1,14 +1,12 @@
 import convert from 'color-convert';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { addProductColor } from '@/utils/reduxSlice/productSlice';
-import cart from '@/utils/cart.helper';
+import { updateCartItemColor } from '@/utils/reduxSlice/cartSlice';
 
 function Colors({ color, productId }:{ color:string, productId:string }) {
   const dispatch = useTypedDispatch();
   const isColorSelected = useTypedSelector((store) => store.products.selectedColor);
   const handleColor = () => {
-    dispatch(addProductColor(color));
-    cart.updateColor(color, productId);
+    dispatch(updateCartItemColor({ color, productId }));
   };
   return (
     <>

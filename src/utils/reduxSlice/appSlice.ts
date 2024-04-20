@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ClientFlashSale } from '@/types/Sale';
@@ -8,15 +9,15 @@ enum Screen {
   SELLER = 'SELLER',
 }
 interface IAPP {
-  user:IUser | null,
-  authenticated:boolean,
-  authPage:boolean,
-  sidebarIsOpen:boolean,
-  doSignout:boolean,
-  sidebar:boolean,
-  screen:Screen,
-  flashSaleItem: ClientFlashSale | null
-  modal:boolean
+  user:IUser | null;
+  authenticated:boolean;
+  authPage:boolean;
+  sidebarIsOpen:boolean;
+  doSignout:boolean;
+  sidebar:boolean;
+  screen:Screen;
+  flashSaleItem: ClientFlashSale | null;
+  modal:boolean;
   marketSidebar:boolean;
 }
 
@@ -41,19 +42,12 @@ const appSlice = createSlice({
         state.user = action.payload;
       }
     },
-    removeUser: (state) => {
-      state.user = null;
-    },
     confirmAuthentication: (state, action:PayloadAction<boolean>) => {
       state.authenticated = action.payload;
-    },
-    removeAuthentication: (state) => {
-      state.authenticated = false;
     },
     signInPage: (state, action:PayloadAction<boolean>) => {
       state.authPage = action.payload;
     },
-
     upgradeToSeller: (state, action:PayloadAction<boolean>) => {
       const { user } = state;
       if (user) {
@@ -84,15 +78,16 @@ const appSlice = createSlice({
     toggleModal: (state) => {
       state.modal = !state.modal;
     },
+    resetUser: (state) => {
+      Object.assign(state, initialState);
+    },
 
   },
 });
 
 export const {
   addUser,
-  removeUser,
   confirmAuthentication,
-  removeAuthentication,
   signInPage,
   upgradeToSeller,
   toggleSidebar,
@@ -102,6 +97,7 @@ export const {
   addFlashSaleItem,
   toggleModal,
   toggleSidebarMarketplace,
+  resetUser,
 } = appSlice.actions;
 
 export default appSlice.reducer;

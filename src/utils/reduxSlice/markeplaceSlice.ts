@@ -143,6 +143,9 @@ const marketplaceSlice = createSlice({
     confirmShopDelete: (state, action:PayloadAction<DeleteShopDialouge>) => {
       state.confirmShopDelete = action.payload;
     },
+    resetMarketplace: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
@@ -160,6 +163,7 @@ export const {
   clearProductImages,
   addShopList,
   confirmShopDelete,
+  resetMarketplace
 } = marketplaceSlice.actions;
 
 export default marketplaceSlice.reducer;

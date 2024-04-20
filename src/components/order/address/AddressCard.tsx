@@ -1,7 +1,6 @@
 import LineSmall from '@/components/home/ui/LineSmall';
 import { Address } from '@/types/Orders';
 
-
 type AddressCardProps = {
   address:Address,
   selectedAddress:Address,

@@ -31,10 +31,13 @@ const orderSlice = createSlice({
     addMyOrders: (state, action:PayloadAction<FinalOrder[]>) => {
       state.myOrders = action.payload;
     },
+    resetOrders: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
 export default orderSlice.reducer;
 export const {
-  addOrderId, addAddressId, clearAddressId, clearOrderId, addMyOrders,
+  addOrderId, addAddressId, clearAddressId, clearOrderId, addMyOrders, resetOrders
 } = orderSlice.actions;

@@ -10,7 +10,7 @@ import AuthHelper from '../../auth/apis/helper';
 import { AddressSchema, transformZodToFormikErrors } from './helpers/validationSchema';
 import { createAddress } from '../apis/createAddress';
 import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
-import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { addUser } from '../../../utils/reduxSlice/appSlice';
 import Loading from '../../../utils/animations/Loading';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,19 +35,15 @@ function AddAddress() {
           actions.setSubmitting(false);
           if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
             actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-          } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-              && response?.success === false) {
-            AuthHelper.clearSignedOnData();
-            dispatch(removeUser());
-            navigate('/auth');
-          }
-          if (response.statusCode === StatusCodes.OK) {
+          } else if (response.statusCode === StatusCodes.OK) {
             toast.success('Successfully saved');
             AuthHelper
               .pushAuthenticatedUserAddress((response.message?.user?.address.pop()), () => {
                 const user = AuthHelper.getUserFromLocalStorage();
                 dispatch(addUser(user));
               });
+          } else {
+            toast.error('Failed to create address');
           }
         });
       }}

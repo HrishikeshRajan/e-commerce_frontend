@@ -2,15 +2,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { faTriangleExclamation } from '@fortawesome/free-solid-svg-icons/faTriangleExclamation';
 import { useTypedDispatch } from '../../hooks/user/reduxHooks';
-import { removeUser } from '../../utils/reduxSlice/appSlice';
-import AuthHelper from '../auth/apis/helper';
+import { resetUser } from '../../utils/reduxSlice/appSlice';
 
 function ServiceUnavailable() {
   const navigate = useNavigate();
   const dispatch = useTypedDispatch();
   const handleSignout = () => {
-    AuthHelper.clearSignedOnData();
-    dispatch(removeUser());
+    dispatch(resetUser());
     navigate('/auth');
   };
   return (

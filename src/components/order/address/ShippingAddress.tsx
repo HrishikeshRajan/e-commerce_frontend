@@ -84,7 +84,11 @@ function ShippingAddress() {
              .map((address:Address) => {
                if (address.isPrimary) {
                  return (
-                   <PrimaryAddressFactory key={address._id}>
+                   <PrimaryAddressFactory
+                     key={address._id}
+                     address={address}
+                     setAddress={setAddress}
+                   >
                      <AddressCard
                        address={address}
                        selectedAddress={selectedAddress!}

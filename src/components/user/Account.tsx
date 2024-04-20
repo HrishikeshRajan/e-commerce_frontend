@@ -4,12 +4,17 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
-import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';
+import {
+  resetUser,
+} from '@/utils/reduxSlice/appSlice';
 
-import AuthHelper from '../auth/apis/helper';
+import { resetCart } from '@/utils/reduxSlice/cartSlice';
+import { resetOrders } from '@/utils/reduxSlice/orderSlice';
+import { resetMarketplace } from '@/utils/reduxSlice/markeplaceSlice';
 import { options } from './Options';
 import Modal from '../dialougeBox/Modal';
 import { signout } from '../auth/apis/signout';
+import AuthHelper from '../auth/apis/helper';
 
 function Account() {
   const dispatch = useTypedDispatch();
@@ -25,10 +30,12 @@ function Account() {
    */
   const signOut = async () => {
     await signout().then(() => {
-      dispatch(removeUser());
-      dispatch(removeAuthentication());
-      navigate('/auth');
       AuthHelper.clearSignedOnData();
+      dispatch(resetUser());
+      dispatch(resetCart());
+      dispatch(resetOrders());
+      dispatch(resetMarketplace());
+      navigate('/auth');
     });
   };
   const handleTabChange = (title:string) => {

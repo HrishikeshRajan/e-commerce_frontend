@@ -9,11 +9,12 @@ import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { useLoaderData, useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import FormFieldError from '@/utils/FormikError';
+import { toast } from 'react-toastify';
 import { updateAddress } from '../apis/updateAddress.api';
 import AuthHelper from '../../auth/apis/helper';
 import { AddressSchema, transformZodToFormikErrors } from './helpers/validationSchema';
 import { IAddress } from '..';
-import { addUser, removeUser } from '../../../utils/reduxSlice/appSlice';
+import { addUser } from '../../../utils/reduxSlice/appSlice';
 import { useTypedDispatch } from '../../../hooks/user/reduxHooks';
 import Loading from '../../../utils/animations/Loading';
 
@@ -49,17 +50,13 @@ function EditAddress() {
             actions.setSubmitting(false);
             if (response.statusCode === StatusCodes.UNPROCESSABLE_ENTITY) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.message?.error)));
-            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-              && response?.success === false) {
-              AuthHelper.clearSignedOnData();
-              dispatch(removeUser());
-              navigate('/auth');
-            }
-            if (response.success && response.statusCode === StatusCodes.OK) {
+            } else if (response.success && response.statusCode === StatusCodes.OK) {
               AuthHelper
                 .updateUserAddressInLocalStorage(response.message.address, props.address._id);
               const user = AuthHelper.getUserFromLocalStorage();
               dispatch(addUser(user));
+            } else {
+              toast.error('Address edit failed');
             }
           });
         } catch (error) {

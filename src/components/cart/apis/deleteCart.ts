@@ -7,9 +7,10 @@ export const deleteCart = async (cartId: string): Promise<any> => {
       credentials: 'include',
       method: 'DELETE',
     });
-    const data = await response.json();
-    console.log(data);
+    return await response.json();
   } catch (error) {
-    console.log(error);
+    if (error instanceof Error) {
+      throw new Error('Unable to delete the cart');
+    }
   }
 };

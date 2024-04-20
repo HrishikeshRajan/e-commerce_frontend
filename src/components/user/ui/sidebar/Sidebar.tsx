@@ -6,7 +6,8 @@ import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { isEmpty } from 'lodash';
 import {
-  removeAuthentication, removeUser, toggleUserSidebar,
+  resetUser,
+  toggleUserSidebar,
 } from '@/utils/reduxSlice/appSlice';
 import AuthHelper from '@/components/auth/apis/helper';
 import { useNavigate } from 'react-router-dom';
@@ -29,8 +30,7 @@ function Sidebar() {
     await signout().then(() => {
       AuthHelper.clearSignedOnData(() => {
         dispatch(toggleUserSidebar());
-        dispatch(removeUser());
-        dispatch(removeAuthentication());
+        dispatch(resetUser());
         navigate('/auth');
       });
     });

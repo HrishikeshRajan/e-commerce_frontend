@@ -59,7 +59,6 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             { selectSize && (
               <SizeBox
                 product={product}
-                cartId={cartId}
                 currentSize={cartItem.options.size}
                 stockAvailable={cartItem.product.stock < cartItem.qty}
                 title="Select Size"

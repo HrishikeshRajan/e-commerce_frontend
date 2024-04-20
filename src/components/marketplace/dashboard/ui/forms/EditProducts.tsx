@@ -11,12 +11,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { useNavigate, useParams } from 'react-router-dom';
-import { removeUser } from 'utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
 import { merge } from 'lodash';
 import { IoIosArrowBack } from 'react-icons/io';
 import { addProductToEdit } from '@/utils/reduxSlice/productSlice';
-import AuthHelper from '../../../../auth/apis/helper';
 import AddProductPhoto from './AddProductPhoto';
 import { getProductById } from '../../pages/products/apis/getProductById';
 import { UpdateProduct } from '../../pages/products/apis/updateProduct';
@@ -78,11 +76,6 @@ function EditProductForm() {
             actions.setSubmitting(false);
             if (response.statusCode === StatusCodes.OK && response.OK) {
               toast.success('Successfully saved');
-            } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-              && response?.success === false) {
-              AuthHelper.clearSignedOnData();
-              dispatch(removeUser());
-              navigate('/auth');
             }
           });
         }}

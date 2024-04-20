@@ -7,7 +7,7 @@ headers.set('Content-Type', 'application/json');
 
 export const updateProfile = async (user:UploadProfile) => {
   try {
-    const url = `${import.meta.env.VITE_BASE_URL}/profile`;
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/users/profile`;
     const response = await fetch(url, {
       method: 'PUT',
       credentials: 'include',

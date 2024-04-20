@@ -5,14 +5,10 @@ import React from 'react';
 import { MdArrowDropDown } from 'react-icons/md';
 import { Link, useNavigate } from 'react-router-dom';
 import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
-import { removeAuthentication, removeUser } from '@/utils/reduxSlice/appSlice';
-import {
-  ErrorResponse, FetchApiResponse, hasFetchSucceeded, isFetchUnauthorizedError,
-} from '@/types/Fetch';
+import { resetUser } from '@/utils/reduxSlice/appSlice';
 import { ToastContainer, toast } from 'react-toastify';
 import { NavbarMenu } from '.';
 import { signout } from '../auth/apis/signout';
-import AuthHelper from '../auth/apis/helper';
 import 'react-toastify/dist/ReactToastify.css';
 import ListWrapper from '../CustomElements/List/ListWrapper';
 import ListItem from '../CustomElements/List/ListItem';
@@ -35,22 +31,9 @@ export function Submenu(
 
   // Clears all user data from redux and local storage
   const signOut = () => {
-    signout().then((result:FetchApiResponse<{ message:string }> | ErrorResponse) => {
-      if (hasFetchSucceeded(result)) {
-        AuthHelper.clearSignedOnData(() => {
-          dispatch(removeUser());
-          dispatch(removeAuthentication());
-          AuthHelper.authenticate(false);
-          navigate('/auth');
-        });
-      } else if (isFetchUnauthorizedError(result)) {
-        AuthHelper.clearSignedOnData(() => {
-          dispatch(removeUser());
-          dispatch(removeAuthentication());
-          AuthHelper.authenticate(false);
-          navigate('/auth');
-        });
-      }
+    signout().then(() => {
+      dispatch(resetUser());
+      navigate('/auth');
     }).catch((e) => {
       notify((e as Error).message);
     });

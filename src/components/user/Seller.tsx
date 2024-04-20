@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useNavigate } from 'react-router-dom';
 import { StatusCodes } from 'http-status-codes';
 import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
-import { removeUser, upgradeToSeller } from '../../utils/reduxSlice/appSlice';
+import { upgradeToSeller } from '../../utils/reduxSlice/appSlice';
 import { activateSeller } from './apis/addSeller';
 import AuthHelper from '../auth/apis/helper';
 
@@ -23,11 +23,6 @@ function Marketplace() {
         if (response.statusCode === StatusCodes.OK && response.success) {
           dispatch(upgradeToSeller(response.message?.message.seller));
           AuthHelper.updateAuthenticatedUserData(response.message?.message);
-        } else if (response?.statusCode === StatusCodes.UNAUTHORIZED
-          && response?.success === false) {
-          AuthHelper.clearSignedOnData();
-          dispatch(removeUser());
-          navigate('/auth');
         }
       });
     }
