@@ -12,7 +12,6 @@ import { ProductCore } from '@/types/Product';
 import { isEmpty } from 'lodash';
 import currency from 'currency.js';
 import { ClientFlashSale, MethodParams } from '@/types/Sale';
-import { v4 as uuidv4 } from 'uuid';
 import { OfferProps } from '@/components/home/SingleProduct';
 import { CartPrice } from './price.utils';
 import { calculatePercentageDiscount } from './discounts/calculatePercentageDiscount';
@@ -127,7 +126,7 @@ const cart = {
     try {
       if (typeof window === 'undefined') return;
       const emptyCart: ClientCart = {
-        userId: uuidv4(),
+        userId: '',
         cartId: '',
         products: {},
         grandTotalPrice: 0,

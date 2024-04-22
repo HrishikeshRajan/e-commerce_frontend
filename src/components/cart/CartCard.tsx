@@ -67,7 +67,17 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             )}
           </div>
           <div className="bg-slate-200 flex w-6/12  p-1 items-center">
-            <button type="button" onClick={() => setSelectQty(true)} className="flex text-xs w-full items-center  outline-none">
+            <button
+              type="button"
+              onClick={() => {
+                if (cartItem.appliedOffer && cartItem.appliedOffer.method === 'FLASHSALE') {
+                  setSelectQty(false);
+                } else {
+                  setSelectQty(true);
+                }
+              }}
+              className="flex text-xs w-full items-center  outline-none"
+            >
               qty: &nbsp;
               {cartItem.qty}
               <MdKeyboardArrowDown />
