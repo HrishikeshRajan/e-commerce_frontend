@@ -37,6 +37,7 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
       <DeleteItemBtn
         productId={product._id}
         cartId={cartId}
+        productName={product.name}
       />
       <div className=" w-28 flex items-center  ">
         <img src={product.images[0].secure_url} alt="product" />

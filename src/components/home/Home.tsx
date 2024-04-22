@@ -1,12 +1,17 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import useFetchCart from '@/hooks/useCart';
-import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import { Promo } from '@/types/Promo';
 import { useSearchParams } from 'react-router-dom';
 import useFilter from '@/hooks/useFilter';
 import useFetchUserPromos from '@/hooks/user/useAllPromos';
 import usePreviousPurchases from '@/hooks/user/usePreviousPurchases';
+import localCart from '@/utils/cart.helper';
+import { getLocalStorageItem } from '@/utils/localstorage.helper';
+import { addToCart } from '@/utils/reduxSlice/cartSlice';
+import { addFlashSaleItem } from '@/utils/reduxSlice/appSlice';
+import { ClientFlashSale } from '@/types/Sale';
 import Categories from './Categories';
 import FlashSaleBanner from '../flashsale/FlashSaleBanner';
 import Coupon from '../coupons/Coupon';
@@ -25,8 +30,18 @@ function Home() {
   const cart = useTypedSelector((store) => store.cart.cart);
   const searchProductsList = useTypedSelector((store) => store.products.userProducts);
   const num = (cart && Object.values(cart).length < 1) || false;
-
+  const dispatch = useTypedDispatch();
   useFetchCart(num);
+  useEffect(() => {
+    const lCart = localCart.get();
+    const flash = getLocalStorageItem<ClientFlashSale>('flash');
+    if (lCart) {
+      dispatch(addToCart(lCart));
+    }
+    if (flash && flash._id) {
+      dispatch(addFlashSaleItem(flash));
+    }
+  }, [dispatch]);
   const [searchParams] = useSearchParams();
 
   const { loadingPromos, promos } = useFetchUserPromos();

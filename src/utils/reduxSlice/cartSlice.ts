@@ -49,6 +49,14 @@ const cartSlice = createSlice({
         state.cart.products[action.payload.productId] = action.payload.item;
       }
     },
+    deleteCartItem: (
+      state,
+      action: PayloadAction<{ productId: string }>,
+    ) => {
+      if (state.cart) {
+        delete state.cart.products[action.payload.productId];
+      }
+    },
     updateCartItemSize: (
       state,
       action: PayloadAction<{ productId: string; size: string }>,
@@ -157,4 +165,5 @@ export const {
   mergeToCart,
   updateUserIdandCartId,
   resetCart,
+  deleteCartItem
 } = cartSlice.actions;
