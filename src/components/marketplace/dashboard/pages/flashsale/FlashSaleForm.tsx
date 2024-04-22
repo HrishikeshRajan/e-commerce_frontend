@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
@@ -27,6 +29,7 @@ function FlashSaleForm() {
 
   const handleChange = (e:any) => {
     const { name, value } = e.target;
+
     setFormData({ ...formData, [name]: value });
     if (e.target.files) {
       setFormData({ ...formData, [name]: e.target.files[0] });
@@ -61,7 +64,7 @@ function FlashSaleForm() {
       <h1 className="text-lg py-1 font-bold text-slate-400 text-center">Create Flash Sale</h1>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Name:
-        <input type="text" name="name" value={formData.name} placeholder="Enter the offer name" onChange={handleChange} className="border-2 py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg"/>
+        <input type="text" name="name" value={formData.name} placeholder="Enter the offer name" onChange={handleChange} className="border-2 py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" />
       </label>
       <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Banner Image:

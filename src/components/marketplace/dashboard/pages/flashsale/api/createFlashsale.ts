@@ -6,6 +6,11 @@
 
 import { UploadFlashSale } from '@/types/Sale';
 
+const createDate = (date:string) => {
+  const parsedTime = date.split('T');
+  const finalDate = new Date(`${parsedTime[0]} ${parsedTime[1]}`);
+  return finalDate;
+};
 export const createFlashsale = async (formData:Partial<UploadFlashSale>) => {
   //  Request headers
   const headers = new Headers();
@@ -18,8 +23,8 @@ export const createFlashsale = async (formData:Partial<UploadFlashSale>) => {
   form.append('image', formData.image!);
   form.append('type', formData.type!);
   form.append('method', formData.method!);
-  form.append('startTime', formData.startTime!);
-  form.append('endTime', formData.endTime!);
+  form.append('startTime', JSON.stringify(createDate(formData.startTime!)));
+  form.append('endTime', JSON.stringify(createDate(formData.endTime!)));
   form.append('totalQuantityToSell', String(formData.totalQuantityToSell!));
 
   if (formData.type === 'PERCENTAGE') {
