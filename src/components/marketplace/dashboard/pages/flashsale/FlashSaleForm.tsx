@@ -51,7 +51,13 @@ function FlashSaleForm() {
     e.preventDefault();
 
     createFlashsale(formData)
-      .then(() => toast.success('Successfully Created'))
+      .then((result) => {
+        if (result.success) {
+          toast.success('Successfully Created');
+        } else {
+          toast.error('Failed to create flash sale');
+        }
+      })
       .catch(() => toast.error('Failed to create flash sale'));
   };
 

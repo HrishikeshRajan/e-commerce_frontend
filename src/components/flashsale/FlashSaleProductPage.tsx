@@ -30,7 +30,9 @@ function FlashSale() {
     dispatch(mergeToCart(cartData));
     navigate('/cart');
   };
+
   if (!flashsale) return;
+
   return (
     <Suspense fallback={<div className="w-full h-screen bg-red-200">Fetching...</div>}>
       <Await resolve={data.product as any}>
@@ -46,17 +48,7 @@ function FlashSale() {
               && new Date() < new Date(flashsale.startTime)
 
               && (
-                <>
-                  <h1 className="text-3xl text-slate-900 animate-pulse font-semibold">COMMING SOON</h1>
-                  <Button
-                    mode="idle"
-                    className="mt-5 mb-5 w-full  rounded-lg bg-orange-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    type="button"
-                    disabled={false}
-                  >
-                    NOTIFY ME
-                  </Button>
-                </>
+                <h1 className="text-3xl text-slate-900 animate-pulse font-semibold">COMMING SOON</h1>
               )}
               {flashsale
               && new Date() >= new Date(flashsale.startTime)
