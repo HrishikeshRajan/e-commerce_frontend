@@ -6,7 +6,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UploadFlashSale } from '@/types/Sale';
 import ProductSelectBox from '../offers/ui/ProductSelectBox';
-import Position from './Position';
+// import Position from './Position';
 import { createFlashsale } from './api/createFlashsale';
 
 function FlashSaleForm() {
@@ -22,7 +22,6 @@ function FlashSaleForm() {
     status: 'PENDING',
     product: '',
     totalQuantityToSell: 0,
-    position: undefined,
   });
 
   const [tagProducts, setTagProducts] = useState(false);
@@ -31,9 +30,9 @@ function FlashSaleForm() {
     const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
-    if (e.target.files) {
-      setFormData({ ...formData, [name]: e.target.files[0] });
-    }
+    // if (e.target.files) {
+    //   setFormData({ ...formData, [name]: e.target.files[0] });
+    // }
   };
 
   const addProductId = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -66,10 +65,10 @@ function FlashSaleForm() {
         Name:
         <input type="text" name="name" value={formData.name} placeholder="Enter the offer name" onChange={handleChange} className="border-2 py-2 text-slate-700 bg-slate-50 outline-none pl-2 rounded-lg" />
       </label>
-      <label className="py-2 w-full gap-2 flex flex-col text-left ">
+      {/* <label className="py-2 w-full gap-2 flex flex-col text-left ">
         Banner Image:
         <input type="file" name="image" onChange={handleChange} />
-      </label>
+      </label> */}
 
       <label className="py-2 w-full gap-2 flex flex-col text-left  ">
         Type:
@@ -131,7 +130,7 @@ function FlashSaleForm() {
           <option value="EXPIRED" className="text-red-400">Expired</option>
         </select>
       </label>
-      <Position formData={formData} handleChange={handleChange} />
+      {/* <Position formData={formData} handleChange={handleChange} /> */}
       <Button onClick={handleSubmit}>Sumbit</Button>
       <ToastContainer
         position="top-center"

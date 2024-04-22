@@ -15,7 +15,7 @@ export interface UploadFlashSale {
   totalQuantityToSell: number;
   currentStock: number;
   status: 'ACTIVE' | 'PENDING' | 'EXPIRED';
-  position : 'TOP' | 'MIDDLE' | 'BOTTOM'
+  position? : 'TOP' | 'MIDDLE' | 'BOTTOM'
 }
 
 export interface ClientFlashSale {

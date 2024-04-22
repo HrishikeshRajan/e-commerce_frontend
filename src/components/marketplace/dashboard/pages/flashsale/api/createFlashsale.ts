@@ -20,7 +20,7 @@ export const createFlashsale = async (formData:Partial<UploadFlashSale>) => {
   const form = new FormData();
 
   form.append('name', formData.name!);
-  form.append('image', formData.image!);
+  // form.append('image', formData.image!);
   form.append('type', formData.type!);
   form.append('method', formData.method!);
   form.append('startTime', JSON.stringify(createDate(formData.startTime!)));
@@ -36,7 +36,7 @@ export const createFlashsale = async (formData:Partial<UploadFlashSale>) => {
 
   form.append('product', formData.product!);
   form.append('status', formData.status!);
-  form.append('position', formData.position!);
+  // form.append('position', formData.position!);
 
   try {
     const data = await fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/flashsale`, {
