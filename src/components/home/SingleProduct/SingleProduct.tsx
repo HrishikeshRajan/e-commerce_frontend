@@ -26,6 +26,7 @@ import Images from './Images';
   };
 
 function SingleProduct({ product, offers, children }:SingleProductProps) {
+  console.log(offers, product)
   return (
     <div className="w-full flex flex-col xl:flex-row  lg:justify-center   lg:container">
       <div className="w-full xl:w-6/12  mt-20"><Images src={product.images} /></div>

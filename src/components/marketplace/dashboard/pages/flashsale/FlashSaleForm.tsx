@@ -30,9 +30,6 @@ function FlashSaleForm() {
     const { name, value } = e.target;
 
     setFormData({ ...formData, [name]: value });
-    // if (e.target.files) {
-    //   setFormData({ ...formData, [name]: e.target.files[0] });
-    // }
   };
 
   const addProductId = (e:React.ChangeEvent<HTMLInputElement>) => {

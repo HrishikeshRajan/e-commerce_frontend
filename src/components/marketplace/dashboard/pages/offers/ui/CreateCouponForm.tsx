@@ -67,8 +67,12 @@ function CreateCouponForm() {
     e.preventDefault();
 
     createPromo(formData)
-      .then(() => {
-        toast('Successfully created');
+      .then((response) => {
+        if (response.success) {
+          toast.success('Successfully created');
+        } else {
+          toast.error('Failed to create promo');
+        }
       })
       .catch(() => toast.error('Failed to create promo'));
   };
