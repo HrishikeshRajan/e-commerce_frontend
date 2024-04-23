@@ -27,6 +27,7 @@ function ProceedToPaymentButton() {
     // if (!cartData || !orderData) {
     //   return navigate(-1);
     // }
+
     try {
       if (!orderData.shippingAddress
          || (orderData.shippingAddress && !orderData.shippingAddress._id)) {
