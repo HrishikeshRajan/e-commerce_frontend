@@ -23,7 +23,6 @@ import Heading from './ui/Heading';
 import Div from '../CustomElements/Div';
 import Sort from './filter/Sort';
 import FilterBox from './sidebar/FilterBox';
-import ShimmerCoupon from '../shimmer/Coupons';
 
 const isCouponExpired = (coupon:Promo) => coupon.status === 'EXPIRED';
 function Home() {
@@ -57,7 +56,7 @@ function Home() {
   return (
     searchParams.toString() ? (
 
-      <Div className="w-full ">
+      <Div className="w-full relative ">
         <Div className="w-full container  top-full mt-28  flex justify-end">
           <Sort />
         </Div>
@@ -75,8 +74,8 @@ function Home() {
             <FilterBox filter={filter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
           </Div>
         )}
-          <Div className="fixed flex  xl:right-0 xl:w-9/12 w-full  justify-end overflow-y-auto">
-            <ProductCardsWrapper className="flex w-full xl:gap-2">
+          <Div className="fixed flex p-2 h-screen  xl:right-0 xl:w-9/12 w-full   justify-end overflow-y-auto">
+            <ProductCardsWrapper className="flex w-full xl:gap-2 ">
               <Div className="w-full flex flex-wrap xl:px-5 ">
                 {
                   searchProductsList.map((item) => <Card key={item._id} {...item} />)
@@ -105,9 +104,9 @@ function Home() {
               })}
             </div>
           </div>
-        ) : <ShimmerCoupon /> }
+        ) : null}
 
-        {!loadingOrders && orders && orders.length && (
+        {!loadingOrders && orders && orders.length ? (
           <div className="container">
             <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
               PREVIOUS PURCHASES
@@ -117,7 +116,7 @@ function Home() {
               {orders?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
             </div>
           </div>
-        ) }
+        ) : null }
       </div>
     )
 
