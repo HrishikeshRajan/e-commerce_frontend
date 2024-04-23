@@ -43,18 +43,18 @@ function ForgotForm() {
         onSubmit={async (values, actions) => {
           actions.setStatus('');
           setIsSubmitting(true);
-          // if (import.meta.env.VITE_PROCESS_ENV === 'production') {
-          const recaptchaToken = await recaptchaRef.current?.executeAsync();
-          recaptchaRef.current?.reset();
+          if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
+            const recaptchaToken = await recaptchaRef.current?.executeAsync();
+            recaptchaRef.current?.reset();
 
-          if (!recaptchaToken) {
-            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
-            actions.setStatus(errorObj);
-            actions.setSubmitting(false);
-            return;
+            if (!recaptchaToken) {
+              const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+              actions.setStatus(errorObj);
+              actions.setSubmitting(false);
+              return;
+            }
+            merge(values, { recaptchaToken });
           }
-          merge(values, { recaptchaToken });
-          // }
           forgot(values).then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
             setIsSubmitting(false);
             if (hasRequestSucceeded(response)) {
@@ -104,7 +104,7 @@ function ForgotForm() {
 
             <FormFieldError name="email" />
 
-            {import.meta.env.VITE_PROCESS_ENV === 'production'
+            {import.meta.env.VITE_PROCESS_ENV !== 'test'
           && (
             <ReCAPTCHA
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}

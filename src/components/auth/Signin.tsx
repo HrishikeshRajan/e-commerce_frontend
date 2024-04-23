@@ -51,18 +51,18 @@ function Signin() {
       validationSchema={toFormikValidationSchema(loginSchema)}
       onSubmit={async (values, actions) => {
         setIsSubmitting(true);
-        // if (import.meta.env.VITE_PROCESS_ENV === 'production') {
-        const recaptchaToken = await recaptchaRef.current?.executeAsync();
-        recaptchaRef.current?.reset();
+        if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
+          const recaptchaToken = await recaptchaRef.current?.executeAsync();
+          recaptchaRef.current?.reset();
 
-        if (!recaptchaToken) {
-          const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
-          actions.setStatus(errorObj);
-          actions.setSubmitting(false);
-          return;
+          if (!recaptchaToken) {
+            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+            actions.setStatus(errorObj);
+            actions.setSubmitting(false);
+            return;
+          }
+          merge(values, { recaptchaToken });
         }
-        merge(values, { recaptchaToken });
-        // }
         signin({ ...values })
           .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
             setIsSubmitting(false);
@@ -119,7 +119,7 @@ function Signin() {
             className={`block flex-1 rounded-lg border-2 bg-transparent  p-4 xl:p-3  text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading${form.errors.password && form.touched.password && 'border-2 border-red-500'}`}
           />
           <FormFieldError name="password" />
-          {import.meta.env.VITE_PROCESS_ENV === 'production'
+          {import.meta.env.VITE_PROCESS_ENV !== 'test'
           && (
             <ReCAPTCHA
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}

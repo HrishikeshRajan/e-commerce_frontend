@@ -43,18 +43,18 @@ function NewPassword() {
         onSubmit={async (values, actions) => {
           setIsSubmitting(true);
           actions.setStatus('');
-          // if (import.meta.env.VITE_PROCESS_ENV === 'production') {
-          const recaptchaToken = await recaptchaRef.current?.executeAsync();
-          recaptchaRef.current?.reset();
+          if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
+            const recaptchaToken = await recaptchaRef.current?.executeAsync();
+            recaptchaRef.current?.reset();
 
-          if (!recaptchaToken) {
-            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
-            actions.setStatus(errorObj);
-            actions.setSubmitting(false);
-            return;
+            if (!recaptchaToken) {
+              const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+              actions.setStatus(errorObj);
+              actions.setSubmitting(false);
+              return;
+            }
+            merge(values, { recaptchaToken });
           }
-          merge(values, { recaptchaToken });
-          // }
           updatePassword({ ...values })
             .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
               setIsSubmitting(false);
@@ -103,7 +103,7 @@ function NewPassword() {
             />
 
             <FormFieldError name="password" />
-            {import.meta.env.VITE_PROCESS_ENV === 'production'
+            {import.meta.env.VITE_PROCESS_ENV !== 'test'
           && (
             <ReCAPTCHA
               sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
