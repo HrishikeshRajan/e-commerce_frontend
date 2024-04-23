@@ -33,7 +33,7 @@ function AddressCard({ address, selectedAddress, setAddress }:AddressCardProps) 
   return (
     <>
       <div className="p-5 lg:p-3  w-full my-1 bg-white border-2 rounded-xl relative border-slate-100 shadow-sm">
-        {address && <input type="radio" name="address" value={JSON.stringify(address)} checked={(selectedAddress && selectedAddress._id === address._id) || false} onChange={() => setAddress(address)} className="accent-gray-800 absolute top-0 left-0 m-3  w-3 h-3 " />}
+        {address && <input type="radio" name="address" value={JSON.stringify(address)} onChange={() => setAddress(address)} className="accent-gray-800 absolute top-0 left-0 m-3  w-3 h-3 " />}
         <h1 className="text-lg lg:text-base font-bold mt-5 lg:mt-5 text-slate-800">{address.fullname}</h1>
         <LineSmall />
         <p className="text-base lg:text-sm font-semibold text-slate-800">{address.homeAddress}</p>
