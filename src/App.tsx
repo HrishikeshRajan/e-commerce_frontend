@@ -54,6 +54,7 @@ import CouponList from './components/marketplace/dashboard/pages/offers/ui/Coupo
 import FlashSaleWrapper from './components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper';
 import FlashSaleForm from './components/marketplace/dashboard/pages/flashsale/FlashSaleForm';
 import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
+import PageNotFound from './components/error/PageNotFound';
 
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 
@@ -194,7 +195,13 @@ const App = () => {
                 </AuthenticationWrapper>
               ),
             },
-
+            {
+              element: (
+                <AuthenticationWrapper authentication={false}>
+                  <PageNotFound />
+                </AuthenticationWrapper>
+              ),
+            },
           ],
         },
         {
@@ -304,6 +311,13 @@ const App = () => {
                 </AuthenticationWrapper>
               ),
             },
+            {
+              element: (
+                <AuthenticationWrapper authentication={false}>
+                  <PageNotFound />
+                </AuthenticationWrapper>
+              ),
+            },
           ],
         },
         {
@@ -337,6 +351,13 @@ const App = () => {
               element: (
                 <AuthenticationWrapper authentication>
                   <EditProductForm />
+                </AuthenticationWrapper>
+              ),
+            },
+            {
+              element: (
+                <AuthenticationWrapper authentication={false}>
+                  <PageNotFound />
                 </AuthenticationWrapper>
               ),
             },
@@ -392,6 +413,13 @@ const App = () => {
                 </AuthenticationWrapper>
               ),
             },
+            {
+              element: (
+                <AuthenticationWrapper authentication={false}>
+                  <PageNotFound />
+                </AuthenticationWrapper>
+              ),
+            },
           ],
         },
         {
@@ -412,6 +440,13 @@ const App = () => {
                 </AuthenticationWrapper>
               ),
             },
+            {
+              element: (
+                <AuthenticationWrapper authentication={false}>
+                  <PageNotFound />
+                </AuthenticationWrapper>
+              ),
+            },
           ],
         },
         {
@@ -419,6 +454,13 @@ const App = () => {
           element: (
             <AuthenticationWrapper authentication>
               <SettingSWapper />
+            </AuthenticationWrapper>
+          ),
+        },
+        {
+          element: (
+            <AuthenticationWrapper authentication={false}>
+              <PageNotFound />
             </AuthenticationWrapper>
           ),
         },
@@ -437,6 +479,14 @@ const App = () => {
       element: (
         <AuthenticationWrapper authentication={false}>
           <ServiceUnavailable />
+        </AuthenticationWrapper>
+      ),
+    },
+    {
+      path: '/*',
+      element: (
+        <AuthenticationWrapper authentication={false}>
+          <PageNotFound />
         </AuthenticationWrapper>
       ),
     },
