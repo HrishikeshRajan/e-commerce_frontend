@@ -15,7 +15,7 @@ export const options: Array<Option> = [
   {
     title: 'Your Profile',
     id: '1',
-    path: 'profile',
+    path: '/account',
     icon: CiUser,
     active: true,
   },

@@ -149,19 +149,13 @@ const App = () => {
           path: '/account',
           element: (
             <AuthenticationWrapper authentication>
-              <Account />
+              <>
+                <Account />
+                <Profile />
+              </>
             </AuthenticationWrapper>
           ),
           children: [
-            {
-              index: true,
-              path: 'profile',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <Profile />
-                </AuthenticationWrapper>
-              ),
-            },
             {
               path: 'address',
               element: (
