@@ -78,6 +78,12 @@ const appSlice = createSlice({
     toggleModal: (state) => {
       state.modal = !state.modal;
     },
+    deleteAddressById: (state, action:PayloadAction<{ addressId:string }>) => {
+      if (action.payload.addressId && state.user?.address) {
+        const rest = state.user?.address.filter((item) => item._id !== action.payload.addressId);
+        state.user.address = [...rest];
+      }
+    },
     resetUser: (state) => {
       Object.assign(state, initialState);
     },
@@ -98,6 +104,7 @@ export const {
   toggleModal,
   toggleSidebarMarketplace,
   resetUser,
+  deleteAddressById
 } = appSlice.actions;
 
 export default appSlice.reducer;

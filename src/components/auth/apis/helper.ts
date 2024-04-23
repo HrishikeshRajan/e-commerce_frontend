@@ -1,6 +1,7 @@
 import {
   isEmpty, isNull, isUndefined, merge,
 } from 'lodash';
+import { Address } from '@/types/Orders';
 import { IAddress, IUser } from '../../user';
 
 const AuthHelper = {
@@ -36,6 +37,15 @@ const AuthHelper = {
 
         localStorage.setItem('user', JSON.stringify(oldUser));
       }
+    }
+  },
+  updateLocalAddressState: (address: Address[]) => {
+    if (typeof window !== undefined && localStorage.getItem('user')) {
+      const oldUser:IUser = JSON.parse(localStorage.getItem('user') as string);
+
+      oldUser.address = address;
+      localStorage.setItem('user', JSON.stringify(oldUser));
+      return oldUser;
     }
   },
   removeAuthenticatedUserAddress: (id: string) => {

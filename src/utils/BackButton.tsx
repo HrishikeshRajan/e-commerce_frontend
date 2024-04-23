@@ -9,7 +9,7 @@ function BackButton({ children }:{ children:React.ReactNode }) {
       mode="idle"
       type="button"
       disabled={false}
-      className="w-full sticky top-0 left-0 right-0 z-50 bg-white   p-3  shadow-transparent gap-2 cursor-pointer  xl:hidden  font-bold  flex justify-center  items-center text-slate-500"
+      className="w-full sticky top-0 left-0 right-0 z-50 bg-white   p-4  shadow-transparent gap-2 cursor-pointer  xl:hidden  font-bold  flex justify-center   items-center text-slate-500"
       onClick={() => navigate('/cart')}
     >
       {children}

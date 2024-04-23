@@ -1,26 +1,19 @@
 /* eslint-disable react/no-array-index-key */
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import LineSmall from '@/components/home/ui/LineSmall';
 import { Address, ClientOrder } from '@/types/Orders';
-import cart from '@/utils/cart.helper';
 import Button from '@/components/auth/ui/Button';
 import { useNavigate } from 'react-router-dom';
 import BackButton from '@/utils/BackButton';
 import { HiOutlineArrowNarrowLeft } from 'react-icons/hi';
-import { toast } from 'react-toastify';
+import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import AddressCard from './AddressCard';
 import PrimaryAddressFactory from '../factory/PrimaryAddressFactory';
 import ProceedToPaymentButton from '../../payment/ProceedToPaymentButton';
-import { getAddresses } from '../apis/getAddress';
-import { isFetchSuccess } from '.';
 import 'react-toastify/dist/ReactToastify.css';
 
-const getDefaultAddress = (addressArray:Address[]) => addressArray
-  .find((addre:Address) => addre.isDefault === true);
-const notify = (message:string) => toast(message);
-
 function ShippingAddress() {
-  const [addresses, setAddresses] = useState<Address[]>();
+  const addresses = useTypedSelector((store) => store.app.user?.address);
   const [selectedAddress, setAddress] = useState<Address>();
   const navigate = useNavigate();
 
@@ -33,29 +26,8 @@ function ShippingAddress() {
     setAddress(add);
   };
 
-  // Fetch user addresses and sets default address
-  useEffect(() => {
-    const orderObj:Record<string, any> = {
-      cartId: '',
-      shippingAddress: {},
-    };
-    const abortController = new AbortController();
-    const { signal } = abortController;
-
-    getAddresses('api/v1/users/address', signal).then((result) => {
-      if (isFetchSuccess(result)) {
-        setAddresses(result.message.user.address);
-        orderObj.cartId = cart.getCartId();
-        orderObj.shippingAddress = getDefaultAddress(result.message.user.address) || {};
-        setAddress(orderObj.shippingAddress);
-        localStorage.setItem('order', JSON.stringify(orderObj));
-      }
-    }).catch((error:unknown) => { notify((error as Error).name); });
-    return () => abortController.abort();
-  }, []);
-
   return (
-    <div className="lg:container w-full mt-20 lg:-mt-10  flex justify-center item-center  flex-col">
+    <div className="lg:container w-full  h-screen  flex top-full mt-20 xl:mt-5 flex-col">
       <BackButton>
         <HiOutlineArrowNarrowLeft />
         Back to CART
@@ -79,7 +51,7 @@ function ShippingAddress() {
       <div className="w-full  flex justify-center overflow-y-auto">
         <div className=" w-full px-2 rounded lg:w-6/12 flex flex-col justify-center items-center overflow-y-auto ">
           {
-            addresses
+            addresses && addresses.length > 0
            && addresses
              .map((address:Address) => {
                if (address.isPrimary) {
