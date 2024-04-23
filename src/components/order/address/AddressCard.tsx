@@ -21,6 +21,7 @@ function AddressCard({ address, selectedAddress, setAddress }:AddressCardProps) 
     setIsModalOpen(!isModalOpen);
   };
 
+  console.log(selectedAddress);
   useReduxUserAddressListner();
   const dispatch = useDispatch();
 
