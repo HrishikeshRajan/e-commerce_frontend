@@ -24,9 +24,9 @@ function ProceedToPaymentButton() {
     const cartData = (JSON.parse(localStorage.getItem('cart') as string) as unknown as ClientCart);
     const orderData = (JSON.parse(localStorage.getItem('order') as string) as unknown as ClientOrder);
 
-    if (!cartData || !orderData) {
-      return navigate(-1);
-    }
+    // if (!cartData || !orderData) {
+    //   return navigate(-1);
+    // }
     try {
       if (!orderData.shippingAddress
          || (orderData.shippingAddress && !orderData.shippingAddress._id)) {
