@@ -51,18 +51,18 @@ function Signin() {
       validationSchema={toFormikValidationSchema(loginSchema)}
       onSubmit={async (values, actions) => {
         setIsSubmitting(true);
-        if (import.meta.env.VITE_PROCESS_ENV === 'production') {
-          const recaptchaToken = await recaptchaRef.current?.executeAsync();
-          recaptchaRef.current?.reset();
+        // if (import.meta.env.VITE_PROCESS_ENV === 'production') {
+        const recaptchaToken = await recaptchaRef.current?.executeAsync();
+        recaptchaRef.current?.reset();
 
-          if (!recaptchaToken) {
-            const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
-            actions.setStatus(errorObj);
-            actions.setSubmitting(false);
-            return;
-          }
-          merge(values, { recaptchaToken });
+        if (!recaptchaToken) {
+          const errorObj:Status = { success: false, message: 'Please verify reCaptcha' };
+          actions.setStatus(errorObj);
+          actions.setSubmitting(false);
+          return;
         }
+        merge(values, { recaptchaToken });
+        // }
         signin({ ...values })
           .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
             setIsSubmitting(false);

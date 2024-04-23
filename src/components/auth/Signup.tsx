@@ -45,7 +45,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
       validationSchema={toFormikValidationSchema(registerSchema)}
       onSubmit={async (values, actions) => {
         setIsSubmitting(true);
-        if (import.meta.env.VITE_PROCESS_ENV === 'production') {
+        // if (import.meta.env.VITE_PROCESS_ENV === 'production') {
           const recaptchaToken = await recaptchaRef.current?.executeAsync();
           recaptchaRef.current?.reset();
 
@@ -56,7 +56,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
             return;
           }
           merge(values, { recaptchaToken });
-        }
+        // }
         actions.setStatus(null);
 
         signup({ ...values })
