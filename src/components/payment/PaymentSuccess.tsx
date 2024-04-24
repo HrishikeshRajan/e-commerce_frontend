@@ -26,16 +26,16 @@ function PaymentSuccess() {
     navigate('/');
   };
   return (
-    <div className="w-full h-screen mt-10  flex flex-col justify-center items-center">
-      <div className="flex flex-col justify-center items-center shadow-sm rounded border-2 p-10">
+    <div className="w-full h-screen mt-10  flex flex-col justify-center items-center p-2 ">
+      <div className="flex w-full flex-col text-center justify-center items-center shadow-sm  border-2 rounded-xl p-10">
         <FontAwesomeIcon icon={faCircleCheck} size="5x" className="text-green-500 animate-pulse" />
         <h2 className="text-bold text-slate-700 p-3">Payment Successfull</h2>
-        <h3 className="font-bold text-slate-800 text-xl mb-10 p-3">Your order has been placed!</h3>
-        <Link to="/myOrders" className="font-semibold p-3 border-2 rounded outline-none">
+        <h3 className="font-bold text-slate-800  w-full text-lg mb-10 p-3">Your order has been placed!</h3>
+        <Link to="/myOrders" className="font-semibold p-3 border-2 outline-none rounded-xl">
           View Orders
         </Link>
         <span className="font-semibold text-slate-600 p-3">or</span>
-        <button type="button" className="p-5 rounded bg-yellow-400 text-slate-900 font-semibold outline-none" onClick={handleClick}>CONTINUE SHOPPING</button>
+        <button type="button" className="p-5 rounded-xl bg-yellow-400 text-slate-900 font-semibold outline-none" onClick={handleClick}>CONTINUE SHOPPING</button>
       </div>
     </div>
   );
