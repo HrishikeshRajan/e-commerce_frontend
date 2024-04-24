@@ -4,6 +4,7 @@ import { isEmpty } from 'lodash';
 import { MdStars } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
 import { Promo } from '@/types/Promo';
+import PageWaiting from '@/utils/animations/PageWaiting';
 import SingleProduct from './SingleProduct';
 import AddToCartButton from '../../cart/AddToCartButton';
 import Colors from './ui/Colors';
@@ -58,7 +59,8 @@ function ProductView() {
   const [response, loading, error] = useSingleProduct(params.productId!);
   if (error.error) return;
   if (loading) return;
-  if (isEmpty(response)) return;
+  if (isEmpty(response)
+  || (response && response.product._id === undefined)) return <PageWaiting loading />;
 
   return (
     <div className="w-full h-screen flex justify-center px-2 xl:container">

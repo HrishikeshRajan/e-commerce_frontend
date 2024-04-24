@@ -10,6 +10,7 @@ import useLocalStorage from '@/hooks/useLocalStorage';
 import { ClientFlashSale, MethodParams } from '@/types/Sale';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { getFinalAmount } from '@/utils/discounts/offer.helper';
+import PageWaiting from '@/utils/animations/PageWaiting';
 import SingleProduct from '../home/SingleProduct/SingleProduct';
 import Button from '../auth/ui/Button';
 import Sizes from '../home/SingleProduct/ui/Sizes';
@@ -34,7 +35,7 @@ function FlashSale() {
   if (!flashsale) return;
 
   return (
-    <Suspense fallback={<div className="w-full h-screen bg-red-200">Fetching...</div>}>
+    <Suspense fallback={<PageWaiting loading />}>
       <Await resolve={data.product as any}>
         {(response) => (
 
