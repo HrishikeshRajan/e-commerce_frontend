@@ -177,7 +177,7 @@ const App = () => {
                   <EditAddress />
                 </AuthenticationWrapper>
               ),
-              loader: ({ params }) => parseSpecificAddressFromLocalStorage(params),
+              loader: ({ params }) => parseSpecificAddressFromLocalStorage(params) || null,
             },
             {
               path: 'address/add',

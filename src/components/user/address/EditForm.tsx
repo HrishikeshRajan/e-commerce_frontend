@@ -41,6 +41,7 @@ function EditAddress() {
         postalCode: props.address.postalCode,
         phoneNo: props.address.phoneNo,
         country: props.address.country,
+        _id: props.address._id,
 
       }}
       validationSchema={toFormikValidationSchema(AddressSchema)}
