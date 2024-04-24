@@ -53,7 +53,7 @@ function CheckoutForm() {
         }
       });
     } catch (error) {
-      console.log('s',error);
+      console.log(error);
     }
   }, [stripe]);
 
@@ -68,7 +68,7 @@ function CheckoutForm() {
     setLoading(true);
     try {
       const { error } = await stripe.confirmPayment({
-        elements, confirmParams: { return_url: 'http://localhost:5173/payment/success' }, redirect: 'always',
+        elements, confirmParams: { return_url: `${import.meta.env.VITE_BASE_URL}/payment/success` }, redirect: 'always',
       });
 
       if ((error && error.type === 'card_error') || (error && error.type === 'validation_error')) {
