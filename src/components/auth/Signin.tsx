@@ -65,6 +65,8 @@ function Signin() {
         }
         signin({ ...values })
           .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
+            actions.setStatus('');
+            setMainError({ accountError: false, message: '' });
             setIsSubmitting(false);
             if (hasRequestSucceeded(response)) {
               dispatch(addUser(response.message.userDetails));

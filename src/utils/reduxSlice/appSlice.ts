@@ -1,7 +1,10 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable max-len */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-param-reassign */
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ClientFlashSale } from '@/types/Sale';
+import { Address } from '@/types/Orders';
 import { IUser } from '../../components/user';
 
 enum Screen {
@@ -84,6 +87,12 @@ const appSlice = createSlice({
         state.user.address = [...rest];
       }
     },
+    updateAddressById: (state, action:PayloadAction<{ address:Address }>) => {
+      if (state.user?.address) {
+        const index = state.user?.address.findIndex((item) => item._id === action.payload.address._id);
+        state.user.address[index] = action.payload.address;
+      }
+    },
     resetUser: (state) => {
       Object.assign(state, initialState);
     },
@@ -105,6 +114,7 @@ export const {
   toggleSidebarMarketplace,
   resetUser,
   deleteAddressById,
+  updateAddressById,
 } = appSlice.actions;
 
 export default appSlice.reducer;

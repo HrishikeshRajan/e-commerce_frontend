@@ -27,8 +27,8 @@ export interface Address {
   phoneNo: string
   country: string
   _id:string
-  isPrimary:boolean
-  isDefault:boolean
+  isPrimary?:boolean
+  isDefault?:boolean
 }
 export interface ClientOrder {
   userId: string

@@ -1,3 +1,5 @@
+/* eslint-disable security/detect-object-injection */
+/* eslint-disable max-len */
 import {
   isEmpty, isNull, isUndefined, merge,
 } from 'lodash';
@@ -68,15 +70,10 @@ const AuthHelper = {
     ) {
       const oldUser = JSON.parse(localStorage.getItem('user') as string);
 
-      const modifiedUser = oldUser.address.map((item: IAddress) => {
-        if (item._id.toString() === id.toString()) {
-          return { ...item, ...address };
-        }
-        return item;
-      });
-      oldUser.address = modifiedUser;
+      const index = oldUser.address.findIndex((item: IAddress) => item._id.toString() === id.toString());
+
+      oldUser.address[index] = address;
       localStorage.setItem('user', JSON.stringify(oldUser));
-      return modifiedUser;
     }
   },
   pushAuthenticatedUserAddress: (address: IAddress[], cb: VoidFunction) => {
