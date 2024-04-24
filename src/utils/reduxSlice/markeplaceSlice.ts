@@ -163,7 +163,7 @@ export const {
   clearProductImages,
   addShopList,
   confirmShopDelete,
-  resetMarketplace
+  resetMarketplace,
 } = marketplaceSlice.actions;
 
 export default marketplaceSlice.reducer;

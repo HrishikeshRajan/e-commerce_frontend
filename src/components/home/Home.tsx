@@ -12,6 +12,8 @@ import { getLocalStorageItem } from '@/utils/localstorage.helper';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
 import { addFlashSaleItem } from '@/utils/reduxSlice/appSlice';
 import { ClientFlashSale } from '@/types/Sale';
+import orderHelper from '@/utils/order.helper';
+import { resetOrders } from '@/utils/reduxSlice/orderSlice';
 import Categories from './Categories';
 import FlashSaleBanner from '../flashsale/FlashSaleBanner';
 import Coupon from '../coupons/Coupon';
@@ -40,6 +42,15 @@ function Home() {
     if (flash && flash._id) {
       dispatch(addFlashSaleItem(flash));
     }
+  }, [dispatch]);
+
+  /**
+   * since each checkout creates new cart
+   */
+  useEffect(() => {
+    dispatch(resetOrders());
+    orderHelper.clearOrder();
+    orderHelper.clearOrderId();
   }, [dispatch]);
   const [searchParams] = useSearchParams();
 

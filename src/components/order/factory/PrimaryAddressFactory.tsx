@@ -1,12 +1,9 @@
-import { Address } from '@/types/Orders';
 import React from 'react';
 
 type PrimaryAddress = {
   children:React.ReactElement;
-  setAddress:(add: Address) => void;
-  address:Address };
-function PrimaryAddressFactory({ children, setAddress, address }:PrimaryAddress) {
-  setAddress(address);
+};
+function PrimaryAddressFactory({ children }:PrimaryAddress) {
   return (
     <div className="relative w-full">
 

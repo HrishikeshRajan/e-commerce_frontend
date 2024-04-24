@@ -201,6 +201,9 @@ const productSlice = createSlice({
     toggleSearchSuggstionList: (state, action:PayloadAction<boolean>) => {
       state.isSearchSuggestionOpen = action.payload;
     },
+    resetProducts: (state) => {
+      Object.assign(state, initialState);
+    },
   },
 });
 
@@ -223,6 +226,7 @@ export const {
   addSizeNotSelectedError,
   clearProducts,
   toggleSearchSuggstionList,
+  resetProducts
 
 } = productSlice.actions;
 export default productSlice.reducer;

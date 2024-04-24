@@ -16,8 +16,10 @@ import {
   type ErrorResponse,
   type FetchApiResponse,
 } from '@/types/Fetch';
-import { toast } from 'react-toastify';
+import orderHelper from '@/utils/order.helper';
 
+import { toast } from 'react-toastify';
+import { createOrder } from '@/utils/reduxSlice/orderSlice';
 import Button from '../auth/ui/Button';
 import { submitCart } from './apis/addToCart';
 import 'react-toastify/dist/ReactToastify.css';
@@ -27,6 +29,7 @@ function Checkout({ summary }:{ summary:ClientCart }) {
   const [loading, setLoading] = useState(false);
 
   const hasUser = useTypedSelector((store) => store.app.user);
+  const hasOrder = useTypedSelector((store) => store.order.order);
   const dispatch = useTypedDispatch();
 
   /**
@@ -52,6 +55,12 @@ function Checkout({ summary }:{ summary:ClientCart }) {
         setLoading(false);
         if (hasRequestSucceeded(result)) {
           dispatch(updateUserIdandCartId(result.message.ids));
+          dispatch(createOrder({
+            order: {
+              userId: result.message.ids.userId,
+              cartId: result.message.ids.cartId,
+            },
+          }));
           navigate('/address');
         } else if (isFetchBadRequestError(result)) {
           dispatch(promoError(result.error));
@@ -68,6 +77,14 @@ function Checkout({ summary }:{ summary:ClientCart }) {
   useEffect(() => () => {
     dispatch(promoError(''));
   }, [dispatch]);
+
+  useEffect(() => () => {
+    if (hasOrder) {
+      orderHelper.addOrder(hasOrder);
+    } else {
+      orderHelper.clearOrder();
+    }
+  }, [dispatch, hasOrder]);
 
   return (
     hasUser && Object.values(hasUser).length > 1

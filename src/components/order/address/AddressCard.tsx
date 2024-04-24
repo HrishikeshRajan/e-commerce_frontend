@@ -1,5 +1,6 @@
 import Modal from '@/components/dialougeBox/Modal';
 import LineSmall from '@/components/home/ui/LineSmall';
+import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import useReduxUserAddressListner from '@/hooks/user/useReduxUserListner';
 import { Address } from '@/types/Orders';
 import { deleteAddressById } from '@/utils/reduxSlice/appSlice';
@@ -11,17 +12,15 @@ import { Link } from 'react-router-dom';
 
 type AddressCardProps = {
   address:Address,
-  selectedAddress:Address,
   setAddress:(add: Address) => void
 };
-function AddressCard({ address, selectedAddress, setAddress }:AddressCardProps) {
+function AddressCard({ address, setAddress }:AddressCardProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const hasAddress = useTypedSelector((store) => store.order.order?.shippingAddress);
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
-  console.log(selectedAddress);
   useReduxUserAddressListner();
   const dispatch = useDispatch();
 
@@ -34,7 +33,7 @@ function AddressCard({ address, selectedAddress, setAddress }:AddressCardProps) 
   return (
     <>
       <div className="p-5 lg:p-3  w-full my-1 bg-white border-2 rounded-xl relative border-slate-100 shadow-sm">
-        {address && <input type="radio" name="address" value={JSON.stringify(address)} onChange={() => setAddress(address)} className="accent-gray-800 absolute top-0 left-0 m-3  w-3 h-3 " />}
+        {address && <input type="radio" checked={(!!(hasAddress && hasAddress._id === address._id))} name="address" value={JSON.stringify(address)} onChange={() => setAddress(address)} className="accent-gray-800 absolute top-0 left-0 m-3  w-3 h-3 " />}
         <h1 className="text-lg lg:text-base font-bold mt-5 lg:mt-5 text-slate-800">{address.fullname}</h1>
         <LineSmall />
         <p className="text-base lg:text-sm font-semibold text-slate-800">{address.homeAddress}</p>

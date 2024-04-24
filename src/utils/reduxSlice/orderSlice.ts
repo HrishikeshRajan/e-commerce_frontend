@@ -1,16 +1,18 @@
 /* eslint-disable no-param-reassign */
-import { FinalOrder } from '@/types/Orders';
+import { Address, ClientOrder, FinalOrder } from '@/types/Orders';
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 interface InitialState {
   orderId:string
   addressId:string
   myOrders:FinalOrder[]
+  order:Partial<ClientOrder> | null
 }
 const initialState:InitialState = {
   orderId: '',
   addressId: '',
   myOrders: [],
+  order: null,
 };
 const orderSlice = createSlice({
   initialState,
@@ -31,6 +33,14 @@ const orderSlice = createSlice({
     addMyOrders: (state, action:PayloadAction<FinalOrder[]>) => {
       state.myOrders = action.payload;
     },
+    createOrder: (state, action:PayloadAction<{ order:Partial<ClientOrder> }>) => {
+      state.order = action.payload.order;
+    },
+    setShippingAdress: (state, action:PayloadAction<{ address:Address }>) => {
+      if (state.order) {
+        state.order.shippingAddress = action.payload.address;
+      }
+    },
     resetOrders: (state) => {
       Object.assign(state, initialState);
     },
@@ -39,5 +49,12 @@ const orderSlice = createSlice({
 
 export default orderSlice.reducer;
 export const {
-  addOrderId, addAddressId, clearAddressId, clearOrderId, addMyOrders, resetOrders
+  addOrderId,
+  addAddressId,
+  clearAddressId,
+  clearOrderId,
+  addMyOrders,
+  resetOrders,
+  createOrder,
+  setShippingAdress,
 } = orderSlice.actions;

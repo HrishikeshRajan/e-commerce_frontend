@@ -104,7 +104,7 @@ export const {
   toggleModal,
   toggleSidebarMarketplace,
   resetUser,
-  deleteAddressById
+  deleteAddressById,
 } = appSlice.actions;
 
 export default appSlice.reducer;
