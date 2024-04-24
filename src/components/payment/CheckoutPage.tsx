@@ -68,7 +68,7 @@ function CheckoutForm() {
     setLoading(true);
     try {
       const { error } = await stripe.confirmPayment({
-        elements, confirmParams: { return_url: 'http://localhost:4000/api/v1/seller/payment/success' }, redirect: 'always',
+        elements, confirmParams: { return_url: 'https://e-commerce-frontend-five-mu.vercel.app/payment/success' }, redirect: 'always',
       });
 
       if ((error && error.type === 'card_error') || (error && error.type === 'validation_error')) {
