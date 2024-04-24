@@ -1,8 +1,7 @@
-
 function ProductCard() {
   return (
-    <div className="relative lg:m-1 flex w-36 h-72 lg:w-56   flex-col overflow-hidden  border border-gray-100 bg-white shadow-sm">
-      <div className="relative px-1 flex h-52 overflow-hidden ">
+    <div className="relative lg:m-1 flex p-2    flex-col overflow-hidden  border border-gray-100 bg-white shadow-sm">
+      <div className="relative px-1 flex overflow-hidden ">
         <div className=" w-full h-56 bg-slate-300  animate-pulse" />
 
       </div>
