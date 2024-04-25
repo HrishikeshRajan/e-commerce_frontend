@@ -15,7 +15,7 @@ import {
   isFetchTooManyRequests,
   isFetchUnprocessableEntityError,
 } from '@/types/Fetch';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Loading from '@/utils/animations/Loading';
 import { signin } from './apis/signin.api';
 
@@ -151,7 +151,8 @@ function Signin() {
               </Button>
             )
           }
-          <div className="flex justify-end mb-3">
+          <div className="flex justify-between items-center mb-3">
+            <Link to="/" className=" text-sm font-bold text-slate-800">Go to Home?</Link>
             <ForgotPassword />
           </div>
 

@@ -10,7 +10,7 @@ function ForgotPassword() {
   return (
     <Button
       mode="idle"
-      className="mt-5  text-sm font-bold text-slate-800"
+      className=" text-sm font-bold text-slate-800"
       type="button"
       disabled={false}
       onClick={() => navigateHandler()}
