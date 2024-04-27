@@ -12,6 +12,7 @@ import { toggleSidebarMarketplace } from '@/utils/reduxSlice/appSlice';
 import { FaBars } from 'react-icons/fa6';
 import { FaUserCircle } from 'react-icons/fa';
 import useUserSync from '@/hooks/user/useUserSync';
+import useCookieStatus from '@/hooks/user/useCookieStatus';
 import { useTypedDispatch, useTypedSelector } from '../../hooks/user/reduxHooks';
 import Search from './Search';
 import CartNavIcon from './CartNavIcon';
@@ -30,6 +31,7 @@ function Navbar() {
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
   useUserSync();
+  useCookieStatus();
   const enableSearch = () => {
     setSearchEnable(!isSearchEnable);
   };

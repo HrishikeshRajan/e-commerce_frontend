@@ -11,6 +11,7 @@ import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import Nav from '@/components/CustomElements/Nabar/Nav';
 import { SiGooglesearchconsole } from 'react-icons/si';
 import useUserSync from '@/hooks/user/useUserSync';
+import useCookieStatus from '@/hooks/user/useCookieStatus';
 import CompanyName from '../CompanyName';
 
 function SellerNavbar() {
@@ -18,6 +19,7 @@ function SellerNavbar() {
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
   useUserSync();
+  useCookieStatus();
   return (
     <Nav className=" flex items-center justify-between bg-white h-20  fixed top-0 z-40 w-full shadow-md   p-2  ">
 

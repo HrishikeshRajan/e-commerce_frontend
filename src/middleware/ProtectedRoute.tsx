@@ -40,10 +40,10 @@ export function AuthenticationWrapper({
 // Page loader animation here
 
 // Prevents signedin users from accessing auth pages
-export const RedirectIfAuthenticated = ({
+export function RedirectIfAuthenticated({
   children,
   authentication = true,
-}:AuthWrapper):React.ReactNode | string => {
+}:AuthWrapper):React.ReactNode | string {
   const { tokenInfo } = useCookieStatus();
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
@@ -56,5 +56,5 @@ export const RedirectIfAuthenticated = ({
     setLoading(false);
   }, [navigate, authentication, tokenInfo]);
 
-  return loading ? 'Loading' : children;
-};
+  return loading ? <PageWaiting loading={loading} /> : children;
+}
