@@ -8,29 +8,34 @@ import { useTypedDispatch, useTypedSelector } from './reduxHooks';
  * Fetches all categories
  */
 const useCategory = () => {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string>();
   const dispatch = useTypedDispatch();
   const categories = useTypedSelector((store) => store.products.categories);
   useEffect(() => {
     const abortController = new AbortController();
     const { signal } = abortController;
-    if (categories && categories.length < 1) {
+
+    if (!categories || (categories && categories.length < 1)) {
+      // setLoading(true);
       getCategories(signal)
         .then((response: FetchApiResponse<{ categories:[] }> | ErrorResponse) => {
-          setLoading(false);
+          // setLoading(false);
           if (hasFetchSucceeded(response)) {
             dispatch(addCategories(response.message.categories));
           }
         }).catch((err) => {
-          setLoading(false);
+          // setLoading(false);
           setError((err as Error).message);
         });
     }
 
-    return () => abortController.abort();
+    return () => {
+      abortController.abort();
+      // setLoading(false);
+    };
   }, [categories, dispatch]);
-  return [loading, error] as const;
+  return [error] as const;
 };
 
 export default useCategory;

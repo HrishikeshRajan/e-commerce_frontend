@@ -4,13 +4,16 @@ import MenuCard from './Menu/MenuCard';
 import CategoryShimmer from '../shimmer/CategoryShimmer';
 
 function Categories() {
-  const [loading, error] = useCategory();
+  const [error] = useCategory();
 
   const categories = useTypedSelector((store) => store.products.categories);
-  if ((categories && categories.length < 1) || loading) {
+  if ((categories && categories.length < 1)) {
     return (
       <CategoryShimmer />
     );
+  }
+  if (error) {
+    return null;
   }
 
   return (
