@@ -7,7 +7,7 @@ import { useDropzone } from 'react-dropzone';
 import { useTypedDispatch, useTypedSelector } from 'hooks/user/reduxHooks';
 import { setShopLogo } from 'utils/reduxSlice/markeplaceSlice';
 import { FormikProps } from 'formik';
-import defaultLogo from '@/assets/defaultCamera.jpg';
+import { defaultCamera } from '@/utils/cloudinaryUrls';
 
 type FormProps = {
   form:FormikProps<{
@@ -46,7 +46,7 @@ function AddLogo({ form }:FormProps) {
 
   return (
     <div className="p-2 shadow-md rounded-xl mb-2">
-      <img src={dataUrl as string || existingImage || defaultLogo} alt="userphoto" width="100px" height="100px" className={`my-3 w-[100px] h-[100px] object-cover rounded ${form.values.logo === '' && form.touched.logo ? 'border border-red-900' : ''}`} />
+      <img src={dataUrl as string || existingImage || defaultCamera} alt="userphoto" width="100px" height="100px" className={`my-3 w-[100px] h-[100px] object-cover rounded ${form.values.logo === '' && form.touched.logo ? 'border border-red-900' : ''}`} />
       {(form.values.logo === '') && form.touched.logo ? (
         <div className="text-red-500 pb-2">
           Required

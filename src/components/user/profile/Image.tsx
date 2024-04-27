@@ -4,7 +4,7 @@ import { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
 import { StatusCodes } from 'http-status-codes';
 import { ToastContainer, toast } from 'react-toastify';
-import defaultUser from '../../../assets/defaultUser.png';
+import { defaultUser } from '@/utils/cloudinaryUrls';
 import { profilePicture } from '../helper/getProfilePicture';
 import { deleteImage, uploadImage } from '../apis/image.api';
 import AuthHelper from '../../auth/apis/helper';
