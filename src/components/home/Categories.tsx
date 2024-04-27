@@ -7,7 +7,7 @@ function Categories() {
   const [loading, error] = useCategory();
 
   const categories = useTypedSelector((store) => store.products.categories);
-  if ((categories && categories.length < 1)  || loading) {
+  if ((categories && categories.length < 1) || loading) {
     return (
       <CategoryShimmer />
     );
