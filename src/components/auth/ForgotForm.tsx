@@ -3,7 +3,7 @@
 import {
   Formik, Form, Field,
 } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import { toFormikValidationSchema } from 'zod-formik-adapter';
 import { ZodError } from 'zod';
 import { useNavigate } from 'react-router-dom';
@@ -27,7 +27,6 @@ import ReCaptchaInfo from './ReCaptchaInfo';
 
 function ForgotForm() {
   const navigate = useNavigate();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = React.createRef<ReCAPTCHA>();
   useAuthPage();
 
@@ -42,7 +41,7 @@ function ForgotForm() {
         validationSchema={toFormikValidationSchema(emailSchema)}
         onSubmit={async (values, actions) => {
           actions.setStatus('');
-          setIsSubmitting(true);
+          actions.setSubmitting(true);
           if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
             const recaptchaToken = await recaptchaRef.current?.executeAsync();
             recaptchaRef.current?.reset();
@@ -56,7 +55,7 @@ function ForgotForm() {
             merge(values, { recaptchaToken });
           }
           forgot(values).then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
-            setIsSubmitting(false);
+            actions.setSubmitting(true);
             if (hasRequestSucceeded(response)) {
               const resObj:Status = { success: true, message: response.message.message };
               actions.setStatus(resObj);
@@ -70,7 +69,7 @@ function ForgotForm() {
               actions.setStatus(errorObj);
             }
           }).catch((error) => {
-            setIsSubmitting(false);
+            actions.setSubmitting(true);
             const errorObj:Status = { success: false, message: (error as Error).message };
             actions.setStatus(errorObj);
           });
@@ -114,7 +113,7 @@ function ForgotForm() {
           )}
 
             {
-              isSubmitting ? (
+              form.isSubmitting ? (
                 <Button
                   type="button"
                   className="mt-10 mb-5 cursor-wait rounded-lg bg-slate-600 p-3 text-xl font-bold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"

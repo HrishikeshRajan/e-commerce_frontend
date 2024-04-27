@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable import/no-extraneous-dependencies */
 import { Formik, Field } from 'formik';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Form, useNavigate,
   useSearchParams,
@@ -30,7 +30,6 @@ function NewPassword() {
   const navigate = useNavigate();
   const [search] = useSearchParams();
   const recaptchaRef = React.createRef<ReCAPTCHA>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
     <div className="h-screen w-full flex justify-center items-center  bg-white">
       <Formik
@@ -41,7 +40,7 @@ function NewPassword() {
         }}
         validationSchema={toFormikValidationSchema(passwordSchema)}
         onSubmit={async (values, actions) => {
-          setIsSubmitting(true);
+          actions.setSubmitting(true);
           actions.setStatus('');
           if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
             const recaptchaToken = await recaptchaRef.current?.executeAsync();
@@ -57,7 +56,7 @@ function NewPassword() {
           }
           updatePassword({ ...values })
             .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
-              setIsSubmitting(false);
+              actions.setSubmitting(true);
               if (hasRequestSucceeded(response)) {
                 const resObj:Status = { success: true, message: response.message.message };
                 actions.setStatus(resObj);
@@ -73,7 +72,7 @@ function NewPassword() {
                 actions.setStatus(errorObj);
               }
             }).catch((error) => {
-              setIsSubmitting(false);
+              actions.setSubmitting(true);
               const errorObj:Status = { success: false, message: (error as Error).message };
               actions.setStatus(errorObj);
             });
@@ -113,7 +112,7 @@ function NewPassword() {
           )}
 
             {
-              isSubmitting ? (
+              form.isSubmitting ? (
                 <Button
                   type="button"
                   mode="loading"

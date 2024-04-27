@@ -32,7 +32,6 @@ import { transformZodToFormikErrors } from '../user/address/helpers/validationSc
 function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.Element {
   const [success, setSuccess] = useState(false);
   const recaptchaRef = React.createRef<ReCAPTCHA>();
-  const [isSubmitting, setIsSubmitting] = useState(false);
   return (
     <Formik
       initialValues={
@@ -44,7 +43,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
       }
       validationSchema={toFormikValidationSchema(registerSchema)}
       onSubmit={async (values, actions) => {
-        setIsSubmitting(true);
+        actions.setSubmitting(true);
         if (import.meta.env.VITE_PROCESS_ENV !== 'test') {
           const recaptchaToken = await recaptchaRef.current?.executeAsync();
           recaptchaRef.current?.reset();
@@ -61,7 +60,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
 
         signup({ ...values })
           .then((response: FetchApiResponse<{ message:string }> | ErrorResponse) => {
-            setIsSubmitting(false);
+            actions.setSubmitting(true);
             if (hasRequestSucceeded(response)) {
               const resObj:Status = { success: true, message: response.message.message };
               actions.setStatus(resObj);
@@ -76,7 +75,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
               actions.setStatus(errorObj);
             }
           }).catch((e) => {
-            setIsSubmitting(false);
+            actions.setSubmitting(true);
             const errorObj:Status = { success: false, message: (e as Error).message };
             actions.setStatus(errorObj);
           });
@@ -134,7 +133,7 @@ function Signup({ toggleAuthState }:{ toggleAuthState:() => void }): React.JSX.E
             />
           )}
 
-          {isSubmitting ? (
+          {form.isSubmitting ? (
 
             <Button
               type="button"
