@@ -3,7 +3,6 @@ import H2 from '@/components/CustomElements/Headings/H2';
 import Para from '@/components/CustomElements/Para';
 import Ratings from '@/components/products/Ratings';
 import { ClientReview } from '@/types/Review';
-import { defaultUser } from '@/utils/cloudinaryUrls';
 import { useState } from 'react';
 import Span from '@/components/CustomElements/Span';
 
@@ -28,13 +27,14 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
   };
   useDeleteReview({ deleteReview, review, userId });
   if (!review) return null;
+
   return (
     <>
       <Div className="shadow-md w-full xl:w-6/12 p-2">
         {!edit && (
           <>
             <Div className="flex gap-2 p-2 justify-start items-center">
-              <img src={review.userId.photo.secure_url || defaultUser} alt="default icon" className="w-10 h-10 rounded-full" />
+              <img src={review.userId?.photo?.secure_url} alt="default icon" className="w-10 h-10 rounded-full" />
               <Para>{review.userId.fullname}</Para>
             </Div>
             <Div className="w-full ps-2">
