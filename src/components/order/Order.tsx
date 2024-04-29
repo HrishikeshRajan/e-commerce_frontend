@@ -97,15 +97,16 @@ function Order({ cartItem }:
                </Button>
              )}
             </div>
-            <hr className="h-px mt-5 bg-gray-200 border-0" />
-            <button type="button" onClick={toggleModal} className=" text-slate-500 flex items-center gap-4 mt-2">
-              Write a product review
-              {' '}
-              <MdKeyboardArrowRight />
-            </button>
-          </div>
-        </div>
 
+          </div>
+
+        </div>
+        <hr className="h-px mt-5 bg-gray-200 border-0" />
+        <button type="button" onClick={toggleModal} className=" text-slate-500 flex items-center gap-4 mt-2">
+          Write a product review
+          {' '}
+          <MdKeyboardArrowRight />
+        </button>
       </div>
       {isModalOpen && (
         <Modal className="rounded-xl flex flex-col py-10 px-5" togglerFn={toggleModal}>
@@ -124,7 +125,7 @@ function Order({ cartItem }:
           <div className="flex items-center gap-2 my-2">
             <ProductImage
               url={cartItem?.product?.images[0]?.secure_url || defaultCamera}
-              className="w-10 h-10"
+              className="w-10 h-10 my-5"
             />
             <h1 className="text-sm font-semibold text-slate-700 p-1 truncate">{item.product.name}</h1>
           </div>
