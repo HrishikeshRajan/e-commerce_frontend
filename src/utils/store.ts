@@ -5,6 +5,7 @@ import markeplaceSlice from './reduxSlice/markeplaceSlice';
 import productSlice from './reduxSlice/productSlice';
 import cartSlice from './reduxSlice/cartSlice';
 import orderSlice from './reduxSlice/orderSlice';
+import reviewSlice from './reduxSlice/reviewSlice';
 
 const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ const store = configureStore({
     products: productSlice,
     cart: cartSlice,
     order: orderSlice,
+    review: reviewSlice,
   },
 });
 

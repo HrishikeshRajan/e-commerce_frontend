@@ -226,7 +226,7 @@ export const {
   addSizeNotSelectedError,
   clearProducts,
   toggleSearchSuggstionList,
-  resetProducts
+  resetProducts,
 
 } = productSlice.actions;
 export default productSlice.reducer;
