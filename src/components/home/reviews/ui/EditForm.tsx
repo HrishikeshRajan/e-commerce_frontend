@@ -13,15 +13,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useTypedDispatch } from '@/hooks/user/reduxHooks';
 import { setClientReviews } from '@/utils/reduxSlice/reviewSlice';
 import { normalizeReviews } from '@/hooks/useFetchProductReviews';
+import { useState } from 'react';
+import { merge } from 'lodash';
 import { editReview } from '../api/editReview';
+import { RateStar } from './RateStar';
 
 function EditForm({ review, cancel }:{ review:ClientReview, cancel:() => void }) {
   const dispatch = useTypedDispatch();
+  const [rating, setRating] = useState(review.star);
   return (
     <>
       <Formik
         initialValues={{
-          star: review.star,
+          star: rating,
           title: review.title,
           description: review.description,
           productId: review.productId,
@@ -29,6 +33,7 @@ function EditForm({ review, cancel }:{ review:ClientReview, cancel:() => void })
         validationSchema={toFormikValidationSchema(ReviewZodSchema)}
         onSubmit={(values, actions) => {
           actions.setSubmitting(true);
+          merge(values, { star: rating });
           editReview(values, review._id)
             .then((response: FetchApiResponse<{ comment: ClientReview; }> | ErrorResponse) => {
               actions.setStatus('');
@@ -50,6 +55,12 @@ function EditForm({ review, cancel }:{ review:ClientReview, cancel:() => void })
         {(form) => (
           <Form>
             <div className="mb-4">
+              <label htmlFor="Rating" className="block text-gray-700 font-bold mb-2">
+                Rating
+                {' '}
+                {rating}
+              </label>
+              <RateStar rating={rating} setRating={setRating} className="flex gap-2 mb-4" />
 
               <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
                 Title
