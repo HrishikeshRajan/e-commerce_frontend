@@ -22,15 +22,15 @@ const useDeleteReview = ({ deleteReview, review, userId }:DeleteReviewProps) => 
               dispatch(removeReview(userId));
               dispatch(decrementReviewCount());
               dispatch(calculateTotalPages());
-              toast.success('Your review added successfully', { position: 'bottom-center' });
+              toast.success('Your review deleted successfully', { position: 'bottom-center' });
             }
           } else {
-            toast.error('Failed to add the review', { position: 'bottom-center' });
+            toast.error('Failed to delete the review', { position: 'bottom-center' });
           }
         })
         .catch(() => {
           setLoading(false);
-          toast.error('Failed to add the review', { position: 'bottom-center' });
+          toast.error('Failed to delete the review', { position: 'bottom-center' });
         });
     }
   }, [deleteReview, dispatch, review._id, review.productId, userId]);

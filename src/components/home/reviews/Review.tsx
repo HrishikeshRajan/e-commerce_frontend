@@ -11,14 +11,21 @@ import { ToastContainer } from 'react-toastify';
 import { MdDelete } from 'react-icons/md';
 import { BiSolidCommentEdit } from 'react-icons/bi';
 import useDeleteReview from '@/hooks/useDeleteReview';
-import EditForm from './ui/EditForm';
+import { RiDeleteBin6Fill } from 'react-icons/ri';
+
 import 'react-toastify/dist/ReactToastify.css';
+import Modal from '@/components/dialougeBox/Modal';
+import { IoIosClose } from 'react-icons/io';
+import EditForm from './ui/EditForm';
 
 function Review({ review, userId }:{ review:ClientReview, userId:string | undefined }) {
   const [edit, setEdit] = useState(false);
   const [deleteReview, setDeleteReview] = useState(false);
   const cancel = () => setEdit(false);
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const toggleModal = () => {
+    setIsModalOpen(!isModalOpen);
+  };
   useDeleteReview({ deleteReview, review, userId });
   if (!review) return null;
   return (
@@ -48,11 +55,51 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
         )}
         <Div className="flex gap-2">
           {userId && !edit && <button type="button" onClick={() => setEdit(!edit)} className="p-1 text-slate-500 rounded-lg hover:scale-110 hover:text-slate-700" aria-label="edit review"><BiSolidCommentEdit /></button>}
-          {userId && !edit && !deleteReview && <button type="button" onClick={() => setDeleteReview(!deleteReview)} className="p-1 text-slate-500 hover:scale-110 hover:text-slate-700 rounded-lg" aria-label="delete"><MdDelete /></button>}
+          {userId && !edit && !deleteReview && <button type="button" onClick={toggleModal} className="p-1 text-slate-500 hover:scale-110 hover:text-slate-700 rounded-lg" aria-label="delete"><MdDelete /></button>}
 
         </Div>
       </Div>
       <ToastContainer />
+      {isModalOpen && (
+        <Modal className="rounded-xl " togglerFn={toggleModal}>
+          <button
+            aria-label="close modal"
+            onClick={() => {
+              toggleModal();
+            }}
+            className="absolute hover:scale-150 font-bold transition ease-linear top-0 p-2 right-0 "
+            type="button"
+          >
+            <IoIosClose size={20} />
+          </button>
+          <RiDeleteBin6Fill size={48} className="text-red-500 " />
+          <H2 className="text-lg mt-5 font-bold">Confirm Delete</H2>
+          <p className=" text-slate-500 font-semibold px-2 text-center "> Are your sure you want to delete your review?</p>
+          <div className="flex gap-2 mt-10 ">
+
+            <button
+              onClick={() => {
+                setDeleteReview(true);
+                toggleModal();
+              }}
+              className=" px-4 py-2 rounded-md outline-none shadow-md shadow-red-300 bg-red-600 font-bold text-white"
+              type="button"
+            >
+              Delete
+            </button>
+            <button
+              aria-label="close modal"
+              onClick={() => {
+                toggleModal();
+              }}
+              className=" px-4 py-2 rounded-md outline-none shadow-md  bg-slate-400 font-bold text-white"
+              type="button"
+            >
+              Cancel
+            </button>
+          </div>
+        </Modal>
+      )}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { usePageFreeze } from '@/hooks/user/usePageFreeze';
+// import { usePageFreeze } from '@/hooks/user/usePageFreeze';
 import React, {
   ElementRef, HTMLAttributes, useRef,
 } from 'react';
@@ -15,7 +15,7 @@ const Modal = (props:ModalProps) => {
   /**
    * This hook hides the veritical scroll
    */
-  usePageFreeze();
+  // usePageFreeze();
   const refOuter = useRef<ElementRef<'div'>>(null);
   const refModal = useRef<ElementRef<'div'>>(null);
 
@@ -42,9 +42,9 @@ const Modal = (props:ModalProps) => {
         role="button"
         aria-label="cancel"
         tabIndex={0}
-        className="absolute z-50 inset-0 backdrop-blur-sm "
+        className="fixed z-50 inset-0 backdrop-blur-sm  "
       />
-      <div ref={refModal} className={`w-72 sm:w-full  md:w-6/12  z-50  lg:w-4/12 h-36 border-2 bg-white rounded border-gray-300 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col py-10 px-2 justify-center items-center ${props.className} `}>
+      <div ref={refModal} className={`w-72 sm:w-8/12  md:w-6/12  z-50  lg:w-4/12 shadow-xl bg-white rounded border-gray-300 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col py-10 px-2 justify-center items-center ${props.className} `}>
         {props.children}
       </div>
     </>,

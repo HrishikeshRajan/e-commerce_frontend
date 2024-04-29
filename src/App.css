@@ -106,3 +106,6 @@
     opacity: 300px;
   }
 }
+html {
+	scrollbar-gutter: stable;
+  }
