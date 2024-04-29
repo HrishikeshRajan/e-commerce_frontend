@@ -35,9 +35,9 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
                 Reviewed on
                 <Span className="ps-2">{new Date(review.createdAt).toDateString()}</Span>
               </small>
-              <H2 className="font-semibold text-base  gap-2 flex   w-full">
+              <H2 className="font-semibold text-base  items-center  gap-2 flex   w-full">
                 <Ratings ratings={review.star} />
-                <Span>{review.title}</Span>
+                <Span className="text-md">{review.title}</Span>
               </H2>
               <Para className="font-normal text-sm py-3">{review.description}</Para>
             </Div>

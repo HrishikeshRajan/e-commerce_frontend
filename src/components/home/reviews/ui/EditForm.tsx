@@ -27,7 +27,7 @@ function EditForm({ review, cancel }:{ review:ClientReview, cancel:() => void })
           productId: review.productId,
         }}
         validationSchema={toFormikValidationSchema(ReviewZodSchema)}
-        onSubmit={async (values, actions) => {
+        onSubmit={(values, actions) => {
           actions.setSubmitting(true);
           editReview(values, review._id)
             .then((response: FetchApiResponse<{ comment: ClientReview; }> | ErrorResponse) => {
@@ -53,7 +53,6 @@ function EditForm({ review, cancel }:{ review:ClientReview, cancel:() => void })
 
               <label htmlFor="title" className="block text-gray-700 font-bold mb-2">
                 Title
-                {JSON.stringify(form.errors)}
               </label>
               <Field
                 type="text"
