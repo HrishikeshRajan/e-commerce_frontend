@@ -1,15 +1,15 @@
 import useOrders from '@/hooks/useOrders';
-import Loading from '@/utils/animations/Loading';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { v4 as uuidV4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
+import PageWaiting from '@/utils/animations/PageWaiting';
 import Order from './Order';
 
 function Orders() {
   const { loading } = useOrders();
   const navigate = useNavigate();
   const orders = useTypedSelector((store) => store.order.myOrders);
-  if (loading) return <Loading />;
+  if (loading) return <PageWaiting loading={loading} />;
 
   return (
     <div className="lg:container w-full bg-white flex justify-center pb-10">

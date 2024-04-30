@@ -21,10 +21,12 @@ import Modal from '../dialougeBox/Modal';
 import AuthHelper from '../auth/apis/helper';
 
 type SubmenuProps = { menus:NavbarMenu[],
-  toggleOpen:(optio:NavbarMenu) => void };
+  toggleOpen:(optio:NavbarMenu) => void ;
+  closeAll:() => void
+};
 
 export function Submenu(
-  { menus, toggleOpen }: SubmenuProps,
+  { menus, toggleOpen, closeAll }: SubmenuProps,
 ) {
   const user = useTypedSelector((store) => store.app.user);
   const handleKeyPress = (event:React.KeyboardEvent<HTMLParagraphElement>, opt:NavbarMenu) => {
@@ -70,11 +72,17 @@ export function Submenu(
                   ) : ''}
                 </p>
               )
-              : user && user._id ? option.title !== 'Signin' && (option.title === 'Signout' ? <button type="button" className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={toggleModal}>{option.title}</button> : <Link to={option.path} className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => toggleOpen(option)}>{option.title}</Link>)
-                : option.title !== 'Signout' && <Link to={option.path} className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => toggleOpen(option)}>{option.title}</Link>}
+              : user && user._id ? option.title !== 'Signin' && (option.title === 'Signout' ? <button type="button" className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={toggleModal}>{option.title}</button> : <Link to={option.path} className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => closeAll()}>{option.title}</Link>)
+                : option.title !== 'Signout' && <Link to={option.path} className="text-black flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => closeAll()}>{option.title}</Link>}
             {option.submenu
                       && option.isOpen
-                      && <Submenu menus={option.submenu} toggleOpen={toggleOpen} />}
+                      && (
+                        <Submenu
+                          menus={option.submenu}
+                          toggleOpen={toggleOpen}
+                          closeAll={closeAll}
+                        />
+                      )}
 
           </ListItem>
         ))}

@@ -70,12 +70,12 @@ export function Menu() {
 
             </p>
           )
-            : <Link to={opt.path} className="text-black text-xs flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => toggleOpen(opt)}>{opt.title}</Link>}
+            : <Link to={opt.path} className="text-black text-xs flex rounded-md p-2 hover:bg-slate-200 items-center space-x-2" onClick={() => closeAll()}>{opt.title}</Link>}
           {opt.isOpen && opt.submenu && (
             <div className=" pr-10 rounded-xl" ref={subRef}>
               {opt.isOpen
                   && opt.submenu
-                  && <Submenu menus={opt.submenu} toggleOpen={toggleOpen} />}
+                  && <Submenu menus={opt.submenu} toggleOpen={toggleOpen} closeAll={closeAll} />}
             </div>
           )}
         </ListItem>
