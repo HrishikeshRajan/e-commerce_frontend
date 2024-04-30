@@ -7,7 +7,7 @@ function Categories() {
   const [error] = useCategory();
 
   const categories = useTypedSelector((store) => store.products.categories);
-  if ((categories && categories.length < 1)) {
+  if ((categories && categories.length < 1 && true)) {
     return (
       <CategoryShimmer />
     );
@@ -22,7 +22,7 @@ function Categories() {
       && (
         <>
           <h2 className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center  lg:mt-28 p-10  font-bold">SHOP BY CATEGORY</h2>
-          <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 xl:gap-0 xl:grid-cols-6 py-2 content-center   place-items-center ">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 xl:gap-0 xl:grid-cols-4  py-2 content-center   place-items-center ">
             {categories?.map((cate) => (
               <MenuCard
                 name={cate.name}
