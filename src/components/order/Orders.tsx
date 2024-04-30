@@ -12,9 +12,12 @@ function Orders() {
   if (loading) return <Loading />;
 
   return (
-    <div className="lg:container w-full bg-white flex justify-center ">
+    <div className="lg:container w-full bg-white flex justify-center pb-10">
       <div className="w-full  px-2 lg:w-8/12 mt-20 lg:p-5 rounded">
-        <h2 className="text-3xl font-bold text-slate-600 py-5">My Orders</h2>
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold text-slate-600 py-5">My Orders</h2>
+          <button type="button" onClick={() => navigate(-1)} className="bg-yellow-400 px-3 py-2 rounded-sm text-black">Back</button>
+        </div>
         <div className="w-full  items-center  gap-2  flex flex-col">
           {orders && orders.length > 0
             ? orders.map((order) => {

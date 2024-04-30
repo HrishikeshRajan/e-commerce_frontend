@@ -3,7 +3,7 @@ import { BsShopWindow } from 'react-icons/bs';
 import { CiUser } from 'react-icons/ci';
 import { FaRegAddressCard } from 'react-icons/fa6';
 import { LiaSignOutAltSolid } from 'react-icons/lia';
-
+import { FaClipboardList } from "react-icons/fa";
 type Option = {
   title: string;
   id: string;
@@ -24,6 +24,13 @@ export const options: Array<Option> = [
     id: '2',
     path: 'address',
     icon: FaRegAddressCard,
+    active: false,
+  },
+  {
+    title: 'Your Orders',
+    id: '2.5',
+    path: '/myOrders',
+    icon: FaClipboardList,
     active: false,
   },
   {

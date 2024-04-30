@@ -46,8 +46,8 @@ function Order({ cartItem }:
       <div className=" p-3 flex bg-white flex-col rounded-xl shadow-md  w-full">
         <div className="text-xs font-bold text-slate-500 p-2 flex justify-between items-center">
           <span className="font-base flex flex-col md:flex-row">
-            {/* <span className="lg:font-semibold text-[.6rem]">Ordered On :</span> */}
-            {/* <span className="text-[.6rem]">{`${new Date(cartItem.orderDate).getDay()}/${new Date(cartItem.orderDate).getMonth() + 1}/${new Date(cartItem.orderDate).getFullYear()}`}</span> */}
+            <span className="lg:font-semibold text-[.6rem]">Ordered On :</span>
+            <span className="text-[.6rem]">{`${new Date(cartItem.orderDate).getDay()}/${new Date(cartItem.orderDate).getMonth() + 1}/${new Date(cartItem.orderDate).getFullYear()}`}</span>
           </span>
           <div className="p-1">
             <small className="text-slate-500">Order   Status : </small>

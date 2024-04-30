@@ -61,7 +61,7 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
       </Div>
       <ToastContainer />
       {isModalOpen && (
-        <Modal className="rounded-xl " togglerFn={toggleModal}>
+        <Modal className="rounded-xl flex flex-col py-10 px-5 " togglerFn={toggleModal}>
           <button
             aria-label="close modal"
             onClick={() => {
@@ -72,10 +72,10 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
           >
             <IoIosClose size={20} />
           </button>
-          <RiDeleteBin6Fill size={48} className="text-red-500 " />
-          <H2 className="text-lg mt-5 font-bold">Confirm Delete</H2>
+          <RiDeleteBin6Fill size={48} className="text-red-500 mx-auto " />
+          <H2 className="text-lg mt-5 font-bold mx-auto">Confirm Delete</H2>
           <p className=" text-slate-500 font-semibold px-2 text-center "> Are your sure you want to delete your review?</p>
-          <div className="flex gap-2 mt-10 ">
+          <div className="flex gap-2 mt-10 mx-auto">
 
             <button
               onClick={() => {

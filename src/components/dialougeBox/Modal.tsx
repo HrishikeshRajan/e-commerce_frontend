@@ -30,7 +30,6 @@ const Modal = (props:ModalProps) => {
   window.addEventListener('click', (e: MouseEvent) => {
     if (refModal && refModal.current) {
       if (isClickOutSideOfModal(e) && isClickOnBackdrop(e)) {
-        // dispatch(toggleModal());
         props.togglerFn();
       }
     }
@@ -44,7 +43,7 @@ const Modal = (props:ModalProps) => {
         tabIndex={0}
         className="fixed z-50 inset-0 backdrop-blur-sm  "
       />
-      <div ref={refModal} className={`w-72 sm:w-8/12  md:w-6/12  z-50  lg:w-4/12 shadow-xl bg-white rounded border-gray-300 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${props.className} `}>
+      <div ref={refModal} className={` mx-auto w-11/12 sm:w-10/12  md:w-10/12  z-50  lg:w-10/12 xl:w-5/12 shadow-xl bg-white rounded border-gray-300 fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ${props.className} `}>
         {props.children}
       </div>
     </>,
