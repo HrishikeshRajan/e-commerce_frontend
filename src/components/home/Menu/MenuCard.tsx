@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 function MenuCard({ name, secure_url }:{ name:string, secure_url:string, offer?:string }) {
   return (
 
-    <div className="relative xl:scale-75  transition delay-50 ease-linear hover:scale-90 active:scale-105   border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700">
+    <div className="relative xl:scale-75 shadow-md  transition delay-50 ease-linear hover:scale-90 active:scale-105   border border-gray-200 rounded-lg  dark:bg-gray-800 dark:border-gray-700">
       <Link to={{
         pathname: '/products',
         search: `?category=${name}`,

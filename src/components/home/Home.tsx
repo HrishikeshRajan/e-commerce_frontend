@@ -14,6 +14,7 @@ import { addFlashSaleItem, currentPage } from '@/utils/reduxSlice/appSlice';
 import { ClientFlashSale } from '@/types/Sale';
 import orderHelper from '@/utils/order.helper';
 import { resetOrders } from '@/utils/reduxSlice/orderSlice';
+import { Slider } from '@/utils/slider/SliderWrapper';
 import Categories from './Categories';
 import FlashSaleBanner from '../flashsale/FlashSaleBanner';
 import Coupon from '../coupons/Coupon';
@@ -71,7 +72,7 @@ function Home() {
   return (
     searchParams.toString() ? (
 
-      <Div className="w-full relative ">
+      <Div className="w-full relative pb-20">
         <Div className="w-full container  top-full mt-28  flex justify-end">
           <Sort />
         </Div>
@@ -101,7 +102,7 @@ function Home() {
         </Div>
       </Div>
     ) : (
-      <div>
+      <div className="pb-20 rounded-xl">
         <FlashSaleBanner />
         <Categories />
         { !loadingPromos && promos && promos.length ? (
@@ -122,14 +123,17 @@ function Home() {
         ) : null}
 
         {!loadingOrders && orders && orders.length ? (
-          <div className="container">
+          <div className="container shadow-md xl:px-5 py-2">
             <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
               PREVIOUS PURCHASES
             </Heading>
             <Line />
-            <div className="flex w-full gap-2 justify-start mt-10 overflow-y-auto">
-              {orders?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
-            </div>
+            <Slider>
+              <div className="flex w-full gap-2  justify-start mt-10 overflow-y-auto">
+                {orders?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
+              </div>
+            </Slider>
+
           </div>
         ) : null }
       </div>
