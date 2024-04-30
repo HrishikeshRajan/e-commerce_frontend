@@ -1,14 +1,7 @@
-import { faStore } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
-function MenuCard() {
+function MenuCard({ children }:{ children:any }) {
   return (
-    <div className="w-52 h-20 rounded bg-green-100 shadow-md">
-      <div>
-        <FontAwesomeIcon icon={faStore} />
-        <h1>Manage Shops</h1>
-      </div>
-
+    <div className="h-fit  rounded-xl flex gap-2 items-center  p-5 shadow-lg">
+      {children}
     </div>
   );
 }
