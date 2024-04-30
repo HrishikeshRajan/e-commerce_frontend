@@ -86,11 +86,9 @@ function CartCard({ cartItem, cartId }:{ cartItem:ClientCartItem, cartId:string 
             {selectQty && (
               <QtyBox
                 productId={product._id}
-                cartId={cartId}
                 qty={cartItem.qty}
                 stock={cartItem.product.stock}
                 close={setSelectQty}
-                title="Select Quantity"
               />
             )}
           </div>

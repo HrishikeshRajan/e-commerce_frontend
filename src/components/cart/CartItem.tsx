@@ -2,6 +2,7 @@
 
 import { isEmpty } from 'lodash';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import PageWaiting from '@/utils/animations/PageWaiting';
 import CartCard from './CartCard';
 import ClearCartBtn from './ClearCartBtn';
 import PromoField from '../coupons/PromoField';
@@ -9,11 +10,11 @@ import PromoField from '../coupons/PromoField';
 function CartItem() {
   const myCart = useTypedSelector((store) => store.cart.cart);
   if (!myCart) {
-    return <h1>Loading cart</h1>;
+    return <PageWaiting loading={myCart !== undefined} />;
   }
 
   return (
-    <div className="lg:w-5/12 w-full mt-32 md:mt-40 lg:mt-32 shadow-sm  rounded ">
+    <div className="lg:w-5/12 w-full mt-32 md:mt-40 pb-20 lg:mt-32 shadow-sm  rounded ">
       <div className="flex  w-full justify-between">
 
         <h1 className="text-slate-900 font-bold text-lg py-3">
