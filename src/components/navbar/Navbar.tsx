@@ -28,6 +28,7 @@ function Navbar() {
   const [isSearchEnable, setSearchEnable] = useState(false);
   const [search, setSearch] = useSearchParams();
   const dispatch = useTypedDispatch();
+  const currentPage = useTypedSelector((store) => store.app.currentPage);
   useCartSyncToLocalStorage();
   useFlashSyncToLocalStorage();
   useUserSync();
@@ -81,7 +82,7 @@ function Navbar() {
             )}
             <div className="flex p-3 w-auto items-center   justify-end space-x-2">
 
-              {!isSearchEnable && (
+              {!isSearchEnable && (currentPage && (currentPage === 'home' || 'products')) && (
                 <span className="pr-1 flex items-center " aria-label="search">
                   <LensIconButton enableSearch={enableSearch} />
                 </span>

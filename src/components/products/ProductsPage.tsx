@@ -1,10 +1,11 @@
 /* eslint-disable react/jsx-props-no-spreading */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import useFilter from '@/hooks/useFilter';
 import { useSearchParams } from 'react-router-dom';
-import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import useProductsQuery from '@/hooks/user/useProductsQuery';
+import { currentPage } from '@/utils/reduxSlice/appSlice';
 import Pagination from './Pagination';
 import Div from '../CustomElements/Div';
 import FilterBox from '../home/sidebar/FilterBox';
@@ -21,6 +22,13 @@ function ProductsPage() {
   const [page] = useState(1);
 
   const [searchParams] = useSearchParams();
+  const dispatch = useTypedDispatch();
+  useEffect(() => {
+    dispatch(currentPage('products'));
+    return () => {
+      dispatch(currentPage(''));
+    };
+  }, [dispatch]);
   const products = useTypedSelector((store) => store.products.userProducts);
   const {
     productsLoading, hasMore,

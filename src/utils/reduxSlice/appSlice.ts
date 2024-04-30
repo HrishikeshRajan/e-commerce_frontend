@@ -22,6 +22,7 @@ interface IAPP {
   flashSaleItem: ClientFlashSale | null;
   modal:boolean;
   marketSidebar:boolean;
+  currentPage:string
 }
 
 const initialState:IAPP = {
@@ -35,6 +36,7 @@ const initialState:IAPP = {
   flashSaleItem: null,
   modal: false,
   marketSidebar: false,
+  currentPage: '',
 };
 const appSlice = createSlice({
   name: 'app',
@@ -93,6 +95,9 @@ const appSlice = createSlice({
         state.user.address[index] = action.payload.address;
       }
     },
+    currentPage: (state, action:PayloadAction<string>) => {
+      state.currentPage = action.payload;
+    },
     resetUser: (state) => {
       Object.assign(state, initialState);
     },
@@ -115,6 +120,7 @@ export const {
   resetUser,
   deleteAddressById,
   updateAddressById,
+  currentPage,
 } = appSlice.actions;
 
 export default appSlice.reducer;

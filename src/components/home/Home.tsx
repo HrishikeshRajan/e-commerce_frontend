@@ -10,7 +10,7 @@ import usePreviousPurchases from '@/hooks/user/usePreviousPurchases';
 import localCart from '@/utils/cart.helper';
 import { getLocalStorageItem } from '@/utils/localstorage.helper';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
-import { addFlashSaleItem } from '@/utils/reduxSlice/appSlice';
+import { addFlashSaleItem, currentPage } from '@/utils/reduxSlice/appSlice';
 import { ClientFlashSale } from '@/types/Sale';
 import orderHelper from '@/utils/order.helper';
 import { resetOrders } from '@/utils/reduxSlice/orderSlice';
@@ -51,6 +51,10 @@ function Home() {
     dispatch(resetOrders());
     orderHelper.clearOrder();
     orderHelper.clearOrderId();
+    dispatch(currentPage('home'));
+    return () => {
+      dispatch(currentPage(''));
+    };
   }, [dispatch]);
   const [searchParams] = useSearchParams();
 
