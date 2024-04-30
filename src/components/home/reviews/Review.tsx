@@ -1,3 +1,5 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable max-len */
 import Div from '@/components/CustomElements/Div';
 import H2 from '@/components/CustomElements/Headings/H2';
 import Para from '@/components/CustomElements/Para';
@@ -15,6 +17,7 @@ import { RiDeleteBin6Fill } from 'react-icons/ri';
 import 'react-toastify/dist/ReactToastify.css';
 import Modal from '@/components/dialougeBox/Modal';
 import { IoIosClose } from 'react-icons/io';
+import moment from 'moment';
 import EditForm from './ui/EditForm';
 
 function Review({ review, userId }:{ review:ClientReview, userId:string | undefined }) {
@@ -39,12 +42,12 @@ function Review({ review, userId }:{ review:ClientReview, userId:string | undefi
             </Div>
             <Div className="w-full ps-2">
               <small className="text-slate-500">
-                Reviewed on
-                <Span className="ps-2">{new Date(review.createdAt).toDateString()}</Span>
+                Reviewed -
+                <Span className="ps-1">{moment(new Date(review.createdAt)).fromNow()}</Span>
               </small>
               <H2 className="font-semibold text-base  items-center  gap-2 flex   w-full">
                 <Ratings ratings={review.star} />
-                <Span className="text-md">{review.title}</Span>
+                <Span className="text-md truncate">{review.title}</Span>
               </H2>
               <Para className="font-normal text-sm py-3">{review.description}</Para>
             </Div>

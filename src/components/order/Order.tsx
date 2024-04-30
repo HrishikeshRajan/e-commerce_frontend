@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-len */
 import { useState } from 'react';
 import { ORDER_STATUS } from '@/types/Cart';
@@ -8,6 +9,7 @@ import { MdKeyboardArrowRight } from 'react-icons/md';
 import { IoIosClose } from 'react-icons/io';
 import { defaultCamera } from '@/utils/cloudinaryUrls';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
+import moment from 'moment';
 import LineSmall from '../home/ui/LineSmall';
 import cancelOrder from './apis/cancel';
 import CancelButton from './ui/cancelBtn';
@@ -46,8 +48,8 @@ function Order({ cartItem }:
       <div className=" p-3 flex bg-white flex-col rounded-xl shadow-md  w-full">
         <div className="text-xs font-bold text-slate-500 p-2 flex justify-between items-center">
           <span className="font-base flex flex-col md:flex-row">
-            <span className="lg:font-semibold text-[.6rem]">Ordered On :</span>
-            <span className="text-[.6rem]">{`${new Date(cartItem.orderDate).getDay()}/${new Date(cartItem.orderDate).getMonth() + 1}/${new Date(cartItem.orderDate).getFullYear()}`}</span>
+            <span className="lg:font-semibold text-[.6rem]">ordered - </span>
+            <span className="text-[.6rem] ps-1">{moment(new Date(cartItem.orderDate)).fromNow()}</span>
           </span>
           <div className="p-1">
             <small className="text-slate-500">Order   Status : </small>
