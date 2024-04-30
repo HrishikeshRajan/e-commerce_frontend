@@ -129,7 +129,7 @@ function Home() {
             </Heading>
             <Line />
             <Slider>
-              <div className="flex w-full gap-2  justify-start mt-10 overflow-y-auto">
+              <div className="flex w-full gap-2  justify-start mt-10">
                 {orders?.map((item:Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >) => <Card key={item._id} {...item} />)}
               </div>
             </Slider>
