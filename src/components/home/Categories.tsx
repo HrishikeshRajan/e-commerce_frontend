@@ -3,6 +3,13 @@ import useCategory from '@/hooks/user/useCategories';
 import MenuCard from './Menu/MenuCard';
 import CategoryShimmer from '../shimmer/CategoryShimmer';
 
+const makeVariants = (url:string, width:number, height:number) => {
+  const config = `c_scale,w_${width},h_${height}`;
+  const parsed = url.split('/');
+  parsed.splice(6, 0, config);
+  return parsed.join('/');
+};
+
 function Categories() {
   const [error] = useCategory();
 
@@ -27,6 +34,7 @@ function Categories() {
               <MenuCard
                 name={cate.name}
                 secure_url={cate.image.secure_url}
+                variants={`${makeVariants(cate.image.secure_url, 412, 618)}`}
                 key={cate._id}
                 offer={cate.offer}
               />
