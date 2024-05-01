@@ -14,7 +14,7 @@ import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import Account from './components/user/Account';
 import { AuthenticationWrapper, RedirectIfAuthenticated } from './middleware/ProtectedRoute';
-import Dashboard from './components/marketplace/dashboard/pages/Dashboard';
+
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';
 import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
@@ -25,17 +25,12 @@ import NewPassword from './components/auth/NewPassword';
 import Expired from './components/error/Expired';
 import Marketplace from './components/user/Seller';
 import ServiceUnavailable from './components/error/ServiceUnavailable';
-import Main from './components/marketplace/dashboard/pages/Main';
-import ShopsWrapper from './components/marketplace/dashboard/pages/shop/ShopsWrapper';
-
-import ProductWrapper from './components/marketplace/dashboard/pages/products/ProductWrapper';
-import SalesWrapper from './components/marketplace/dashboard/pages/sales/SalesWapper';
-import SettingSWapper from './components/marketplace/dashboard/pages/settings/SettingSWapper';
-import CreateShop from './components/marketplace/dashboard/pages/shop/CreateShop';
-import ListShops from './components/marketplace/dashboard/pages/shop/ListShops';
-import EditForm from './components/marketplace/dashboard/ui/forms/EditForm';
-import AddProductForm from './components/marketplace/dashboard/ui/forms/AddProductForm';
-import EditProductForm from './components/marketplace/dashboard/ui/forms/EditProducts';
+import CouponWrapper from './components/coupons/CouponWrapper';
+import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
+import PageNotFound from './components/error/PageNotFound';
+import { getSingleProduct } from './components/products/apis/getSingleProduct';
+import ConfirmEmail from './components/error/ConfirmEmail';
+import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 import ProductsPage from './components/products/ProductsPage';
 import ProductView from './components/home/SingleProduct/ProductView';
 import Cart from './components/cart/Cart';
@@ -43,22 +38,26 @@ import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
 import PaymentSuccess from './components/payment/PaymentSuccess';
 import Orders from './components/order/Orders';
-import OrderWrapper from './components/marketplace/dashboard/pages/orders/OrderWrapper';
-import OrderTableWrapper from './components/marketplace/dashboard/pages/orders/OrderTableWrapper';
-import ConfirmEmail from './components/error/ConfirmEmail';
-import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
-import { getSingleProduct } from './components/products/apis/getSingleProduct';
-import CouponWrapper from './components/coupons/CouponWrapper';
-import OfferWrapper from './components/marketplace/dashboard/pages/offers/OfferWrapper';
-import CreateCouponForm from './components/marketplace/dashboard/pages/offers/ui/CreateCouponForm';
-import CouponList from './components/marketplace/dashboard/pages/offers/ui/CouponList';
-import FlashSaleWrapper from './components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper';
-import FlashSaleForm from './components/marketplace/dashboard/pages/flashsale/FlashSaleForm';
-import SellerNavbar from './components/navbar/Marketplace/NavbarSeller';
-import PageNotFound from './components/error/PageNotFound';
 
+const Main = lazy(() => import('./components/marketplace/dashboard/pages/Main'));
+const ShopsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/shop/ShopsWrapper'));
+const ProductWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ProductWrapper'));
+const SalesWrapper = lazy(() => import('./components/marketplace/dashboard/pages/sales/SalesWapper'));
+const SettingSWapper = lazy(() => import('./components/marketplace/dashboard/pages/settings/SettingSWapper'));
+const CreateShop = lazy(() => import('./components/marketplace/dashboard/pages/shop/CreateShop'));
+const ListShops = lazy(() => import('./components/marketplace/dashboard/pages/shop/ListShops'));
+const EditForm = lazy(() => import('./components/marketplace/dashboard/ui/forms/EditForm'));
+const AddProductForm = lazy(() => import('./components/marketplace/dashboard/ui/forms/AddProductForm'));
+const EditProductForm = lazy(() => import('./components/marketplace/dashboard/ui/forms/EditProducts'));
+const OrderWrapper = lazy(() => import('./components/marketplace/dashboard/pages/orders/OrderWrapper'));
+const OrderTableWrapper = lazy(() => import('./components/marketplace/dashboard/pages/orders/OrderTableWrapper'));
+const OfferWrapper = lazy(() => import('./components/marketplace/dashboard/pages/offers/OfferWrapper'));
+const CreateCouponForm = lazy(() => import('./components/marketplace/dashboard/pages/offers/ui/CreateCouponForm'));
+const CouponList = lazy(() => import('./components/marketplace/dashboard/pages/offers/ui/CouponList'));
+const FlashSaleWrapper = lazy(() => import('./components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper'));
+const FlashSaleForm = lazy(() => import('./components/marketplace/dashboard/pages/flashsale/FlashSaleForm'));
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
-
+const Dashboard = lazy(() => import('./components/marketplace/dashboard/pages/Dashboard'));
 // All user components handled here
 const Element = () => (
   <div className=" relative ">
