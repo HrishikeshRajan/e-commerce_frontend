@@ -1,7 +1,9 @@
 /* eslint-disable jsx-a11y/no-noninteractive-element-to-interactive-role */
 /* eslint-disable no-param-reassign */
 import { MdArrowDropDown, MdArrowDropUp } from 'react-icons/md';
-import React, { ElementRef, useRef, useState } from 'react';
+import React, {
+  ElementRef, useCallback, useEffect, useRef, useState,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { Submenu } from './Submenu';
 import { NavbarMenu, NavOptions } from '.';
@@ -18,7 +20,7 @@ export function Menu() {
     }
     setData([...data]);
   };
-  const closeAll = () => {
+  const closeAll = useCallback(() => {
     const result = data.map((item) => {
       if (item.type === 'collection') {
         item.isOpen = false;
@@ -27,16 +29,20 @@ export function Menu() {
     });
 
     setData([...result]);
-  };
+  }, [data]);
 
-  window.addEventListener('click', (e: MouseEvent) => {
-    if (subRef && subRef.current) {
-      if (!subRef.current.contains(e.target as Node)
-        && !(refs && refs.current && refs.current.contains(e.target as Node))) {
-        closeAll();
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (subRef && subRef.current) {
+        if (!subRef.current.contains(e.target as Node)
+          && !(refs && refs.current && refs.current.contains(e.target as Node))) {
+          closeAll();
+        }
       }
-    }
-  });
+    };
+    window.addEventListener('click', handleClickOutside);
+    return () => window.removeEventListener('click', handleClickOutside);
+  }, [closeAll]);
 
   const handleKeyPress = (event:React.KeyboardEvent<HTMLParagraphElement>, opt:NavbarMenu) => {
     if (event.key === 'Enter' || event.key === ' ') {
