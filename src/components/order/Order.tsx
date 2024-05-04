@@ -1,6 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable max-len */
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { ORDER_STATUS } from '@/types/Cart';
 import { FinalOrder } from '@/types/Orders';
 import { useNavigate } from 'react-router-dom';
@@ -10,6 +10,7 @@ import { IoIosClose } from 'react-icons/io';
 import { defaultCamera } from '@/utils/cloudinaryUrls';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
 import LineSmall from '../home/ui/LineSmall';
 import cancelOrder from './apis/cancel';
 import CancelButton from './ui/cancelBtn';
@@ -17,7 +18,9 @@ import ProductImage from './ui/ProductImage';
 import Button from '../auth/ui/Button';
 import Modal from '../dialougeBox/Modal';
 import H2 from '../CustomElements/Headings/H2';
-import CreateForm from '../home/reviews/ui/CreateForm';
+import 'react-toastify/dist/ReactToastify.css';
+
+const CreateForm = lazy(() => import('../home/reviews/ui/CreateForm'));
 
 function Order({ cartItem }:
 { cartItem:FinalOrder }) {
@@ -31,8 +34,11 @@ function Order({ cartItem }:
   const user = useTypedSelector((store) => store.app.user);
   const handleCancelOrders = () => {
     cancelOrder(cartItem.cartId, cartItem.product.productId)
-      .then(() => setItem({ ...item, ...orderStatus }))
-      .catch((error) => console.log(error));
+      .then(() => {
+        setItem({ ...item, ...orderStatus });
+        toast.success('Order cancelled successfully');
+      })
+      .catch(() => toast.error('Failed to cancel orders'));
   };
 
   const redirectToProductPage = () => {
@@ -132,9 +138,12 @@ function Order({ cartItem }:
             <h1 className="text-sm font-semibold text-slate-700 p-1 truncate">{item.product.name}</h1>
           </div>
 
-          <CreateForm productId={item.product.productId} userId={user?._id} cancel={toggleModal} />
+          <Suspense fallback={null}>
+            <CreateForm productId={item.product.productId} userId={user?._id} cancel={toggleModal} />
+          </Suspense>
         </Modal>
       )}
+      <ToastContainer hideProgressBar />
     </>
   );
 }

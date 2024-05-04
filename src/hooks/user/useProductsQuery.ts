@@ -59,8 +59,7 @@ const useProductsQuery = (
           setProductsLoading(false);
         }
       })
-      .catch((e) => {
-        console.log(e);
+      .catch(() => {
         setError(true);
         setProductsLoading(false);
       });

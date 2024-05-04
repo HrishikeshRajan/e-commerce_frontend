@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { lazy, Suspense } from 'react';
 import { formattedAmount } from '@/utils/convertToRupees';
 import cart from '@/utils/cart.helper';
 import { useDispatch } from 'react-redux';
@@ -11,11 +11,11 @@ import { ClientFlashSale, MethodParams } from '@/types/Sale';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import { getFinalAmount } from '@/utils/discounts/offer.helper';
 import PageWaiting from '@/utils/animations/PageWaiting';
-import SingleProduct from '../home/SingleProduct/SingleProduct';
 import Button from '../auth/ui/Button';
 import Sizes from '../home/SingleProduct/ui/Sizes';
 import Colors from '../home/SingleProduct/ui/Colors';
 
+const SingleProduct = lazy(() => import('../home/SingleProduct/SingleProduct'));
 const isUserAlreadyPurchased = (flash:ClientFlashSale, userId:string = '1') => flash.users.usedBy.includes(userId);
 function FlashSale() {
   const dispatch = useDispatch();

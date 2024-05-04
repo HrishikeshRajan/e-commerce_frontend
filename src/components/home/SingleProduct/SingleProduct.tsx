@@ -1,7 +1,8 @@
 /* eslint-disable react/require-default-props */
-import Ratings from '@/components/products/Ratings';
 
-import { ReactNode, useState } from 'react';
+import {
+  lazy, ReactNode, Suspense, useState,
+} from 'react';
 
 import { ProductCore } from '@/types/Product';
 import { Offers } from '@/utils/cart.helper';
@@ -19,7 +20,9 @@ import DetailsItem from './ui/DetailsItem';
 import Heading from './ui/Heading';
 import ShopDetails from './ui/ShopDetails';
 import Images from './Images';
-import ReviewWrapper from '../reviews/ReviewWrapper';
+
+const ReviewWrapper = lazy(() => import('../reviews/ReviewWrapper'));
+const Ratings = lazy(() => import('@/components/products/Ratings'));
 
   type SingleProductProps = {
     product:ProductCore
@@ -38,7 +41,9 @@ function SingleProduct({ product, offers, children }:SingleProductProps) {
           <ProductName name={product.name} />
           <Brand brand={product.brand} />
           <p className="mt-5">
-            <Ratings ratings={product.ratings} />
+            <Suspense fallback={<span className="w-4/12 h-10 bg-slate-200" />}>
+              <Ratings ratings={product.ratings} />
+            </Suspense>
             {product.numberOfReviews ? <CustomerReview numberOfReviews={product.numberOfReviews} /> : <span className="px-1 text-slate-400">(0) Not rated</span>}
           </p>
           <LineSmall />
@@ -88,7 +93,11 @@ function SingleProduct({ product, offers, children }:SingleProductProps) {
         </div>
 
       </div>
-      {!fetchUserReviewsError && <ReviewWrapper page={page} />}
+      {!fetchUserReviewsError && (
+        <Suspense fallback={<div className="w-full h-40 bg-red-400">Loading</div>}>
+          <ReviewWrapper page={page} />
+        </Suspense>
+      )}
     </div>
   );
 }

@@ -5,11 +5,13 @@ import { MdStars } from 'react-icons/md';
 import { formattedAmount } from '@/utils/convertToRupees';
 import { Promo } from '@/types/Promo';
 import PageWaiting from '@/utils/animations/PageWaiting';
-import SingleProduct from './SingleProduct';
+import { lazy, Suspense } from 'react';
 import AddToCartButton from '../../cart/AddToCartButton';
 import Colors from './ui/Colors';
 import Sizes from './ui/Sizes';
 import { OfferProps } from '.';
+
+const SingleProduct = lazy(() => import('./SingleProduct'));
 
 const isOfferActive = (promo:Promo) => promo.status === 'ACTIVE';
 function Offers({ offers }:{ offers:OfferProps }) {
@@ -58,42 +60,44 @@ function ProductView() {
   const params = useParams();
   const [response, loading, error] = useSingleProduct(params.productId!);
   if (error.error) return;
-  if (loading) return;
+  if (loading) return <PageWaiting loading />;
   if (isEmpty(response)
   || (response && response.product._id === undefined)) return <PageWaiting loading />;
 
   return (
     <div className="w-full h-screen flex justify-center px-2 xl:container">
-      <SingleProduct product={response.product}>
-        <Sizes
-          sizes={response.product && response.product.sizes}
-          productId={response.product._id}
-        />
-        <Colors
-          color={response.product && response.product.color}
-          productId={response.product._id}
-        />
-        {response.product.stock < 5 && response.product.stock > 0 && (
-          <div className="my-1">
-            <span className="text-red-500 font-bold">
-              Huryy Up limited stock is available (
-              {response.product.stock}
-              )
+      <Suspense fallback={<PageWaiting loading />}>
+        <SingleProduct product={response.product}>
+          <Sizes
+            sizes={response.product && response.product.sizes}
+            productId={response.product._id}
+          />
+          <Colors
+            color={response.product && response.product.color}
+            productId={response.product._id}
+          />
+          {response.product.stock < 5 && response.product.stock > 0 && (
+            <div className="my-1">
+              <span className="text-red-500 font-bold">
+                Huryy Up limited stock is available (
+                {response.product.stock}
+                )
+              </span>
+            </div>
+          )}
+          {response.product.stock < 1 && (
+            <span className="text-red-500  border-2 p-2 border-red-300 cursor-not-allowed font-bold">
+              Product is out of stock
             </span>
-          </div>
-        )}
-        {response.product.stock < 1 && (
-          <span className="text-red-500  border-2 p-2 border-red-300 cursor-not-allowed font-bold">
-            Product is out of stock
-          </span>
-        ) }
-        {response.product.stock > 0 && <AddToCartButton /> }
-        {response.offers
+          ) }
+          {response.product.stock > 0 && <AddToCartButton /> }
+          {response.offers
          && response.offers.coupons
           && response.offers.coupons.length
-          ? <Offers offers={response.offers} /> : '' }
+            ? <Offers offers={response.offers} /> : '' }
 
-      </SingleProduct>
+        </SingleProduct>
+      </Suspense>
     </div>
   );
 }

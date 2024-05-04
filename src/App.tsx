@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable react/function-component-definition */
-import { Suspense, lazy } from 'react';
+import { lazy, Suspense } from 'react';
 import './App.css';
 import {
   createBrowserRouter, RouterProvider, Outlet, defer,
@@ -12,7 +12,6 @@ import Auth from './components/auth/Auth';
 import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
-import Account from './components/user/Account';
 import { AuthenticationWrapper, RedirectIfAuthenticated } from './middleware/ProtectedRoute';
 
 import AddressWrapper from './components/user/address/Wrapper';
@@ -33,12 +32,14 @@ import ConfirmEmail from './components/error/ConfirmEmail';
 import FlashSaleProductPage from './components/flashsale/FlashSaleProductPage';
 import ProductsPage from './components/products/ProductsPage';
 import ProductView from './components/home/SingleProduct/ProductView';
-import Cart from './components/cart/Cart';
 import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
 import PaymentSuccess from './components/payment/PaymentSuccess';
-import Orders from './components/order/Orders';
+import PageWaiting from './utils/animations/PageWaiting';
 
+const Account = lazy(() => import('./components/user/Account'));
+const Cart = lazy(() => import('./components/cart/Cart'));
+const Orders = lazy(() => import('./components/order/Orders'));
 const Main = lazy(() => import('./components/marketplace/dashboard/pages/Main'));
 const ShopsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/shop/ShopsWrapper'));
 const ProductWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ProductWrapper'));
@@ -58,6 +59,7 @@ const FlashSaleWrapper = lazy(() => import('./components/marketplace/dashboard/p
 const FlashSaleForm = lazy(() => import('./components/marketplace/dashboard/pages/flashsale/FlashSaleForm'));
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
 const Dashboard = lazy(() => import('./components/marketplace/dashboard/pages/Dashboard'));
+
 // All user components handled here
 const Element = () => (
   <div className=" relative ">
@@ -68,10 +70,12 @@ const Element = () => (
 
 // All markplace components handled here
 const MarketPlace = () => (
-  <div className="relative">
-    <SellerNavbar />
-    <Dashboard />
-  </div>
+  <Suspense fallback={<PageWaiting loading />}>
+    <div className="relative">
+      <SellerNavbar />
+      <Dashboard />
+    </div>
+  </Suspense>
 );
 
 const App = () => {
@@ -108,9 +112,11 @@ const App = () => {
         {
           path: 'cart',
           element: (
-            <AuthenticationWrapper authentication={false}>
-              <Cart />
-            </AuthenticationWrapper>
+            <Suspense fallback={<PageWaiting loading />}>
+              <AuthenticationWrapper authentication={false}>
+                <Cart />
+              </AuthenticationWrapper>
+            </Suspense>
           ),
         },
         {
@@ -140,17 +146,21 @@ const App = () => {
         {
           path: 'myOrders',
           element: (
-            <AuthenticationWrapper authentication={false}>
-              <Orders />
-            </AuthenticationWrapper>
+            <Suspense fallback={<PageWaiting loading />}>
+              <AuthenticationWrapper authentication={false}>
+                <Orders />
+              </AuthenticationWrapper>
+            </Suspense>
           ),
         },
         {
           path: '/account',
           element: (
-            <AuthenticationWrapper authentication>
-              <Account />
-            </AuthenticationWrapper>
+            <Suspense fallback={<PageWaiting loading />}>
+              <AuthenticationWrapper authentication>
+                <Account />
+              </AuthenticationWrapper>
+            </Suspense>
           ),
           children: [
             {
@@ -270,9 +280,11 @@ const App = () => {
         {
           index: true,
           element: (
+
             <AuthenticationWrapper authentication>
               <Main />
             </AuthenticationWrapper>
+
           ),
         },
         {

@@ -8,6 +8,13 @@ import Para from '../CustomElements/Para';
 import Span from '../CustomElements/Span';
 import Div from '../CustomElements/Div';
 
+const makeVariants = (url:string, width:number, height:number) => {
+  const config = `c_fit,w_${width},h_${height},f_auto`;
+  const parsed = url.split('/');
+  parsed.splice(6, 0, config);
+  return parsed.join('/');
+};
+
 type CardProps = Pick<ProductUser, 'name' | 'price' | 'brand' | '_id' | 'ratings' | 'images' | 'numberOfReviews' >;
 function Card({
   name,
@@ -26,7 +33,7 @@ function Card({
   return (
     <Link to={`/product/${_id}`} className="relative bg-white xl:rounded-xl flex-col shadow-md">
       <Div className="relative px-1 flex w-full justify-center  h-52 overflow-hidden ">
-        <img className="object-cover " src={(images && images[0].secure_url) || 'https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8c25lYWtlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60'} alt="product image" />
+        <img className="object-cover " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
       </Div>
       <Div className="mt-1 px-2 bg-white ">
         <Div className=" overflow-hidden ">

@@ -81,16 +81,13 @@ function FlashSaleBanner() {
     return () => clearInterval(timer.current!);
   });
 
-  if (loading) {
-    return <Loading />;
+  if (loading || (!sale) || (isEmpty(sale))) {
+    return <div className="w-full h-96 bg-slate-200"><Loading /></div>;
   }
   if (isError.error) return null;
-  if (isEmpty(sale)) return null;
   if (new Date() > new Date(sale.endTime)) {
     return;
   }
-
-  if ((days || hours || mins || secs) === undefined) return null;
   return (
     <Link to={`flashsale/${sale._id}}/product/${sale.product}`} className="p-1 flex flex-col justify-center items-center top-full mt-20 h-fit relative bg-black">
       <p className="text-white font-extrabold text-base lg:text-lg mt-5 xl:mt-10">{sale.name}</p>

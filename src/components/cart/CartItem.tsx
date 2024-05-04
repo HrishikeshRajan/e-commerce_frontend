@@ -3,9 +3,11 @@
 import { isEmpty } from 'lodash';
 import { useTypedSelector } from '@/hooks/user/reduxHooks';
 import PageWaiting from '@/utils/animations/PageWaiting';
-import CartCard from './CartCard';
+import { lazy, Suspense } from 'react';
 import ClearCartBtn from './ClearCartBtn';
 import PromoField from '../coupons/PromoField';
+
+const CartList = lazy(() => import('./CartList'));
 
 function CartItem() {
   const myCart = useTypedSelector((store) => store.cart.cart);
@@ -29,9 +31,9 @@ function CartItem() {
           {myCart && !isEmpty(myCart.products) && <ClearCartBtn cartId={myCart.cartId} />}
         </div>
       </div>
-      { myCart && myCart.products && !isEmpty(myCart.products) && Object.entries(myCart.products)
-        .map(([id, product]) => <CartCard key={id} cartItem={product} cartId={myCart.cartId} />)}
-
+      <Suspense fallback={null}>
+        <CartList myCart={myCart} />
+      </Suspense>
       <PromoField />
     </div>
   );

@@ -1,5 +1,5 @@
 /* eslint-disable react/no-array-index-key */
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import LineSmall from '@/components/home/ui/LineSmall';
 import { Address } from '@/types/Orders';
 import Button from '@/components/auth/ui/Button';
@@ -10,10 +10,10 @@ import orderHelper from '@/utils/order.helper';
 import cart from '@/utils/cart.helper';
 import { addToCart } from '@/utils/reduxSlice/cartSlice';
 
-import AddressCard from './AddressCard';
-import PrimaryAddressFactory from '../factory/PrimaryAddressFactory';
 import ProceedToPaymentButton from '../../payment/ProceedToPaymentButton';
 import 'react-toastify/dist/ReactToastify.css';
+
+const AddressList = lazy(() => import('./AddressList'));
 
 function ShippingAddress() {
   const addresses = useTypedSelector((store) => store.app.user?.address);
@@ -65,31 +65,9 @@ function ShippingAddress() {
 
       <div className="w-full  flex justify-center  ">
         <div className=" w-full px-2 rounded lg:w-6/12 flex flex-col scroll-smooth justify-center items-center overflow-y-auto ">
-          {
-            addresses && addresses.length > 0
-           && addresses
-             .map((address:Address) => {
-               if (address.isPrimary) {
-                 return (
-                   <PrimaryAddressFactory
-                     key={address._id}
-                   >
-                     <AddressCard
-                       address={address}
-                       setAddress={setAdd}
-                     />
-                   </PrimaryAddressFactory>
-                 );
-               }
-               return (
-                 <AddressCard
-                   address={address}
-                   key={address._id}
-                   setAddress={setAdd}
-                 />
-               );
-             })
-          }
+          <Suspense fallback={null}>
+            <AddressList addressess={addresses} setAdd={setAdd} />
+          </Suspense>
         </div>
       </div>
       {hasAddress && hasAddress._id ? (
