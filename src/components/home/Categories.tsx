@@ -24,7 +24,7 @@ function Categories() {
   }
 
   return (
-    <div className="top-full mt-20">
+    <div className="">
       {!error
       && (
         <>

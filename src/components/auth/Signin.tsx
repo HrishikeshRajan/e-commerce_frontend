@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
@@ -61,7 +62,7 @@ function Signin() {
         }
         merge(values, { recaptchaToken });
         signin({ ...values })
-          .then((response:FetchApiResponse<{ userDetails:IUser }> | ErrorResponse) => {
+          .then((response:FetchApiResponse<{ userDetails:IUser, accessToken:string }> | ErrorResponse) => {
             actions.setStatus('');
             setMainError({ accountError: false, message: '' });
             actions.setSubmitting(false);
@@ -69,6 +70,7 @@ function Signin() {
               dispatch(addUser(response.message.userDetails));
               dispatch(confirmAuthentication(true));
               AuthHelper.add(response.message.userDetails);
+              AuthHelper.storeTokenToLocal(response.message.accessToken);
               navigate('/');
             } else if (isFetchUnprocessableEntityError(response)) {
               actions.setErrors(transformZodToFormikErrors(new ZodError(response.error)));

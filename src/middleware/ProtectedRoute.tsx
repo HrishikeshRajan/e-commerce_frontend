@@ -6,7 +6,7 @@ import {
 import AuthHelper from '@/components/auth/apis/helper';
 import { useDispatch } from 'react-redux';
 import { resetUser } from '@/utils/reduxSlice/appSlice';
-import useCookieStatus from '@/hooks/user/useCookieStatus';
+// import useCookieStatus from '@/hooks/user/useCookieStatus';
 import PageWaiting from '@/utils/animations/PageWaiting';
 
 export interface AuthWrapper {
@@ -22,18 +22,21 @@ export function AuthenticationWrapper({
   const navigate = useNavigate();
   const [loading, setLoading] = React.useState(true);
   const dispatch = useDispatch();
-
-  const { loadingStatus, tokenInfo } = useCookieStatus();
+  const token = AuthHelper.getTokenToLocal();
+  // const { loadingStatus, tokenInfo } = useCookieStatus();
   useEffect(() => {
-    if (authentication && !loadingStatus && !tokenInfo) {
+    if (authentication && !token) {
       AuthHelper.clearSignedOnData(() => {
         dispatch(resetUser());
-        navigate('/auth');
+        if (typeof window !== undefined) {
+          window.location.href = '/auth';
+        }
+        // navigate('/auth');
       });
     }
 
     setLoading(false);
-  }, [authentication, dispatch, loadingStatus, navigate, tokenInfo]);
+  }, [authentication, dispatch, navigate, token]);
 
   return loading ? <PageWaiting loading={loading} /> : children;
 }
@@ -44,17 +47,14 @@ export function RedirectIfAuthenticated({
   children,
   authentication = true,
 }:AuthWrapper):React.ReactNode | string {
-  const { tokenInfo } = useCookieStatus();
-  const navigate = useNavigate();
-  const [loading, setLoading] = React.useState(true);
+  const token = AuthHelper.getTokenToLocal();
 
-  useEffect(() => {
+  const navigate = useNavigate();
   // compares the condition and current user status
-    if (!authentication && tokenInfo) {
+  useEffect(() => {
+    if (!authentication && token) {
       navigate('/');
     }
-    setLoading(false);
-  }, [navigate, authentication, tokenInfo]);
-
-  return loading ? <PageWaiting loading={loading} /> : children;
+  }, [authentication, navigate, token]);
+  return children;
 }

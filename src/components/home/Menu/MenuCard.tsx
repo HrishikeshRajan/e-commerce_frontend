@@ -17,6 +17,7 @@ function MenuCard({ name, secure_url, variants }: MenuCardProps) {
           src={secure_url}
           alt={`${name}`}
           srcSet={variants}
+          loading="lazy"
         />
 
         <div className="bg-black text-center items-center flex flex-col  w-full absolute bottom-0 h-20 bg-opacity-80 ">

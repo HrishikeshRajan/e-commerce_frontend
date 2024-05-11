@@ -12,6 +12,25 @@ const AuthHelper = {
       localStorage.setItem('user', JSON.stringify(user));
     }
   },
+  storeTokenToLocal: (token:string) => {
+    if (typeof window !== undefined) {
+      localStorage.setItem('token', JSON.stringify(token));
+    }
+  },
+  getTokenToLocal: () => {
+    if (typeof window !== undefined) {
+      const tokenString = localStorage.getItem('token');
+      if (tokenString) {
+        return JSON.parse(tokenString);
+      }
+      return null;
+    }
+  },
+  removeTokenToLocal: () => {
+    if (typeof window !== undefined) {
+      localStorage.removeItem('token');
+    }
+  },
   authenticate: (status: boolean) => {
     if (typeof window !== undefined) {
       localStorage.setItem('authenticated', String(status));
@@ -124,6 +143,7 @@ const AuthHelper = {
   clearSignedOnData(cb?: () => void) {
     if (typeof window !== undefined) {
       localStorage.removeItem('user');
+      this.removeTokenToLocal();
     }
     if (cb) {
       cb();

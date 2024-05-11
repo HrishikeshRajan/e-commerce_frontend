@@ -111,7 +111,7 @@ function TableTemplate({ paramsId }:{ paramsId:string }) {
  }, [pageIndex, search, setSearchParams, table]);
 
  return (
-    <div className="w-full bg-white p-2  overflow-x-scroll  ">
+    <div className="w-full bg-white p-2  ">
       <div className="shadow-md  w-full p-2 rounded-lg  overflow-x-scroll  ">
         <table className="w-11/12 text-sm text-left rtl:text-right text-gray-800  overflow-y-scroll   ">
           <thead className=" ">

@@ -33,7 +33,7 @@ function Card({
   return (
     <Link to={`/product/${_id}`} className="relative bg-white xl:rounded-xl flex-col shadow-md">
       <Div className="relative px-1 flex w-full justify-center  h-52 overflow-hidden ">
-        <img className="object-cover " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
+        <img className="object-cover " loading="lazy" src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
       </Div>
       <Div className="mt-1 px-2 bg-white ">
         <Div className=" overflow-hidden ">
