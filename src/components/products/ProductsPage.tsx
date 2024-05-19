@@ -13,6 +13,7 @@ import Div from '../CustomElements/Div';
 import ProductsShimmer from '../shimmer/ProductsShimmer';
 import ProductNotFoundError from './ProductNotFoundError';
 import PaginationShimmer from '../shimmer/PaginationShimmer';
+import FilterShimmer from '../shimmer/FilterShimmer';
 
 const FilterBox = lazy(() => import('../home/sidebar/FilterBox'));
 const Sort = lazy(() => import('../home/filter/Sort'));
@@ -56,14 +57,15 @@ function ProductsPage() {
       </Div>
 
       {memoFilter && !loading
-        && (
+
+        ? (
 
           <Div className={`fixed left-0 xl:hidden bg-white right-0 bottom-0  delay-75 duration-150 ease overflow-y-auto  z-40  xl:bottom-10 xl:left-0 ${isOpen ? 'h-full ' : 'h-20'}`}>
             <Suspense fallback={<div className="fixed left-0 xl:hidden bg-white right-0 bottom-0  delay-75 duration-150 ease overflow-y-auto  z-40  xl:bottom-10 xl:left-0"><Loading /></div>}>
               <FilterBox filter={memoFilter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
             </Suspense>
           </Div>
-        )}
+        ) : <FilterShimmer />}
       <Div className="flex justify-end">
         {memoFilter && !loading
         && (

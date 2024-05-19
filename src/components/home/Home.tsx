@@ -94,7 +94,7 @@ function Home() {
         )}
           <Div className="fixed flex p-2   xl:right-0 xl:w-9/12 w-full   justify-end overflow-y-auto">
             <ProductCardsWrapper className="flex w-full">
-              <Div className="grid grid-cols-2  sm:grid-cols-4 gap-2 xl:grid-cols-4 py-2  ">
+              <Div className="w-full flex sm:gap-2 justify-center">
                 {
                   searchProductsList.map((item) => <Card key={item._id} {...item} />)
                 }
