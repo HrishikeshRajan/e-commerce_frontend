@@ -39,15 +39,15 @@ function AddProductForm() {
 
       <Formik
         initialValues={{
-          name: 'Majestic Man Slim Fit Satin Cotton Formal Shirt for Men',
+          name: '',
           price: '',
-          currencyCode: 'INR',
-          description: 'Majestic Man slim fit solid cotton formal shirt for men is a versatile piece of clothing that can be dressed up or down. It is made of cotton fabric, which makes it soft,',
-          category: 'Casual Styles',
-          brand: 'Rose',
-          sizes: 'sm,md,lg,xl,xxl',
-          color: 'White',
-          gender: 'Male',
+          currencyCode: '',
+          description: '',
+          category: '',
+          brand: '',
+          sizes: '',
+          color: '',
+          gender: '',
           isDiscontinued: false,
           shopId: params.id!,
           stock: '',
@@ -69,7 +69,7 @@ function AddProductForm() {
         {(form) => (
           <Form className=" shadow-md sm:w-5/6 p-2">
             <h1 className=" text-slate-500 py-2 mb-1 text-xl font-semibold">
-              Add New Product {JSON.stringify(form.errors)}
+              Add New Product
             </h1>
 
             <div className="my-5">
