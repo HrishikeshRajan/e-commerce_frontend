@@ -41,7 +41,7 @@ function AddProductForm() {
         initialValues={{
           name: '',
           price: '',
-          currencyCode: '',
+          currencyCode: 'INR',
           description: '',
           category: '',
           brand: '',
