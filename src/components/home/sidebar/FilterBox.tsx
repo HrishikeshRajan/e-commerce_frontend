@@ -61,7 +61,7 @@ function FilterBox({ filter, toggleButton, isOpen }:{ filter:Array<FilterBoxItem
   };
 
   return (
-    <Div className="relative w-full">
+    <Div className="relative w-full shadow-md">
       <FilterHeader className=" bg-white flex w-full border-2 xl:border-0 justify-between rounded-t-3xl shadow-md">
         <button type="button" className="font-bold text-slate-800 py-5 ms-5 xl:hidden" onClick={toggleButton}>{isOpen ? 'Close' : 'Filter'}</button>
         <h3 className="font-bold text-slate-800 py-5 ms-5 hidden xl:flex">Filter</h3>

@@ -5,7 +5,7 @@ import {
 
 import useFilter from '@/hooks/useFilter';
 import { useSearchParams } from 'react-router-dom';
-import { useTypedDispatch } from '@/hooks/user/reduxHooks';
+import { useTypedDispatch, useTypedSelector } from '@/hooks/user/reduxHooks';
 import useProductsQuery from '@/hooks/user/useProductsQuery';
 import { currentPage } from '@/utils/reduxSlice/appSlice';
 import Loading from '@/utils/animations/Loading';
@@ -24,7 +24,7 @@ function ProductsPage() {
   const memoFilter = useMemo(() => filter, [filter]);
   const [isOpen, setIsOpen] = useState(false);
   const [page] = useState(1);
-
+  const products = useTypedSelector((store) => store.products.userProducts);
   const [searchParams] = useSearchParams();
   const dispatch = useTypedDispatch();
   useEffect(() => {
@@ -81,7 +81,7 @@ function ProductsPage() {
       <Div className="w-full flex justify-end">
 
         <Suspense fallback={<PaginationShimmer />}>
-          <Pagination />
+          {products && products.length > 10 && <Pagination />}
         </Suspense>
       </Div>
     </Div>

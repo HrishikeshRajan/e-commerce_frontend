@@ -18,6 +18,7 @@ export const getCategories = async (signal:AbortSignal) => {
     method: 'GET',
     headers,
     signal,
+    cache: 'no-cache'
   };
   try {
     const url = `${import.meta.env.VITE_BASE_URL}/api/v1/seller/categories`;

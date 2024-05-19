@@ -31,21 +31,21 @@ function Card({
   }).format(parseFloat(price));
 
   return (
-    <Link to={`/product/${_id}`} className="relative bg-white xl:rounded-xl flex-col shadow-md">
-      <Div className="relative px-1 flex w-full justify-center  h-52 overflow-hidden ">
-        <img className="object-cover " loading="lazy" src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
-      </Div>
-      <Div className="mt-1 px-2 bg-white ">
+    <Link to={`/product/${_id}`} className="w-6/12 sm:max-w-[180px]  shadow-md  sm:rounded-xl flex-col ">
+
+      <img className="object-cover " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
+
+      <Div className="px-2 w- bg-white py-2 ">
         <Div className=" overflow-hidden ">
-          <Para>
+          <Para className=" truncate">
             {brand}
           </Para>
-          <Para className="text-xs  text-slate-500 overflow-hidden overflow-ellipsis h-10 whitespace-nowrap">
+          <Para className=" text-xs  text-slate-500 truncate h-10">
             {name}
           </Para>
         </Div>
 
-        <Div className="w-full mb-2 flex  items-start justify-between flex-col">
+        <Div className="w-full mb-2 flex   items-start justify-between flex-col">
           <Para className="flex gap-1 items-center">
             <Span className="text-slate-400 text-xs ">
               MRP:
