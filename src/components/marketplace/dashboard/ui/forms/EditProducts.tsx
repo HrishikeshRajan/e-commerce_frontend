@@ -64,7 +64,6 @@ function EditProductForm() {
           color: product.color,
           gender: product.gender,
           isDiscontinued: product.isDiscontinued,
-          keywords: product.keywords.toString(),
           id: product.id,
           shopId: product.shopId,
           stock: product.stock,
@@ -294,24 +293,6 @@ function EditProductForm() {
                 </div>
                 <ErrorMessage
                   name="isDiscontinued"
-                  render={(msg) => (
-                    <div className="text-red-500 pb-2">
-                      {msg}
-                    </div>
-                  )}
-                />
-              </div>
-              <div className="mb-5">
-                <label htmlFor="keywords" className="block mb-2 text-sm font-medium text-gray-900 ">Enter 5 keywords for this product</label>
-                <Field
-                  type="text"
-                  id="keywords"
-                  name="keywords"
-                  className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg  block w-full p-2.5 ${form.errors.keywords && form.touched.keywords && 'border-2 border-red-500'} `}
-                  placeholder="Write 5 keywords for your products"
-                />
-                <ErrorMessage
-                  name="keywords"
                   render={(msg) => (
                     <div className="text-red-500 pb-2">
                       {msg}

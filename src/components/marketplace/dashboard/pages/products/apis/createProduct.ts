@@ -7,7 +7,7 @@ export interface FileTypes {
   files?:any
 }
 export type Product = IProduct & FileTypes;
-export const createNewProduct = async (product:Omit<Product, 'id' | 'price' | 'stock' > & { price:string, stock:string }) => {
+export const createNewProduct = async (product:Omit<Product, 'id' | 'price' | 'stock' | 'keywords'> & { price:string, stock:string }) => {
   try {
     const formData = new FormData();
     formData.append('name', product.name);
@@ -24,12 +24,6 @@ export const createNewProduct = async (product:Omit<Product, 'id' | 'price' | 's
 
     for (let i = 0; i < product.files.images.length; i += 1) {
       formData.append('images', product.files.images[i]);
-    }
-
-    const keywords = product.keywords.split(',');
-
-    for (let i = 0; i < keywords.length; i += 1) {
-      formData.append('keywords', keywords[i]);
     }
 
     const sizes = product.sizes.split(',');

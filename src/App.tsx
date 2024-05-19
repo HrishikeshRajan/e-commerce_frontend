@@ -13,10 +13,10 @@ import Navbar from './components/navbar/Navbar';
 import Home from './components/home/Home';
 import Profile from './components/user/profile/Profile';
 import { AuthenticationWrapper, RedirectIfAuthenticated } from './middleware/ProtectedRoute';
+import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
 
 import AddressWrapper from './components/user/address/Wrapper';
 import EditAddress from './components/user/address/EditForm';
-import { parseSpecificAddressFromLocalStorage } from './loaderHelpers/address.helper';
 import AddAddress from './components/user/address/AddForm';
 import store from './utils/store';
 import ForgotForm from './components/auth/ForgotForm';
@@ -340,15 +340,8 @@ const App = () => {
           ),
           children: [
             {
-              path: ':id',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <AddProductForm />
-                </AuthenticationWrapper>
-              ),
-            },
-            {
               index: true,
+              path: 'list',
               element: (
                 <AuthenticationWrapper authentication>
                   <Suspense fallback={<h1>Loding</h1>}>
@@ -357,6 +350,15 @@ const App = () => {
                 </AuthenticationWrapper>
               ),
             },
+            {
+              path: ':id',
+              element: (
+                <AuthenticationWrapper authentication>
+                  <AddProductForm />
+                </AuthenticationWrapper>
+              ),
+            },
+
             {
               path: 'edit/:id',
               element: (

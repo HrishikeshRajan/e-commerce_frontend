@@ -11,7 +11,7 @@ export const ProductCoreSchema = z.object({
   color: z.string(),
   gender: z.string(),
   isDiscontinued: z.boolean(),
-  keywords: z.string(),
+  keywords: z.string().optional(),
   id: z.string().optional(),
   shopId: z.string(),
   stock: z.number(),

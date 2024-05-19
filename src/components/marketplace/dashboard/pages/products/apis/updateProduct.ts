@@ -24,12 +24,6 @@ export const UpdateProduct = async (product:Product) => {
       formData.append('images', product.files.images[i]);
     }
 
-    const keywords = product.keywords.split(',');
-
-    for (let i = 0; i < keywords.length; i += 1) {
-      formData.append('keywords', keywords[i]);
-    }
-
     const sizes = product.sizes.split(',');
 
     for (let i = 0; i < sizes.length; i += 1) {

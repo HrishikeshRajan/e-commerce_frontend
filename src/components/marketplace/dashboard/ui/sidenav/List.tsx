@@ -75,7 +75,7 @@ export const list:SidebarItemTypes[] = [
     children: [
       {
         title: 'Your Products',
-        id: 3,
+        id: 3.1,
         path: 'product/list',
         icon: CiBoxList,
         isActive: false,
