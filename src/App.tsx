@@ -36,6 +36,7 @@ import ShippingAddress from './components/order/address/ShippingAddress';
 import Payment from './components/payment/Payment';
 import PaymentSuccess from './components/payment/PaymentSuccess';
 import PageWaiting from './utils/animations/PageWaiting';
+import Footer from './components/footer/Footer';
 
 const Account = lazy(() => import('./components/user/Account'));
 const Cart = lazy(() => import('./components/cart/Cart'));
@@ -89,7 +90,10 @@ const App = () => {
           path: '/',
           element: (
             <AuthenticationWrapper authentication={false}>
-              <Home />
+              <>
+                <Home />
+                <Footer />
+              </>
             </AuthenticationWrapper>
           ),
         },
