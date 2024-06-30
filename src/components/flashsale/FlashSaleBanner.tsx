@@ -2,7 +2,7 @@ import useFlashSale from '@/hooks/useFlashSale';
 import { isEmpty } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Loader from './Loader';
+import Loader from '../ui/Loader';
 
 function saleStatus(startTime:Date, endTime:Date):string | null {
   const currentDate = new Date();

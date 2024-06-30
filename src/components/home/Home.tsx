@@ -18,13 +18,15 @@ import Categories from './Categories';
 import Card from '../products/Card';
 import ProductCardsWrapper from '../products/v2/ProductWrapper';
 import Div from '../CustomElements/Div';
-import Loader from '../flashsale/Loader';
+import Loader from '../ui/Loader';
+import LatestProducts from './latestProducts/LatestProducts';
 
 const FlashSaleBanner = lazy(() => import('../flashsale/FlashSaleBanner'));
 const LatestOffers = lazy(() => import('./promos/LatestOffers'));
 const PreviousOrders = lazy(() => import('./orders/PreviousOrders'));
 const FilterBox = lazy(() => import('./sidebar/FilterBox'));
 const Sort = lazy(() => import('./filter/Sort'));
+
 function Home() {
   const cart = useTypedSelector((store) => store.cart.cart);
   const searchProductsList = useTypedSelector((store) => store.products.userProducts);
@@ -117,9 +119,19 @@ function Home() {
           <FlashSaleBanner />
         </Suspense>
         <Categories />
-        <Suspense fallback={<div className="w-full h-96 bg-slate-200"><Loading /></div>}>
+        <Suspense fallback={(
+          <div
+            className="w-full top-full mt-20 relative  h-56 sm:h-96 bg-slate-700 flex justify-center items-center text-center flex-col"
+          >
+            <Loader title="Looking for exclusive offers for you" className="text-xl sm:text-3xl my-10 font-semibold text-slate-200" />
+          </div>
+        )}
+        >
           <LatestOffers />
         </Suspense>
+        <div className="sm:container mt-10">
+          <LatestProducts />
+        </div>
         <Suspense fallback={<div className="w-full h-96 bg-slate-200"><Loading /></div>}>
           <PreviousOrders />
         </Suspense>

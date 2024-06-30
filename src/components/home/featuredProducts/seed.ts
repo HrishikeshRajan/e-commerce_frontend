@@ -1,0 +1,68 @@
+import { ProductUser } from '@/components/products/types';
+
+export const productsSeed: ProductUser[] = [
+  {
+    _id: '664a34b294e0b2bb8d44ef6c',
+    name: "MANQ Men's Slim Fit Single Breasted Blazer",
+    description: 'Shop from a wide range of Blazer from MANQ. Perfect for office meetings and parties, you could pair it with a stylish shirt to complete the look.',
+    category: 'Formals',
+    price: '5000',
+    currencyCode: 'INR',
+    brand: 'Rose',
+    color: 'Black',
+    sizes: [
+      'sm',
+      'md',
+      'lg',
+      'xl',
+      'xxl',
+    ],
+    images: [
+      {
+        url: 'http://res.cloudinary.com/dxv2tmvfw/image/upload/v1716139185/Products/t7yhfe1vgmwkgcav1w9l.jpg',
+        secure_url: 'https://res.cloudinary.com/dxv2tmvfw/image/upload/v1716139185/Products/t7yhfe1vgmwkgcav1w9l.jpg',
+        _id: '664a34b294e0b2bb8d44ef6d',
+      },
+    ],
+    ratings: 0,
+    numberOfReviews: 0,
+    sellerId: '659e76f841083740ad7fae3d',
+    shopId: '65b75f3068861cb12082d3c5',
+    gender: 'Male',
+    stock: '98',
+    isDiscontinued: 'true',
+    keywords: [],
+  },
+  {
+    _id: '664a35dd94e0b2bb8d44ef8d',
+    name: "Peter England Men's Slim Fit Blazer",
+    description: 'Styling your blazer can be tricky but with Peter England blazers, you can pair it up with almost anything in your wardrobe. Make it formal with a formal shirt, tie and a pocket square; make it casual with printed shirts, chinos and sunglasses. Don’t let those blazers rot in your cupboard; style',
+    category: 'Formals',
+    price: '9133',
+    currencyCode: 'INR',
+    brand: 'Zara',
+    color: 'Black',
+    sizes: [
+      'sm',
+      'md',
+      'lg',
+      'xl',
+      'xxl',
+    ],
+    images: [
+      {
+        url: 'http://res.cloudinary.com/dxv2tmvfw/image/upload/v1716139484/Products/q0fbe4pwh7cvu1zo7kni.jpg',
+        secure_url: 'https://res.cloudinary.com/dxv2tmvfw/image/upload/v1716139484/Products/q0fbe4pwh7cvu1zo7kni.jpg',
+        _id: '664a35dd94e0b2bb8d44ef8e',
+      },
+    ],
+    ratings: 0,
+    numberOfReviews: 0,
+    sellerId: '659e76f841083740ad7fae3d',
+    shopId: '65b75f3068861cb12082d3c5',
+    gender: 'Male',
+    stock: '2',
+    isDiscontinued: 'true',
+    keywords: [],
+  },
+];

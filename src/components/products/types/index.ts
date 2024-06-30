@@ -3,6 +3,7 @@ import { z } from 'zod';
 const ImageSchema = z.object({
   url: z.string(),
   secure_url: z.string(),
+  _id: z.string().optional(),
 });
 
 export const productSchema = z.object({
