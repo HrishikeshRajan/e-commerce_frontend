@@ -18,6 +18,7 @@ import Categories from './Categories';
 import Card from '../products/Card';
 import ProductCardsWrapper from '../products/v2/ProductWrapper';
 import Div from '../CustomElements/Div';
+import Loader from '../flashsale/Loader';
 
 const FlashSaleBanner = lazy(() => import('../flashsale/FlashSaleBanner'));
 const LatestOffers = lazy(() => import('./promos/LatestOffers'));
@@ -104,8 +105,15 @@ function Home() {
         </Div>
       </Div>
     ) : (
-      <div className="pb-20 flex flex-col gap-4 rounded-xl">
-        <Suspense fallback={<div className="w-full h-96 bg-slate-200"><Loading /></div>}>
+      <div className="pb-20 flex flex-col gap-4 rounded-xl relative">
+        <Suspense fallback={(
+          <div
+            className="w-full top-full mt-20 relative  h-56 sm:h-96 bg-slate-700 flex justify-center items-center text-center flex-col"
+          >
+            <Loader title="Looking for great offers for you" className="text-xl sm:text-3xl my-10 font-semibold text-slate-200" />
+          </div>
+        )}
+        >
           <FlashSaleBanner />
         </Suspense>
         <Categories />

@@ -1,8 +1,8 @@
 import useFlashSale from '@/hooks/useFlashSale';
-import Loading from '@/utils/animations/Loading';
 import { isEmpty } from 'lodash';
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Loader from './Loader';
 
 function saleStatus(startTime:Date, endTime:Date):string | null {
   const currentDate = new Date();
@@ -82,14 +82,20 @@ function FlashSaleBanner() {
   });
 
   if (loading || (!sale) || (isEmpty(sale))) {
-    return <div className="w-full h-96 bg-slate-200"><Loading /></div>;
+    return (
+      <div
+        className="w-full top-full mt-20 relative h-56 sm:h-96 bg-slate-700 flex justify-center text-center items-center flex-col"
+      >
+        <Loader title="Looking for great offers for you" className="text-xl sm:text-3xl my-10 font-semibold text-slate-200" />
+      </div>
+    );
   }
   if (isError.error) return null;
   if (new Date() > new Date(sale.endTime)) {
     return;
   }
   return (
-    <Link to={`flashsale/${sale._id}}/product/${sale.product}`} className="p-1 flex flex-col justify-center items-center top-full mt-20 h-fit relative bg-black">
+    <Link to={`flashsale/${sale._id}}/product/${sale.product}`} className="p-1 flex flex-col justify-center items-center top-full mt-20 h-fit sm:h-96 relative bg-black">
       <p className="text-white font-extrabold text-base lg:text-lg mt-5 xl:mt-10">{sale.name}</p>
       <div className="p-1  relative flex flex-col  justify-center">
         <p className="flex items-center    text-[.7rem] justify-center lg:text-lg text-white p-5 font-semibold">{ saleStatus(sale.startTime, sale.endTime) === 'ACTIVE' ? <span>Sale ends  in</span> : <span>Sale starts in</span>}</p>
