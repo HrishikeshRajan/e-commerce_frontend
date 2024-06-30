@@ -10,8 +10,8 @@ function LatestOffers() {
   if (loadingPromos) return null;
   if (!promos || (promos && promos.length < 1)) return null;
   return (
-    <div className="container">
-      <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
+    <div className="overflow-hidden">
+      <Heading className="text-xl xl:text-4xl headingDecorator text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
         LATEST OFFERS
       </Heading>
       <Line />

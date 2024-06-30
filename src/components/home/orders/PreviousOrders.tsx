@@ -12,7 +12,7 @@ function PreviousOrders() {
   if (!orders || (orders && orders.length < 1)) return null;
   return (
     <div className="container shadow-md xl:px-5 py-2">
-      <Heading className="text-xl xl:text-4xl  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
+      <Heading className="text-xl xl:text-4xl  headingDecorator  text-orange-500 drop-shadow-lg text-center mt-10 font-bold">
         PREVIOUS PURCHASES
       </Heading>
       <Line />
