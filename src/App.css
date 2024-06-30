@@ -115,6 +115,8 @@ html {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
+    text-shadow: 2px 1px orangered;
+    letter-spacing: 2px;
   }
   
   .headingDecorator::before,
