@@ -82,7 +82,7 @@ function Navbar() {
             )}
             <div className="flex p-3 w-auto items-center   justify-end space-x-2">
 
-              {!isSearchEnable && (currentPage && (currentPage === 'home' || 'products')) && (
+              {!isSearchEnable && (currentPage && (currentPage === 'products')) && (
                 <span className="pr-1 flex items-center " aria-label="search">
                   <LensIconButton enableSearch={enableSearch} />
                 </span>
