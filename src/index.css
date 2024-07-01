@@ -66,3 +66,13 @@
 .menu-item.open .menu-content{
   height: auto;
 }
+
+/* the slides */
+.slick-slide {
+  margin: 0;
+  padding: 0;
+}
+/* the parent */
+.slick-list {
+  margin: 0 -1px;
+}

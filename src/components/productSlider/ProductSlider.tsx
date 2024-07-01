@@ -1,10 +1,12 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 
-function ProductSliderCard({ children, title }:{ children:React.ReactNode, title:string }) {
+type ProductSliderCardProps = { children:React.ReactNode, title:string, className?:string };
+function ProductSliderCard({ children, title, className }:ProductSliderCardProps) {
   return (
-    <div className="w-full h-fit py-5 border-2 rounded-xl  ps-1">
+    <div className={`w-full h-fit py-5 border-2 rounded-xl  ps-1 ${className}`}>
       <h1 className="text-xl font-bold border-b-2 text-slate-800 p-3">{title}</h1>
-      <div className="overflow-hidden w-full">
+      <div className="overflow-hidden">
         {children}
       </div>
 

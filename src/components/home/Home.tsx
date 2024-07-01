@@ -119,16 +119,19 @@ function Home() {
           <FlashSaleBanner />
         </Suspense>
         <Categories />
-        <Suspense fallback={(
-          <div
-            className="w-full top-full mt-20 relative  h-56 sm:h-96 bg-slate-700 flex justify-center items-center text-center flex-col"
+
+        <div className="sm:container mt-10">
+          <Suspense fallback={(
+            <div
+              className="w-full top-full mt-20 relative  h-56 sm:h-96 bg-slate-700 flex justify-center items-center text-center flex-col"
+            >
+              <Loader title="Looking for exclusive offers for you" className="text-xl sm:text-3xl my-10 font-semibold text-slate-200" />
+            </div>
+          )}
           >
-            <Loader title="Looking for exclusive offers for you" className="text-xl sm:text-3xl my-10 font-semibold text-slate-200" />
-          </div>
-        )}
-        >
-          <LatestOffers />
-        </Suspense>
+            <LatestOffers />
+          </Suspense>
+        </div>
         <div className="sm:container mt-10">
           <LatestProducts />
         </div>
