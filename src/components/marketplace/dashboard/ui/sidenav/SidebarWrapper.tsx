@@ -13,9 +13,13 @@ import { IconContext } from 'react-icons';
 import { RxCross1 } from 'react-icons/rx';
 import { IoIosClose } from 'react-icons/io';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { list, SidebarItemTypes } from './List';
-import { hasChildren, isColletion, isOpen } from './helper';
+import AuthHelper from '@/components/auth/apis/helper';
+import { resetCart } from '@/utils/reduxSlice/cartSlice';
+import { resetMarketplace } from '@/utils/reduxSlice/markeplaceSlice';
+import { resetOrders } from '@/utils/reduxSlice/orderSlice';
 import Submenu from './Submenu';
+import { hasChildren, isColletion, isOpen } from './helper';
+import { list, SidebarItemTypes } from './List';
 
 function SidebarWrapper() {
   const sidebarOpen = useTypedSelector((store) => store.app.marketSidebar);
@@ -49,7 +53,11 @@ function SidebarWrapper() {
    */
   const signOut = async () => {
     await signout().then(() => {
+      AuthHelper.clearSignedOnData();
       dispatch(resetUser());
+      dispatch(resetCart());
+      dispatch(resetOrders());
+      dispatch(resetMarketplace());
       navigate('/auth');
     });
   };
