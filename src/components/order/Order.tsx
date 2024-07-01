@@ -67,7 +67,7 @@ function Order({ cartItem }:
         </div>
         <LineSmall />
         <div className="flex items-center">
-          <ProductImage url={cartItem?.product?.images[0]?.secure_url || defaultCamera} />
+          <ProductImage className="w-20" url={Object.values(cartItem?.product).length > 1 ? cartItem?.product?.images[0]?.secure_url : defaultCamera} />
           <div className="flex flex-col justify-center">
             <h1 className="text-sm font-semibold text-slate-700 p-1">{item.product.name}</h1>
             <h4 className="text-slate-500 text-sm p-1">{item.product.brand}</h4>
