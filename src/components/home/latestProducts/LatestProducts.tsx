@@ -1,8 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react/jsx-props-no-spreading */
 import Card from '@/components/products/Card';
-import ProductSlider from '@/components/productSlider/ProductSlider';
+import ProductSliderCard from '@/components/productSlider/ProductSlider';
 import Loader from '@/components/ui/Loader';
 import useLatestProducts from '@/hooks/useLatestProducts';
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
 
 function LatestProducts() {
   const { products, loading, error } = useLatestProducts();
@@ -17,10 +21,51 @@ function LatestProducts() {
       </div>
     );
   }
+
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    swipeToSlide: true,
+    autoplay: true,
+    autoplaySpeed: 2000,
+    pauseOnHover: true,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 3,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 2,
+          initialSlide: 2,
+        },
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
   return (
-    <ProductSlider title="Latest Products">
-      { products && products.map((item) => <Card key={item._id} {...item} />)}
-    </ProductSlider>
+    <ProductSliderCard title="Latest Products">
+      <Slider {...settings}>
+        { products && products.map((item) => <Card key={item._id} {...item} />)}
+      </Slider>
+    </ProductSliderCard>
   );
 }
 
