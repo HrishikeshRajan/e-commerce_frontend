@@ -125,7 +125,7 @@ const App = () => {
           path: 'myOrders',
           element: (
             <Suspense fallback={<PageWaiting loading />}>
-              <AuthenticationWrapper authentication={false}>
+              <AuthenticationWrapper authentication>
                 <Orders />
               </AuthenticationWrapper>
             </Suspense>
