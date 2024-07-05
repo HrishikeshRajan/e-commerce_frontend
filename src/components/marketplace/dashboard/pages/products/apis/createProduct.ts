@@ -1,6 +1,5 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
-import { ProductBaseUrl } from '../../../../urlConstants';
 import { IProduct } from '../types';
 
 export interface FileTypes {
@@ -31,8 +30,8 @@ export const createNewProduct = async (product:Omit<Product, 'id' | 'price' | 's
     for (let i = 0; i < sizes.length; i += 1) {
       formData.append('sizes', sizes[i]);
     }
-
-    const response = await fetch(`${ProductBaseUrl('/')}`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
+    const response = await fetch(url, {
       method: 'POST',
       credentials: 'include',
       body: formData,

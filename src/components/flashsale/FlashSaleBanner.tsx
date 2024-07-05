@@ -96,9 +96,9 @@ function FlashSaleBanner() {
   }
   return (
     <Link to={`flashsale/${sale._id}}/product/${sale.product}`} className="p-1 flex flex-col justify-center items-center top-full mt-20 h-fit sm:h-96 relative bg-black">
-      <p className="text-white font-extrabold text-base lg:text-lg mt-5 xl:mt-10">{sale.name}</p>
+      <p className="text-white font-extrabold text-center text-base lg:text-lg mt-5 xl:mt-10">{sale.name}</p>
       <div className="p-1  relative flex flex-col  justify-center">
-        <p className="flex items-center    text-[.7rem] justify-center lg:text-lg text-white p-5 font-semibold">{ saleStatus(sale.startTime, sale.endTime) === 'ACTIVE' ? <span>Sale ends  in</span> : <span>Sale starts in</span>}</p>
+        <p className="flex items-center text-[.7rem] justify-center lg:text-lg text-white p-5 font-semibold">{ saleStatus(sale.startTime, sale.endTime) === 'ACTIVE' ? <span>Sale ends  in</span> : <span>Sale starts in</span>}</p>
         <div className="flex justify-center  items-center xl:mb-20 mb-5  gap-1  ">
           {days ? <FormatDate time={days} label="DAYS" /> : <FormatDate time="00" label="DAYS" />}
           {' '}

@@ -1,10 +1,10 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
-import { ProductBaseUrl } from '../../../../urlConstants';
 
 export const deleteProductById = async (productId:string) => {
   try {
-    const response = await fetch(`${ProductBaseUrl('/')}${productId}`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
+    const response = await fetch(`${url}${productId}`, {
       method: 'DELETE',
       credentials: 'include',
     });

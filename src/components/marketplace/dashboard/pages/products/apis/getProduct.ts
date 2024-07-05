@@ -1,10 +1,10 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
-import { ProductBaseUrl } from '../../../../urlConstants';
 
 export const getProductsBySellerId = async (query:string) => {
   try {
-    const response = await fetch(`${ProductBaseUrl(`seller/list?${query}`)}`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
+    const response = await fetch(`${url}/seller/list?${query}`, {
       method: 'GET',
       credentials: 'include',
     });

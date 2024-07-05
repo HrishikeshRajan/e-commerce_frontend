@@ -1,8 +1,7 @@
-import { ProductBaseUrl } from '../../../../urlConstants';
-
 export const getProductById = async (productId:string) => {
   try {
-    const response = await fetch(`${ProductBaseUrl(`seller/product/${productId}`)}`, {
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
+    const response = await fetch(`${url}seller/product/${productId}`, {
       method: 'GET',
       credentials: 'include',
     });

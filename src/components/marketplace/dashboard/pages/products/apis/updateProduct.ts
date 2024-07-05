@@ -1,6 +1,5 @@
 /* eslint-disable security/detect-object-injection */
 /* eslint-disable import/no-cycle */
-import { ProductBaseUrl } from '../../../../urlConstants';
 import { IProduct } from '../types';
 
 export interface FileTypes {
@@ -29,8 +28,9 @@ export const UpdateProduct = async (product:Product) => {
     for (let i = 0; i < sizes.length; i += 1) {
       formData.append('sizes', sizes[i]);
     }
+    const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
 
-    const response = await fetch(`${ProductBaseUrl(product.id!)}`, {
+    const response = await fetch(`${url}/${product.id!}`, {
       method: 'PUT',
       credentials: 'include',
       body: formData,

@@ -1,8 +1,7 @@
-import { ProductBaseUrl } from '../../../../urlConstants';
-
 export const deleteProductsByIds = async (productsIds:string[]) => {
+  const url = `${import.meta.env.VITE_BASE_URL}/api/v1/product`;
   try {
-    const response = await fetch(`${ProductBaseUrl('multiples')}`, {
+    const response = await fetch(`${url}/multiples`, {
       method: 'POST',
       credentials: 'include',
       headers: {

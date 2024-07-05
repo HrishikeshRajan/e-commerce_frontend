@@ -31,38 +31,40 @@ function Card({
   }).format(parseFloat(price));
 
   return (
-    <Link to={`/product/${_id}`} className="w-6/12 sm:max-w-[12rem]  shadow-md  sm:rounded-md flex-col overflow-hidden ">
+    <div className="shadow-md w-[10rem] max-w-[16rem] sm:w-full">
+      <Link to={`/product/${_id}`}>
 
-      <img className="object-cover w-full " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
+        <img className="object-cover object-top mx-auto " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />
 
-      <Div className="px-2 py-2 w-full ">
-        <Div className=" overflow-hidden ">
-          <Para className=" truncate">
-            {brand}
-          </Para>
-          <Para className=" text-xs  text-slate-500 truncate h-10">
-            {name}
-          </Para>
-        </Div>
+        <Div className="px-2 py-2 w-full mx-1 ">
+          <Div className=" overflow-hidden ">
+            <Para className=" truncate">
+              {brand}
+            </Para>
+            <Para className=" text-xs  text-slate-500 truncate h-10">
+              {name}
+            </Para>
+          </Div>
 
-        <Div className="w-full mb-2 flex   items-start justify-between flex-col">
-          <Para className="flex gap-1 items-center">
-            <Span className="text-slate-400 text-xs ">
-              MRP:
-            </Span>
-            <Span className="text-sm font-bold text-slate-700">
-              {formattedAmount}
-            </Span>
-          </Para>
-          <Div className="flex items-center my-1 text-xs">
-            <Ratings ratings={ratings} />
-            <Span className="mr-2 ml-3 rounded bg-yellow-200 px-1.5 py-0.5 text-xs font-semibold">
-              {numberOfReviews}
-            </Span>
+          <Div className="w-full mb-2 flex   items-start justify-between flex-col">
+            <Para className="flex gap-1 items-center">
+              <Span className="text-slate-400 text-xs ">
+                MRP:
+              </Span>
+              <Span className="text-sm font-bold text-slate-700">
+                {formattedAmount}
+              </Span>
+            </Para>
+            <Div className="flex items-center my-1 text-xs">
+              <Ratings ratings={ratings} />
+              <Span className="mr-2 ml-3 rounded bg-yellow-200 px-1.5 py-0.5 text-xs font-semibold">
+                {numberOfReviews}
+              </Span>
+            </Div>
           </Div>
         </Div>
-      </Div>
-    </Link>
+      </Link>
+    </div>
 
   );
 }
