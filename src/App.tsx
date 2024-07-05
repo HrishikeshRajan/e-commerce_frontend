@@ -59,13 +59,14 @@ const CouponList = lazy(() => import('./components/marketplace/dashboard/pages/o
 const FlashSaleWrapper = lazy(() => import('./components/marketplace/dashboard/pages/flashsale/FlashsaleWrapper'));
 const FlashSaleForm = lazy(() => import('./components/marketplace/dashboard/pages/flashsale/FlashSaleForm'));
 const ListProductsWrapper = lazy(() => import('./components/marketplace/dashboard/pages/products/ListProductsWrapper'));
-const Dashboard = lazy(() => import('./components/marketplace/dashboard/pages/Dashboard'));
+const SidebarWrapper = lazy(() => import('./components/marketplace/dashboard/ui/sidenav/SidebarWrapper'));
 
 // All user components handled here
 const Element = () => (
-  <div className=" relative ">
+  <div className="relative">
     <Navbar />
     <Outlet />
+    <Footer />
   </div>
 );
 
@@ -74,67 +75,40 @@ const MarketPlace = () => (
   <Suspense fallback={<PageWaiting loading />}>
     <div className="relative">
       <SellerNavbar />
-      <Dashboard />
+      <SidebarWrapper />
+      <Outlet />
     </div>
   </Suspense>
 );
 
 const App = () => {
-  // useClearCookie('user');
   const allRoutes = createBrowserRouter([
     {
       path: '/',
       element: <Element />,
       children: [
+        { index: true, element: <Home /> },
         {
-          path: '/',
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <>
-                <Home />
-                <Footer />
-              </>
-            </AuthenticationWrapper>
-          ),
+          path: 'products', element: <ProductsPage />,
         },
         {
-          path: 'products',
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <ProductsPage />
-            </AuthenticationWrapper>
-          ),
-        },
-        {
-          path: 'product/:productId',
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <ProductView />
-            </AuthenticationWrapper>
-          ),
+          path: 'product/:productId', element: <ProductView />,
         },
         {
           path: 'cart',
           element: (
             <Suspense fallback={<PageWaiting loading />}>
-              <AuthenticationWrapper authentication={false}>
-                <Cart />
-              </AuthenticationWrapper>
+              <Cart />
             </Suspense>
           ),
         },
         {
-          path: 'address',
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <ShippingAddress />
-            </AuthenticationWrapper>
-          ),
+          path: 'address', element: <ShippingAddress />,
         },
         {
           path: 'payment',
           element: (
-            <AuthenticationWrapper authentication={false}>
+            <AuthenticationWrapper authentication>
               <Payment />
             </AuthenticationWrapper>
           ),
@@ -142,7 +116,7 @@ const App = () => {
         {
           path: 'payment/success',
           element: (
-            <AuthenticationWrapper authentication={false}>
+            <AuthenticationWrapper authentication>
               <PaymentSuccess />
             </AuthenticationWrapper>
           ),
@@ -209,21 +183,13 @@ const App = () => {
               ),
             },
             {
-              element: (
-                <AuthenticationWrapper authentication={false}>
-                  <PageNotFound />
-                </AuthenticationWrapper>
-              ),
+              element: <PageNotFound />,
             },
           ],
         },
         {
           path: 'flashsale/:saleId/product/:productId',
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <FlashSaleProductPage />
-            </AuthenticationWrapper>
-          ),
+          element: <FlashSaleProductPage />,
           loader: async ({ params }:
           LoaderFunctionArgs<{ saleId:string,
             productId:string }>) => defer({ product: getSingleProduct(params.productId!) }),
@@ -236,8 +202,6 @@ const App = () => {
               <CouponWrapper />
             </AuthenticationWrapper>
           ),
-          loader: async () => fetch(`${import.meta.env.VITE_BASE_URL}/api/v1/seller/promo?method=coupon`, { credentials: 'include' }),
-
         },
       ],
     },
@@ -283,40 +247,19 @@ const App = () => {
       children: [
         {
           index: true,
-          element: (
-
-            <AuthenticationWrapper authentication>
-              <Main />
-            </AuthenticationWrapper>
-
-          ),
+          element: <Main />,
         },
         {
           path: 'shop',
-          element: (
-            <AuthenticationWrapper authentication>
-              <ShopsWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <ShopsWrapper />,
           children: [
             {
               index: true,
-
-              element: (
-                <AuthenticationWrapper authentication>
-                  <CreateShop />
-                </AuthenticationWrapper>
-              ),
+              element: <CreateShop />,
             },
             {
               path: 'myshops',
-              element: (
-                <AuthenticationWrapper authentication>
-
-                  <ListShops />
-
-                </AuthenticationWrapper>
-              ),
+              element: <ListShops />,
             },
             {
               path: 'edit/:id',
@@ -327,185 +270,106 @@ const App = () => {
               ),
             },
             {
-              element: (
-                <AuthenticationWrapper authentication={false}>
-                  <PageNotFound />
-                </AuthenticationWrapper>
-              ),
+              element: <PageNotFound />,
             },
           ],
         },
         {
           path: 'product',
-          element: (
-            <AuthenticationWrapper authentication>
-              <ProductWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <ProductWrapper />,
           children: [
             {
               index: true,
               path: 'list',
               element: (
-                <AuthenticationWrapper authentication>
-                  <Suspense fallback={<h1>Loding</h1>}>
-                    <ListProductsWrapper />
-                  </Suspense>
-                </AuthenticationWrapper>
+                <Suspense fallback={<h1>Loding</h1>}>
+                  <ListProductsWrapper />
+                </Suspense>
+
               ),
             },
             {
               path: ':id',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <AddProductForm />
-                </AuthenticationWrapper>
-              ),
+              element: <AddProductForm />,
             },
 
             {
               path: 'edit/:id',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <EditProductForm />
-                </AuthenticationWrapper>
-              ),
+              element: <EditProductForm />,
             },
             {
-              element: (
-                <AuthenticationWrapper authentication={false}>
-                  <PageNotFound />
-                </AuthenticationWrapper>
-              ),
+              element: <PageNotFound />,
+
             },
           ],
         },
         {
           path: 'orders',
-          element: (
-            <AuthenticationWrapper authentication>
-              <OrderWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <OrderWrapper />,
         },
         {
           path: 'orders/:id/order',
-          element: (
-            <AuthenticationWrapper authentication>
-              <OrderTableWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <OrderTableWrapper />,
         },
         {
           path: 'sales',
-          element: (
-            <AuthenticationWrapper authentication>
-              <SalesWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <SalesWrapper />,
         },
         {
           path: 'offers',
-          element: (
-            <AuthenticationWrapper authentication>
-              <OfferWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <OfferWrapper />,
           children: [
             {
 
               index: true,
               path: 'create',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <CreateCouponForm />
-                </AuthenticationWrapper>
-              ),
+              element: <CreateCouponForm />,
             },
             {
               path: 'list',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <CouponList />
-                </AuthenticationWrapper>
-              ),
+              element: <CouponList />,
             },
             {
-              element: (
-                <AuthenticationWrapper authentication={false}>
-                  <PageNotFound />
-                </AuthenticationWrapper>
-              ),
+              element: <PageNotFound />,
             },
           ],
         },
         {
           path: 'flashsale',
-          element: (
-            <AuthenticationWrapper authentication>
-              <FlashSaleWrapper />
-            </AuthenticationWrapper>
-          ),
+          element: <FlashSaleWrapper />,
           children: [
             {
 
               index: true,
               path: 'create',
-              element: (
-                <AuthenticationWrapper authentication>
-                  <FlashSaleForm />
-                </AuthenticationWrapper>
-              ),
+              element: <FlashSaleForm />,
+
             },
             {
-              element: (
-                <AuthenticationWrapper authentication={false}>
-                  <PageNotFound />
-                </AuthenticationWrapper>
-              ),
+              element: <PageNotFound />,
             },
           ],
         },
         {
           path: 'settings',
-          element: (
-            <AuthenticationWrapper authentication>
-              <SettingSWapper />
-            </AuthenticationWrapper>
-          ),
+          element: <SettingSWapper />,
         },
         {
-          element: (
-            <AuthenticationWrapper authentication={false}>
-              <PageNotFound />
-            </AuthenticationWrapper>
-          ),
+          element: <PageNotFound />,
         },
       ],
     },
     {
       path: '/expired',
-      element: (
-        <AuthenticationWrapper authentication={false}>
-          <Expired />
-        </AuthenticationWrapper>
-      ),
+      element: <Expired />,
     },
     {
       path: '/server/error',
-      element: (
-        <AuthenticationWrapper authentication={false}>
-          <ServiceUnavailable />
-        </AuthenticationWrapper>
-      ),
+      element: <ServiceUnavailable />,
     },
     {
       path: '/*',
-      element: (
-        <AuthenticationWrapper authentication={false}>
-          <PageNotFound />
-        </AuthenticationWrapper>
-      ),
+      element: <PageNotFound />,
     },
   ]);
   return (

@@ -31,7 +31,7 @@ function Card({
   }).format(parseFloat(price));
 
   return (
-    <div className="shadow-md w-[10rem] max-w-[16rem] sm:w-full">
+    <div className="shadow-md w-[10rem] max-w-[16rem] h-fit sm:w-full">
       <Link to={`/product/${_id}`}>
 
         <img className="object-cover object-top mx-auto " src={(images && images[0].secure_url)} srcSet={`${makeVariants(images && images[0].secure_url, 200, 400)}`} alt="product image" />

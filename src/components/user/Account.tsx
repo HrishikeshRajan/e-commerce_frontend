@@ -54,7 +54,7 @@ function Account() {
 
   return (
     <>
-      <div className=" md:top-full   left-0 w-full  flex flex-col mt-10  lg:mt-20 xl:flex-row  p-3 gap-2">
+      <div className=" md:top-full   left-0 w-full  flex flex-col mt-10  lg:mt-20 xl:flex-row  p-3 gap-2 min-h-screen">
         <div className=" w-full top-full mt-10 flex xl:flex-col  md:w-full xl:w-4/12">
           {navs.map((option) => {
             if (option.title === 'Signout') {

@@ -61,7 +61,7 @@ function FilterBox({ filter, toggleButton, isOpen }:{ filter:Array<FilterBoxItem
   };
 
   return (
-    <Div className="relative w-full shadow-md">
+    <Div className="relative w-full shadow-md h-full bg-white">
       <FilterHeader className=" bg-white flex w-full border-2 xl:border-0 justify-between rounded-t-3xl shadow-md">
         <button type="button" className="font-bold text-slate-800 py-5 ms-5 xl:hidden" onClick={toggleButton}>{isOpen ? 'Close' : 'Filter'}</button>
         <h3 className="font-bold text-slate-800 py-5 ms-5 hidden xl:flex">Filter</h3>
@@ -74,7 +74,7 @@ function FilterBox({ filter, toggleButton, isOpen }:{ filter:Array<FilterBoxItem
         </button>
       </FilterHeader>
       <Div className="divide-y divide-solid divide-emerald-400" />
-      <Div className="ps-5 py-5 top-full  h-5/6 overflow-y-auto  flex gap-2 flex-col">
+      <Div className="ps-5 py-5 top-full h-full  flex gap-2 flex-col">
         {filterOptions && filterOptions.length && filterOptions.map((item) => (
           <Div key={item.id} className="p-2 ">
             <H2>{item.title}</H2>

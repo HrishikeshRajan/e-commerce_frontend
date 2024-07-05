@@ -49,36 +49,42 @@ function ProductsPage() {
   }
   return (
 
-    <Div className="w-full relative ">
-      <Div className="w-full container  top-full mt-28  flex justify-end">
-        <Suspense fallback={<div className="w-full h-20 bg-slate-200"><Loading /></div>}>
-          <Sort />
-        </Suspense>
-      </Div>
+    <Div>
 
       {memoFilter && !loading
 
         ? (
 
-          <Div className={`fixed left-0 xl:hidden bg-white right-0 bottom-0  delay-75 duration-150 ease overflow-y-auto  z-40  xl:bottom-10 xl:left-0 ${isOpen ? 'h-full ' : 'h-20'}`}>
+          <Div className={`xl:hidden z-50 fixed bottom-0 w-full ${isOpen ? 'h-screen ' : 'h-20'}`}>
             <Suspense fallback={<div className="fixed left-0 xl:hidden bg-white right-0 bottom-0  delay-75 duration-150 ease overflow-y-auto  z-40  xl:bottom-10 xl:left-0"><Loading /></div>}>
               <FilterBox filter={memoFilter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
             </Suspense>
           </Div>
         ) : <FilterShimmer />}
-      <Div className="flex justify-end">
+
+      <Div className="flex w-full relative top-full mt-[100px] min-h-screen">
         {memoFilter && !loading
         && (
-          <Div className="fixed bg-white w-3/12 left-0 hidden xl:flex right-auto  py-2  delay-75 duration-150 ease overflow-y-auto  z-40 h-5/6 ">
-            <Suspense fallback={<div className="fixed bg-white w-3/12 left-0 hidden xl:flex right-auto  py-2  delay-75 duration-150 ease overflow-y-auto  z-40 h-5/6"><Loading /></div>}>
+          <Div className="relative hidden xl:block w-4/12">
+            <Suspense fallback={<div className="static  bg-white w-3/12 left-0 hidden xl:flex right-auto  py-2  delay-75 duration-150 ease overflow-y-auto  z-40 max-h-screen"><Loading /></div>}>
               <FilterBox filter={memoFilter} toggleButton={toggleBottomSheet} isOpen={isOpen} />
             </Suspense>
           </Div>
         )}
-        <Suspense fallback={<ProductsShimmer />}>
-          <Products />
-        </Suspense>
 
+        <div className="flex flex-col w-full ">
+          <Div className="w-auto h-20 bg-gray-100 flex justify-end border-2 border-gray-50">
+            <Suspense fallback={<div className="w-full h-20 bg-slate-200"><Loading /></div>}>
+              <Sort />
+            </Suspense>
+          </Div>
+          <div className="w-full p-2">
+            <Suspense fallback={<ProductsShimmer />}>
+              <Products />
+            </Suspense>
+
+          </div>
+        </div>
       </Div>
       <Div className="w-full flex justify-end">
 
